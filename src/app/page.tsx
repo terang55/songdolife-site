@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { MapPin, Coffee, Home, Baby, Newspaper, Search, Clock } from 'lucide-react';
+import { formatDistanceToNow } from 'date-fns';
+import { ko } from 'date-fns/locale';
 
 interface NewsItem {
   title: string;
@@ -50,6 +52,43 @@ const categories = [
   '남동구 카페'
 ];
 
+// 한국어 날짜 형식을 표준 Date 객체로 변환하는 함수
+const parseKoreanDate = (dateStr: string): Date => {
+  if (!dateStr) return new Date();
+  
+  try {
+    // "2025.06.17. 오후 4:09" 형태의 한국어 날짜 파싱
+    const match = dateStr.match(/(\d{4})\.(\d{1,2})\.(\d{1,2})\.\s*(오전|오후)\s*(\d{1,2}):(\d{2})/);
+    if (match) {
+      const [, year, month, day, ampm, hour, minute] = match;
+      let hour24 = parseInt(hour);
+      
+      // 오후인 경우 12시간 추가 (단, 12시는 그대로)
+      if (ampm === '오후' && hour24 !== 12) {
+        hour24 += 12;
+      }
+      // 오전 12시는 0시로 변환
+      if (ampm === '오전' && hour24 === 12) {
+        hour24 = 0;
+      }
+      
+      return new Date(
+        parseInt(year),
+        parseInt(month) - 1, // JavaScript의 월은 0부터 시작
+        parseInt(day),
+        hour24,
+        parseInt(minute)
+      );
+    }
+    
+    // 표준 ISO 날짜 형식도 시도
+    return new Date(dateStr);
+  } catch (error) {
+    console.warn('날짜 파싱 실패:', dateStr, error);
+    return new Date();
+  }
+};
+
 export default function HomePage() {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -92,13 +131,14 @@ export default function HomePage() {
 
   const formatDate = (dateString: string) => {
     try {
-      const date = new Date(dateString);
-      return date.toLocaleDateString('ko-KR', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
+      const date = parseKoreanDate(dateString);
+      if (isNaN(date.getTime())) {
+        return dateString; // 파싱 실패시 원본 반환
+      }
+      
+      return formatDistanceToNow(date, { 
+        addSuffix: true,
+        locale: ko 
       });
     } catch {
       return dateString;

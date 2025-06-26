@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { MapPin, Coffee, Home, Baby, Newspaper, Search, Clock } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import { MapPin, Coffee, Home, Search, Clock } from 'lucide-react';
+import Image from 'next/image';
 
 interface NewsItem {
   title: string;
@@ -63,7 +64,7 @@ export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [error, setError] = useState<string | null>(null);
 
-  const fetchNews = async () => {
+  const fetchNews = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -90,24 +91,20 @@ export default function HomePage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedCategory, searchQuery]);
 
   useEffect(() => {
     fetchNews();
-  }, [selectedCategory, searchQuery]);
+  }, [fetchNews]);
 
   const formatDate = (dateString: string, item?: NewsItem) => {
     // 블로그 글이고 날짜가 없는 경우
     if (item?.type === 'blog' && (!dateString || dateString.trim() === '')) {
       // 네이버 블로그 URL에서 날짜 추출 시도
       if (item.url && item.url.includes('blog.naver.com')) {
-        const urlMatch = item.url.match(/\/(\d+)$/);
-        if (urlMatch) {
-          const postId = urlMatch[1];
-          // 네이버 블로그 포스트 ID는 보통 시간 기반으로 생성됨
-          // 하지만 정확한 날짜 추출은 어려우므로 "블로그 글"로 표시
-          return '블로그 글';
-        }
+        // 네이버 블로그 포스트 ID는 보통 시간 기반으로 생성되지만
+        // 정확한 날짜 추출은 어려우므로 "블로그 글"로 표시
+        return '블로그 글';
       }
       return '블로그 글';
     }
@@ -330,11 +327,13 @@ export default function HomePage() {
               >
                 {/* 유튜브 썸네일 */}
                 {item.type === 'youtube' && item.thumbnail && (
-                  <div className="aspect-video bg-gray-100 rounded-t-lg overflow-hidden">
-                    <img 
+                  <div className="aspect-video bg-gray-100 rounded-t-lg overflow-hidden relative">
+                    <Image 
                       src={item.thumbnail} 
                       alt={item.title}
-                      className="w-full h-full object-cover"
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                   </div>
                 )}

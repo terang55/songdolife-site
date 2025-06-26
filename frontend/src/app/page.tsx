@@ -11,7 +11,12 @@ interface NewsItem {
   url: string;
   keyword: string;
   content_length: number;
-  type?: string; // 'news' 또는 'blog'
+  type?: string; // 'news', 'blog', 'youtube'
+  // 유튜브 전용 필드들
+  channel?: string;
+  views?: string;
+  upload_time?: string;
+  thumbnail?: string;
 }
 
 interface ApiResponse {
@@ -23,31 +28,32 @@ interface ApiResponse {
 }
 
 const categoryIcons = {
-  '논현동': <MapPin className="w-5 h-5" />,
-  '논현동 맛집': <Coffee className="w-5 h-5" />,
-  '논현동 카페': <Coffee className="w-5 h-5" />,
-  '논현동 부동산': <Home className="w-5 h-5" />,
-  '논현동 육아': <Baby className="w-5 h-5" />,
-  '논현동 소식': <Newspaper className="w-5 h-5" />,
-  '강남 논현동': <MapPin className="w-5 h-5" />,
-  '논현역 맛집': <Coffee className="w-5 h-5" />,
-  '논현역': <MapPin className="w-5 h-5" />,
-  '인천 논현동': <MapPin className="w-5 h-5" />,
+  '인천 논현동': <MapPin className="w-4 h-4" />,
+  '인천 논현지구': <MapPin className="w-4 h-4" />,
+  '인천 논현고잔동': <MapPin className="w-4 h-4" />,
+  '인천 논현동 맛집': <Coffee className="w-4 h-4" />,
+  '인천 논현동 카페': <Coffee className="w-4 h-4" />,
+  '인천 논현동 부동산': <Home className="w-4 h-4" />,
+  '인천 남동구 논현동': <MapPin className="w-4 h-4" />,
+  '인천 호구포': <MapPin className="w-4 h-4" />,
+  '소래포구': <MapPin className="w-4 h-4" />,
+  '에코메트로': <MapPin className="w-4 h-4" />,
 };
 
 
 
 const categories = [
   '전체',
-  '인천 남동구',
-  '인천 남동구 소식',
-  '인천 남동구 육아',
-  '인천 남동구 부동산',
   '인천 논현동',
-  '인천 논현지구',
-  '인천 고잔동',
-  '남동구 맛집',
-  '남동구 카페'
+  '인천 논현지구', 
+  '인천 논현고잔동',
+  '인천 논현동 맛집',
+  '인천 논현동 카페',
+  '인천 논현동 부동산',
+  '인천 남동구 논현동',
+  '인천 호구포',
+  '소래포구',
+  '에코메트로'
 ];
 
 export default function HomePage() {
@@ -90,16 +96,72 @@ export default function HomePage() {
     fetchNews();
   }, [selectedCategory, searchQuery]);
 
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString: string, item?: NewsItem) => {
+    // 블로그 글이고 날짜가 없는 경우
+    if (item?.type === 'blog' && (!dateString || dateString.trim() === '')) {
+      // 네이버 블로그 URL에서 날짜 추출 시도
+      if (item.url && item.url.includes('blog.naver.com')) {
+        const urlMatch = item.url.match(/\/(\d+)$/);
+        if (urlMatch) {
+          const postId = urlMatch[1];
+          // 네이버 블로그 포스트 ID는 보통 시간 기반으로 생성됨
+          // 하지만 정확한 날짜 추출은 어려우므로 "블로그 글"로 표시
+          return '블로그 글';
+        }
+      }
+      return '블로그 글';
+    }
+    
+    if (!dateString) return '날짜 없음';
+    
     try {
+      // 한국어 날짜 형식 파싱: "2025.06.25. 오후 3:54"
+      const koreanDateMatch = dateString.match(/(\d{4})\.(\d{1,2})\.(\d{1,2})\.\s*(오전|오후)\s*(\d{1,2}):(\d{2})/);
+      
+      if (koreanDateMatch) {
+        const [, year, month, day, ampm, hour, minute] = koreanDateMatch;
+        let hour24 = parseInt(hour);
+        
+        // 오후인 경우 12시간 추가 (단, 12시는 그대로)
+        if (ampm === '오후' && hour24 !== 12) {
+          hour24 += 12;
+        }
+        // 오전 12시는 0시로 변환
+        if (ampm === '오전' && hour24 === 12) {
+          hour24 = 0;
+        }
+        
+        const parsedDate = new Date(
+          parseInt(year),
+          parseInt(month) - 1, // JavaScript의 월은 0부터 시작
+          parseInt(day),
+          hour24,
+          parseInt(minute)
+        );
+        
+        return parsedDate.toLocaleDateString('ko-KR', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+      }
+      
+      // 표준 ISO 날짜 형식도 시도
       const date = new Date(dateString);
-      return date.toLocaleDateString('ko-KR', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      });
+      if (!isNaN(date.getTime())) {
+        return date.toLocaleDateString('ko-KR', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+      }
+      
+      // 파싱 실패시 원본 반환
+      return dateString;
     } catch {
       return dateString;
     }
@@ -108,23 +170,33 @@ export default function HomePage() {
   const getTypeIcon = (type?: string) => {
     if (type === 'blog') {
       return '📝';
+    } else if (type === 'youtube') {
+      return '🎥';
     }
     return '📰';
   };
 
+  const getTypeLabel = (type?: string) => {
+    if (type === 'blog') {
+      return '블로그';
+    } else if (type === 'youtube') {
+      return '유튜브';
+    }
+    return '뉴스';
+  };
+
   const getCategoryColor = (keyword: string) => {
     const colors: { [key: string]: string } = {
-      '인천 남동구': 'bg-blue-100 text-blue-800',
-      '인천 남동구 소식': 'bg-green-100 text-green-800',
-      '인천 남동구 육아': 'bg-pink-100 text-pink-800',
-      '인천 남동구 부동산': 'bg-orange-100 text-orange-800',
-      '인천 논현동': 'bg-purple-100 text-purple-800',
+      '인천 논현동': 'bg-blue-100 text-blue-800',
       '인천 논현지구': 'bg-indigo-100 text-indigo-800',
-      '인천 고잔동': 'bg-teal-100 text-teal-800',
-      '남동구 맛집': 'bg-red-100 text-red-800',
-      '남동구 카페': 'bg-yellow-100 text-yellow-800',
-      '고잔신도시 육아': 'bg-pink-200 text-pink-900',
-      '고잔신도시 부동산': 'bg-orange-200 text-orange-900'
+      '인천 논현고잔동': 'bg-purple-100 text-purple-800',
+      '인천 논현동 맛집': 'bg-red-100 text-red-800',
+      '인천 논현동 카페': 'bg-yellow-100 text-yellow-800',
+      '인천 논현동 부동산': 'bg-orange-100 text-orange-800',
+      '인천 남동구 논현동': 'bg-green-100 text-green-800',
+      '인천 호구포': 'bg-teal-100 text-teal-800',
+      '소래포구': 'bg-cyan-100 text-cyan-800',
+      '에코메트로': 'bg-emerald-100 text-emerald-800'
     };
     return colors[keyword] || 'bg-gray-100 text-gray-800';
   };
@@ -256,14 +328,29 @@ export default function HomePage() {
                 key={index}
                 className="bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow duration-200"
               >
+                {/* 유튜브 썸네일 */}
+                {item.type === 'youtube' && item.thumbnail && (
+                  <div className="aspect-video bg-gray-100 rounded-t-lg overflow-hidden">
+                    <img 
+                      src={item.thumbnail} 
+                      alt={item.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+                
                 <div className="p-6">
                   {/* 헤더 */}
                   <div className="flex items-start justify-between mb-3">
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getCategoryColor(item.keyword)}`}>
-                      {getTypeIcon(item.type)} {item.keyword}
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                      item.type === 'youtube' ? 'bg-red-100 text-red-800' :
+                      item.type === 'blog' ? 'bg-green-100 text-green-800' :
+                      getCategoryColor(item.keyword)
+                    }`}>
+                      {getTypeIcon(item.type)} {getTypeLabel(item.type)}
                     </span>
                     <span className="text-xs text-gray-500">
-                      {item.content_length}자
+                      {item.type === 'youtube' ? item.views : `${item.content_length}자`}
                     </span>
                   </div>
 
@@ -280,19 +367,30 @@ export default function HomePage() {
                   </h3>
 
                   {/* 내용 */}
-                  <p className="text-gray-600 text-sm mb-4 line-clamp-3">
-                    {item.content}
-                  </p>
+                  {item.type !== 'youtube' && (
+                    <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+                      {item.content}
+                    </p>
+                  )}
 
                   {/* 하단 정보 */}
                   <div className="flex items-center justify-between text-sm">
                     <span className="font-medium text-gray-900">
-                      {item.source}
+                      {item.type === 'youtube' ? item.channel : item.source}
                     </span>
                     <span className="text-gray-500">
-                      {formatDate(item.date)}
+                      {item.type === 'youtube' ? item.upload_time : formatDate(item.date, item)}
                     </span>
                   </div>
+                  
+                  {/* 키워드 태그 (유튜브인 경우 하단에 별도 표시) */}
+                  {item.type === 'youtube' && (
+                    <div className="mt-3 pt-3 border-t">
+                      <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium ${getCategoryColor(item.keyword)}`}>
+                        #{item.keyword}
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}

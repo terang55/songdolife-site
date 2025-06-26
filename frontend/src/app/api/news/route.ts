@@ -10,6 +10,12 @@ interface NewsItem {
   url: string;
   keyword: string;
   content_length: number;
+  type?: string; // 'news', 'blog', 'youtube'
+  // 유튜브 전용 필드들
+  channel?: string;
+  views?: string;
+  upload_time?: string;
+  thumbnail?: string;
 }
 
 export async function GET(request: NextRequest) {
@@ -30,15 +36,73 @@ export async function GET(request: NextRequest) {
         const newsData = JSON.parse(fileContent);
         
         if (Array.isArray(newsData)) {
-          allNews = allNews.concat(newsData);
+          // 날짜가 없는 항목들은 crawled_at을 사용하거나 기본값 설정
+          const processedData = newsData.map(item => ({
+            ...item,
+            date: item.date || item.upload_time || item.crawled_at || new Date().toISOString(),
+            // 유튜브의 경우 source를 channel로 설정
+            source: item.type === 'youtube' ? (item.channel || '유튜브') : (item.source || item.press || '알 수 없음')
+          }));
+          allNews = allNews.concat(processedData);
         }
       } catch (error) {
         console.error(`Error reading file ${file}:`, error);
       }
     });
 
-    // 날짜 기준으로 최신 순 정렬
-    allNews.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    // 날짜 파싱 함수
+    const parseDate = (dateString: string): Date => {
+      if (!dateString) return new Date();
+      
+      // 한국어 날짜 형식 파싱: "2025.06.25. 오후 3:54"
+      const koreanDateMatch = dateString.match(/(\d{4})\.(\d{1,2})\.(\d{1,2})\.\s*(오전|오후)\s*(\d{1,2}):(\d{2})/);
+      
+      if (koreanDateMatch) {
+        const [, year, month, day, ampm, hour, minute] = koreanDateMatch;
+        let hour24 = parseInt(hour);
+        
+        if (ampm === '오후' && hour24 !== 12) {
+          hour24 += 12;
+        }
+        if (ampm === '오전' && hour24 === 12) {
+          hour24 = 0;
+        }
+        
+        return new Date(
+          parseInt(year),
+          parseInt(month) - 1,
+          parseInt(day),
+          hour24,
+          parseInt(minute)
+        );
+      }
+      
+      // 표준 날짜 형식 시도
+      const date = new Date(dateString);
+      return isNaN(date.getTime()) ? new Date() : date;
+    };
+
+    // 타입별 우선순위와 날짜 기준으로 정렬 (뉴스 > 블로그 > 유튜브)
+    allNews.sort((a, b) => {
+      // 타입별 우선순위 설정
+      const getTypePriority = (type?: string) => {
+        if (type === 'news') return 1;
+        if (type === 'blog') return 2;
+        if (type === 'youtube') return 3;
+        return 1; // 기본값은 뉴스로 처리
+      };
+      
+      const priorityA = getTypePriority(a.type);
+      const priorityB = getTypePriority(b.type);
+      
+      // 타입 우선순위가 다르면 타입으로 정렬
+      if (priorityA !== priorityB) {
+        return priorityA - priorityB;
+      }
+      
+      // 같은 타입이면 날짜로 정렬 (최신순)
+      return parseDate(b.date).getTime() - parseDate(a.date).getTime();
+    });
 
     // URL 파라미터 처리
     const searchParams = request.nextUrl.searchParams;

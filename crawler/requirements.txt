@@ -1,0 +1,27 @@
+# 논현동 정보 크롤러 필수 패키지
+
+# 웹 크롤링
+selenium==4.11.2
+beautifulsoup4==4.12.2
+requests==2.31.0
+
+# 데이터 처리
+pandas==2.1.0
+
+# 환경 설정
+python-dotenv==1.0.0
+
+# 스케줄링
+schedule==1.2.0
+
+# 로깅
+loguru==0.7.0
+
+# JSON 처리
+ujson==5.8.0
+
+# 데이터베이스 (선택사항)
+sqlite3
+
+# 날짜/시간 처리
+python-dateutil==2.8.2 

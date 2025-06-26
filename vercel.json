@@ -1,19 +1,4 @@
 {
   "version": 2,
-  "name": "nonhyeon-info-site",
-  "builds": [
-    {
-      "src": "frontend/package.json",
-      "use": "@vercel/next"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "frontend/$1"
-    }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  }
+  "name": "nonhyeon-info-site"
 } 

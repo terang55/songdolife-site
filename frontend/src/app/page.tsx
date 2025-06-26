@@ -146,7 +146,7 @@ export default function HomePage() {
             <div className="flex items-center space-x-3">
               <MapPin className="w-8 h-8 text-blue-600" />
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">🏠 논현동 정보 허브</h1>
+                <h1 className="text-2xl font-bold text-gray-900">🏠 인천 논현동 정보 허브</h1>
                 <p className="text-sm text-gray-500">인천 남동구 논현동 실시간 정보</p>
               </div>
             </div>
@@ -162,7 +162,7 @@ export default function HomePage() {
       <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h2 className="text-4xl font-bold mb-4">논현동 주민들을 위한 정보 허브</h2>
+            <h2 className="text-4xl font-bold mb-4">인천 논현동 주민들을 위한 정보 허브</h2>
             <p className="text-xl mb-8 text-blue-100">
               실시간 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요
             </p>

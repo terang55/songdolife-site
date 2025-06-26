@@ -14,8 +14,8 @@ interface NewsItem {
 
 export async function GET(request: NextRequest) {
   try {
-    // 프로젝트 루트에서 data/enhanced_news 디렉토리 경로
-    const dataDir = join(process.cwd(), '..', 'data', 'enhanced_news');
+    // frontend/public/data/enhanced_news 디렉토리 경로
+    const dataDir = join(process.cwd(), 'public', 'data', 'enhanced_news');
     
     // enhanced_news 디렉토리의 모든 JSON 파일 읽기
     const files = readdirSync(dataDir).filter(file => file.endsWith('.json'));

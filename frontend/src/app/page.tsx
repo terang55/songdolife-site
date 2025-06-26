@@ -1,9 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { MapPin, Coffee, Home, Baby, Newspaper, Search, Clock, ExternalLink } from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
-import { ko } from 'date-fns/locale';
+import { MapPin, Coffee, Home, Baby, Newspaper, Search, Clock } from 'lucide-react';
 
 interface NewsItem {
   title: string;
@@ -37,18 +35,7 @@ const categoryIcons = {
   '인천 논현동': <MapPin className="w-5 h-5" />,
 };
 
-const categoryColors = {
-  '논현동': 'bg-blue-100 text-blue-800',
-  '논현동 맛집': 'bg-orange-100 text-orange-800',
-  '논현동 카페': 'bg-amber-100 text-amber-800',
-  '논현동 부동산': 'bg-green-100 text-green-800',
-  '논현동 육아': 'bg-pink-100 text-pink-800',
-  '논현동 소식': 'bg-purple-100 text-purple-800',
-  '강남 논현동': 'bg-indigo-100 text-indigo-800',
-  '논현역 맛집': 'bg-red-100 text-red-800',
-  '논현역': 'bg-teal-100 text-teal-800',
-  '인천 논현동': 'bg-gray-100 text-gray-800',
-};
+
 
 const categories = [
   '전체',
@@ -69,10 +56,6 @@ export default function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState('전체');
   const [searchQuery, setSearchQuery] = useState('');
   const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    fetchNews();
-  }, [selectedCategory, searchQuery]);
 
   const fetchNews = async () => {
     try {
@@ -102,6 +85,10 @@ export default function HomePage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchNews();
+  }, [selectedCategory, searchQuery]);
 
   const formatDate = (dateString: string) => {
     try {

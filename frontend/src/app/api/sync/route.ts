@@ -23,7 +23,7 @@ export async function GET() {
         timestamp: new Date().toISOString()
       });
       
-    } catch (fileError) {
+    } catch {
       // sync_summary.json이 없는 경우
       return NextResponse.json({
         success: true,

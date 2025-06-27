@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { MapPin, Coffee, Home, Search, Clock, Newspaper, BookOpen, Video } from 'lucide-react';
+// 필요한 아이콘만 import (현재 사용 중인 아이콘 없음)
 import Image from 'next/image';
 
 interface NewsItem {

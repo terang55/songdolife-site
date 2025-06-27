@@ -4,22 +4,27 @@ import { join } from 'path';
 
 interface NewsItem {
   title: string;
-  content: string;
-  source: string;
+  content?: string;
+  summary?: string;
+  source?: string;
+  press?: string;
+  channel?: string;
   date: string;
   url: string;
   keyword: string;
-  content_length: number;
+  content_length?: number;
   type?: string;
 }
 
 export async function GET() {
   try {
-    // 프로젝트 루트에서 data/enhanced_news 디렉토리 경로
-    const dataDir = join(process.cwd(), '..', 'data', 'enhanced_news');
+    // public/data/enhanced_news 디렉토리 경로 (프론트엔드 동기화된 데이터)
+    const dataDir = join(process.cwd(), 'public', 'data', 'enhanced_news');
     
-    // enhanced_news 디렉토리의 모든 JSON 파일 읽기
-    const files = readdirSync(dataDir).filter(file => file.endsWith('.json'));
+    // enhanced_news 디렉토리의 모든 JSON 파일 읽기 (sync_summary.json 제외)
+    const files = readdirSync(dataDir).filter(file => 
+      file.endsWith('.json') && file !== 'sync_summary.json'
+    );
     
     let allNews: NewsItem[] = [];
     
@@ -47,13 +52,14 @@ export async function GET() {
       return acc;
     }, {} as Record<string, number>);
 
-    // 소스별 통계
+    // 소스별 통계 (press, source, channel 모두 고려)
     const sourceStats = allNews.reduce((acc, item) => {
-      acc[item.source] = (acc[item.source] || 0) + 1;
+      const source = item.source || item.press || item.channel || 'Unknown';
+      acc[source] = (acc[source] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
 
-    // 타입별 통계 (뉴스 vs 블로그)
+    // 타입별 통계 (뉴스 vs 블로그 vs 유튜브)
     const typeStats = allNews.reduce((acc, item) => {
       const type = item.type || 'news';
       acc[type] = (acc[type] || 0) + 1;
@@ -69,44 +75,34 @@ export async function GET() {
 
     const dailyStats = last7Days.map(date => {
       const count = allNews.filter(item => {
-        const itemDate = new Date(item.date).toISOString().split('T')[0];
-        return itemDate === date;
+        try {
+          const itemDate = new Date(item.date).toISOString().split('T')[0];
+          return itemDate === date;
+        } catch {
+          return false;
+        }
       }).length;
       
       return { date, count };
     });
 
-    // 평균 콘텐츠 길이
-    const avgContentLength = allNews.length > 0 
-      ? Math.round(allNews.reduce((sum, item) => sum + item.content_length, 0) / allNews.length)
+    // 평균 콘텐츠 길이 (content_length가 있는 경우만)
+    const validContentLengths = allNews
+      .filter(item => item.content_length && item.content_length > 0)
+      .map(item => item.content_length!);
+    
+    const avgContentLength = validContentLengths.length > 0 
+      ? Math.round(validContentLengths.reduce((sum, length) => sum + length, 0) / validContentLengths.length)
       : 0;
 
     // 최신 업데이트 시간
     const lastUpdated = allNews.length > 0 
-      ? new Date(Math.max(...allNews.map(item => new Date(item.date).getTime()))).toISOString()
+      ? new Date().toISOString() // 현재 시간 사용
       : new Date().toISOString();
 
-    // 인천 남동구 관련 키워드 순위
-    const incheonKeywords = [
-      '인천 남동구',
-      '인천 남동구 소식',
-      '인천 남동구 육아',
-      '인천 남동구 부동산',
-      '인천 논현동',
-      '인천 논현지구',
-      '인천 고잔동',
-      '남동구 맛집',
-      '남동구 카페',
-      '고잔신도시 육아',
-      '고잔신도시 부동산'
-    ];
-
-    const topCategories = incheonKeywords
-      .map(keyword => ({
-        keyword,
-        count: categoryStats[keyword] || 0
-      }))
-      .filter(item => item.count > 0)
+    // 상위 카테고리 (실제 키워드 기준)
+    const topCategories = Object.entries(categoryStats)
+      .map(([keyword, count]) => ({ keyword, count }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 5);
 
@@ -126,6 +122,7 @@ export async function GET() {
         summary: {
           newsCount: typeStats.news || 0,
           blogCount: typeStats.blog || 0,
+          youtubeCount: typeStats.youtube || 0,
           totalSources: Object.keys(sourceStats).length,
           totalCategories: Object.keys(categoryStats).length
         }
@@ -136,57 +133,30 @@ export async function GET() {
   } catch (error) {
     console.error('Error in stats API:', error);
     
-    // 오류 시 더미 통계 반환
+    // 오류 시에는 빈 통계 반환하여 문제를 명확히 함
     return NextResponse.json({
-      success: true,
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
       data: {
-        totalArticles: 67,
-        avgContentLength: 845,
+        totalArticles: 0,
+        avgContentLength: 0,
         lastUpdated: new Date().toISOString(),
         stats: {
-          categories: {
-            '인천 남동구': 12,
-            '인천 남동구 소식': 8,
-            '인천 남동구 육아': 10,
-            '인천 남동구 부동산': 7,
-            '인천 논현동': 6,
-            '고잔신도시 육아': 9,
-            '남동구 맛집': 5,
-            '남동구 카페': 4,
-            '기타': 6
-          },
-          sources: {
-            '네이버 블로그': 25,
-            '중앙일보': 8,
-            '연합뉴스': 6,
-            '뉴시스': 5,
-            '기타': 23
-          },
-          types: {
-            'news': 32,
-            'blog': 35
-          },
-          daily: Array.from({ length: 7 }, (_, i) => ({
-            date: new Date(Date.now() - (6-i) * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-            count: Math.floor(Math.random() * 15) + 5
-          })),
-          topCategories: [
-            { keyword: '인천 남동구', count: 12 },
-            { keyword: '인천 남동구 육아', count: 10 },
-            { keyword: '고잔신도시 육아', count: 9 },
-            { keyword: '인천 남동구 소식', count: 8 },
-            { keyword: '인천 남동구 부동산', count: 7 }
-          ]
+          categories: {},
+          sources: {},
+          types: {},
+          daily: [],
+          topCategories: []
         },
         summary: {
-          newsCount: 32,
-          blogCount: 35,
-          totalSources: 15,
-          totalCategories: 9
+          newsCount: 0,
+          blogCount: 0,
+          youtubeCount: 0,
+          totalSources: 0,
+          totalCategories: 0
         }
       },
-      timestamp: new Date().toISOString(),
-      note: "Using mock data due to file system error"
+      timestamp: new Date().toISOString()
     });
   }
 } 

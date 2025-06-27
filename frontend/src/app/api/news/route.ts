@@ -114,7 +114,17 @@ export async function GET(request: NextRequest) {
     let filteredNews = allNews;
 
     if (category && category !== '전체') {
-      filteredNews = filteredNews.filter(item => item.keyword === category);
+      // 타입별 필터링으로 변경
+      const typeMap: { [key: string]: string } = {
+        '뉴스': 'news',
+        '블로그': 'blog',
+        '유튜브': 'youtube'
+      };
+      
+      const targetType = typeMap[category];
+      if (targetType) {
+        filteredNews = filteredNews.filter(item => item.type === targetType);
+      }
     }
 
     if (search) {

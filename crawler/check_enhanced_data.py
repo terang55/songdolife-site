@@ -86,12 +86,13 @@ def check_summary():
             
             print(f"📅 크롤링 시간: {summary.get('crawl_time', '시간 정보 없음')}")
             print(f"🔧 크롤러 타입: {summary.get('crawler_type', '타입 정보 없음')}")
-            print(f"📊 총 수집 기사: {summary.get('total_articles', 0)}개")
-            print("📈 키워드별 결과:")
+            print(f"📊 총 수집 항목: {summary.get('total_items', 0)}개")
+            print(f"📝 요약: {summary.get('summary', '요약 정보 없음')}")
+            print("📈 키워드 목록:")
             
-            results = summary.get('results', {})
-            for keyword, count in results.items():
-                print(f"   - {keyword}: {count}개 기사")
+            keywords = summary.get('keywords', [])
+            for i, keyword in enumerate(keywords, 1):
+                print(f"   {i}. {keyword}")
                 
         except Exception as e:
             print(f"❌ 요약 파일 읽기 오류: {str(e)}")

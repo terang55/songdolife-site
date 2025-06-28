@@ -280,6 +280,14 @@ export default function RootLayout({
             })
           }}
         />
+
+        {/* Google AdSense - HEAD 태그 안에 위치 */}
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2592538242403472"
+          crossOrigin="anonymous"
+          strategy="beforeInteractive"
+        />
       </head>
       <body
         className={`${inter.variable} font-sans antialiased bg-gray-50`}
@@ -301,14 +309,6 @@ export default function RootLayout({
           `}
         </Script>
 
-        {/* Google AdSense */}
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2592538242403472"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
-        
         {children}
       </body>
     </html>

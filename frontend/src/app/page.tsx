@@ -372,7 +372,7 @@ export default function HomePage() {
               <div>
                 <div className="text-xl sm:text-3xl font-bold flex items-center justify-center gap-1 sm:gap-2">
                   <span className="text-2xl sm:text-4xl">⚡</span>
-                  매일 2회
+                  실시간
                 </div>
                 <div className="text-xs sm:text-sm text-blue-200">자동 업데이트</div>
               </div>
@@ -583,19 +583,15 @@ export default function HomePage() {
                 <div className="flex items-center justify-center md:justify-start space-x-2">
                   <span className="text-base">📧</span>
                   <a 
-                    href="mailto:terang55@gmail.com" 
+                    href="mailto:rainbowcr55@gmail.com" 
                     className="hover:text-white transition-colors"
                   >
-                    terang55@gmail.com
+                    rainbowcr55@gmail.com
                   </a>
                 </div>
                 <div className="flex items-center justify-center md:justify-start space-x-2">
                   <span className="text-base">💼</span>
                   <span>광고 및 제휴 문의</span>
-                </div>
-                <div className="flex items-center justify-center md:justify-start space-x-2">
-                  <span className="text-base">🔄</span>
-                  <span>매일 2회 자동 업데이트</span>
                 </div>
               </div>
             </div>
@@ -607,12 +603,20 @@ export default function HomePage() {
               <div className="text-xs sm:text-sm text-gray-400">
                 © 2025 논현동 정보 허브. 모든 권리 보유.
               </div>
-              <div className="flex items-center space-x-4 text-xs sm:text-sm text-gray-400">
-                <span>🌐 실시간 정보 제공</span>
-                <span>•</span>
-                <span>📱 모바일 최적화</span>
-                <span>•</span>
-                <span>🔍 SEO 최적화</span>
+              <div className="flex items-center space-x-4 text-xs sm:text-sm">
+                <a 
+                  href="/privacy" 
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  개인정보처리방침
+                </a>
+                <span className="text-gray-600">|</span>
+                <a 
+                  href="/terms" 
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  이용약관
+                </a>
               </div>
             </div>
           </div>

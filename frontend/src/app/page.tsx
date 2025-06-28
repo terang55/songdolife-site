@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 // 필요한 아이콘만 import (현재 사용 중인 아이콘 없음)
 import Image from 'next/image';
 import Head from 'next/head';
+import WeatherWidget from './components/WeatherWidget';
 
 interface NewsItem {
   title: string;
@@ -349,33 +350,46 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-6 sm:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-2xl sm:text-4xl font-bold mb-2 sm:mb-4">인천 논현동 주민들을 위한 정보 허브</h2>
-            <p className="text-sm sm:text-xl mb-4 sm:mb-8 text-blue-100">
-              실시간 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요
-            </p>
-            <div className="flex justify-center space-x-6 sm:space-x-12 text-center">
-              <div>
-                <div className="text-xl sm:text-3xl font-bold flex items-center justify-center gap-1 sm:gap-2">
-                  <span className="text-2xl sm:text-4xl">📊</span>
-                  {stats?.totalArticles || news.length}
-                </div>
-                <div className="text-xs sm:text-sm text-blue-200">총 콘텐츠 수</div>
+          {/* 제목 & 날씨 위젯 */}
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-center mb-8">
+            {/* 제목과 설명 */}
+            <div className="lg:col-span-3 text-center">
+              <h2 className="text-2xl sm:text-4xl font-bold mb-2 sm:mb-4">인천 논현동 주민들을 위한 정보 허브</h2>
+              <p className="text-sm sm:text-xl text-blue-100">
+                실시간 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요
+              </p>
+            </div>
+            
+            {/* 날씨 위젯 */}
+            <div className="lg:col-span-1 flex justify-center lg:justify-end">
+              <div className="w-full max-w-xs">
+                <WeatherWidget />
               </div>
-              <div>
-                <div className="text-xl sm:text-3xl font-bold flex items-center justify-center gap-1 sm:gap-2">
-                  <span className="text-2xl sm:text-4xl">🏷️</span>
-                  {syncStatus?.keywords?.length || '17'}
-                </div>
-                <div className="text-xs sm:text-sm text-blue-200">수집 키워드</div>
+            </div>
+          </div>
+          
+          {/* 통계 정보 */}
+          <div className="flex justify-center space-x-6 sm:space-x-12 text-center">
+            <div>
+              <div className="text-xl sm:text-3xl font-bold flex items-center justify-center gap-1 sm:gap-2">
+                <span className="text-2xl sm:text-4xl">📊</span>
+                {stats?.totalArticles || news.length}
               </div>
-              <div>
-                <div className="text-xl sm:text-3xl font-bold flex items-center justify-center gap-1 sm:gap-2">
-                  <span className="text-2xl sm:text-4xl">⚡</span>
-                  실시간
-                </div>
-                <div className="text-xs sm:text-sm text-blue-200">자동 업데이트</div>
+              <div className="text-xs sm:text-sm text-blue-200">총 콘텐츠 수</div>
+            </div>
+            <div>
+              <div className="text-xl sm:text-3xl font-bold flex items-center justify-center gap-1 sm:gap-2">
+                <span className="text-2xl sm:text-4xl">🏷️</span>
+                {syncStatus?.keywords?.length || '17'}
               </div>
+              <div className="text-xs sm:text-sm text-blue-200">수집 키워드</div>
+            </div>
+            <div>
+              <div className="text-xl sm:text-3xl font-bold flex items-center justify-center gap-1 sm:gap-2">
+                <span className="text-2xl sm:text-4xl">⚡</span>
+                실시간
+              </div>
+              <div className="text-xs sm:text-sm text-blue-200">자동 업데이트</div>
             </div>
           </div>
         </div>

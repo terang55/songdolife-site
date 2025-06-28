@@ -1,6 +1,28 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 논현동 정보 허브
 
-## Getting Started
+인천 남동구 논현동 지역 정보를 제공하는 Next.js 웹사이트입니다.
+
+## 기능
+
+- 📰 실시간 뉴스, 블로그, 유튜브 콘텐츠 수집
+- 🌤️ 논현동 실시간 날씨 정보
+- 📱 모바일 반응형 디자인
+- 🔍 SEO 최적화
+- 📊 Google Analytics & AdSense 연동
+
+## 환경변수 설정
+
+날씨 기능을 사용하려면 OpenWeather API 키가 필요합니다:
+
+1. [OpenWeatherMap](https://openweathermap.org/api)에서 무료 계정 생성
+2. API 키 발급 (무료 계정: 하루 1000회 호출 가능)
+3. `.env.local` 파일 생성:
+
+```bash
+OPENWEATHER_API_KEY=your_api_key_here
+```
+
+## 개발 서버 실행
 
 First, run the development server:
 

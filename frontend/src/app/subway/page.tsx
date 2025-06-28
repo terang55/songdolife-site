@@ -62,6 +62,8 @@ export default function SubwayPage() {
   const [trainInfo, setTrainInfo] = useState<TrainInfo[]>([]);
   const [loading, setLoading] = useState(false);
   const [lastUpdate, setLastUpdate] = useState<string>('');
+  const [isTestData, setIsTestData] = useState(false);
+  const [isServiceEnded, setIsServiceEnded] = useState(false);
 
   // 실시간 정보 가져오기 (더미 데이터로 시작)
   const fetchTrainInfo = async (stationName: string) => {
@@ -77,14 +79,21 @@ export default function SubwayPage() {
         console.log('✅ 열차 정보 수신:', result.data);
         setTrainInfo(result.data);
         setLastUpdate(new Date().toLocaleTimeString('ko-KR'));
+        // 운행종료 및 테스트 데이터 여부 확인
+        setIsServiceEnded(result.note && result.note.includes('운행종료'));
+        setIsTestData(result.note && result.note.includes('테스트'));
       } else {
         console.error('❌ 지하철 API 오류:', result.error);
         // 오류 시 빈 배열로 설정
         setTrainInfo([]);
+        setIsServiceEnded(false);
+        setIsTestData(false);
       }
     } catch (error) {
       console.error('❌ 지하철 정보 로딩 오류:', error);
       setTrainInfo([]);
+      setIsServiceEnded(false);
+      setIsTestData(false);
     } finally {
       setLoading(false);
     }
@@ -203,6 +212,44 @@ export default function SubwayPage() {
               {selectedStation}
             </div>
 
+            {/* 운행종료 알림 */}
+            {isServiceEnded && (
+              <div className="bg-red-50 border-l-4 border-red-400 p-4 mb-6 rounded-lg">
+                <div className="flex items-center">
+                  <div className="flex-shrink-0">
+                    <span className="text-2xl">🚫</span>
+                  </div>
+                  <div className="ml-3">
+                    <h3 className="text-sm font-medium text-red-800">
+                      운행 종료
+                    </h3>
+                    <div className="mt-2 text-sm text-red-700">
+                      <p>현재 운행하지 않는 시간입니다. 운행시간은 오전 5시 30분부터 자정까지입니다.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 테스트 데이터 경고 */}
+            {isTestData && !isServiceEnded && (
+              <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6 rounded-lg">
+                <div className="flex items-center">
+                  <div className="flex-shrink-0">
+                    <span className="text-2xl">⚠️</span>
+                  </div>
+                  <div className="ml-3">
+                    <h3 className="text-sm font-medium text-yellow-800">
+                      현재는 지하철 정보가 없습니다
+                    </h3>
+                    <div className="mt-2 text-sm text-yellow-700">
+                      <p>운행이 종료 되었거나, 정보가 제공되지 않습니다.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {loading ? (
               <div className="text-center py-8">
                 <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
@@ -210,7 +257,16 @@ export default function SubwayPage() {
               </div>
             ) : (
               <>
-                {trainInfo.length > 0 ? (
+                {/* 운행종료 시에는 열차 정보 표시하지 않음 */}
+                {isServiceEnded ? (
+                  <div className="text-center py-12">
+                    <div className="text-gray-400 mb-4">
+                      <span className="text-6xl">🌙</span>
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-700 mb-2">운행이 종료되었습니다</h3>
+                    <p className="text-gray-600">내일 오전 5시 30분부터 운행을 재개합니다.</p>
+                  </div>
+                ) : trainInfo.length > 0 ? (
                   <>
                     {/* 방향별 분리 표시 */}
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">

@@ -48,30 +48,30 @@ export async function GET(request: NextRequest) {
     const mappedStationName = stationNameMapping[stationParam] || stationParam;
     console.log('🚇 매핑된 역명:', mappedStationName);
 
-    // 임시 더미 데이터 (실제 API 연동 전까지)
+    // 테스트용 더미 데이터 (실제 API 연동 전까지)
     const dummyTrainData: TrainInfo[] = [
       {
         station: mappedStationName,
         line: '수인분당선',
         direction: '상행',
-        destination: '왕십리',
-        arrivalTime: '2분 후 도착',
+        destination: '미운행중',
+        arrivalTime: '미운행중',
         trainType: '일반',
-        status: '운행',
-        currentLocation: '소래포구',
-        stationsLeft: '1개 역 전',
+        status: '미운행중',
+        currentLocation: '미운행중',
+        stationsLeft: '미운행중',
         updatedAt: new Date().toISOString()
       },
       {
         station: mappedStationName,
         line: '수인분당선',
         direction: '하행',
-        destination: '인천',
-        arrivalTime: '5분 후 도착',
+        destination: '미운행중',
+        arrivalTime: '미운행중',
         trainType: '일반',
-        status: '운행',
-        currentLocation: '연수',
-        stationsLeft: '2개 역 전',
+        status: '미운행중',
+        currentLocation: '미운행중',
+        stationsLeft: '미운행중',
         updatedAt: new Date().toISOString()
       }
     ];
@@ -155,7 +155,7 @@ export async function GET(request: NextRequest) {
       success: true,
       data: dummyTrainData,
       timestamp: new Date().toISOString(),
-      note: '테스트 데이터 (실제 API 연동 필요)'
+      note: '테스트 데이터 - 현재는 지하철 정보가 없습니다'
     });
 
   } catch (error) {

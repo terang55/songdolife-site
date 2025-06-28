@@ -524,9 +524,7 @@ export default function HomePage() {
                       {getTypeIcon(item.type)} {getTypeLabel(item.type)}
                     </span>
                     <span className="text-xs text-gray-500 flex-shrink-0 ml-2">
-                      {item.type === 'youtube' ? item.views : 
-                       item.type === 'blog' ? '' : 
-                       item.content_length ? `${item.content_length}자` : ''}
+                      {item.type === 'youtube' ? item.views : ''}
                     </span>
                   </div>
 

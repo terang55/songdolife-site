@@ -4,8 +4,8 @@ import { NextResponse } from 'next/server';
 const NONHYEON_LAT = 37.3894;
 const NONHYEON_LON = 126.7317;
 
-// OpenWeather API 키 (환경변수에서 가져오거나 임시로 사용)
-const API_KEY = process.env.OPENWEATHER_API_KEY || 'fec0e5d8daec1747581d667dc08e95cb';
+// OpenWeather API 키 (환경변수에서만 가져오기)
+const API_KEY = process.env.OPENWEATHER_API_KEY;
 
 // 환경 변수 로드 확인 (개발용)
 console.log('🔧 환경 변수 확인:', {
@@ -44,6 +44,12 @@ export async function GET() {
   try {
     console.log('🌤️ 논현동 날씨 정보 요청');
 
+    // API 키 확인
+    if (!API_KEY) {
+      console.error('❌ OpenWeather API 키가 설정되지 않았습니다');
+      throw new Error('API 키가 필요합니다');
+    }
+
     // 현재 날씨 정보 가져오기
     const currentWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${NONHYEON_LAT}&lon=${NONHYEON_LON}&appid=${API_KEY}&units=metric&lang=kr`;
     
@@ -51,8 +57,8 @@ export async function GET() {
     const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${NONHYEON_LAT}&lon=${NONHYEON_LON}&appid=${API_KEY}&units=metric&lang=kr`;
 
     console.log('🔗 API 요청 URL:', {
-      current: currentWeatherUrl.replace(API_KEY, 'API_KEY_HIDDEN'),
-      forecast: forecastUrl.replace(API_KEY, 'API_KEY_HIDDEN')
+      current: currentWeatherUrl.replace(API_KEY!, 'API_KEY_HIDDEN'),
+      forecast: forecastUrl.replace(API_KEY!, 'API_KEY_HIDDEN')
     });
 
     const [currentResponse, forecastResponse] = await Promise.all([

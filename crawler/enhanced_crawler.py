@@ -452,13 +452,17 @@ class EnhancedNonhyeonCrawler:
             return []
 
     def crawl_youtube_search(self, keyword):
-        """유튜브 검색 결과 크롤링 - 관련도순, 최신 업로드"""
+        """유튜브 검색 결과 크롤링 - 관련도순, 이번주 업로드"""
         try:
-            logger.info(f"유튜브 크롤링 시작 (최신업로드, 관련도순): {keyword}")
+            logger.info(f"유튜브 크롤링 시작 (이번주, 관련도순): {keyword}")
             
             youtube_data = []
-            # 유튜브 검색 URL - 관련도순, 이번 주 업로드
-            search_url = f"https://www.youtube.com/results?search_query={keyword}&sp=EgQIBBAB"
+            # 유튜브 검색 URL - 관련도순, 이번주 업로드 (sp=EgIIAw%3D%3D)
+            # URL 인코딩: 인천논현 검색, 이번주 필터 적용
+            encoded_keyword = urllib.parse.quote(keyword)
+            search_url = f"https://www.youtube.com/results?search_query={encoded_keyword}&sp=EgIIAw%3D%3D"
+            
+            logger.debug(f"유튜브 검색 URL: {search_url}")
             
             self.driver.get(search_url)
             time.sleep(3)  # 유튜브는 로딩이 좀 더 필요
@@ -478,9 +482,9 @@ class EnhancedNonhyeonCrawler:
             # 비디오 요소들 찾기
             video_items = self.driver.find_elements(By.CSS_SELECTOR, "div#contents ytd-video-renderer")
             
-            logger.info(f"발견된 유튜브 비디오 수: {len(video_items)}")
+            logger.info(f"🎬 발견된 유튜브 비디오 수: {len(video_items)}개 (상위 7개 수집 예정)")
             
-            for idx, item in enumerate(video_items[:8]):  # 상위 8개
+            for idx, item in enumerate(video_items[:7]):  # 상위 7개만 수집
                 try:
                     # 제목 추출
                     title_element = item.find_element(By.CSS_SELECTOR, "#video-title")
@@ -501,12 +505,18 @@ class EnhancedNonhyeonCrawler:
                     except:
                         views = ""
                     
-                    # 업로드 시간 추출
+                    # 업로드 시간 추출 (없어도 포함)
                     try:
                         time_element = item.find_element(By.CSS_SELECTOR, "#metadata-line span:last-child")
                         upload_time = time_element.text.strip()
+                        
+                        # 업로드 시간 체크는 로그만 남기고 제외하지 않음
+                        if upload_time and not self._is_recent_video(upload_time):
+                            logger.debug(f"오래된 영상이지만 포함: {title[:30]}... ({upload_time})")
+                            
                     except:
-                        upload_time = ""
+                        upload_time = "업로드 시간 불명"
+                        logger.debug(f"업로드 시간 불명이지만 포함: {title[:30]}...")
                     
                     # 썸네일 URL 추출
                     try:
@@ -518,17 +528,22 @@ class EnhancedNonhyeonCrawler:
                     if not title or len(title) < 3:
                         continue
                     
+                    # 업로드 시간을 실제 날짜로 변환
+                    actual_date = self._convert_upload_time_to_date(upload_time)
+                    
                     youtube_video = {
                         "title": title,
                         "url": link,
                         "channel": channel,
                         "views": views,
                         "upload_time": upload_time,
+                        "actual_date": actual_date,
                         "thumbnail": thumbnail,
                         "type": "youtube",
                         "keyword": keyword,
                         "search_rank": idx + 1,
-                        "date": upload_time  # 업로드 시간을 날짜로 사용
+                        "date": actual_date,  # 실제 날짜 사용
+                        "summary": f"채널: {channel} | 조회수: {views} | 업로드: {upload_time}"
                     }
                     
                     youtube_data.append(youtube_video)
@@ -544,6 +559,86 @@ class EnhancedNonhyeonCrawler:
         except Exception as e:
             logger.error(f"유튜브 크롤링 오류: {str(e)}")
             return []
+
+    def _is_recent_video(self, upload_time_text):
+        """유튜브 업로드 시간이 최근인지 판단 (관대한 기준 적용)"""
+        try:
+            if not upload_time_text:
+                return True  # 시간 불명인 경우도 포함
+            
+            upload_time_text = upload_time_text.lower().strip()
+            
+            # 최근 영상 패턴들 (한 달 이내)
+            recent_patterns = [
+                "초 전", "분 전", "시간 전",  # 오늘
+                "일 전", "주 전", "주일 전",  # 일/주 단위
+                "하루 전", "이틀 전", "사흘 전", "나흘 전", "닷새 전", "엿새 전",  # 한글 표현
+                "일주일 전", "이주일 전", "삼주일 전", "한 달 전"  # 주/월 표현
+            ]
+            
+            # 패턴 매칭
+            for pattern in recent_patterns:
+                if pattern in upload_time_text:
+                    return True
+            
+            # "일 전" 패턴으로 숫자 추출 (30일까지 허용)
+            import re
+            day_match = re.search(r'(\d+)일 전', upload_time_text)
+            if day_match:
+                days_ago = int(day_match.group(1))
+                return days_ago <= 30  # 30일 이내로 확장
+            
+            # "주 전" 패턴 (4주까지 허용)
+            week_match = re.search(r'(\d+)주 전', upload_time_text)
+            if week_match:
+                weeks_ago = int(week_match.group(1))
+                return weeks_ago <= 4  # 4주 이내
+            
+            # 기본적으로 포함 (너무 엄격하지 않게)
+            return True
+            
+        except Exception as e:
+            logger.warning(f"업로드 시간 파싱 오류: {str(e)}")
+            return True  # 오류 시에도 포함
+
+    def _convert_upload_time_to_date(self, upload_time_text):
+        """유튜브 업로드 시간을 실제 날짜로 변환"""
+        try:
+            if not upload_time_text:
+                return datetime.now().strftime("%Y-%m-%d")
+            
+            upload_time_text = upload_time_text.lower().strip()
+            now = datetime.now()
+            
+            # 오늘 업로드
+            if any(x in upload_time_text for x in ["초 전", "분 전", "시간 전"]):
+                return now.strftime("%Y-%m-%d")
+            
+            # N일 전 패턴
+            import re
+            day_match = re.search(r'(\d+)일 전', upload_time_text)
+            if day_match:
+                days_ago = int(day_match.group(1))
+                target_date = now - timedelta(days=days_ago)
+                return target_date.strftime("%Y-%m-%d")
+            
+            # 한글 표현 처리
+            korean_days = {
+                "하루 전": 1, "이틀 전": 2, "사흘 전": 3, 
+                "나흘 전": 4, "닷새 전": 5, "엿새 전": 6
+            }
+            
+            for korean_day, days_ago in korean_days.items():
+                if korean_day in upload_time_text:
+                    target_date = now - timedelta(days=days_ago)
+                    return target_date.strftime("%Y-%m-%d")
+            
+            # 기본값: 오늘 날짜
+            return now.strftime("%Y-%m-%d")
+            
+        except Exception as e:
+            logger.warning(f"날짜 변환 오류: {str(e)}")
+            return datetime.now().strftime("%Y-%m-%d")
 
     def _normalize_text(self, text):
         """텍스트 정규화 - 중복 검사를 위한 전처리"""

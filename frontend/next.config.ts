@@ -1,6 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  env: {
+    OPENWEATHER_API_KEY: process.env.OPENWEATHER_API_KEY || 'fec0e5d8daec1747581d667dc08e95cb',
+    SEOUL_OPEN_API_KEY: process.env.SEOUL_OPEN_API_KEY || '496144506174657239334644787245',
+  },
+  
   images: {
     domains: ['i.ytimg.com'],
     formats: ['image/webp', 'image/avif'],

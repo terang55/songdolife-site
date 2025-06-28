@@ -65,12 +65,12 @@ class DataSyncManager:
             return {}
 
     def get_latest_files_by_keyword(self):
-        """키워드별 최신 파일들 가져오기"""
+        """all_platforms 통합 파일만 가져오기 (중복 방지)"""
         try:
             latest_files = {}
             
-            # 모든 JSON 파일 스캔
-            pattern = os.path.join(self.source_dir, "*_enhanced_news_*.json")
+            # all_platforms로 시작하는 통합 파일만 스캔
+            pattern = os.path.join(self.source_dir, "all_platforms_enhanced_news_*.json")
             all_files = glob.glob(pattern)
             
             for file_path in all_files:
@@ -81,15 +81,17 @@ class DataSyncManager:
                     keyword = filename.split("_enhanced_news_")[0]
                     timestamp = filename.split("_enhanced_news_")[1].replace(".json", "")
                     
-                    # 키워드별로 가장 최신 파일만 선택
-                    if keyword not in latest_files or timestamp > latest_files[keyword]['timestamp']:
-                        latest_files[keyword] = {
-                            'path': file_path,
-                            'timestamp': timestamp,
-                            'filename': filename
-                        }
+                    # all_platforms 파일만 선택 (중복 방지)
+                    if keyword == "all_platforms":
+                        # 키워드별로 가장 최신 파일만 선택
+                        if keyword not in latest_files or timestamp > latest_files[keyword]['timestamp']:
+                            latest_files[keyword] = {
+                                'path': file_path,
+                                'timestamp': timestamp,
+                                'filename': filename
+                            }
             
-            logger.info(f"키워드별 최신 파일 {len(latest_files)}개 선택")
+            logger.info(f"통합 파일 {len(latest_files)}개 선택 (중복 방지)")
             return latest_files
             
         except Exception as e:
@@ -219,17 +221,31 @@ class DataSyncManager:
     def create_latest_sync_summary(self, synced_files):
         """최신 데이터 동기화 요약 정보 생성"""
         try:
-            # 키워드 추출
-            keywords = set()
+            # 실제 데이터에서 사용된 키워드 추출
+            unique_keywords = set()
+            
+            # all_platforms 파일에서 실제 키워드 추출
             for filename in synced_files.keys():
-                if "_enhanced_news_" in filename:
-                    keyword = filename.split("_enhanced_news_")[0]
-                    keywords.add(keyword)
+                if "all_platforms" in filename:
+                    try:
+                        file_path = os.path.join(self.target_dir, filename)
+                        with open(file_path, 'r', encoding='utf-8') as f:
+                            data = json.load(f)
+                            for item in data:
+                                if 'keyword' in item:
+                                    unique_keywords.add(item['keyword'])
+                    except Exception as e:
+                        logger.warning(f"키워드 추출 실패: {str(e)}")
+            
+            # 실제 검색 키워드 리스트 (정렬)
+            actual_keywords = sorted(list(unique_keywords))
             
             summary = {
                 "sync_time": datetime.now().isoformat(),
                 "total_files": len(synced_files),
-                "keywords": list(keywords),
+                "total_keywords": len(actual_keywords),  # 실제 키워드 수
+                "keywords": actual_keywords,  # 실제 검색 키워드들
+                "file_types": list(synced_files.keys()),  # 파일 타입들
                 "files": {k: k for k in synced_files.keys()},
                 "sync_type": "latest_only"
             }
@@ -238,7 +254,7 @@ class DataSyncManager:
             with open(summary_path, 'w', encoding='utf-8') as f:
                 json.dump(summary, f, ensure_ascii=False, indent=2)
                 
-            logger.info(f"최신 데이터 동기화 요약 생성: {summary_path}")
+            logger.info(f"최신 데이터 동기화 요약 생성: {summary_path} (실제 키워드 {len(actual_keywords)}개)")
             
         except Exception as e:
             logger.warning(f"최신 데이터 동기화 요약 생성 오류: {str(e)}")
@@ -273,10 +289,31 @@ class DataSyncManager:
     def create_sync_summary(self, synced_files):
         """동기화 요약 정보 생성"""
         try:
+            # 실제 데이터에서 사용된 키워드 추출
+            unique_keywords = set()
+            
+            # all_platforms 파일에서 실제 키워드 추출
+            for keyword, file_info in synced_files.items():
+                if "all_platforms" in keyword:
+                    try:
+                        source_path = file_info['path']
+                        with open(source_path, 'r', encoding='utf-8') as f:
+                            data = json.load(f)
+                            for item in data:
+                                if 'keyword' in item:
+                                    unique_keywords.add(item['keyword'])
+                    except Exception as e:
+                        logger.warning(f"키워드 추출 실패: {str(e)}")
+            
+            # 실제 검색 키워드 리스트 (정렬)
+            actual_keywords = sorted(list(unique_keywords))
+            
             summary = {
                 "sync_time": datetime.now().isoformat(),
                 "total_files": len(synced_files),
-                "keywords": list(synced_files.keys()),
+                "total_keywords": len(actual_keywords),  # 실제 키워드 수
+                "keywords": actual_keywords,  # 실제 검색 키워드들
+                "file_types": list(synced_files.keys()),  # 파일 타입들 
                 "files": {k: v['filename'] for k, v in synced_files.items()},
                 "sync_type": "latest_only"
             }
@@ -285,7 +322,7 @@ class DataSyncManager:
             with open(summary_path, 'w', encoding='utf-8') as f:
                 json.dump(summary, f, ensure_ascii=False, indent=2)
                 
-            logger.info(f"동기화 요약 생성: {summary_path}")
+            logger.info(f"동기화 요약 생성: {summary_path} (실제 키워드 {len(actual_keywords)}개)")
             
         except Exception as e:
             logger.warning(f"동기화 요약 생성 오류: {str(e)}")

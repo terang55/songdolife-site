@@ -23,12 +23,14 @@ export async function GET(request: NextRequest) {
     // frontend/public/data/enhanced_news 디렉토리 경로
     const dataDir = join(process.cwd(), 'public', 'data', 'enhanced_news');
     
-    // enhanced_news 디렉토리의 모든 JSON 파일 읽기
-    const files = readdirSync(dataDir).filter(file => file.endsWith('.json'));
+    // all_platforms로 시작하는 통합 파일만 읽기 (중복 방지)
+    const files = readdirSync(dataDir).filter(file => 
+      file.startsWith('all_platforms') && file.endsWith('.json')
+    );
     
     let allNews: NewsItem[] = [];
     
-    // 각 파일의 뉴스 데이터 읽기
+    // 통합 파일만 읽기
     files.forEach(file => {
       try {
         const filePath = join(dataDir, file);

@@ -11,7 +11,9 @@ const API_KEY = process.env.OPENWEATHER_API_KEY;
 console.log('🔧 환경 변수 확인:', {
   hasApiKey: !!process.env.OPENWEATHER_API_KEY,
   keyLength: process.env.OPENWEATHER_API_KEY?.length || 0,
-  usingFallback: !process.env.OPENWEATHER_API_KEY
+  usingFallback: !process.env.OPENWEATHER_API_KEY,
+  allEnvKeys: Object.keys(process.env).filter(key => key.includes('OPENWEATHER')),
+  nodeEnv: process.env.NODE_ENV
 });
 
 interface WeatherData {
@@ -43,10 +45,25 @@ interface WeatherData {
 export async function GET() {
   try {
     console.log('🌤️ 논현동 날씨 정보 요청');
+    
+    // 모든 환경변수 확인 (디버깅용)
+    console.log('🔍 전체 환경변수 디버깅:', {
+      nodeEnv: process.env.NODE_ENV,
+      hasOpenWeather: !!process.env.OPENWEATHER_API_KEY,
+      openWeatherLength: process.env.OPENWEATHER_API_KEY?.length || 0,
+      hasSeoul: !!process.env.SEOUL_OPEN_API_KEY,
+      allKeys: Object.keys(process.env).filter(key => key.includes('API_KEY')),
+      processEnvKeys: Object.keys(process.env).length
+    });
 
     // API 키 확인
     if (!API_KEY) {
       console.error('❌ OpenWeather API 키가 설정되지 않았습니다');
+      console.error('🔍 디버깅 정보:', {
+        API_KEY_value: API_KEY,
+        env_value: process.env.OPENWEATHER_API_KEY,
+        typeof_env: typeof process.env.OPENWEATHER_API_KEY
+      });
       throw new Error('API 키가 필요합니다');
     }
 

@@ -398,7 +398,7 @@ export default function HomePage() {
             <div>
               <div className="text-xl sm:text-3xl font-bold flex items-center justify-center gap-1 sm:gap-2">
                 <span className="text-2xl sm:text-4xl">🏷️</span>
-                {syncStatus?.keywords?.length || '17'}
+                {stats?.summary?.totalCategories || syncStatus?.keywords?.length || '10'}
               </div>
               <div className="text-xs sm:text-sm text-blue-200">수집 키워드</div>
             </div>
@@ -519,7 +519,9 @@ export default function HomePage() {
                       {getTypeIcon(item.type)} {getTypeLabel(item.type)}
                     </span>
                     <span className="text-xs text-gray-500">
-                      {item.type === 'youtube' ? item.views : `${item.content_length}자`}
+                      {item.type === 'youtube' ? item.views : 
+                       item.type === 'blog' ? '' : 
+                       item.content_length ? `${item.content_length}자` : ''}
                     </span>
                   </div>
 
@@ -549,16 +551,20 @@ export default function HomePage() {
                     </span>
                     <span className="text-gray-500 text-xs flex-shrink-0">
                       {item.type === 'youtube' ? 
-                        (item.upload_time && item.upload_time.trim() !== '' ? item.upload_time : '유튜브 영상') : 
+                        (item.upload_time && item.upload_time.trim() !== '' && !item.upload_time.includes('불명') ? item.upload_time : '') : 
                         formatDate(item.date, item)
                       }
                     </span>
                   </div>
                   
-                  {/* 키워드 태그 (유튜브인 경우 하단에 별도 표시) */}
-                  {item.type === 'youtube' && (
+                  {/* 키워드 태그 (모든 타입에 하단 표시) */}
+                  {item.keyword && (
                     <div className="mt-2 sm:mt-3 pt-2 sm:pt-3 border-t">
-                      <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium ${getCategoryColor(item.type)}`}>
+                      <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium ${
+                        item.type === 'youtube' ? 'bg-red-100 text-red-700' :
+                        item.type === 'blog' ? 'bg-green-100 text-green-700' :
+                        'bg-blue-100 text-blue-700'
+                      }`}>
                         #{item.keyword}
                       </span>
                     </div>
@@ -628,7 +634,7 @@ export default function HomePage() {
                 </div>
                 <div className="flex items-center justify-center md:justify-start space-x-2">
                   <span className="text-base">💼</span>
-                  <span>광고 및 제휴 문의</span>
+                  <span>제휴 문의</span>
                 </div>
               </div>
             </div>

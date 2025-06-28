@@ -1,17 +1,24 @@
 {
-  "sync_time": "2025-06-28T16:04:56.309134",
-  "total_files": 4,
+  "sync_time": "2025-06-28T22:19:49.637734",
+  "total_files": 1,
+  "total_keywords": 10,
   "keywords": [
-    "all_platforms",
-    "blog",
-    "news",
-    "youtube"
+    "소래포구",
+    "에코메트로",
+    "인천 남동구 논현동",
+    "인천 논현고잔동",
+    "인천 논현지구",
+    "인천논현",
+    "인천논현 맛집",
+    "인천논현 아파트",
+    "인천논현 카페",
+    "호구포"
+  ],
+  "file_types": [
+    "all_platforms"
   ],
   "files": {
-    "all_platforms": "all_platforms_enhanced_news_20250628_155657.json",
-    "blog": "blog_enhanced_news_20250628_155657.json",
-    "news": "news_enhanced_news_20250628_155657.json",
-    "youtube": "youtube_enhanced_news_20250628_155657.json"
+    "all_platforms": "all_platforms_enhanced_news_20250628_220634.json"
   },
   "sync_type": "latest_only"
 }

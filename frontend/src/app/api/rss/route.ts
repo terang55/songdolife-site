@@ -135,7 +135,7 @@ export async function GET(request: NextRequest) {
       <width>1200</width>
       <height>630</height>
     </image>
-${limitedNews.map((item, index) => {
+${limitedNews.map((item) => {
   const itemDate = formatDate(item.date);
   const itemTitle = escapeXml(item.title || '제목 없음');
   const itemContent = escapeXml((item.content || item.title || '내용 없음').substring(0, 500));

@@ -18,7 +18,7 @@ export default function PrivacyPage() {
           
           <div className="prose max-w-none">
             <p className="text-gray-600 mb-6">
-              논현동 정보 허브(이하 "회사")는 개인정보보호법에 따라 이용자의 개인정보 보호 및 권익을 보호하고 개인정보와 관련한 이용자의 고충을 원활하게 처리할 수 있도록 다음과 같은 처리방침을 두고 있습니다.
+              논현동 정보 허브(이하 &ldquo;회사&rdquo;)는 개인정보보호법에 따라 이용자의 개인정보 보호 및 권익을 보호하고 개인정보와 관련한 이용자의 고충을 원활하게 처리할 수 있도록 다음과 같은 처리방침을 두고 있습니다.
             </p>
 
             <section className="mb-8">

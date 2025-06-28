@@ -18,13 +18,13 @@ export default function TermsPage() {
           
           <div className="prose max-w-none">
             <p className="text-gray-600 mb-6">
-              논현동 정보 허브(이하 "회사")가 제공하는 인터넷 관련 서비스(이하 "서비스")를 이용함에 있어 이용자의 권리·의무 및 책임사항을 규정함을 목적으로 합니다.
+              논현동 정보 허브(이하 &ldquo;회사&rdquo;)가 제공하는 인터넷 관련 서비스(이하 &ldquo;서비스&rdquo;)를 이용함에 있어 이용자의 권리·의무 및 책임사항을 규정함을 목적으로 합니다.
             </p>
 
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-gray-800 mb-4">제1조 (목적)</h2>
               <p className="text-gray-600">
-                이 약관은 논현동 정보 허브(이하 "회사")가 제공하는 인터넷 관련 서비스(이하 "서비스")를 이용함에 있어 이용자의 권리·의무 및 책임사항을 규정함을 목적으로 합니다.
+                이 약관은 논현동 정보 허브(이하 &ldquo;회사&rdquo;)가 제공하는 인터넷 관련 서비스(이하 &ldquo;서비스&rdquo;)를 이용함에 있어 이용자의 권리·의무 및 책임사항을 규정함을 목적으로 합니다.
               </p>
             </section>
 
@@ -32,10 +32,10 @@ export default function TermsPage() {
               <h2 className="text-2xl font-semibold text-gray-800 mb-4">제2조 (정의)</h2>
               <p className="text-gray-600 mb-4">이 약관에서 사용하는 용어의 정의는 다음과 같습니다.</p>
               <ul className="list-disc list-inside text-gray-600 space-y-2">
-                <li>"서비스"란 회사가 제공하는 논현동 지역 정보 플랫폼을 의미합니다.</li>
-                <li>"이용자"란 회사의 서비스에 접속하여 이 약관에 따라 회사가 제공하는 서비스를 받는 회원 및 비회원을 말합니다.</li>
-                <li>"회원"이란 회사에 개인정보를 제공하여 회원등록을 한 자로서, 회사의 정보를 지속적으로 제공받으며, 회사가 제공하는 서비스를 계속적으로 이용할 수 있는 자를 말합니다.</li>
-                <li>"비회원"이란 회원에 가입하지 않고 회사가 제공하는 서비스를 이용하는 자를 말합니다.</li>
+                <li>&ldquo;서비스&rdquo;란 회사가 제공하는 논현동 지역 정보 플랫폼을 의미합니다.</li>
+                <li>&ldquo;이용자&rdquo;란 회사의 서비스에 접속하여 이 약관에 따라 회사가 제공하는 서비스를 받는 회원 및 비회원을 말합니다.</li>
+                <li>&ldquo;회원&rdquo;이란 회사에 개인정보를 제공하여 회원등록을 한 자로서, 회사의 정보를 지속적으로 제공받으며, 회사가 제공하는 서비스를 계속적으로 이용할 수 있는 자를 말합니다.</li>
+                <li>&ldquo;비회원&rdquo;이란 회원에 가입하지 않고 회사가 제공하는 서비스를 이용하는 자를 말합니다.</li>
               </ul>
             </section>
 

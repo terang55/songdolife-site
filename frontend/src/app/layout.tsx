@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     "소래포구", "호구포", "논현동 정보", "논현동 뉴스", "논현동 생활정보",
     "인천 남동구", "논현동 아파트", "논현동 교통", "논현동 병원", "논현동 학원"
   ],
-  authors: [{ name: "논현동 정보 허브", url: "https://nonhyeon-info.vercel.app" }],
+  authors: [{ name: "논현동 정보 허브", url: "https://nonhyeon-info-site.vercel.app" }],
   creator: "논현동 정보 허브",
   publisher: "논현동 정보 허브",
   robots: {
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "ko_KR",
-    url: "https://nonhyeon-info.vercel.app",
+    url: "https://nonhyeon-info-site.vercel.app",
     siteName: "논현동 정보 허브",
     title: "논현동 정보 허브 | 인천 남동구 논현동 지역 정보",
     description: "인천 남동구 논현동 주민들을 위한 종합 정보 플랫폼. 실시간 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요.",
@@ -64,7 +64,7 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: "https://nonhyeon-info.vercel.app",
+    canonical: "https://nonhyeon-info-site.vercel.app",
   },
   category: "지역정보",
 };
@@ -92,7 +92,7 @@ export default function RootLayout({
               'https://wcs.naver.net/wcslog.js');
               wcs_add_config({
                 'account': 'NAVER_ANALYTICS_ID',
-                'domain': 'nonhyeon-info.vercel.app'
+                'domain': 'nonhyeon-info-site.vercel.app'
               });
               wcs_do();
             `,
@@ -129,7 +129,7 @@ export default function RootLayout({
               "@type": "LocalBusiness",
               "name": "논현동 정보 허브",
               "description": "인천 남동구 논현동 주민들을 위한 종합 정보 플랫폼",
-              "url": "https://nonhyeon-info.vercel.app",
+              "url": "https://nonhyeon-info-site.vercel.app",
               "address": {
                 "@type": "PostalAddress",
                 "addressCountry": "KR",
@@ -162,14 +162,14 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "WebSite",
               "name": "논현동 정보 허브",
-              "url": "https://nonhyeon-info.vercel.app",
+              "url": "https://nonhyeon-info-site.vercel.app",
               "description": "인천 남동구 논현동 지역 정보 종합 플랫폼",
               "inLanguage": "ko-KR",
               "potentialAction": {
                 "@type": "SearchAction",
                 "target": {
                   "@type": "EntryPoint",
-                  "urlTemplate": "https://nonhyeon-info.vercel.app?category={search_term_string}"
+                  "urlTemplate": "https://nonhyeon-info-site.vercel.app?category={search_term_string}"
                 },
                 "query-input": "required name=search_term_string"
               },

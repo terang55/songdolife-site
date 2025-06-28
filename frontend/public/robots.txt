@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # 사이트맵 위치
-Sitemap: https://nonhyeon-info.vercel.app/sitemap.xml
+Sitemap: https://nonhyeon-info-site.vercel.app/sitemap.xml
 
 # 크롤링 최적화 (1초 대기)
 Crawl-delay: 1

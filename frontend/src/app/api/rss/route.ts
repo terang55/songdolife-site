@@ -144,19 +144,23 @@ ${limitedNews.map((item) => {
   const itemType = getTypeLabel(item.type);
   const itemUrl = escapeXml(item.url || '#');
   
+  // 네이버 RSS 호환을 위해 내부 링크 사용
+  const internalLink = `${baseUrl}/?ref=rss&external=${encodeURIComponent(item.url || '#')}`;
+  
   return `    <item>
       <title>[${itemType}] ${itemTitle}</title>
-      <description>${itemContent}${itemContent.length >= 500 ? '...' : ''}</description>
+      <description>${itemContent}${itemContent.length >= 500 ? '...' : ''} - 원문 링크: ${itemUrl}</description>
       <content:encoded><![CDATA[
         <h3>${itemTitle}</h3>
         <p><strong>출처:</strong> ${itemSource}</p>
         <p><strong>카테고리:</strong> ${itemType}</p>
         <p><strong>키워드:</strong> ${itemKeyword}</p>
         <div>${item.content || item.title || '내용 없음'}</div>
+        <p><strong>원문 보기:</strong> <a href="${itemUrl}" target="_blank" rel="noopener noreferrer">${itemUrl}</a></p>
         ${item.type === 'youtube' && item.thumbnail ? `<img src="${escapeXml(item.thumbnail)}" alt="썸네일" style="max-width: 100%; height: auto;">` : ''}
       ]]></content:encoded>
-      <link>${itemUrl}</link>
-      <guid isPermaLink="true">${itemUrl}</guid>
+      <link>${internalLink}</link>
+      <guid isPermaLink="false">${baseUrl}/item/${Date.now()}-${Math.random().toString(36).substr(2, 9)}</guid>
       <pubDate>${itemDate}</pubDate>
       <source url="${baseUrl}/api/rss">${itemSource}</source>
       <category>${itemType}</category>

@@ -107,6 +107,23 @@ export default function HomePage() {
     fetchStats();
   }, [fetchNews]);
 
+  // RSS 리디렉션 처리
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const externalUrl = urlParams.get('external');
+    
+    if (externalUrl) {
+      // 3초 후 외부 링크로 리디렉션
+      const timer = setTimeout(() => {
+        window.open(decodeURIComponent(externalUrl), '_blank', 'noopener,noreferrer');
+        // URL에서 파라미터 제거
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }, 3000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
   const fetchSyncStatus = async () => {
     try {
       const response = await fetch('/api/sync');
@@ -393,6 +410,23 @@ export default function HomePage() {
 
       {/* News Grid */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+        {/* RSS 리디렉션 알림 */}
+        {typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('external') && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-8">
+            <div className="flex">
+              <div className="flex-shrink-0">
+                <span className="text-blue-400">🔗</span>
+              </div>
+              <div className="ml-3">
+                <h3 className="text-sm font-medium text-blue-800">RSS 피드에서 접속</h3>
+                <div className="mt-2 text-sm text-blue-700">
+                  잠시 후 원문 페이지로 이동합니다. 논현동 정보 허브를 방문해 주셔서 감사합니다!
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* 에러 메시지 */}
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-8">

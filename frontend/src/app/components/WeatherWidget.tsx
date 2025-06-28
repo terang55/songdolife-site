@@ -85,14 +85,12 @@ export default function WeatherWidget() {
     return iconMap[iconCode] || '🌤️';
   };
 
-
-
   if (loading) {
     return (
       <div className="bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg p-3 text-white shadow-md">
         <div className="animate-pulse">
           <div className="h-3 bg-blue-300 rounded mb-2 w-20"></div>
-          <div className="h-6 bg-blue-300 rounded mb-2 w-12"></div>
+          <div className="h-5 bg-blue-300 rounded mb-2 w-12"></div>
           <div className="h-2 bg-blue-300 rounded w-24"></div>
         </div>
       </div>
@@ -104,7 +102,7 @@ export default function WeatherWidget() {
       <div className="bg-gray-100 rounded-lg p-3 border border-gray-200">
         <div className="text-center">
           <span className="text-xl">🌤️</span>
-          <h3 className="text-xs font-semibold text-gray-700 mt-1">논현동 날씨</h3>
+          <h3 className="text-sm font-semibold text-gray-700 mt-1">논현동 날씨</h3>
           <p className="text-gray-500 text-xs mt-1">로딩 중...</p>
         </div>
       </div>
@@ -116,41 +114,34 @@ export default function WeatherWidget() {
       {/* 헤더 + 현재 날씨 통합 */}
       <div className="flex items-center justify-between mb-2">
         <div>
-          <div className="text-xs text-blue-100 mb-1">📍 논현동 날씨</div>
+          <div className="text-sm text-blue-100">📍 논현동</div>
           <div className="text-xl font-bold">
             {weather.current.temp}°C
           </div>
         </div>
         
         <div className="text-right">
-          <div className="text-2xl mb-1">
+          <div className="text-2xl">
             {getWeatherIcon(weather.current.weather[0].icon)}
           </div>
-          <div className="text-xs text-blue-100">
+          <div className="text-sm text-blue-100">
             {weather.current.weather[0].description}
           </div>
         </div>
       </div>
       
       {/* 간단한 상세 정보 */}
-      <div className="flex justify-between text-xs text-blue-100 mb-2">
-        <span>체감 {weather.current.feels_like}°C</span>
+      <div className="flex justify-between text-sm text-blue-100 mb-2">
+        <span>체감 {weather.current.feels_like}°</span>
         <span>습도 {weather.current.humidity}%</span>
       </div>
 
-      {/* 2일 예보만 표시 */}
-      <div className="grid grid-cols-2 gap-2">
-        {weather.forecast.slice(0, 2).map((day, index) => (
+      {/* 내일 예보만 표시 */}
+      <div className="flex justify-center">
+        {weather.forecast.slice(1, 2).map((day, index) => (
           <div key={index} className="text-center">
-            <div className="text-xs text-blue-100 mb-1">
-              {day.date}
-            </div>
-            <div className="text-sm mb-1">
-              {getWeatherIcon(day.weather.icon)}
-            </div>
-            <div className="text-xs">
-              <span className="font-semibold">{day.temp_max}°</span>
-              <span className="text-blue-200 ml-1">{day.temp_min}°</span>
+            <div className="text-sm text-blue-100">
+              {day.date} {getWeatherIcon(day.weather.icon)} {day.temp_max}°/{day.temp_min}°
             </div>
           </div>
         ))}

@@ -46,6 +46,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly' as const,
       priority: 0.3,
     },
+    // 지하철 정보 페이지
+    {
+      url: `${baseUrl}/subway`,
+      lastModified: now,
+      changeFrequency: 'daily' as const,
+      priority: 0.8,
+    },
     // API 엔드포인트들 (robots.txt에서 차단하지만 sitemap에는 포함하지 않음)
     // 중요한 지역 정보 키워드 페이지들 (실제로는 검색 결과지만 SEO를 위해 포함)
     {

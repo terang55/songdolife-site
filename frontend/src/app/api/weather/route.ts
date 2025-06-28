@@ -7,6 +7,13 @@ const NONHYEON_LON = 126.7317;
 // OpenWeather API 키 (환경변수에서 가져오거나 임시로 사용)
 const API_KEY = process.env.OPENWEATHER_API_KEY || 'fec0e5d8daec1747581d667dc08e95cb';
 
+// 환경 변수 로드 확인 (개발용)
+console.log('🔧 환경 변수 확인:', {
+  hasApiKey: !!process.env.OPENWEATHER_API_KEY,
+  keyLength: process.env.OPENWEATHER_API_KEY?.length || 0,
+  usingFallback: !process.env.OPENWEATHER_API_KEY
+});
+
 interface WeatherData {
   current: {
     temp: number;
@@ -43,13 +50,35 @@ export async function GET() {
     // 5일 예보 정보 가져오기
     const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${NONHYEON_LAT}&lon=${NONHYEON_LON}&appid=${API_KEY}&units=metric&lang=kr`;
 
+    console.log('🔗 API 요청 URL:', {
+      current: currentWeatherUrl.replace(API_KEY, 'API_KEY_HIDDEN'),
+      forecast: forecastUrl.replace(API_KEY, 'API_KEY_HIDDEN')
+    });
+
     const [currentResponse, forecastResponse] = await Promise.all([
       fetch(currentWeatherUrl),
       fetch(forecastUrl)
     ]);
 
+    console.log('📡 API 응답 상태:', {
+      current: currentResponse.status,
+      forecast: forecastResponse.status,
+      currentOk: currentResponse.ok,
+      forecastOk: forecastResponse.ok
+    });
+
     if (!currentResponse.ok || !forecastResponse.ok) {
-      throw new Error('날씨 API 호출 실패');
+      const currentError = !currentResponse.ok ? await currentResponse.text() : null;
+      const forecastError = !forecastResponse.ok ? await forecastResponse.text() : null;
+      
+      console.error('❌ API 응답 에러:', {
+        currentStatus: currentResponse.status,
+        forecastStatus: forecastResponse.status,
+        currentError,
+        forecastError
+      });
+      
+      throw new Error(`날씨 API 호출 실패: Current(${currentResponse.status}), Forecast(${forecastResponse.status})`);
     }
 
     const currentData = await currentResponse.json();

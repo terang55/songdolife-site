@@ -347,13 +347,33 @@ export default function HomePage() {
         </div>
       </header>
 
+      {/* 네비게이션 바 */}
+      <section className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-center py-4">
+            <div className="flex items-center space-x-6 sm:space-x-8">
+              <a 
+                href="/subway" 
+                className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+              >
+                <span className="text-lg">🚇</span>
+                <span className="text-sm font-medium">지하철 정보</span>
+              </a>
+              <div className="text-sm text-gray-600">
+                호구포역 · 인천논현역 · 소래포구역 실시간 정보
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-6 sm:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* 제목 & 날씨 위젯 */}
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-center mb-8">
+          {/* 제목과 날씨 위젯 */}
+          <div className="flex justify-between items-start mb-8">
             {/* 제목과 설명 */}
-            <div className="lg:col-span-3 text-center">
+            <div className="flex-1 text-center">
               <h2 className="text-2xl sm:text-4xl font-bold mb-2 sm:mb-4">인천 논현동 주민들을 위한 정보 허브</h2>
               <p className="text-sm sm:text-xl text-blue-100">
                 실시간 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요
@@ -361,10 +381,8 @@ export default function HomePage() {
             </div>
             
             {/* 날씨 위젯 */}
-            <div className="lg:col-span-1 flex justify-center lg:justify-end">
-              <div className="w-full max-w-xs">
-                <WeatherWidget />
-              </div>
+            <div className="hidden sm:block">
+              <WeatherWidget />
             </div>
           </div>
           
@@ -391,6 +409,11 @@ export default function HomePage() {
               </div>
               <div className="text-xs sm:text-sm text-blue-200">자동 업데이트</div>
             </div>
+          </div>
+          
+          {/* 모바일용 날씨 위젯 */}
+          <div className="sm:hidden mt-6 flex justify-center">
+            <WeatherWidget />
           </div>
         </div>
       </section>

@@ -143,6 +143,12 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="manifest" href="/site.webmanifest" />
         
+        {/* RSS 피드 */}
+        <link rel="alternate" type="application/rss+xml" title="논현동 정보 허브 - 전체" href="/api/rss" />
+        <link rel="alternate" type="application/rss+xml" title="논현동 정보 허브 - 뉴스" href="/api/rss?category=뉴스" />
+        <link rel="alternate" type="application/rss+xml" title="논현동 정보 허브 - 블로그" href="/api/rss?category=블로그" />
+        <link rel="alternate" type="application/rss+xml" title="논현동 정보 허브 - 유튜브" href="/api/rss?category=유튜브" />
+        
         {/* 구조화된 데이터 - 지역 비즈니스 */}
         <script
           type="application/ld+json"

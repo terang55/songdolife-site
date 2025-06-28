@@ -112,61 +112,48 @@ export async function GET(request: NextRequest) {
     const currentDate = new Date().toUTCString();
     const categoryTitle = category ? ` - ${category}` : '';
     
+    const rssItems = limitedNews.map((item, index) => {
+      const itemDate = formatDate(item.date);
+      const itemTitle = escapeXml(item.title || '제목 없음');
+      const itemContent = escapeXml((item.content || item.title || '내용 없음').substring(0, 300));
+      const itemSource = escapeXml(item.source || '알 수 없음');
+      const itemKeyword = escapeXml(item.keyword || '논현동');
+      const itemType = getTypeLabel(item.type);
+      const originalUrl = item.url || '#';
+      
+      // 네이버 RSS 호환을 위해 내부 링크 사용
+      const internalLink = `${baseUrl}/?ref=rss&external=${encodeURIComponent(originalUrl)}`;
+      const uniqueGuid = `${baseUrl}/rss-item/${Date.now()}-${index}`;
+      
+      return `    <item>
+      <title>${escapeXml(`[${itemType}] ${item.title || '제목 없음'}`)}</title>
+      <description>${itemContent}${itemContent.length >= 300 ? '...' : ''}</description>
+      <link>${internalLink}</link>
+      <guid isPermaLink="false">${uniqueGuid}</guid>
+      <pubDate>${itemDate}</pubDate>
+      <category>${escapeXml(itemType)}</category>
+    </item>`;
+    }).join('\n');
+    
     const rssXml = `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0">
   <channel>
-    <title>논현동 정보 허브${categoryTitle}</title>
-    <description>인천 남동구 논현동 주민들을 위한 종합 정보 플랫폼. 실시간 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요.</description>
+    <title>${escapeXml(`논현동 정보 허브${categoryTitle}`)}</title>
+    <description>${escapeXml('인천 남동구 논현동 주민들을 위한 종합 정보 플랫폼. 실시간 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요.')}</description>
     <link>${baseUrl}</link>
     <language>ko-kr</language>
     <lastBuildDate>${currentDate}</lastBuildDate>
     <pubDate>${currentDate}</pubDate>
     <ttl>60</ttl>
-    <atom:link href="${baseUrl}/api/rss${category ? `?category=${encodeURIComponent(category)}` : ''}" rel="self" type="application/rss+xml"/>
-    <managingEditor>info@nonhyeon-info-site.vercel.app (논현동 정보 허브)</managingEditor>
-    <webMaster>info@nonhyeon-info-site.vercel.app (논현동 정보 허브)</webMaster>
+    <managingEditor>terang55@gmail.com (논현동 정보 허브)</managingEditor>
+    <webMaster>terang55@gmail.com (논현동 정보 허브)</webMaster>
     <category>지역정보</category>
-    <category>논현동</category>
-    <category>인천 남동구</category>
     <image>
       <url>${baseUrl}/og-image.jpg</url>
-      <title>논현동 정보 허브${categoryTitle}</title>
+      <title>${escapeXml(`논현동 정보 허브${categoryTitle}`)}</title>
       <link>${baseUrl}</link>
-      <width>1200</width>
-      <height>630</height>
     </image>
-${limitedNews.map((item) => {
-  const itemDate = formatDate(item.date);
-  const itemTitle = escapeXml(item.title || '제목 없음');
-  const itemContent = escapeXml((item.content || item.title || '내용 없음').substring(0, 500));
-  const itemSource = escapeXml(item.source || '알 수 없음');
-  const itemKeyword = escapeXml(item.keyword || '논현동');
-  const itemType = getTypeLabel(item.type);
-  const itemUrl = escapeXml(item.url || '#');
-  
-  // 네이버 RSS 호환을 위해 내부 링크 사용
-  const internalLink = `${baseUrl}/?ref=rss&external=${encodeURIComponent(item.url || '#')}`;
-  
-  return `    <item>
-      <title>[${itemType}] ${itemTitle}</title>
-      <description>${itemContent}${itemContent.length >= 500 ? '...' : ''} - 원문 링크: ${itemUrl}</description>
-      <content:encoded><![CDATA[
-        <h3>${itemTitle}</h3>
-        <p><strong>출처:</strong> ${itemSource}</p>
-        <p><strong>카테고리:</strong> ${itemType}</p>
-        <p><strong>키워드:</strong> ${itemKeyword}</p>
-        <div>${item.content || item.title || '내용 없음'}</div>
-        <p><strong>원문 보기:</strong> <a href="${itemUrl}" target="_blank" rel="noopener noreferrer">${itemUrl}</a></p>
-        ${item.type === 'youtube' && item.thumbnail ? `<img src="${escapeXml(item.thumbnail)}" alt="썸네일" style="max-width: 100%; height: auto;">` : ''}
-      ]]></content:encoded>
-      <link>${internalLink}</link>
-      <guid isPermaLink="false">${baseUrl}/item/${Date.now()}-${Math.random().toString(36).substr(2, 9)}</guid>
-      <pubDate>${itemDate}</pubDate>
-      <source url="${baseUrl}/api/rss">${itemSource}</source>
-      <category>${itemType}</category>
-      <category>${itemKeyword}</category>
-    </item>`;
-}).join('\n')}
+${rssItems}
   </channel>
 </rss>`;
 

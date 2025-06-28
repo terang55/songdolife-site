@@ -27,7 +27,26 @@ User-agent: Bingbot
 Allow: /
 Crawl-delay: 1
 
+# 네이버 검색봇 최적화
 User-agent: NaverBot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Yeti
+Allow: /
+Crawl-delay: 1
+
+User-agent: CokieBot
+Allow: /
+Crawl-delay: 1
+
+# 다음/카카오 검색봇
+User-agent: DaumBot
+Allow: /
+Crawl-delay: 1
+
+# 네이버 블로그 검색봇
+User-agent: NaverBlogBot
 Allow: /
 Crawl-delay: 1
 

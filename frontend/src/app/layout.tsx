@@ -107,6 +107,29 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="논현동정보허브" />
         
+        {/* 네이버 SEO 최적화 메타 태그 */}
+        <meta name="naver-site-verification" content="naver-verification-code" />
+        <meta name="description" content="인천 남동구 논현동 주민들을 위한 종합 정보 플랫폼. 실시간 뉴스, 맛집, 카페, 부동산, 육아, 교통 정보를 한눈에 확인하세요." />
+        <meta name="keywords" content="논현동,인천논현동,남동구논현동,논현지구,에코메트로,논현동맛집,논현동카페,논현동부동산,논현동육아,소래포구,호구포" />
+        <meta name="author" content="논현동 정보 허브" />
+        <meta name="publisher" content="논현동 정보 허브" />
+        <meta name="copyright" content="논현동 정보 허브" />
+        <meta name="robots" content="index,follow" />
+        <meta name="revisit-after" content="1 days" />
+        <meta name="content-language" content="ko" />
+        
+        {/* Open Graph for Naver */}
+        <meta property="og:locale" content="ko_KR" />
+        <meta property="og:site_name" content="논현동 정보 허브" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="논현동 정보 허브 | 인천 남동구 논현동 지역 정보" />
+        <meta property="og:description" content="인천 남동구 논현동 주민들을 위한 종합 정보 플랫폼. 실시간 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요." />
+        <meta property="og:url" content="https://nonhyeon-info-site.vercel.app" />
+        <meta property="og:image" content="https://nonhyeon-info-site.vercel.app/og-image.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="논현동 정보 허브 - 인천 남동구 논현동 지역 정보" />
+        
         {/* 지역 정보 메타 태그 */}
         <meta name="geo.region" content="KR-28" />
         <meta name="geo.placename" content="인천광역시 남동구 논현동" />
@@ -180,6 +203,72 @@ export default function RootLayout({
                   "@type": "GeoCoordinates",
                   "latitude": 37.3894,
                   "longitude": 126.7317
+                }
+              }
+            })
+          }}
+        />
+        
+        {/* 네이버용 조직 구조화 데이터 */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "논현동 정보 허브",
+              "url": "https://nonhyeon-info-site.vercel.app",
+              "logo": "https://nonhyeon-info-site.vercel.app/og-image.jpg",
+              "description": "인천 남동구 논현동 주민들을 위한 종합 정보 플랫폼",
+              "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "KR",
+                "addressRegion": "인천광역시",
+                "addressLocality": "남동구",
+                "streetAddress": "논현동"
+              },
+              "areaServed": {
+                "@type": "Place",
+                "name": "인천광역시 남동구 논현동"
+              },
+              "knowsAbout": [
+                "논현동 지역정보", "논현동 맛집", "논현동 카페", 
+                "논현동 부동산", "논현동 육아", "에코메트로", 
+                "소래포구", "호구포", "논현지구"
+              ],
+              "sameAs": [
+                "https://nonhyeon-info-site.vercel.app"
+              ]
+            })
+          }}
+        />
+        
+        {/* 네이버용 뉴스 미디어 구조화 데이터 */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "NewsMediaOrganization",
+              "name": "논현동 정보 허브",
+              "url": "https://nonhyeon-info-site.vercel.app",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://nonhyeon-info-site.vercel.app/og-image.jpg",
+                "width": 1200,
+                "height": 630
+              },
+              "description": "인천 남동구 논현동 지역 뉴스 및 정보 제공",
+              "publishingPrinciples": "https://nonhyeon-info-site.vercel.app",
+              "areaServed": {
+                "@type": "Place",
+                "name": "인천광역시 남동구 논현동"
+              },
+              "audience": {
+                "@type": "Audience",
+                "geographicArea": {
+                  "@type": "Place",
+                  "name": "인천광역시 남동구 논현동"
                 }
               }
             })

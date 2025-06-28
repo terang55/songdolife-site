@@ -104,7 +104,6 @@ export async function GET(request: NextRequest) {
           
           // 각 필드 추출
           const bstatnNm = rowData.match(/<bstatnNm>(.*?)<\/bstatnNm>/)?.[1] || '';
-          const trainLineNm = rowData.match(/<trainLineNm>(.*?)<\/trainLineNm>/)?.[1] || '';
           const updnLine = rowData.match(/<updnLine>(.*?)<\/updnLine>/)?.[1] || '';
           const arvlMsg2 = rowData.match(/<arvlMsg2>(.*?)<\/arvlMsg2>/)?.[1] || '';
           const arvlMsg3 = rowData.match(/<arvlMsg3>(.*?)<\/arvlMsg3>/)?.[1] || '';
@@ -115,7 +114,6 @@ export async function GET(request: NextRequest) {
           const stationMatch = arvlMsg3.match(/\[(\d+)\]번째 전역 \(([^)]+)\)/);
           if (stationMatch) {
             const count = stationMatch[1];
-            const currentStation = stationMatch[2];
             stationsLeft = `${count}개 역 전`;
           }
           

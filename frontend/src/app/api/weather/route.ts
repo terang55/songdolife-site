@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
 // 논현동 좌표 (인천 남동구 논현동)
 const NONHYEON_LAT = 37.3894;
@@ -33,7 +33,7 @@ interface WeatherData {
   }>;
 }
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     console.log('🌤️ 논현동 날씨 정보 요청');
 
@@ -57,22 +57,29 @@ export async function GET(request: NextRequest) {
 
     // 5일 예보 데이터 처리 (하루에 하나씩만)
     const dailyForecast = forecastData.list
-      .filter((_: any, index: number) => index % 8 === 0) // 3시간마다 데이터가 오므로 8개씩 건너뛰어 하루 단위로
+      .filter((_: unknown, index: number) => index % 8 === 0) // 3시간마다 데이터가 오므로 8개씩 건너뛰어 하루 단위로
       .slice(0, 5)
-      .map((item: any) => ({
-        date: new Date(item.dt * 1000).toLocaleDateString('ko-KR', {
-          month: 'short',
-          day: 'numeric',
-          weekday: 'short'
-        }),
-        temp_max: Math.round(item.main.temp_max),
-        temp_min: Math.round(item.main.temp_min),
-        weather: {
-          main: item.weather[0].main,
-          description: item.weather[0].description,
-          icon: item.weather[0].icon
-        }
-      }));
+      .map((item: unknown) => {
+        const forecastItem = item as {
+          dt: number;
+          main: { temp_max: number; temp_min: number };
+          weather: Array<{ main: string; description: string; icon: string }>;
+        };
+        return {
+          date: new Date(forecastItem.dt * 1000).toLocaleDateString('ko-KR', {
+            month: 'short',
+            day: 'numeric',
+            weekday: 'short'
+          }),
+          temp_max: Math.round(forecastItem.main.temp_max),
+          temp_min: Math.round(forecastItem.main.temp_min),
+          weather: {
+            main: forecastItem.weather[0].main,
+            description: forecastItem.weather[0].description,
+            icon: forecastItem.weather[0].icon
+          }
+        };
+      });
 
     const weatherData: WeatherData = {
       current: {

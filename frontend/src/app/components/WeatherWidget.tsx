@@ -85,12 +85,7 @@ export default function WeatherWidget() {
     return iconMap[iconCode] || '🌤️';
   };
 
-  const getWindDirection = (speed: number) => {
-    if (speed < 1) return '무풍';
-    if (speed < 3) return '약한 바람';
-    if (speed < 7) return '보통 바람';
-    return '강한 바람';
-  };
+
 
   if (loading) {
     return (

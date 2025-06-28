@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 // 필요한 아이콘만 import (현재 사용 중인 아이콘 없음)
 import Image from 'next/image';
+import Head from 'next/head';
 
 interface NewsItem {
   title: string;
@@ -65,10 +66,12 @@ export default function HomePage() {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('전체');
-  const [searchQuery, setSearchQuery] = useState('');
+
   const [error, setError] = useState<string | null>(null);
   const [syncStatus, setSyncStatus] = useState<SyncStatus | null>(null);
   const [stats, setStats] = useState<StatsData | null>(null);
+
+
 
   const fetchNews = useCallback(async () => {
     try {
@@ -77,7 +80,6 @@ export default function HomePage() {
       
       const params = new URLSearchParams();
       if (selectedCategory !== '전체') params.append('category', selectedCategory);
-      if (searchQuery.trim()) params.append('search', searchQuery.trim());
       params.append('limit', '100');
 
       const response = await fetch(`/api/news?${params.toString()}`);
@@ -97,7 +99,7 @@ export default function HomePage() {
     } finally {
       setLoading(false);
     }
-  }, [selectedCategory, searchQuery]);
+  }, [selectedCategory]);
 
   useEffect(() => {
     fetchNews();
@@ -224,6 +226,52 @@ export default function HomePage() {
     return colors[getTypeLabel(type)] || 'bg-gray-100 text-gray-800';
   };
 
+  // 구조화된 데이터 생성 함수
+  const generateNewsStructuredData = () => {
+    if (!news.length) return null;
+
+    const newsArticles = news.slice(0, 10).map((item, index) => ({
+      "@type": "NewsArticle",
+      "headline": item.title,
+      "description": item.content.substring(0, 200),
+      "url": item.url,
+      "datePublished": item.date,
+      "author": {
+        "@type": "Organization",
+        "name": item.source || item.channel || "논현동 정보 허브"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "논현동 정보 허브",
+        "url": "https://nonhyeon-info.vercel.app"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": `https://nonhyeon-info.vercel.app#article-${index}`
+      },
+      "articleSection": item.type === 'news' ? '뉴스' : item.type === 'blog' ? '블로그' : '유튜브',
+      "keywords": [item.keyword, "논현동", "인천 남동구"],
+      "about": {
+        "@type": "Place",
+        "name": "인천광역시 남동구 논현동"
+      }
+    }));
+
+    return {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "name": "논현동 지역 정보",
+      "description": "인천 남동구 논현동 관련 최신 뉴스 및 정보",
+      "url": "https://nonhyeon-info.vercel.app",
+      "numberOfItems": newsArticles.length,
+      "itemListElement": newsArticles.map((article, index) => ({
+        "@type": "ListItem",
+        "position": index + 1,
+        "item": article
+      }))
+    };
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -232,8 +280,23 @@ export default function HomePage() {
     );
   }
 
+  const structuredData = generateNewsStructuredData();
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <>
+      {/* 동적 구조화된 데이터 추가 */}
+      {structuredData && (
+        <Head>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(structuredData)
+            }}
+          />
+        </Head>
+      )}
+      
+      <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white shadow-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -296,24 +359,12 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Search and Filter */}
+      {/* Filter */}
       <section className="bg-white py-4 sm:py-6 border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col lg:flex-row gap-3 sm:gap-4 items-center">
-            {/* Search */}
-            <div className="relative flex-1 w-full lg:max-w-md">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-base sm:text-lg">🔍</span>
-              <input
-                type="text"
-                placeholder="검색..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 sm:pl-10 pr-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
-
+          <div className="flex justify-center">
             {/* Category Filter */}
-            <div className="flex flex-wrap gap-1.5 sm:gap-2 justify-center w-full lg:w-auto">
+            <div className="flex flex-wrap gap-1.5 sm:gap-2 justify-center">
               {categories.map(category => (
                 <button
                   key={category}
@@ -471,5 +522,6 @@ export default function HomePage() {
         </div>
       </footer>
     </div>
+    </>
   );
 }

@@ -128,11 +128,38 @@ export async function GET(request: NextRequest) {
     }
 
     if (search) {
-      const searchLower = search.toLowerCase();
-      filteredNews = filteredNews.filter(item => 
-        item.title.toLowerCase().includes(searchLower) || 
-        item.content.toLowerCase().includes(searchLower)
-      );
+      const searchLower = search.toLowerCase().trim();
+      
+      // 검색어가 너무 짧으면 필터링하지 않음
+      if (searchLower.length < 2) {
+        return NextResponse.json({
+          success: true,
+          data: [],
+          total: 0,
+          timestamp: new Date().toISOString(),
+          note: "검색어는 최소 2글자 이상이어야 합니다."
+        });
+      }
+      
+      filteredNews = filteredNews.filter(item => {
+        const title = item.title.toLowerCase();
+        const content = item.content.toLowerCase();
+        const keyword = item.keyword.toLowerCase();
+        const source = item.source.toLowerCase();
+        
+        // 1. 완전 일치 (가장 높은 우선순위)
+        if (title.includes(searchLower) || keyword.includes(searchLower)) {
+          return true;
+        }
+        
+        // 2. 단어 단위 검색 (공백으로 구분된 각 단어가 모두 포함되어야 함)
+        const searchWords = searchLower.split(' ').filter(word => word.length > 0);
+        const titleMatch = searchWords.every(word => title.includes(word));
+        const contentMatch = searchWords.every(word => content.includes(word));
+        const sourceMatch = searchWords.every(word => source.includes(word));
+        
+        return titleMatch || contentMatch || sourceMatch;
+      });
     }
 
     // 제한된 개수만 반환

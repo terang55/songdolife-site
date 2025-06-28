@@ -19,6 +19,8 @@ from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
 from loguru import logger
 import config
+import difflib
+import re
 
 class EnhancedNonhyeonCrawler:
     def __init__(self):
@@ -106,8 +108,6 @@ class EnhancedNonhyeonCrawler:
         except Exception as e:
             logger.error(f"네이버 뉴스 직접 크롤링 오류: {str(e)}")
             return []
-
-
 
     def _crawl_naver_news_search(self, keyword):
         """네이버 뉴스 검색 크롤링 - 실제 구조에 맞게 개선"""
@@ -545,6 +545,98 @@ class EnhancedNonhyeonCrawler:
             logger.error(f"유튜브 크롤링 오류: {str(e)}")
             return []
 
+    def _normalize_text(self, text):
+        """텍스트 정규화 - 중복 검사를 위한 전처리"""
+        if not text:
+            return ""
+        
+        # 소문자 변환
+        text = text.lower()
+        
+        # 특수문자, 공백, 숫자 제거
+        text = re.sub(r'[^\w가-힣]', '', text)
+        
+        # 연속된 공백을 하나로
+        text = re.sub(r'\s+', '', text)
+        
+        return text
+    
+    def _calculate_similarity(self, text1, text2):
+        """두 텍스트 간의 유사도 계산 (0~1 사이 값)"""
+        if not text1 or not text2:
+            return 0.0
+        
+        # 텍스트 정규화
+        norm_text1 = self._normalize_text(text1)
+        norm_text2 = self._normalize_text(text2)
+        
+        if not norm_text1 or not norm_text2:
+            return 0.0
+        
+        # SequenceMatcher를 사용한 유사도 계산
+        similarity = difflib.SequenceMatcher(None, norm_text1, norm_text2).ratio()
+        return similarity
+    
+    def _is_duplicate_content(self, item1, item2, title_threshold=0.8, content_threshold=0.7):
+        """두 항목이 중복인지 판단"""
+        try:
+            # URL이 같으면 확실한 중복
+            if item1.get('url') == item2.get('url'):
+                return True
+            
+            # 제목 유사도 검사
+            title1 = item1.get('title', '')
+            title2 = item2.get('title', '')
+            title_similarity = self._calculate_similarity(title1, title2)
+            
+            # 내용 유사도 검사 (summary 또는 content 사용)
+            content1 = item1.get('summary', '') or item1.get('content', '')
+            content2 = item2.get('summary', '') or item2.get('content', '')
+            content_similarity = self._calculate_similarity(content1, content2)
+            
+            # 제목이 매우 유사하거나, 제목과 내용이 모두 유사하면 중복으로 판단
+            if title_similarity >= title_threshold:
+                return True
+            
+            if title_similarity >= 0.6 and content_similarity >= content_threshold:
+                return True
+            
+            return False
+            
+        except Exception as e:
+            logger.warning(f"중복 검사 중 오류: {str(e)}")
+            return False
+    
+    def remove_duplicates(self, data_list):
+        """데이터 리스트에서 중복 항목 제거"""
+        try:
+            if not data_list:
+                return []
+            
+            unique_items = []
+            removed_count = 0
+            
+            for current_item in data_list:
+                is_duplicate = False
+                
+                # 기존 unique_items와 비교
+                for existing_item in unique_items:
+                    if self._is_duplicate_content(current_item, existing_item):
+                        is_duplicate = True
+                        removed_count += 1
+                        logger.debug(f"중복 제거: '{current_item.get('title', '')[:50]}...'")
+                        break
+                
+                if not is_duplicate:
+                    unique_items.append(current_item)
+            
+            logger.info(f"중복 제거 완료: 전체 {len(data_list)}개 → 유니크 {len(unique_items)}개 (제거: {removed_count}개)")
+            return unique_items
+            
+        except Exception as e:
+            logger.error(f"중복 제거 중 오류: {str(e)}")
+            return data_list  # 오류 시 원본 반환
+
     def save_enhanced_data(self, data, keyword):
         """개선된 데이터를 JSON 파일로 저장"""
         try:
@@ -560,6 +652,158 @@ class EnhancedNonhyeonCrawler:
         except Exception as e:
             logger.error(f"데이터 저장 오류: {str(e)}")
             return None
+
+    def run_enhanced_crawl_with_platform_keywords(self):
+        """플랫폼별 키워드를 사용한 개선된 크롤링 실행"""
+        try:
+            if not self.create_webdriver():
+                logger.error("웹드라이버 생성 실패")
+                return False
+            
+            all_data = []
+            platform_results = {}
+            
+            # 플랫폼별 키워드 가져오기
+            news_keywords = config.SEARCH_KEYWORDS.get('news', [])
+            blog_keywords = config.SEARCH_KEYWORDS.get('blog', [])
+            youtube_keywords = config.SEARCH_KEYWORDS.get('youtube', [])
+            
+            print(f"🎯 플랫폼별 키워드 크롤링 시작...")
+            print(f"   📰 뉴스 키워드: {len(news_keywords)}개")
+            print(f"   📝 블로그 키워드: {len(blog_keywords)}개") 
+            print(f"   🎥 유튜브 키워드: {len(youtube_keywords)}개")
+            
+            # 1. 뉴스 크롤링
+            print(f"\n📰 뉴스 크롤링 시작...")
+            news_data = []
+            for idx, keyword in enumerate(news_keywords, 1):
+                print(f"   [{idx}/{len(news_keywords)}] 뉴스 키워드: '{keyword}'")
+                keyword_news = self.crawl_enhanced_naver_news(keyword)
+                news_data.extend(keyword_news)
+                time.sleep(config.DELAY_BETWEEN_REQUESTS)
+            
+            print(f"   ✅ 뉴스 수집 완료: {len(news_data)}개 항목")
+            platform_results['news'] = news_data
+            
+            # 2. 블로그 크롤링  
+            print(f"\n📝 블로그 크롤링 시작...")
+            blog_data = []
+            for idx, keyword in enumerate(blog_keywords, 1):
+                print(f"   [{idx}/{len(blog_keywords)}] 블로그 키워드: '{keyword}'")
+                keyword_blog = self.crawl_naver_blog_search(keyword)
+                blog_data.extend(keyword_blog)
+                time.sleep(config.DELAY_BETWEEN_REQUESTS)
+            
+            print(f"   ✅ 블로그 수집 완료: {len(blog_data)}개 항목")
+            platform_results['blog'] = blog_data
+            
+            # 3. 유튜브 크롤링
+            print(f"\n🎥 유튜브 크롤링 시작...")
+            youtube_data = []
+            for idx, keyword in enumerate(youtube_keywords, 1):
+                print(f"   [{idx}/{len(youtube_keywords)}] 유튜브 키워드: '{keyword}'")
+                keyword_youtube = self.crawl_youtube_search(keyword)
+                youtube_data.extend(keyword_youtube)
+                time.sleep(config.DELAY_BETWEEN_REQUESTS)
+            
+            print(f"   ✅ 유튜브 수집 완료: {len(youtube_data)}개 항목")
+            platform_results['youtube'] = youtube_data
+            
+            # 플랫폼별 중복 제거
+            print(f"\n🔍 플랫폼별 중복 제거 중...")
+            for platform, data in platform_results.items():
+                if data:
+                    unique_data = self.remove_duplicates(data)
+                    removed_count = len(data) - len(unique_data)
+                    platform_results[platform] = unique_data
+                    print(f"   {platform}: {len(data)}개 → {len(unique_data)}개 (중복 {removed_count}개 제거)")
+            
+            # 전체 데이터 합치기
+            all_data = []
+            for platform_data in platform_results.values():
+                all_data.extend(platform_data)
+            
+            # 전체 데이터에서 최종 중복 제거 (플랫폼 간 중복)
+            if all_data:
+                print(f"\n🔍 플랫폼 간 최종 중복 검사 중...")
+                initial_count = len(all_data)
+                final_unique_data = self.remove_duplicates(all_data)
+                final_removed_count = initial_count - len(final_unique_data)
+                
+                if final_removed_count > 0:
+                    print(f"✅ 플랫폼 간 중복 제거 완료: {final_removed_count}개 추가 중복 제거")
+                
+                # 플랫폼별로 키워드 그룹핑해서 저장
+                self._save_platform_based_data(platform_results, final_unique_data)
+                
+                # 전체 요약 저장
+                summary_file = f"{self.data_dir}/enhanced_crawl_summary_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+                with open(summary_file, 'w', encoding='utf-8') as f:
+                    json.dump({
+                        "total_items": len(final_unique_data),
+                        "total_before_dedup": initial_count,
+                        "duplicates_removed": final_removed_count,
+                        "platform_breakdown": {
+                            "news": {
+                                "keywords": news_keywords,
+                                "items": len(platform_results['news'])
+                            },
+                            "blog": {
+                                "keywords": blog_keywords, 
+                                "items": len(platform_results['blog'])
+                            },
+                            "youtube": {
+                                "keywords": youtube_keywords,
+                                "items": len(platform_results['youtube'])
+                            }
+                        },
+                        "crawl_time": datetime.now().isoformat(),
+                        "summary": f"{len(final_unique_data)}개 유니크 항목이 플랫폼별 키워드로 수집됨"
+                    }, f, ensure_ascii=False, indent=2)
+                
+                all_data = final_unique_data
+            
+            logger.info(f"플랫폼별 키워드 크롤링 완료: {len(all_data)}개 유니크 항목")
+            print(f"\n🎉 플랫폼별 키워드 크롤링 완료!")
+            print(f"   📊 최종 결과: {len(all_data)}개 유니크 항목")
+            print(f"   📰 뉴스: {len(platform_results['news'])}개")
+            print(f"   📝 블로그: {len(platform_results['blog'])}개")
+            print(f"   🎥 유튜브: {len(platform_results['youtube'])}개")
+            
+            # 크롤링 완료 후 자동으로 프론트엔드에 동기화
+            self.sync_to_frontend()
+            
+            return True
+            
+        except Exception as e:
+            logger.error(f"플랫폼별 키워드 크롤링 오류: {str(e)}")
+            return False
+        finally:
+            if self.driver:
+                self.driver.quit()
+                logger.info("웹드라이버 종료")
+    
+    def _save_platform_based_data(self, platform_results, final_data):
+        """플랫폼별 데이터를 개별 파일로 저장"""
+        try:
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            
+            # 플랫폼별로 저장
+            for platform, data in platform_results.items():
+                if data:
+                    filename = f"{self.data_dir}/enhanced_news/{platform}_enhanced_news_{timestamp}.json"
+                    with open(filename, 'w', encoding='utf-8') as f:
+                        json.dump(data, f, ensure_ascii=False, indent=2)
+                    logger.info(f"{platform} 데이터 저장: {filename} ({len(data)}개 항목)")
+            
+            # 전체 통합 데이터도 저장
+            all_filename = f"{self.data_dir}/enhanced_news/all_platforms_enhanced_news_{timestamp}.json"
+            with open(all_filename, 'w', encoding='utf-8') as f:
+                json.dump(final_data, f, ensure_ascii=False, indent=2)
+            logger.info(f"통합 데이터 저장: {all_filename} ({len(final_data)}개 항목)")
+            
+        except Exception as e:
+            logger.error(f"플랫폼별 데이터 저장 오류: {str(e)}")
 
     def run_enhanced_crawl(self, keywords):
         """개선된 크롤링 실행"""
@@ -590,28 +834,50 @@ class EnhancedNonhyeonCrawler:
                 combined_data = news_data + blog_data + youtube_data
                 
                 if combined_data:
+                    # 키워드별 중복 제거
+                    print(f"   🔍 중복 검사 중...")
+                    unique_data = self.remove_duplicates(combined_data)
+                    
                     # 키워드별 파일 저장
-                    self.save_enhanced_data(combined_data, keyword)
-                    all_data.extend(combined_data)
-                    print(f"   ✅ 총 {len(combined_data)}개 항목 수집 완료 (뉴스: {len(news_data)}, 블로그: {len(blog_data)}, 유튜브: {len(youtube_data)})")
+                    self.save_enhanced_data(unique_data, keyword)
+                    all_data.extend(unique_data)
+                    
+                    removed_count = len(combined_data) - len(unique_data)
+                    if removed_count > 0:
+                        print(f"   ✅ 총 {len(unique_data)}개 항목 수집 완료 (뉴스: {len(news_data)}, 블로그: {len(blog_data)}, 유튜브: {len(youtube_data)}) - 중복 {removed_count}개 제거")
+                    else:
+                        print(f"   ✅ 총 {len(unique_data)}개 항목 수집 완료 (뉴스: {len(news_data)}, 블로그: {len(blog_data)}, 유튜브: {len(youtube_data)})")
                 else:
                     print(f"   ⚠️ 수집된 데이터 없음")
                 
                 # 요청 간 대기
                 time.sleep(config.DELAY_BETWEEN_REQUESTS)
             
-            # 전체 요약 저장
+            # 전체 데이터에서 최종 중복 제거
             if all_data:
+                print(f"\n🔍 전체 데이터 최종 중복 검사 중...")
+                final_unique_data = self.remove_duplicates(all_data)
+                final_removed_count = len(all_data) - len(final_unique_data)
+                
+                if final_removed_count > 0:
+                    print(f"✅ 전체 데이터 중복 제거 완료: {final_removed_count}개 추가 중복 제거")
+                
+                # 전체 요약 저장
                 summary_file = f"{self.data_dir}/enhanced_crawl_summary_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
                 with open(summary_file, 'w', encoding='utf-8') as f:
                     json.dump({
-                        "total_items": len(all_data),
+                        "total_items": len(final_unique_data),
+                        "total_before_dedup": len(all_data),
+                        "duplicates_removed": final_removed_count,
                         "keywords": keywords,
                         "crawl_time": datetime.now().isoformat(),
-                        "summary": f"{len(all_data)}개 항목이 {len(keywords)}개 키워드로 수집됨"
+                        "summary": f"{len(final_unique_data)}개 유니크 항목이 {len(keywords)}개 키워드로 수집됨 (중복 {final_removed_count}개 제거)"
                     }, f, ensure_ascii=False, indent=2)
+                
+                # all_data를 최종 중복 제거된 데이터로 업데이트
+                all_data = final_unique_data
             
-            logger.info(f"전체 개선된 크롤링 완료: {len(all_data)}개 항목")
+            logger.info(f"전체 개선된 크롤링 완료: {len(all_data)}개 유니크 항목")
             
             # 크롤링 완료 후 자동으로 프론트엔드에 동기화
             self.sync_to_frontend()
@@ -625,7 +891,7 @@ class EnhancedNonhyeonCrawler:
             if self.driver:
                 self.driver.quit()
                 logger.info("웹드라이버 종료")
-    
+
     def sync_to_frontend(self):
         """크롤링 완료 후 프론트엔드로 데이터 동기화"""
         try:

@@ -114,10 +114,7 @@ export async function GET(request: NextRequest) {
     
     const rssItems = limitedNews.map((item, index) => {
       const itemDate = formatDate(item.date);
-      const itemTitle = escapeXml(item.title || '제목 없음');
       const itemContent = escapeXml((item.content || item.title || '내용 없음').substring(0, 300));
-      const itemSource = escapeXml(item.source || '알 수 없음');
-      const itemKeyword = escapeXml(item.keyword || '논현동');
       const itemType = getTypeLabel(item.type);
       const originalUrl = item.url || '#';
       

@@ -108,7 +108,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content="논현동정보허브" />
         
         {/* 네이버 SEO 최적화 메타 태그 */}
-        <meta name="naver-site-verification" content="naver-verification-code" />
+        <meta name="naver-site-verification" content="6f6f6592110192cd2491d3c5bf4133592c100558" />
         <meta name="description" content="인천 남동구 논현동 주민들을 위한 종합 정보 플랫폼. 실시간 뉴스, 맛집, 카페, 부동산, 육아, 교통 정보를 한눈에 확인하세요." />
         <meta name="keywords" content="논현동,인천논현동,남동구논현동,논현지구,에코메트로,논현동맛집,논현동카페,논현동부동산,논현동육아,소래포구,호구포" />
         <meta name="author" content="논현동 정보 허브" />

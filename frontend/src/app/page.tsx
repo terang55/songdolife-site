@@ -634,7 +634,7 @@ export default function HomePage() {
                 </div>
                 <div className="flex items-center justify-center md:justify-start space-x-2">
                   <span className="text-base">💼</span>
-                  <span>제휴 문의</span>
+                  <span>제휴 및 사이트 문의</span>
                 </div>
               </div>
             </div>

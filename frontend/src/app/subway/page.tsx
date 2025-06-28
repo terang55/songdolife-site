@@ -111,6 +111,36 @@ export default function SubwayPage() {
       </Head>
 
       <div className="min-h-screen bg-gray-50">
+        {/* 네비게이션 바 */}
+        <div className="bg-white shadow-sm border-b">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between h-16">
+              <div className="flex items-center space-x-4">
+                <a 
+                  href="/" 
+                  className="flex items-center text-green-600 hover:text-green-800 transition-colors"
+                >
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                  </svg>
+                  홈으로
+                </a>
+                <span className="text-gray-300">|</span>
+                <span className="text-gray-700 font-medium">🚇 지하철 정보</span>
+              </div>
+              <a 
+                href="/"
+                className="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
+              >
+                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                메인 페이지로
+              </a>
+            </div>
+          </div>
+        </div>
+
         {/* 헤더 */}
         <div className="bg-gradient-to-r from-green-600 to-green-800 text-white py-8">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -397,6 +427,83 @@ export default function SubwayPage() {
             </div>
           </div>
         </div>
+        
+        {/* Footer */}
+        <footer className="bg-gray-800 text-white py-8 sm:py-12 mt-8 sm:mt-12">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mb-6 sm:mb-8">
+              {/* 브랜드 정보 */}
+              <div className="flex flex-col items-center md:items-start">
+                <div className="flex items-center space-x-2 sm:space-x-3 mb-3 sm:mb-4">
+                  <span className="text-2xl sm:text-3xl">🏙️</span>
+                  <div>
+                    <div className="text-lg sm:text-xl font-bold">논현동 정보 허브</div>
+                    <div className="text-sm text-gray-400">인천 남동구 논현동 지역 정보</div>
+                  </div>
+                </div>
+                <p className="text-sm text-gray-300 text-center md:text-left max-w-sm">
+                  논현동 주민들을 위한 실시간 지역 정보를 제공합니다. 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요.
+                </p>
+              </div>
+
+              {/* 주요 지역 */}
+              <div className="text-center md:text-left">
+                <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">주요 지역</h3>
+                <ul className="space-y-1 sm:space-y-2 text-sm text-gray-300">
+                  <li>📍 논현동</li>
+                  <li>🚇 에코메트로</li>
+                  <li>🦐 소래포구</li>
+                  <li>⚓ 호구포</li>
+                  <li>🏗️ 논현지구</li>
+                </ul>
+              </div>
+
+              {/* 비즈니스 문의 */}
+              <div className="text-center md:text-left">
+                <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">비즈니스 문의</h3>
+                <div className="space-y-2 text-sm text-gray-300">
+                  <div className="flex items-center justify-center md:justify-start space-x-2">
+                    <span className="text-base">📧</span>
+                    <a 
+                      href="mailto:rainbowcr55@gmail.com" 
+                      className="hover:text-white transition-colors"
+                    >
+                      rainbowcr55@gmail.com
+                    </a>
+                  </div>
+                  <div className="flex items-center justify-center md:justify-start space-x-2">
+                    <span className="text-base">💼</span>
+                    <span>제휴 및 사이트 문의</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 하단 구분선 및 저작권 */}
+            <div className="border-t border-gray-700 pt-6 sm:pt-8">
+              <div className="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
+                <div className="text-xs sm:text-sm text-gray-400">
+                  © 2025 논현동 정보 허브. 모든 권리 보유.
+                </div>
+                <div className="flex items-center space-x-4 text-xs sm:text-sm">
+                  <a 
+                    href="/privacy" 
+                    className="text-gray-400 hover:text-white transition-colors"
+                  >
+                    개인정보처리방침
+                  </a>
+                  <span className="text-gray-600">|</span>
+                  <a 
+                    href="/terms" 
+                    className="text-gray-400 hover:text-white transition-colors"
+                  >
+                    이용약관
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </footer>
       </div>
     </>
   );

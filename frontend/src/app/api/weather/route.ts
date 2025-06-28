@@ -16,6 +16,20 @@ console.log('🔧 환경 변수 확인:', {
   nodeEnv: process.env.NODE_ENV
 });
 
+interface ForecastItem {
+  dt: number;
+  main: {
+    temp: number;
+    temp_max: number;
+    temp_min: number;
+  };
+  weather: Array<{
+    main: string;
+    description: string;
+    icon: string;
+  }>;
+}
+
 interface WeatherData {
   current: {
     temp: number;
@@ -115,7 +129,7 @@ export async function GET() {
     });
     
     console.log('📅 예보 데이터 첫 5개 항목:', 
-      forecastData.list.slice(0, 5).map((item: any) => ({
+      forecastData.list.slice(0, 5).map((item: ForecastItem) => ({
         시간: new Date(item.dt * 1000).toLocaleString('ko-KR'),
         온도: item.main.temp,
         날씨: item.weather[0].description
@@ -125,7 +139,7 @@ export async function GET() {
     // 5일 예보 데이터 처리 (하루별 최고/최저 온도 계산)
     const dailyForecastMap = new Map();
     
-    forecastData.list.forEach((item: any) => {
+    forecastData.list.forEach((item: ForecastItem) => {
       const date = new Date(item.dt * 1000);
       const dateKey = date.toDateString(); // 날짜별로 그룹화
       
@@ -143,7 +157,7 @@ export async function GET() {
       }
       
       // 해당 날짜의 온도 데이터 추가
-      dailyForecastMap.get(dateKey).temps.push(item.main.temp);
+      dailyForecastMap.get(dateKey)!.temps.push(item.main.temp);
     });
     
     // 날짜별 최고/최저 온도 계산

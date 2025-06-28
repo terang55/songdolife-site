@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
+import Link from 'next/link';
 
 interface TrainInfo {
   station: string;
@@ -116,7 +117,7 @@ export default function SubwayPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-16">
               <div className="flex items-center space-x-4">
-                <a 
+                <Link 
                   href="/" 
                   className="flex items-center text-green-600 hover:text-green-800 transition-colors"
                 >
@@ -124,11 +125,11 @@ export default function SubwayPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                   </svg>
                   홈으로
-                </a>
+                </Link>
                 <span className="text-gray-300">|</span>
                 <span className="text-gray-700 font-medium">🚇 지하철 정보</span>
               </div>
-              <a 
+              <Link 
                 href="/"
                 className="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
               >
@@ -136,7 +137,7 @@ export default function SubwayPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
                 메인 페이지로
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -486,19 +487,19 @@ export default function SubwayPage() {
                   © 2025 논현동 정보 허브. 모든 권리 보유.
                 </div>
                 <div className="flex items-center space-x-4 text-xs sm:text-sm">
-                  <a 
+                  <Link 
                     href="/privacy" 
                     className="text-gray-400 hover:text-white transition-colors"
                   >
                     개인정보처리방침
-                  </a>
+                  </Link>
                   <span className="text-gray-600">|</span>
-                  <a 
+                  <Link 
                     href="/terms" 
                     className="text-gray-400 hover:text-white transition-colors"
                   >
                     이용약관
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

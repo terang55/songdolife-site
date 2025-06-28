@@ -513,18 +513,73 @@ export default function HomePage() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white py-6 sm:py-8 mt-8 sm:mt-12">
+      <footer className="bg-gray-800 text-white py-8 sm:py-12 mt-8 sm:mt-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center space-x-2 sm:space-x-3 mb-3 sm:mb-4 md:mb-0">
-              <span className="text-xl sm:text-2xl">🌐</span>
-              <div>
-                <div className="text-sm sm:text-base font-semibold">논현동 정보 허브</div>
-                <div className="text-xs sm:text-sm text-gray-400">인천 남동구 논현동 지역 정보</div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mb-6 sm:mb-8">
+            {/* 브랜드 정보 */}
+            <div className="flex flex-col items-center md:items-start">
+              <div className="flex items-center space-x-2 sm:space-x-3 mb-3 sm:mb-4">
+                <span className="text-2xl sm:text-3xl">🏙️</span>
+                <div>
+                  <div className="text-lg sm:text-xl font-bold">논현동 정보 허브</div>
+                  <div className="text-sm text-gray-400">인천 남동구 논현동 지역 정보</div>
+                </div>
+              </div>
+              <p className="text-sm text-gray-300 text-center md:text-left max-w-sm">
+                논현동 주민들을 위한 실시간 지역 정보를 제공합니다. 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요.
+              </p>
+            </div>
+
+            {/* 주요 지역 */}
+            <div className="text-center md:text-left">
+              <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">주요 지역</h3>
+              <ul className="space-y-1 sm:space-y-2 text-sm text-gray-300">
+                <li>📍 논현동</li>
+                <li>🚇 에코메트로</li>
+                <li>🦐 소래포구</li>
+                <li>⚓ 호구포</li>
+                <li>🏗️ 논현지구</li>
+              </ul>
+            </div>
+
+            {/* 비즈니스 문의 */}
+            <div className="text-center md:text-left">
+              <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">비즈니스 문의</h3>
+              <div className="space-y-2 text-sm text-gray-300">
+                <div className="flex items-center justify-center md:justify-start space-x-2">
+                  <span className="text-base">📧</span>
+                  <a 
+                    href="mailto:terang55@gmail.com" 
+                    className="hover:text-white transition-colors"
+                  >
+                    terang55@gmail.com
+                  </a>
+                </div>
+                <div className="flex items-center justify-center md:justify-start space-x-2">
+                  <span className="text-base">💼</span>
+                  <span>광고 및 제휴 문의</span>
+                </div>
+                <div className="flex items-center justify-center md:justify-start space-x-2">
+                  <span className="text-base">🔄</span>
+                  <span>매일 2회 자동 업데이트</span>
+                </div>
               </div>
             </div>
-            <div className="text-xs sm:text-sm text-gray-400 text-center">
-              © 2025 논현동 정보 허브. 모든 권리 보유.
+          </div>
+
+          {/* 하단 구분선 및 저작권 */}
+          <div className="border-t border-gray-700 pt-6 sm:pt-8">
+            <div className="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
+              <div className="text-xs sm:text-sm text-gray-400">
+                © 2025 논현동 정보 허브. 모든 권리 보유.
+              </div>
+              <div className="flex items-center space-x-4 text-xs sm:text-sm text-gray-400">
+                <span>🌐 실시간 정보 제공</span>
+                <span>•</span>
+                <span>📱 모바일 최적화</span>
+                <span>•</span>
+                <span>🔍 SEO 최적화</span>
+              </div>
             </div>
           </div>
         </div>

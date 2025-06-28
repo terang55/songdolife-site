@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     creator: "@nonhyeon_info",
   },
   verification: {
-    google: "google-site-verification-code", // 실제 구글 서치 콘솔에서 발급받은 코드로 교체 필요
+    google: "e3VR6BkZXX1VtX4dm2Zx6q0L2bgHC1FFCPHpnJ6n_hI", // Google Search Console 인증 코드
     other: {
       "naver-site-verification": "naver-verification-code", // 네이버 서치어드바이저 코드
     },
@@ -191,7 +191,7 @@ export default function RootLayout({
       >
         {/* Google Analytics */}
         <Script
-          src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"
+          src="https://www.googletagmanager.com/gtag/js?id=G-SSEDR2CED7"
           strategy="afterInteractive"
         />
         <Script id="google-analytics" strategy="afterInteractive">
@@ -199,7 +199,7 @@ export default function RootLayout({
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'GA_MEASUREMENT_ID', {
+            gtag('config', 'G-SSEDR2CED7', {
               page_title: document.title,
               page_location: window.location.href,
             });

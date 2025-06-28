@@ -115,88 +115,91 @@ export default function SubwayPage() {
         {/* 네비게이션 바 */}
         <div className="bg-white shadow-sm border-b">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between h-16">
-              <div className="flex items-center space-x-4">
+            <div className="flex items-center justify-between py-3 sm:py-4 min-h-[60px]">
+              <div className="flex items-center space-x-2 sm:space-x-4">
                 <Link 
                   href="/" 
-                  className="flex items-center text-green-600 hover:text-green-800 transition-colors"
+                  className="flex items-center text-green-600 hover:text-green-800 transition-colors touch-manipulation"
                 >
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                   </svg>
-                  홈으로
+                  <span className="text-sm sm:text-base">홈으로</span>
                 </Link>
-                <span className="text-gray-300">|</span>
-                <span className="text-gray-700 font-medium">🚇 지하철 정보</span>
+                <span className="text-gray-300 hidden sm:inline">|</span>
+                <span className="text-gray-700 font-medium text-sm sm:text-base">🚇 지하철 정보</span>
               </div>
               <Link 
                 href="/"
-                className="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
+                className="inline-flex items-center px-3 py-2 sm:px-4 sm:py-2 bg-green-600 text-white text-xs sm:text-sm font-medium rounded-lg hover:bg-green-700 transition-colors touch-manipulation min-h-[44px] justify-center"
               >
-                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
-                메인 페이지로
+                <span className="hidden sm:inline">메인 페이지로</span>
+                <span className="sm:hidden">메인</span>
               </Link>
             </div>
           </div>
         </div>
 
         {/* 헤더 */}
-        <div className="bg-gradient-to-r from-green-600 to-green-800 text-white py-8">
+        <div className="bg-gradient-to-r from-green-600 to-green-800 text-white py-6 sm:py-8">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
-              <h1 className="text-3xl sm:text-4xl font-bold mb-4">🚇 수인분당선 지하철 정보</h1>
-              <p className="text-lg text-green-100">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4">🚇 수인분당선 지하철 정보</h1>
+              <p className="text-sm sm:text-base lg:text-lg text-green-100 max-w-2xl mx-auto leading-relaxed">
                 논현동 주변 지하철역의 실시간 도착 정보와 편의시설 안내
               </p>
             </div>
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
           {/* 역 선택 */}
-          <div className="bg-white rounded-lg shadow-sm border p-6 mb-8">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">📍 역 선택</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6 mb-6 sm:mb-8">
+            <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">📍 역 선택</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
               {stations.map((station) => (
                 <button
                   key={station.name}
                   onClick={() => setSelectedStation(station.name)}
-                  className={`p-4 rounded-lg border-2 transition-all ${
+                  className={`p-4 sm:p-4 rounded-xl border-2 transition-all touch-manipulation min-h-[72px] ${
                     selectedStation === station.name
-                      ? 'border-green-600 bg-green-50 text-green-800'
-                      : 'border-gray-200 hover:border-green-300 hover:bg-green-50'
+                      ? 'border-green-600 bg-green-50 text-green-800 shadow-md'
+                      : 'border-gray-200 hover:border-green-300 hover:bg-green-50 active:bg-green-50'
                   }`}
                 >
-                  <div className="text-lg font-semibold">{station.name}</div>
-                  <div className="text-sm text-gray-600">{station.code}</div>
+                  <div className="text-base sm:text-lg font-semibold">{station.name}</div>
+                  <div className="text-xs sm:text-sm text-gray-600 mt-1">{station.code}</div>
                 </button>
               ))}
             </div>
           </div>
 
           {/* 실시간 도착 정보 */}
-          <div className="bg-white rounded-lg shadow-sm border p-6 mb-8">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold text-gray-900">🚄 실시간 도착 정보</h2>
-              <div className="flex items-center gap-4">
+          <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6 mb-6 sm:mb-8">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3 sm:gap-4">
+              <h2 className="text-lg sm:text-xl font-bold text-gray-900">🚄 실시간 도착 정보</h2>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 w-full sm:w-auto">
                 {lastUpdate && (
-                  <span className="text-sm text-gray-600">
-                    마지막 업데이트: {lastUpdate}
+                  <span className="text-xs sm:text-sm text-gray-600 order-2 sm:order-1">
+                    <span className="hidden sm:inline">마지막 업데이트: </span>
+                    <span className="sm:hidden">업데이트: </span>
+                    {lastUpdate}
                   </span>
                 )}
                 <button
                   onClick={() => fetchTrainInfo(selectedStation)}
                   disabled={loading}
-                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 transition-colors"
+                  className="px-4 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 transition-colors text-sm font-medium touch-manipulation min-h-[44px] w-full sm:w-auto order-1 sm:order-2"
                 >
                   {loading ? '새로고침 중...' : '새로고침'}
                 </button>
               </div>
             </div>
 
-            <div className="text-center text-2xl font-bold text-green-800 mb-6">
+            <div className="text-center text-xl sm:text-2xl font-bold text-green-800 mb-4 sm:mb-6 py-2 bg-green-50 rounded-lg">
               {selectedStation}
             </div>
 
@@ -210,45 +213,45 @@ export default function SubwayPage() {
                 {trainInfo.length > 0 ? (
                   <>
                     {/* 방향별 분리 표시 */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                       {/* 상행 (서울 방향) */}
-                      <div className="space-y-4">
-                        <div className="flex items-center justify-center bg-blue-50 py-3 rounded-lg border-2 border-blue-200">
-                          <span className="text-blue-700 font-bold text-lg">🔵 상행 (서울 방향)</span>
+                      <div className="space-y-3 sm:space-y-4">
+                        <div className="flex items-center justify-center bg-blue-50 py-2.5 sm:py-3 rounded-lg border-2 border-blue-200">
+                          <span className="text-blue-700 font-bold text-base sm:text-lg">🔵 상행 (서울 방향)</span>
                         </div>
                         {trainInfo
                           .filter(train => train.direction === '상행')
                           .map((train, index) => (
-                            <div key={`up-${index}`} className="bg-white rounded-lg shadow-md p-4 border-l-4 border-blue-500 hover:shadow-lg transition-shadow">
-                              <div className="flex justify-between items-start mb-3">
-                                <div className="flex items-center gap-2">
-                                  <span className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full">
+                            <div key={`up-${index}`} className="bg-white rounded-xl shadow-md p-3 sm:p-4 border-l-4 border-blue-500 hover:shadow-lg transition-shadow">
+                              <div className="flex flex-col sm:flex-row justify-between items-start mb-3 gap-2 sm:gap-0">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <span className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-1 rounded-full">
                                     {train.trainType}
                                   </span>
-                                  <span className="text-blue-600 font-medium">↗️ {train.destination}</span>
+                                  <span className="text-blue-600 font-medium text-sm sm:text-base">↗️ {train.destination}</span>
                                 </div>
-                                <span className="text-xs text-gray-400">
+                                <span className="text-xs text-gray-400 order-first sm:order-last">
                                   {new Date(train.updatedAt).toLocaleTimeString('ko-KR')}
                                 </span>
                               </div>
                               
-                              <div className="space-y-2 mb-3">
-                                <div className="text-sm text-gray-600">
+                              <div className="space-y-1.5 sm:space-y-2 mb-3">
+                                <div className="text-xs sm:text-sm text-gray-600">
                                   🚇 현재 위치: {train.currentLocation}
                                 </div>
                                 {train.stationsLeft && (
                                   <div className="flex items-center gap-1">
                                     <span className="text-orange-500">📍</span>
-                                    <span className="text-sm font-medium text-orange-600">{train.stationsLeft}</span>
+                                    <span className="text-xs sm:text-sm font-medium text-orange-600">{train.stationsLeft}</span>
                                   </div>
                                 )}
                               </div>
                               
                               <div className="flex justify-between items-center">
-                                <span className="text-xl font-bold text-blue-600">
+                                <span className="text-lg sm:text-xl font-bold text-blue-600">
                                   {train.arrivalTime}
                                 </span>
-                                <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                                <span className={`px-2.5 sm:px-3 py-1 rounded-full text-xs font-medium ${
                                   train.status === '도착' ? 'bg-green-100 text-green-800' :
                                   train.status === '진입' ? 'bg-yellow-100 text-yellow-800' :
                                   'bg-blue-100 text-blue-800'
@@ -267,43 +270,43 @@ export default function SubwayPage() {
                       </div>
 
                       {/* 하행 (인천 방향) */}
-                      <div className="space-y-4">
-                        <div className="flex items-center justify-center bg-red-50 py-3 rounded-lg border-2 border-red-200">
-                          <span className="text-red-700 font-bold text-lg">🔴 하행 (인천 방향)</span>
+                      <div className="space-y-3 sm:space-y-4">
+                        <div className="flex items-center justify-center bg-red-50 py-2.5 sm:py-3 rounded-lg border-2 border-red-200">
+                          <span className="text-red-700 font-bold text-base sm:text-lg">🔴 하행 (인천 방향)</span>
                         </div>
                         {trainInfo
                           .filter(train => train.direction === '하행')
                           .map((train, index) => (
-                            <div key={`down-${index}`} className="bg-white rounded-lg shadow-md p-4 border-l-4 border-red-500 hover:shadow-lg transition-shadow">
-                              <div className="flex justify-between items-start mb-3">
-                                <div className="flex items-center gap-2">
-                                  <span className="inline-block bg-red-100 text-red-800 text-xs font-semibold px-3 py-1 rounded-full">
+                            <div key={`down-${index}`} className="bg-white rounded-xl shadow-md p-3 sm:p-4 border-l-4 border-red-500 hover:shadow-lg transition-shadow">
+                              <div className="flex flex-col sm:flex-row justify-between items-start mb-3 gap-2 sm:gap-0">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <span className="inline-block bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-1 rounded-full">
                                     {train.trainType}
                                   </span>
-                                  <span className="text-red-600 font-medium">↙️ {train.destination}</span>
+                                  <span className="text-red-600 font-medium text-sm sm:text-base">↙️ {train.destination}</span>
                                 </div>
-                                <span className="text-xs text-gray-400">
+                                <span className="text-xs text-gray-400 order-first sm:order-last">
                                   {new Date(train.updatedAt).toLocaleTimeString('ko-KR')}
                                 </span>
                               </div>
                               
-                              <div className="space-y-2 mb-3">
-                                <div className="text-sm text-gray-600">
+                              <div className="space-y-1.5 sm:space-y-2 mb-3">
+                                <div className="text-xs sm:text-sm text-gray-600">
                                   🚇 현재 위치: {train.currentLocation}
                                 </div>
                                 {train.stationsLeft && (
                                   <div className="flex items-center gap-1">
                                     <span className="text-orange-500">📍</span>
-                                    <span className="text-sm font-medium text-orange-600">{train.stationsLeft}</span>
+                                    <span className="text-xs sm:text-sm font-medium text-orange-600">{train.stationsLeft}</span>
                                   </div>
                                 )}
                               </div>
                               
                               <div className="flex justify-between items-center">
-                                <span className="text-xl font-bold text-red-600">
+                                <span className="text-lg sm:text-xl font-bold text-red-600">
                                   {train.arrivalTime}
                                 </span>
-                                <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                                <span className={`px-2.5 sm:px-3 py-1 rounded-full text-xs font-medium ${
                                   train.status === '도착' ? 'bg-green-100 text-green-800' :
                                   train.status === '진입' ? 'bg-yellow-100 text-yellow-800' :
                                   'bg-red-100 text-red-800'
@@ -345,39 +348,39 @@ export default function SubwayPage() {
 
           {/* 역 상세 정보 */}
           {selectedStationInfo && (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
               {/* 출구 정보 */}
-              <div className="bg-white rounded-lg shadow-sm border p-6">
-                <h3 className="text-lg font-bold text-gray-900 mb-4">🚪 출구 정보</h3>
-                <div className="space-y-3">
+              <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6">
+                <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">🚪 출구 정보</h3>
+                <div className="space-y-2 sm:space-y-3">
                   {selectedStationInfo.exits.map((exit, index) => (
                     <div key={index} className="p-3 bg-gray-50 rounded-lg">
-                      <div className="text-sm font-medium text-gray-900">{exit}</div>
+                      <div className="text-xs sm:text-sm font-medium text-gray-900 leading-relaxed">{exit}</div>
                     </div>
                   ))}
                 </div>
               </div>
 
               {/* 편의시설 */}
-              <div className="bg-white rounded-lg shadow-sm border p-6">
-                <h3 className="text-lg font-bold text-gray-900 mb-4">🏢 편의시설</h3>
-                <div className="grid grid-cols-2 gap-2">
+              <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6">
+                <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">🏢 편의시설</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {selectedStationInfo.facilities.map((facility, index) => (
-                    <div key={index} className="flex items-center gap-2 p-2 bg-blue-50 rounded-lg">
-                      <span className="text-blue-600">✓</span>
-                      <span className="text-sm text-gray-900">{facility}</span>
+                    <div key={index} className="flex items-center gap-2 p-2.5 bg-blue-50 rounded-lg">
+                      <span className="text-blue-600 text-sm">✓</span>
+                      <span className="text-xs sm:text-sm text-gray-900">{facility}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
               {/* 주변 명소 */}
-              <div className="bg-white rounded-lg shadow-sm border p-6 lg:col-span-2">
-                <h3 className="text-lg font-bold text-gray-900 mb-4">📍 주변 명소 및 시설</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6 lg:col-span-2">
+                <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">📍 주변 명소 및 시설</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-3">
                   {selectedStationInfo.nearbyPlaces.map((place, index) => (
-                    <div key={index} className="p-3 bg-yellow-50 rounded-lg text-center">
-                      <div className="text-sm font-medium text-gray-900">{place}</div>
+                    <div key={index} className="p-2.5 sm:p-3 bg-yellow-50 rounded-lg text-center">
+                      <div className="text-xs sm:text-sm font-medium text-gray-900">{place}</div>
                     </div>
                   ))}
                 </div>
@@ -386,40 +389,42 @@ export default function SubwayPage() {
           )}
 
           {/* 수인분당선 노선 정보 */}
-          <div className="bg-white rounded-lg shadow-sm border p-6 mt-8">
-            <h3 className="text-lg font-bold text-gray-900 mb-4">🗺️ 수인분당선 노선 정보</h3>
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <div className="text-sm text-gray-600 mb-2">
-                <strong>운행 구간:</strong> 인천역 ↔ 청량리역
-              </div>
-              <div className="text-sm text-gray-600 mb-2">
-                <strong>운행 시간:</strong> 첫차 약 05:00 ~ 막차 약 24:00 (역별로 다름)
-              </div>
-              <div className="text-sm text-gray-600 mb-2">
-                <strong>배차 간격:</strong> 평일 6-8분 / 주말 8-12분
-              </div>
-              <div className="text-sm text-gray-600 mb-4">
-                <strong>주요 경유역:</strong> 인천, 송도, 수원, 분당, 왕십리, 청량리
-              </div>
-              
-              <div className="flex flex-wrap gap-2 text-xs">
-                <span className="px-2 py-1 bg-green-100 text-green-800 rounded">논현동 구간</span>
-                <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded">호구포역</span>
-                <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded font-bold">인천논현역</span>
-                <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded">소래포구역</span>
+          <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6 mt-6 sm:mt-8">
+            <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">🗺️ 수인분당선 노선 정보</h3>
+            <div className="bg-gray-50 p-3 sm:p-4 rounded-lg">
+              <div className="space-y-2 sm:space-y-3">
+                <div className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                  <strong className="text-gray-800">운행 구간:</strong> 인천역 ↔ 청량리역
+                </div>
+                <div className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                  <strong className="text-gray-800">운행 시간:</strong> 첫차 약 05:00 ~ 막차 약 24:00 (역별로 다름)
+                </div>
+                <div className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                  <strong className="text-gray-800">배차 간격:</strong> 평일 6-8분 / 주말 8-12분
+                </div>
+                <div className="text-xs sm:text-sm text-gray-600 leading-relaxed mb-3 sm:mb-4">
+                  <strong className="text-gray-800">주요 경유역:</strong> 인천, 송도, 수원, 분당, 왕십리, 청량리
+                </div>
+                
+                <div className="flex flex-wrap gap-1.5 sm:gap-2 text-xs">
+                  <span className="px-2 py-1 bg-green-100 text-green-800 rounded">논현동 구간</span>
+                  <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded">호구포역</span>
+                  <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded font-bold">인천논현역</span>
+                  <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded">소래포구역</span>
+                </div>
               </div>
             </div>
           </div>
 
           {/* 안내사항 */}
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mt-8">
+          <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-3 sm:p-4 mt-6 sm:mt-8">
             <div className="flex">
               <div className="flex-shrink-0">
-                <span className="text-yellow-400">⚠️</span>
+                <span className="text-yellow-400 text-lg">⚠️</span>
               </div>
-              <div className="ml-3">
-                <h3 className="text-sm font-medium text-yellow-800">안내사항</h3>
-                <div className="mt-2 text-sm text-yellow-700">
+              <div className="ml-2 sm:ml-3">
+                <h3 className="text-sm font-medium text-yellow-800 mb-2">안내사항</h3>
+                <div className="space-y-1 text-xs sm:text-sm text-yellow-700">
                   <p>• 실시간 정보는 실제와 다를 수 있습니다.</p>
                   <p>• 지연 및 운행 중단 시 역내 안내방송을 확인해 주세요.</p>
                   <p>• 더 정확한 정보는 코레일톡 앱을 이용해 주세요.</p>

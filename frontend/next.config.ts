@@ -12,7 +12,6 @@ const nextConfig: NextConfig = {
   compress: true,
   
   experimental: {
-    optimizeCss: true,
     optimizePackageImports: ['lucide-react'],
   },
   

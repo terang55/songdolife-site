@@ -1,0 +1,243 @@
+# 논현동 정보 허브 프로젝트 - Cursor Rules
+
+## 프로젝트 개요
+- **목적**: 인천 남동구 논현동 지역 정보 제공 플랫폼
+- **기술 스택**: Next.js 15, TypeScript, Tailwind CSS 4, Python (크롤링)
+- **최종 목표**: SEO 최적화를 통한 유입 증대 및 광고 수익화
+
+## 개발 원칙
+
+### 1. 코드 스타일 및 구조
+- **언어**: 모든 응답과 주석은 한국어로 작성
+- **TypeScript**: 엄격한 타입 체크 적용, any 타입 사용 금지
+- **컴포넌트**: 함수형 컴포넌트 + hooks 사용
+- **스타일링**: Tailwind CSS 클래스만 사용, 인라인 스타일 금지
+- **반응형**: 모바일 우선 설계 (sm:, md:, lg: 브레이크포인트 활용)
+
+### 2. 크롤링 시스템
+- **플랫폼별 키워드**: 뉴스, 블로그, 유튜브별로 다른 키워드 사용
+- **중복 제거**: 유사도 기반 지능형 중복 검사 (제목 80%, 내용 70% 기준)
+- **데이터 정리**: 최신 데이터만 유지, 기존 파일 자동 정리
+- **에러 처리**: 로깅과 함께 graceful failure 구현
+
+### 3. SEO 최적화
+- **메타 태그**: 모든 페이지에 적절한 title, description, keywords 설정
+- **구조화된 데이터**: JSON-LD 스키마 마크업 필수
+- **성능**: Core Web Vitals 최적화 (LCP, FID, CLS)
+- **접근성**: ARIA 레이블 및 시맨틱 HTML 사용
+
+### 4. 데이터 관리
+- **파일 명명**: `{platform}_{keyword}_enhanced_news_{timestamp}.json` 형식
+- **동기화**: 크롤링 완료 후 자동으로 프론트엔드에 동기화
+- **백업**: 중요한 데이터 변경 전 백업 생성
+- **정리**: 중복 파일 자동 감지 및 제거
+
+## 코딩 가이드라인
+
+### Frontend (Next.js)
+```typescript
+// 컴포넌트 예시
+interface ComponentProps {
+  title: string;
+  items: NewsItem[];
+  category?: string;
+}
+
+export default function Component({ title, items, category = '전체' }: ComponentProps) {
+  // hooks는 상단에 배치
+  const [loading, setLoading] = useState(false);
+  
+  // 이벤트 핸들러는 useCallback 사용
+  const handleClick = useCallback(() => {
+    // 구현
+  }, [dependency]);
+  
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* 반응형 클래스 필수 */}
+    </div>
+  );
+}
+```
+
+### Backend/API
+```typescript
+// API 라우트 예시
+export async function GET(request: NextRequest) {
+  try {
+    // 파라미터 검증
+    const searchParams = request.nextUrl.searchParams;
+    const category = searchParams.get('category');
+    
+    // 데이터 처리
+    const result = await processData(category);
+    
+    return NextResponse.json({
+      success: true,
+      data: result,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('API Error:', error);
+    return NextResponse.json({
+      success: false,
+      error: 'Internal Server Error'
+    }, { status: 500 });
+  }
+}
+```
+
+### 크롤링 (Python)
+```python
+# 크롤러 메서드 예시
+def crawl_with_error_handling(self, keyword: str) -> List[Dict]:
+    """에러 처리가 포함된 크롤링 메서드"""
+    try:
+        logger.info(f"🔍 '{keyword}' 크롤링 시작")
+        
+        # 크롤링 로직
+        data = self.extract_data(keyword)
+        
+        # 중복 제거
+        unique_data = self.remove_duplicates(data)
+        
+        logger.info(f"✅ '{keyword}' 완료: {len(unique_data)}개 수집")
+        return unique_data
+        
+    except Exception as e:
+        logger.error(f"❌ '{keyword}' 크롤링 실패: {str(e)}")
+        return []
+```
+
+## 파일 구조 규칙
+
+### Frontend
+```
+frontend/
+├── src/app/
+│   ├── api/           # API 라우트
+│   ├── components/    # 재사용 컴포넌트 (필요시)
+│   ├── globals.css    # 전역 스타일
+│   ├── layout.tsx     # 루트 레이아웃 (SEO 설정)
+│   ├── page.tsx       # 메인 페이지
+│   └── sitemap.ts     # 동적 사이트맵
+├── public/
+│   ├── data/          # 크롤링 데이터
+│   ├── robots.txt     # SEO
+│   └── site.webmanifest # PWA
+```
+
+### 크롤러
+```
+crawler/
+├── config.py          # 키워드 및 설정
+├── enhanced_crawler.py # 메인 크롤러
+├── remove_duplicates.py # 중복 제거 도구
+├── sync_to_frontend.py # 동기화 스크립트
+└── *.bat             # 실행 배치 파일
+```
+
+## 개발 워크플로우
+
+### 1. 기능 개발
+1. **로컬 테스트**: 기능 구현 후 반드시 로컬에서 테스트
+2. **타입 체크**: `npm run type-check` 실행
+3. **빌드 확인**: `npm run build` 성공 확인
+4. **커밋**: 의미있는 커밋 메시지 작성
+
+### 2. 크롤링 시스템
+1. **키워드 수정**: `config.py`에서 플랫폼별 키워드 관리
+2. **테스트 실행**: 소규모 테스트 후 전체 실행
+3. **중복 확인**: 자동 중복 제거 결과 검토
+4. **동기화**: 프론트엔드 자동 동기화 확인
+
+### 3. 배포 프로세스
+1. **로컬 확인**: 모든 기능 정상 작동 확인
+2. **Git 커밋**: 상세한 커밋 메시지와 함께
+3. **푸시**: GitHub에 푸시 후 Vercel 자동 배포
+4. **SEO 확인**: 메타 태그 및 구조화된 데이터 검증
+
+## 에러 처리 패턴
+
+### Frontend
+```typescript
+// 로딩 상태와 에러 처리
+const [loading, setLoading] = useState(true);
+const [error, setError] = useState<string | null>(null);
+
+try {
+  setLoading(true);
+  setError(null);
+  // API 호출
+} catch (error) {
+  console.error('Error:', error);
+  setError('사용자 친화적인 에러 메시지');
+} finally {
+  setLoading(false);
+}
+```
+
+### 크롤러
+```python
+# 로깅과 함께하는 에러 처리
+try:
+    # 크롤링 로직
+    pass
+except TimeoutException:
+    logger.warning(f"⏰ 타임아웃: {keyword}")
+except NoSuchElementException:
+    logger.warning(f"🔍 요소 없음: {keyword}")
+except Exception as e:
+    logger.error(f"❌ 예상치 못한 오류: {str(e)}")
+```
+
+## 성능 최적화
+
+### 1. 이미지 최적화
+- Next.js Image 컴포넌트 사용
+- WebP, AVIF 형식 우선 사용
+- 적절한 sizes 속성 설정
+
+### 2. 데이터 최적화
+- 중복 제거로 데이터 크기 최소화
+- API 응답 캐싱 (1시간)
+- 불필요한 필드 제거
+
+### 3. SEO 최적화
+- 메타 태그 동적 생성
+- 구조화된 데이터 자동 생성
+- 사이트맵 자동 업데이트
+
+## 금지사항
+- ❌ 하드코딩된 URL이나 키워드
+- ❌ 인라인 스타일 사용
+- ❌ any 타입 사용
+- ❌ console.log (배포 환경에서)
+- ❌ 중복 코드 작성
+- ❌ SEO 태그 누락
+
+## 권장사항
+- ✅ 의미있는 변수명과 함수명 사용
+- ✅ 적절한 주석 (한국어)
+- ✅ 에러 처리 및 로깅
+- ✅ 반응형 디자인
+- ✅ 접근성 고려
+- ✅ 성능 최적화
+
+## 커밋 메시지 규칙
+```
+🚀 기능 추가
+🔧 버그 수정  
+📝 문서 업데이트
+🎨 UI/UX 개선
+⚡ 성능 최적화
+🔍 SEO 최적화
+🗃️ 데이터베이스 관련
+🧹 코드 정리
+```
+
+## 참고사항
+- **타겟 지역**: 인천 남동구 논현동
+- **주요 키워드**: 논현동, 에코메트로, 소래포구, 호구포
+- **사용자**: 논현동 주민 및 관심있는 사람들
+- **목표**: 지역 정보 허브로서의 신뢰성 확보 및 수익화 

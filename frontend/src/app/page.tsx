@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 // 필요한 아이콘만 import (현재 사용 중인 아이콘 없음)
 import Image from 'next/image';
 import Head from 'next/head';
@@ -137,6 +137,11 @@ export default function HomePage() {
   };
 
   const formatDate = (dateString: string, item?: NewsItem) => {
+    // 유튜브 영상이고 날짜가 없는 경우
+    if (item?.type === 'youtube' && (!dateString || dateString.trim() === '')) {
+      return '유튜브 영상';
+    }
+    
     // 블로그 글이고 날짜가 없는 경우
     if (item?.type === 'blog' && (!dateString || dateString.trim() === '')) {
       // 네이버 블로그 URL에서 날짜 추출 시도
@@ -148,7 +153,7 @@ export default function HomePage() {
       return '블로그 글';
     }
     
-    if (!dateString) return '날짜 없음';
+    if (!dateString || dateString.trim() === '') return '날짜 없음';
     
     try {
       // 한국어 날짜 형식 파싱: "2025.06.25. 오후 3:54"
@@ -232,10 +237,10 @@ export default function HomePage() {
 
     const newsArticles = news.slice(0, 10).map((item, index) => ({
       "@type": "NewsArticle",
-      "headline": item.title,
-      "description": item.content.substring(0, 200),
-      "url": item.url,
-      "datePublished": item.date,
+      "headline": item.title || "제목 없음",
+      "description": (item.content || item.title || "내용 없음").substring(0, 200),
+      "url": item.url || "#",
+      "datePublished": item.date || new Date().toISOString(),
       "author": {
         "@type": "Organization",
         "name": item.source || item.channel || "논현동 정보 허브"
@@ -250,7 +255,7 @@ export default function HomePage() {
         "@id": `https://nonhyeon-info.vercel.app#article-${index}`
       },
       "articleSection": item.type === 'news' ? '뉴스' : item.type === 'blog' ? '블로그' : '유튜브',
-      "keywords": [item.keyword, "논현동", "인천 남동구"],
+      "keywords": [item.keyword || "논현동", "논현동", "인천 남동구"],
       "about": {
         "@type": "Place",
         "name": "인천광역시 남동구 논현동"
@@ -472,7 +477,10 @@ export default function HomePage() {
                       {item.type === 'youtube' ? item.channel : item.source}
                     </span>
                     <span className="text-gray-500 text-xs flex-shrink-0">
-                      {item.type === 'youtube' ? item.upload_time : formatDate(item.date, item)}
+                      {item.type === 'youtube' ? 
+                        (item.upload_time && item.upload_time.trim() !== '' ? item.upload_time : '유튜브 영상') : 
+                        formatDate(item.date, item)
+                      }
                     </span>
                   </div>
                   

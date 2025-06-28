@@ -19,6 +19,9 @@ Disallow: /*.json$
 # RSS 피드는 허용
 Allow: /api/rss
 
+# AdSense 관련 파일 허용
+Allow: /ads.txt
+
 # 특별히 허용할 경로들 (지역 정보)
 Allow: /?category=뉴스
 Allow: /?category=블로그

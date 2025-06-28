@@ -227,6 +227,8 @@ export default function HomePage() {
       return <span className="text-lg">📝</span>;
     } else if (type === 'youtube') {
       return <span className="text-lg">🎥</span>;
+    } else if (type === 'cafe') {
+      return <span className="text-lg">☕</span>;
     }
     return <span className="text-lg">📰</span>;
   };
@@ -236,6 +238,8 @@ export default function HomePage() {
       return '블로그';
     } else if (type === 'youtube') {
       return '유튜브';
+    } else if (type === 'cafe') {
+      return '카페';
     }
     return '뉴스';
   };
@@ -244,7 +248,8 @@ export default function HomePage() {
     const colors: { [key: string]: string } = {
       '뉴스': 'bg-blue-100 text-blue-800',
       '블로그': 'bg-green-100 text-green-800',
-      '유튜브': 'bg-red-100 text-red-800'
+      '유튜브': 'bg-red-100 text-red-800',
+      '카페': 'bg-orange-100 text-orange-800'
     };
     return colors[getTypeLabel(type)] || 'bg-gray-100 text-gray-800';
   };
@@ -272,7 +277,7 @@ export default function HomePage() {
         "@type": "WebPage",
         "@id": `https://nonhyeon-info.vercel.app#article-${index}`
       },
-      "articleSection": item.type === 'news' ? '뉴스' : item.type === 'blog' ? '블로그' : '유튜브',
+      "articleSection": item.type === 'news' ? '뉴스' : item.type === 'blog' ? '블로그' : item.type === 'cafe' ? '카페' : '유튜브',
       "keywords": [item.keyword || "논현동", "논현동", "인천 남동구"],
       "about": {
         "@type": "Place",

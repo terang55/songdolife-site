@@ -106,29 +106,68 @@ export async function GET() {
 
     const currentData = await currentResponse.json();
     const forecastData = await forecastResponse.json();
+    
+    console.log('🌡️ 현재 날씨 원본 데이터:', {
+      온도: currentData.main.temp,
+      체감온도: currentData.main.feels_like,
+      습도: currentData.main.humidity,
+      날씨: currentData.weather[0]
+    });
+    
+    console.log('📅 예보 데이터 첫 5개 항목:', 
+      forecastData.list.slice(0, 5).map((item: any) => ({
+        시간: new Date(item.dt * 1000).toLocaleString('ko-KR'),
+        온도: item.main.temp,
+        날씨: item.weather[0].description
+      }))
+    );
 
-    // 5일 예보 데이터 처리 (하루에 하나씩만)
-    const dailyForecast = forecastData.list
-      .filter((_: unknown, index: number) => index % 8 === 0) // 3시간마다 데이터가 오므로 8개씩 건너뛰어 하루 단위로
-      .slice(0, 5)
-      .map((item: unknown) => {
-        const forecastItem = item as {
-          dt: number;
-          main: { temp_max: number; temp_min: number };
-          weather: Array<{ main: string; description: string; icon: string }>;
-        };
-        return {
-          date: new Date(forecastItem.dt * 1000).toLocaleDateString('ko-KR', {
+    // 5일 예보 데이터 처리 (하루별 최고/최저 온도 계산)
+    const dailyForecastMap = new Map();
+    
+    forecastData.list.forEach((item: any) => {
+      const date = new Date(item.dt * 1000);
+      const dateKey = date.toDateString(); // 날짜별로 그룹화
+      
+      if (!dailyForecastMap.has(dateKey)) {
+        dailyForecastMap.set(dateKey, {
+          date: date.toLocaleDateString('ko-KR', {
             month: 'short',
             day: 'numeric',
             weekday: 'short'
           }),
-          temp_max: Math.round(forecastItem.main.temp_max),
-          temp_min: Math.round(forecastItem.main.temp_min),
+          temps: [],
+          weather: item.weather[0], // 첫 번째 날씨 정보 사용
+          dt: item.dt
+        });
+      }
+      
+      // 해당 날짜의 온도 데이터 추가
+      dailyForecastMap.get(dateKey).temps.push(item.main.temp);
+    });
+    
+    // 날짜별 최고/최저 온도 계산
+    const dailyForecast = Array.from(dailyForecastMap.values())
+      .slice(0, 5) // 5일치만
+      .map(day => {
+        const maxTemp = Math.round(Math.max(...day.temps));
+        const minTemp = Math.round(Math.min(...day.temps));
+        
+        console.log(`📊 ${day.date} 온도 분석:`, {
+          원본온도들: day.temps,
+          최고온도: maxTemp,
+          최저온도: minTemp,
+          온도차: maxTemp - minTemp
+        });
+        
+        return {
+          date: day.date,
+          temp_max: maxTemp,
+          temp_min: minTemp,
           weather: {
-            main: forecastItem.weather[0].main,
-            description: forecastItem.weather[0].description,
-            icon: forecastItem.weather[0].icon
+            main: day.weather.main,
+            description: day.weather.description,
+            icon: day.weather.icon
           }
         };
       });
@@ -178,9 +217,13 @@ export async function GET() {
         },
         forecast: [
           {
-            date: '오늘',
-            temp_max: 25,
-            temp_min: 18,
+            date: new Date().toLocaleDateString('ko-KR', {
+              month: 'short',
+              day: 'numeric',
+              weekday: 'short'
+            }),
+            temp_max: 28,
+            temp_min: 22,
             weather: {
               main: 'Clear',
               description: '맑음',
@@ -188,13 +231,31 @@ export async function GET() {
             }
           },
           {
-            date: '내일',
-            temp_max: 23,
-            temp_min: 16,
+            date: new Date(Date.now() + 24 * 60 * 60 * 1000).toLocaleDateString('ko-KR', {
+              month: 'short',
+              day: 'numeric',
+              weekday: 'short'
+            }),
+            temp_max: 26,
+            temp_min: 19,
             weather: {
               main: 'Clouds',
               description: '구름많음',
               icon: '03d'
+            }
+          },
+          {
+            date: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toLocaleDateString('ko-KR', {
+              month: 'short',
+              day: 'numeric',
+              weekday: 'short'
+            }),
+            temp_max: 24,
+            temp_min: 17,
+            weather: {
+              main: 'Rain',
+              description: '비',
+              icon: '10d'
             }
           }
         ]

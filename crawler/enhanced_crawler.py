@@ -640,6 +640,108 @@ class EnhancedNonhyeonCrawler:
             logger.warning(f"날짜 변환 오류: {str(e)}")
             return datetime.now().strftime("%Y-%m-%d")
 
+    def crawl_naver_cafe_search(self, keyword):
+        """네이버 카페 검색 결과 크롤링"""
+        try:
+            logger.info(f"네이버 카페 크롤링 시작: {keyword}")
+            
+            cafe_data = []
+            
+            # 네이버 카페 검색 URL (최신순)
+            encoded_keyword = urllib.parse.quote(keyword)
+            search_url = f"https://search.naver.com/search.naver?ssc=tab.cafe.all&query={encoded_keyword}&sm=tab_opt&sort=1&photo=0&field=0&pd=0&ds=&de=&mynews=0&cluster_rank=41&start=1"
+            
+            logger.debug(f"카페 검색 URL: {search_url}")
+            self.driver.get(search_url)
+            time.sleep(config.DELAY_BETWEEN_REQUESTS)
+            
+            # 카페 게시글 요소들 찾기
+            cafe_items = self.driver.find_elements(By.CSS_SELECTOR, ".total_wrap .api_subject_bx")
+            
+            logger.info(f"☕ 발견된 카페 게시글 수: {len(cafe_items)}개 (상위 5개 수집 예정)")
+            
+            for idx, item in enumerate(cafe_items[:5]):
+                try:
+                    # 제목 추출
+                    title_element = item.find_element(By.CSS_SELECTOR, ".api_txt_lines.total_tit a")
+                    title = title_element.text.strip()
+                    link = title_element.get_attribute("href")
+                    
+                    # 카페명 추출
+                    try:
+                        cafe_element = item.find_element(By.CSS_SELECTOR, ".sub_txt a")
+                        cafe_name = cafe_element.text.strip()
+                    except:
+                        cafe_name = ""
+                    
+                    # 작성자 추출
+                    try:
+                        author_element = item.find_element(By.CSS_SELECTOR, ".sub_txt .name")
+                        author = author_element.text.strip()
+                    except:
+                        author = ""
+                    
+                    # 작성일 추출
+                    try:
+                        date_element = item.find_element(By.CSS_SELECTOR, ".sub_txt .date")
+                        date_text = date_element.text.strip()
+                        
+                        # 날짜 형식 변환
+                        if "." in date_text:
+                            # "2024.12.29" 형식
+                            date_info = date_text.replace(".", "-")
+                        elif "일 전" in date_text:
+                            days_ago = int(date_text.replace("일 전", "").strip())
+                            target_date = datetime.now() - timedelta(days=days_ago)
+                            date_info = target_date.strftime("%Y-%m-%d")
+                        else:
+                            date_info = datetime.now().strftime("%Y-%m-%d")
+                    except:
+                        date_info = datetime.now().strftime("%Y-%m-%d")
+                    
+                    # 내용 미리보기 추출
+                    try:
+                        content_element = item.find_element(By.CSS_SELECTOR, ".api_txt_lines.dsc_txt")
+                        content = content_element.text.strip()
+                    except:
+                        content = ""
+                    
+                    if not title or len(title) < 3:
+                        continue
+                    
+                    # 광고성 콘텐츠 필터링
+                    if self._is_ad_content(title):
+                        logger.debug(f"광고성 카페글 제외: {title[:30]}...")
+                        continue
+                    
+                    cafe_post = {
+                        "title": title,
+                        "content": content,
+                        "url": link,
+                        "source": cafe_name if cafe_name else "네이버카페",
+                        "author": author,
+                        "date": date_info,
+                        "keyword": keyword,
+                        "type": "cafe",
+                        "content_length": len(content) if content else 0
+                    }
+                    
+                    cafe_data.append(cafe_post)
+                    logger.debug(f"카페글 수집: {title[:50]}...")
+                    
+                except Exception as e:
+                    logger.warning(f"카페글 처리 중 오류: {str(e)}")
+                    continue
+            
+            logger.info(f"네이버 카페 수집 완료: {len(cafe_data)}개 게시글")
+            return cafe_data
+            
+        except Exception as e:
+            logger.error(f"네이버 카페 크롤링 오류: {str(e)}")
+            return []
+
+
+
     def _normalize_text(self, text):
         """텍스트 정규화 - 중복 검사를 위한 전처리"""
         if not text:
@@ -762,11 +864,13 @@ class EnhancedNonhyeonCrawler:
             news_keywords = config.SEARCH_KEYWORDS.get('news', [])
             blog_keywords = config.SEARCH_KEYWORDS.get('blog', [])
             youtube_keywords = config.SEARCH_KEYWORDS.get('youtube', [])
+            cafe_keywords = config.SEARCH_KEYWORDS.get('cafe', [])
             
             print(f"🎯 플랫폼별 키워드 크롤링 시작...")
             print(f"   📰 뉴스 키워드: {len(news_keywords)}개")
             print(f"   📝 블로그 키워드: {len(blog_keywords)}개") 
             print(f"   🎥 유튜브 키워드: {len(youtube_keywords)}개")
+            print(f"   ☕ 네이버카페 키워드: {len(cafe_keywords)}개")
             
             # 1. 뉴스 크롤링
             print(f"\n📰 뉴스 크롤링 시작...")
@@ -803,6 +907,18 @@ class EnhancedNonhyeonCrawler:
             
             print(f"   ✅ 유튜브 수집 완료: {len(youtube_data)}개 항목")
             platform_results['youtube'] = youtube_data
+            
+            # 4. 네이버 카페 크롤링
+            print(f"\n☕ 네이버 카페 크롤링 시작...")
+            cafe_data = []
+            for idx, keyword in enumerate(cafe_keywords, 1):
+                print(f"   [{idx}/{len(cafe_keywords)}] 카페 키워드: '{keyword}'")
+                keyword_cafe = self.crawl_naver_cafe_search(keyword)
+                cafe_data.extend(keyword_cafe)
+                time.sleep(config.DELAY_BETWEEN_REQUESTS)
+            
+            print(f"   ✅ 네이버 카페 수집 완료: {len(cafe_data)}개 항목")
+            platform_results['cafe'] = cafe_data
             
             # 플랫폼별 중복 제거
             print(f"\n🔍 플랫폼별 중복 제거 중...")
@@ -850,6 +966,10 @@ class EnhancedNonhyeonCrawler:
                             "youtube": {
                                 "keywords": youtube_keywords,
                                 "items": len(platform_results['youtube'])
+                            },
+                            "cafe": {
+                                "keywords": cafe_keywords,
+                                "items": len(platform_results['cafe'])
                             }
                         },
                         "crawl_time": datetime.now().isoformat(),

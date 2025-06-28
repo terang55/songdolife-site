@@ -110,41 +110,42 @@ export default function WeatherWidget() {
   }
 
   return (
-    <div className="bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg p-3 text-white shadow-md">
-      {/* 헤더 + 현재 날씨 통합 */}
-      <div className="flex items-center justify-between mb-2">
-        <div>
-          <div className="text-sm text-blue-100">📍 논현동</div>
-          <div className="text-xl font-bold">
-            {weather.current.temp}°C
-          </div>
-        </div>
-        
-        <div className="text-right">
-          <div className="text-2xl">
-            {getWeatherIcon(weather.current.weather[0].icon)}
-          </div>
-          <div className="text-sm text-blue-100">
-            {weather.current.weather[0].description}
-          </div>
-        </div>
-      </div>
-      
-      {/* 간단한 상세 정보 */}
-      <div className="flex justify-between text-sm text-blue-100 mb-2">
-        <span>체감 {weather.current.feels_like}°</span>
-        <span>습도 {weather.current.humidity}%</span>
-      </div>
-
-      {/* 내일 예보만 표시 */}
-      <div className="flex justify-center">
-        {weather.forecast.slice(1, 2).map((day, index) => (
-          <div key={index} className="text-center">
-            <div className="text-sm text-blue-100">
-              {day.date} {getWeatherIcon(day.weather.icon)} {day.temp_max}°/{day.temp_min}°
+    <div className="bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg p-3 text-white shadow-md w-full max-w-md">
+      <div className="flex items-center justify-between gap-4">
+        {/* 현재 날씨 (왼쪽) */}
+        <div className="flex items-center gap-3">
+          <div>
+            <div className="text-xs text-blue-100">📍 논현동</div>
+            <div className="text-2xl font-bold">{weather.current.temp}°C</div>
+            <div className="text-xs text-blue-100">
+              체감 {weather.current.feels_like}° · 습도 {weather.current.humidity}%
             </div>
           </div>
-        ))}
+          <div className="text-center">
+            <div className="text-3xl">{getWeatherIcon(weather.current.weather[0].icon)}</div>
+            <div className="text-xs text-blue-100">{weather.current.weather[0].description}</div>
+          </div>
+        </div>
+
+        {/* 구분선 */}
+        <div className="h-12 w-px bg-blue-300"></div>
+
+        {/* 오늘의 최고/최저 온도 (오른쪽) */}
+        <div className="text-center">
+          {weather.forecast.slice(0, 1).map((day, index) => (
+            <div key={index}>
+              <div className="text-xs text-blue-100 mb-1">오늘 예상</div>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-2xl">{getWeatherIcon(day.weather.icon)}</span>
+                <div className="text-xs text-blue-100">
+                  <div>최고 {day.temp_max}°</div>
+                  <div>최저 {day.temp_min}°</div>
+                </div>
+              </div>
+              <div className="text-xs text-blue-200">{day.weather.description}</div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

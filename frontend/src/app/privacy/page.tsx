@@ -104,7 +104,7 @@ export default function PrivacyPage() {
               <h2 className="text-2xl font-semibold text-gray-800 mb-4">8. 개인정보보호책임자</h2>
               <div className="bg-gray-50 p-4 rounded-lg">
                 <p className="text-gray-600 mb-2"><strong>개인정보보호책임자</strong></p>
-                <p className="text-gray-600 mb-1">이메일: terang55@gmail.com</p>
+                <p className="text-gray-600 mb-1">이메일: rainbowcr55@gmail.com</p>
                 <p className="text-gray-600">담당부서: 논현동 정보 허브 운영팀</p>
               </div>
             </section>

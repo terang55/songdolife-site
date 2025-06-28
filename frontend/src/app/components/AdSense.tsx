@@ -41,7 +41,7 @@ export default function AdSense({
           display: 'block',
           ...style 
         }}
-        data-ad-client="ca-pub-YOUR_PUBLISHER_ID" // 실제 AdSense 승인 후 교체
+        data-ad-client="ca-pub-2592538242403472"
         data-ad-slot={slot}
         data-ad-format={format}
         data-full-width-responsive={responsive ? "true" : "false"}

@@ -142,8 +142,8 @@ export async function GET(request: NextRequest) {
     <lastBuildDate>${currentDate}</lastBuildDate>
     <pubDate>${currentDate}</pubDate>
     <ttl>60</ttl>
-    <managingEditor>terang55@gmail.com (논현동 정보 허브)</managingEditor>
-    <webMaster>terang55@gmail.com (논현동 정보 허브)</webMaster>
+    <managingEditor>rainbowcr55@gmail.com (논현동 정보 허브)</managingEditor>
+    <webMaster>rainbowcr55@gmail.com (논현동 정보 허브)</webMaster>
     <category>지역정보</category>
     <image>
       <url>${baseUrl}/og-image.jpg</url>

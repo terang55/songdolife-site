@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { XMLParser } from 'fast-xml-parser';
 
 // 국토교통부 실거래가 API 설정

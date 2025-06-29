@@ -5,6 +5,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import Head from 'next/head';
 import WeatherWidget from './components/WeatherWidget';
+import MedicalWidget from './components/MedicalWidget';
 
 interface NewsItem {
   title: string;
@@ -54,13 +55,15 @@ const categoryIcons: { [key: string]: React.ReactNode } = {
   '뉴스': <span className="text-base">📰</span>,
   '블로그': <span className="text-base">📝</span>,
   '유튜브': <span className="text-base">🎥</span>,
+  '병원/약국': <span className="text-base">🏥</span>,
 };
 
 const categories = [
   '전체',
   '뉴스',
   '블로그', 
-  '유튜브'
+  '유튜브',
+  '병원/약국'
 ];
 
 export default function HomePage() {
@@ -72,15 +75,15 @@ export default function HomePage() {
   const [syncStatus, setSyncStatus] = useState<SyncStatus | null>(null);
   const [stats, setStats] = useState<StatsData | null>(null);
 
-
-
   const fetchNews = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
       
       const params = new URLSearchParams();
-      if (selectedCategory !== '전체') params.append('category', selectedCategory);
+      if (selectedCategory !== '전체' && selectedCategory !== '병원/약국') {
+        params.append('category', selectedCategory);
+      }
       params.append('limit', '100');
 
       const response = await fetch(`/api/news?${params.toString()}`);
@@ -103,10 +106,18 @@ export default function HomePage() {
   }, [selectedCategory]);
 
   useEffect(() => {
-    fetchNews();
-    fetchSyncStatus();
-    fetchStats();
-  }, [fetchNews]);
+    // 병원/약국 카테고리가 아닐 때만 뉴스 로딩
+    if (selectedCategory !== '병원/약국') {
+      fetchNews();
+      fetchSyncStatus();
+      fetchStats();
+    } else {
+      // 병원/약국 카테고리일 때는 로딩 상태 해제
+      setLoading(false);
+      setError(null);
+      setNews([]);
+    }
+  }, [fetchNews, selectedCategory]);
 
   // RSS 리디렉션 처리
   useEffect(() => {
@@ -246,85 +257,68 @@ export default function HomePage() {
 
   const getCategoryColor = (type?: string) => {
     const colors: { [key: string]: string } = {
-      '뉴스': 'bg-blue-100 text-blue-800',
-      '블로그': 'bg-green-100 text-green-800',
-      '유튜브': 'bg-red-100 text-red-800',
-      '카페': 'bg-orange-100 text-orange-800'
+      'news': 'bg-blue-100 text-blue-800',
+      'blog': 'bg-green-100 text-green-800',
+      'youtube': 'bg-red-100 text-red-800',
+      'cafe': 'bg-yellow-100 text-yellow-800',
     };
-    return colors[getTypeLabel(type)] || 'bg-gray-100 text-gray-800';
+    return colors[type || 'news'] || 'bg-gray-100 text-gray-800';
   };
 
-  // 구조화된 데이터 생성 함수
   const generateNewsStructuredData = () => {
-    if (!news.length) return null;
+    if (news.length === 0) return null;
 
-    const newsArticles = news.slice(0, 10).map((item, index) => ({
-      "@type": "NewsArticle",
-      "headline": item.title || "제목 없음",
-      "description": (item.content || item.title || "내용 없음").substring(0, 200),
-      "url": item.url || "#",
-      "datePublished": item.date || new Date().toISOString(),
-      "author": {
-        "@type": "Organization",
-        "name": item.source || item.channel || "논현동 정보 허브"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "논현동 정보 허브",
-        "url": "https://nonhyeon-info.vercel.app"
-      },
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": `https://nonhyeon-info.vercel.app#article-${index}`
-      },
-      "articleSection": item.type === 'news' ? '뉴스' : item.type === 'blog' ? '블로그' : item.type === 'cafe' ? '카페' : '유튜브',
-      "keywords": [item.keyword || "논현동", "논현동", "인천 남동구"],
-      "about": {
-        "@type": "Place",
-        "name": "인천광역시 남동구 논현동"
-      }
-    }));
-
-    return {
+    const structuredData = {
       "@context": "https://schema.org",
-      "@type": "ItemList",
-      "name": "논현동 지역 정보",
-      "description": "인천 남동구 논현동 관련 최신 뉴스 및 정보",
-      "url": "https://nonhyeon-info.vercel.app",
-      "numberOfItems": newsArticles.length,
-      "itemListElement": newsArticles.map((article, index) => ({
-        "@type": "ListItem",
-        "position": index + 1,
-        "item": article
-      }))
+      "@type": "CollectionPage",
+      "name": "논현동 정보 허브 - 지역 뉴스 및 정보",
+      "description": "인천 남동구 논현동의 최신 뉴스, 블로그, 유튜브 정보를 한눈에 확인하세요.",
+      "url": "https://your-domain.com",
+      "mainEntity": {
+        "@type": "ItemList",
+        "itemListElement": news.slice(0, 10).map((item, index) => ({
+          "@type": "ListItem",
+          "position": index + 1,
+          "item": {
+            "@type": "NewsArticle",
+            "headline": item.title,
+            "description": item.content,
+            "url": item.url,
+            "datePublished": item.date,
+            "publisher": {
+              "@type": "Organization",
+              "name": item.source
+            }
+          }
+        }))
+      }
     };
-  };
 
-  if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
-      </div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
     );
-  }
-
-  const structuredData = generateNewsStructuredData();
+  };
 
   return (
     <>
-      {/* 동적 구조화된 데이터 추가 */}
-      {structuredData && (
-        <Head>
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify(structuredData)
-            }}
-          />
-        </Head>
-      )}
-      
-      <div className="min-h-screen bg-gray-50">
+      <Head>
+        <title>논현동 정보 허브 - 인천 남동구 논현동 지역 정보</title>
+        <meta name="description" content="인천 남동구 논현동의 최신 뉴스, 맛집, 카페, 부동산, 육아 정보를 실시간으로 확인하세요. 논현지구, 에코메트로, 소래포구 주변 정보도 함께 제공합니다." />
+        <meta name="keywords" content="논현동, 인천 남동구, 논현지구, 에코메트로, 소래포구, 호구포, 지역정보, 뉴스, 맛집, 카페, 부동산, 육아" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta property="og:title" content="논현동 정보 허브 - 인천 남동구 논현동 지역 정보" />
+        <meta property="og:description" content="논현동 주민들을 위한 실시간 지역 정보를 제공합니다. 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요." />
+        <meta property="og:url" content="https://your-domain.com" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://your-domain.com/og-image.jpg" />
+        <link rel="canonical" href="https://your-domain.com" />
+        {generateNewsStructuredData()}
+      </Head>
+
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white shadow-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -389,7 +383,7 @@ export default function HomePage() {
               <WeatherWidget />
             </div>
           </div>
-          
+
           {/* 통계 정보 */}
           <div className="grid grid-cols-3 gap-3 sm:flex sm:justify-center sm:space-x-12 text-center max-w-md sm:max-w-none mx-auto">
             <div className="bg-white/10 rounded-lg p-3 sm:bg-transparent sm:p-0">
@@ -415,7 +409,7 @@ export default function HomePage() {
               <div className="text-xs sm:text-sm text-blue-200">자동 업데이트</div>
             </div>
           </div>
-          
+
           {/* 모바일용 날씨 위젯 */}
           <div className="sm:hidden mt-6 flex justify-center">
             <WeatherWidget />
@@ -450,7 +444,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* News Grid */}
+      {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
         {/* RSS 리디렉션 알림 */}
         {typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('external') && (
@@ -469,128 +463,136 @@ export default function HomePage() {
           </div>
         )}
 
-        {/* 에러 메시지 */}
-        {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-8">
-            <div className="flex">
-              <div className="flex-shrink-0">
-                <span className="text-red-400">⚠️</span>
-              </div>
-              <div className="ml-3">
-                <h3 className="text-sm font-medium text-red-800">오류 발생</h3>
-                <div className="mt-2 text-sm text-red-700">{error}</div>
-              </div>
-            </div>
-          </div>
-        )}
+        {/* 병원/약국 정보 위젯 (병원/약국 카테고리 선택시에만) */}
+        {selectedCategory === '병원/약국' && <MedicalWidget />}
 
-        {/* 로딩 */}
-        {loading && (
-          <div className="text-center py-8 sm:py-12">
-            <div className="inline-block animate-spin rounded-full h-6 w-6 sm:h-8 sm:w-8 border-b-2 border-blue-600"></div>
-            <p className="mt-2 text-sm sm:text-base text-gray-600">데이터를 불러오는 중...</p>
-          </div>
-        )}
-
-        {/* 뉴스 목록 */}
-        {!loading && news.length > 0 && (
-          <div className="grid gap-3 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {news.map((item, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-xl shadow-sm border hover:shadow-md transition-all duration-200 overflow-hidden"
-              >
-                {/* 유튜브 썸네일 */}
-                {item.type === 'youtube' && item.thumbnail && (
-                  <div className="aspect-video bg-gray-100 rounded-t-lg overflow-hidden relative">
-                    <Image 
-                      src={item.thumbnail} 
-                      alt={item.title}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    />
+        {/* 뉴스 콘텐츠 (병원/약국 카테고리가 아닐 때만) */}
+        {selectedCategory !== '병원/약국' && (
+          <>
+            {/* 에러 메시지 */}
+            {error && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-8">
+                <div className="flex">
+                  <div className="flex-shrink-0">
+                    <span className="text-red-400">⚠️</span>
                   </div>
-                )}
-                
-                <div className="p-3 sm:p-6">
-                  {/* 헤더 */}
-                  <div className="flex items-start justify-between mb-2 sm:mb-3">
-                    <span className={`inline-flex items-center gap-1 px-2 sm:px-2.5 py-1 rounded-full text-xs font-medium ${
-                      item.type === 'youtube' ? 'bg-red-100 text-red-800' :
-                      item.type === 'blog' ? 'bg-green-100 text-green-800' :
-                      getCategoryColor(item.type)
-                    }`}>
-                      {getTypeIcon(item.type)} {getTypeLabel(item.type)}
-                    </span>
-                    <span className="text-xs text-gray-500 flex-shrink-0 ml-2">
-                      {item.type === 'youtube' ? item.views : ''}
-                    </span>
+                  <div className="ml-3">
+                    <h3 className="text-sm font-medium text-red-800">오류 발생</h3>
+                    <div className="mt-2 text-sm text-red-700">{error}</div>
                   </div>
-
-                  {/* 제목 */}
-                  <h3 className="text-sm sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-3 line-clamp-2 leading-relaxed">
-                    <a 
-                      href={item.url} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="hover:text-blue-600 transition-colors touch-manipulation"
-                    >
-                      {item.title}
-                    </a>
-                  </h3>
-
-                  {/* 내용 */}
-                  {item.type !== 'youtube' && (
-                    <p className="text-gray-600 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2 sm:line-clamp-3 leading-relaxed">
-                      {item.content}
-                    </p>
-                  )}
-
-                  {/* 하단 정보 */}
-                  <div className="flex items-center justify-between text-xs sm:text-sm pt-2 border-t border-gray-100">
-                    <span className="font-medium text-gray-900 truncate mr-2 flex items-center gap-1">
-                      <span className="text-gray-400 text-xs">🏢</span>
-                      <span className="min-w-0 truncate">{item.type === 'youtube' ? item.channel : item.source}</span>
-                    </span>
-                    <span className="text-gray-500 text-xs flex-shrink-0 flex items-center gap-1">
-                      <span className="text-gray-400">🕒</span>
-                      {item.type === 'youtube' ? 
-                        (item.upload_time && item.upload_time.trim() !== '' && !item.upload_time.includes('불명') ? item.upload_time : '') : 
-                        formatDate(item.date, item)
-                      }
-                    </span>
-                  </div>
-                  
-                  {/* 키워드 태그 (모든 타입에 하단 표시) */}
-                  {item.keyword && (
-                    <div className="mt-2 sm:mt-3 pt-2 sm:pt-3 border-t">
-                      <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium ${
-                        item.type === 'youtube' ? 'bg-red-100 text-red-700' :
-                        item.type === 'blog' ? 'bg-green-100 text-green-700' :
-                        'bg-blue-100 text-blue-700'
-                      }`}>
-                        #{item.keyword}
-                      </span>
-                    </div>
-                  )}
                 </div>
               </div>
-            ))}
-          </div>
-        )}
+            )}
 
-        {/* 데이터 없음 */}
-        {!loading && news.length === 0 && !error && (
-          <div className="text-center py-8 sm:py-12">
-            <div className="text-4xl sm:text-6xl mb-3 sm:mb-4">🤔</div>
-            <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2">
-              검색 결과가 없습니다
-            </h3>
-            <p className="text-sm sm:text-base text-gray-600">
-              다른 키워드나 카테고리로 검색해보세요.
-            </p>
-          </div>
+            {/* 로딩 */}
+            {loading && (
+              <div className="text-center py-8 sm:py-12">
+                <div className="inline-block animate-spin rounded-full h-6 w-6 sm:h-8 sm:w-8 border-b-2 border-blue-600"></div>
+                <p className="mt-2 text-sm sm:text-base text-gray-600">데이터를 불러오는 중...</p>
+              </div>
+            )}
+
+            {/* 뉴스 목록 */}
+            {!loading && news.length > 0 && (
+              <div className="grid gap-3 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {news.map((item, index) => (
+                  <div
+                    key={index}
+                    className="bg-white rounded-xl shadow-sm border hover:shadow-md transition-all duration-200 overflow-hidden"
+                  >
+                    {/* 유튜브 썸네일 */}
+                    {item.type === 'youtube' && item.thumbnail && (
+                      <div className="aspect-video bg-gray-100 rounded-t-lg overflow-hidden relative">
+                        <Image 
+                          src={item.thumbnail} 
+                          alt={item.title}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        />
+                      </div>
+                    )}
+                    
+                    <div className="p-3 sm:p-6">
+                      {/* 헤더 */}
+                      <div className="flex items-start justify-between mb-2 sm:mb-3">
+                        <span className={`inline-flex items-center gap-1 px-2 sm:px-2.5 py-1 rounded-full text-xs font-medium ${
+                          item.type === 'youtube' ? 'bg-red-100 text-red-800' :
+                          item.type === 'blog' ? 'bg-green-100 text-green-800' :
+                          getCategoryColor(item.type)
+                        }`}>
+                          {getTypeIcon(item.type)} {getTypeLabel(item.type)}
+                        </span>
+                        <span className="text-xs text-gray-500 flex-shrink-0 ml-2">
+                          {item.type === 'youtube' ? item.views : ''}
+                        </span>
+                      </div>
+
+                      {/* 제목 */}
+                      <h3 className="text-sm sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-3 line-clamp-2 leading-relaxed">
+                        <a 
+                          href={item.url} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="hover:text-blue-600 transition-colors touch-manipulation"
+                        >
+                          {item.title}
+                        </a>
+                      </h3>
+
+                      {/* 내용 */}
+                      {item.type !== 'youtube' && (
+                        <p className="text-gray-600 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2 sm:line-clamp-3 leading-relaxed">
+                          {item.content}
+                        </p>
+                      )}
+
+                      {/* 하단 정보 */}
+                      <div className="flex items-center justify-between text-xs sm:text-sm pt-2 border-t border-gray-100">
+                        <span className="font-medium text-gray-900 truncate mr-2 flex items-center gap-1">
+                          <span className="text-gray-400 text-xs">🏢</span>
+                          <span className="min-w-0 truncate">{item.type === 'youtube' ? item.channel : item.source}</span>
+                        </span>
+                        <span className="text-gray-500 text-xs flex-shrink-0 flex items-center gap-1">
+                          <span className="text-gray-400">🕒</span>
+                          {item.type === 'youtube' ? 
+                            (item.upload_time && item.upload_time.trim() !== '' && !item.upload_time.includes('불명') ? item.upload_time : '') : 
+                            formatDate(item.date, item)
+                          }
+                        </span>
+                      </div>
+                      
+                      {/* 키워드 태그 (모든 타입에 하단 표시) */}
+                      {item.keyword && (
+                        <div className="mt-2 sm:mt-3 pt-2 sm:pt-3 border-t">
+                          <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium ${
+                            item.type === 'youtube' ? 'bg-red-100 text-red-700' :
+                            item.type === 'blog' ? 'bg-green-100 text-green-700' :
+                            'bg-blue-100 text-blue-700'
+                          }`}>
+                            #{item.keyword}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* 데이터 없음 */}
+            {!loading && news.length === 0 && !error && (
+              <div className="text-center py-8 sm:py-12">
+                <div className="text-4xl sm:text-6xl mb-3 sm:mb-4">🤔</div>
+                <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2">
+                  검색 결과가 없습니다
+                </h3>
+                <p className="text-sm sm:text-base text-gray-600">
+                  다른 키워드나 카테고리로 검색해보세요.
+                </p>
+              </div>
+            )}
+          </>
         )}
       </main>
 

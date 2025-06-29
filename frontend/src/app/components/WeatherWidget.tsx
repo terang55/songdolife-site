@@ -126,26 +126,25 @@ export default function WeatherWidget() {
   }
 
   return (
-    <div className="bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg p-2 text-white shadow-md w-full max-w-md">
+    <div className="bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg p-2 text-white shadow-md w-full max-w-sm">
       <div className="grid grid-cols-3 gap-2 items-center">
         {/* 현재 날씨 (왼쪽) */}
         <div className="text-center">
           <div className="text-xs text-blue-100">📍 논현동</div>
           <div className="text-xl font-bold">{weather.current.temp}°C</div>
           <div className="text-xs text-blue-100">
-            체감 {weather.current.feels_like}°
+            체감 {weather.current.feels_like}° · 습도 {weather.current.humidity}%
           </div>
-          <div className="text-lg mt-1">{getWeatherIcon(weather.current.weather[0].icon)}</div>
-          <div className="text-xs text-blue-100">{weather.current.weather[0].description}</div>
+          <div className="text-lg">{getWeatherIcon(weather.current.weather[0].icon)}</div>
         </div>
 
         {/* 오늘 예보 (가운데) */}
         <div className="text-center border-l border-r border-blue-300 px-1">
           {weather.forecast.slice(0, 1).map((day, index) => (
             <div key={index}>
-              <div className="text-xs text-blue-100 mb-1">오늘 예상</div>
+              <div className="text-xs text-blue-100">오늘 예상</div>
               <div className="text-base">{getWeatherIcon(day.weather.icon)}</div>
-              <div className="text-xs text-blue-100 mt-1">
+              <div className="text-xs text-blue-100">
                 <div>최고 {day.temp_max}°</div>
                 <div>최저 {day.temp_min}°</div>
               </div>
@@ -156,25 +155,20 @@ export default function WeatherWidget() {
         {/* 미세먼지 (오른쪽) */}
         {weather.current.air_quality && (
           <div className="text-center">
-            <div className="text-xs text-blue-100 mb-1">미세먼지</div>
+            <div className="text-xs text-blue-100">미세먼지</div>
             <div className="text-lg">{getAirQualityIcon(weather.current.air_quality.status)}</div>
             <div 
-              className="text-xs font-semibold px-1 py-0.5 rounded text-white text-center mt-1"
+              className="text-xs font-semibold px-1 py-0.5 rounded text-white text-center"
               style={{ backgroundColor: weather.current.air_quality.color }}
             >
               {weather.current.air_quality.status}
             </div>
-            <div className="text-xs text-blue-100 mt-1">
+            <div className="text-xs text-blue-100">
               <div>PM10: {weather.current.air_quality.pm10}</div>
               <div>PM2.5: {weather.current.air_quality.pm25}</div>
             </div>
           </div>
         )}
-      </div>
-
-      {/* 습도 정보만 (하단) */}
-      <div className="mt-2 pt-1 border-t border-blue-300 text-center">
-        <div className="text-xs text-blue-100">습도 {weather.current.humidity}%</div>
       </div>
     </div>
   );

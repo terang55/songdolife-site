@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
+import { BASE_URL } from '@/lib/siteConfig';
 
 const inter = Inter({
   subsets: ["latin"],
@@ -41,7 +42,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "ko_KR",
-    url: "https://nonhyeon-info-site.vercel.app",
+    url: BASE_URL,
     siteName: "인천논현라이프",
     title: "인천논현라이프 | 인천 남동구 논현동 생활정보 플랫폼",
     description: "인천 남동구 논현동 주민들을 위한 종합 정보 플랫폼. 실시간 뉴스, 수인분당선 지하철 정보, 병원/약국 정보, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요.",
@@ -68,7 +69,7 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: "https://nonhyeon-info-site.vercel.app",
+    canonical: BASE_URL,
   },
   category: "지역정보",
 };
@@ -131,8 +132,8 @@ export default function RootLayout({
         <meta property="og:type" content="website" />
         <meta property="og:title" content="인천논현라이프 | 인천 남동구 논현동 생활정보 플랫폼" />
         <meta property="og:description" content="인천 남동구 논현동 주민들을 위한 종합 정보 플랫폼. 실시간 뉴스, 수인분당선 지하철 정보, 병원/약국 정보, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요." />
-        <meta property="og:url" content="https://nonhyeon-info-site.vercel.app" />
-        <meta property="og:image" content="https://nonhyeon-info-site.vercel.app/og-image.jpg" />
+        <meta property="og:url" content={BASE_URL} />
+        <meta property="og:image" content={`${BASE_URL}/og-image.jpg`} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content="인천논현라이프 - 인천 남동구 논현동 생활정보 플랫폼" />
@@ -167,7 +168,7 @@ export default function RootLayout({
               "@type": "LocalBusiness",
               "name": "인천논현라이프",
               "description": "인천 남동구 논현동 주민들을 위한 종합 정보 플랫폼",
-              "url": "https://nonhyeon-info-site.vercel.app",
+              "url": BASE_URL,
               "address": {
                 "@type": "PostalAddress",
                 "addressCountry": "KR",
@@ -202,14 +203,14 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "WebSite",
               "name": "인천논현라이프",
-              "url": "https://nonhyeon-info-site.vercel.app",
+              "url": BASE_URL,
               "description": "인천 남동구 논현동 지역 정보 종합 플랫폼",
               "inLanguage": "ko-KR",
               "potentialAction": {
                 "@type": "SearchAction",
                 "target": {
                   "@type": "EntryPoint",
-                  "urlTemplate": "https://nonhyeon-info-site.vercel.app?category={search_term_string}"
+                  "urlTemplate": `${BASE_URL}?category={search_term_string}`
                 },
                 "query-input": "required name=search_term_string"
               },
@@ -234,8 +235,8 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "Organization",
               "name": "인천논현라이프",
-              "url": "https://nonhyeon-info-site.vercel.app",
-              "logo": "https://nonhyeon-info-site.vercel.app/og-image.jpg",
+              "url": BASE_URL,
+              "logo": `${BASE_URL}/og-image.jpg`,
               "description": "인천 남동구 논현동 주민들을 위한 종합 정보 플랫폼",
               "address": {
                 "@type": "PostalAddress",
@@ -255,7 +256,7 @@ export default function RootLayout({
                 "에코메트로", "소래포구", "호구포", "논현지구"
               ],
               "sameAs": [
-                "https://nonhyeon-info-site.vercel.app"
+                BASE_URL
               ]
             })
           }}
@@ -269,15 +270,15 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "NewsMediaOrganization",
               "name": "인천논현라이프",
-              "url": "https://nonhyeon-info-site.vercel.app",
+              "url": BASE_URL,
               "logo": {
                 "@type": "ImageObject",
-                "url": "https://nonhyeon-info-site.vercel.app/og-image.jpg",
+                "url": `${BASE_URL}/og-image.jpg`,
                 "width": 1200,
                 "height": 630
               },
               "description": "인천 남동구 논현동 지역 뉴스 및 정보 제공",
-              "publishingPrinciples": "https://nonhyeon-info-site.vercel.app",
+              "publishingPrinciples": BASE_URL,
               "areaServed": {
                 "@type": "Place",
                 "name": "인천광역시 남동구 논현동"
@@ -301,7 +302,7 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "MedicalWebPage",
               "name": "인천논현라이프 병원/약국 정보",
-              "url": "https://nonhyeon-info-site.vercel.app",
+              "url": BASE_URL,
               "description": "인천 남동구 논현동 주변 병원 및 약국 정보를 실시간으로 제공하는 의료 정보 서비스",
               "about": {
                 "@type": "MedicalCondition",
@@ -349,7 +350,7 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "WebPage",
               "name": "인천논현라이프 지하철 정보",
-              "url": "https://nonhyeon-info-site.vercel.app/subway",
+              "url": `${BASE_URL}/subway`,
               "description": "수인분당선 호구포역, 인천논현역, 소래포구역의 실시간 열차 도착 정보 및 역 정보",
               "about": {
                 "@type": "PublicTransportHub",

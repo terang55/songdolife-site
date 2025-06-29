@@ -1,7 +1,8 @@
 import { MetadataRoute } from 'next'
+import { BASE_URL } from '@/lib/siteConfig'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://nonhyeon-info-site.vercel.app'
+  const baseUrl = BASE_URL
   
   // 현재 날짜
   const now = new Date()

@@ -46,6 +46,7 @@ export default function RealEstateWidget() {
   const [data, setData] = useState<RealEstateData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showAllDeals, setShowAllDeals] = useState(false);
 
   useEffect(() => {
     fetchRealEstateData();
@@ -135,9 +136,17 @@ export default function RealEstateWidget() {
       <div className="flex flex-col md:flex-row gap-6">
         {/* 최신 거래 */}
         <div className="flex-1">
-          <h3 className="font-bold mb-2 text-blue-700">최신 거래</h3>
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="font-bold text-blue-700">최신 거래</h3>
+            <button
+              onClick={() => setShowAllDeals(!showAllDeals)}
+              className="text-xs text-blue-600 hover:text-blue-800 transition-colors"
+            >
+              {showAllDeals ? '접기' : `전체보기 (${data.deals.length}건)`}
+            </button>
+          </div>
           <div className="space-y-3 max-h-80 overflow-y-auto">
-            {data.deals.slice(0, 10).map((deal, index) => (
+            {data.deals.slice(0, showAllDeals ? data.deals.length : 10).map((deal, index) => (
               <div key={index} className="border-l-4 border-blue-500 pl-3 py-2 bg-gray-50 rounded-r">
                 <div className="flex justify-between items-start mb-1">
                   <h3 className="font-semibold text-gray-800 text-sm">{deal.apartment_name}</h3>

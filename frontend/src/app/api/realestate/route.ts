@@ -170,7 +170,7 @@ export async function GET(): Promise<NextResponse> {
     return NextResponse.json({
       success: true,
       data: {
-        deals: uniqueDeals.slice(0, 50), // 최신 50건만 반환
+        deals: uniqueDeals, // 모든 거래 반환 (중복 제거된)
         statistics: {
           total_deals: totalDeals,
           avg_price: formatPrice(avgPrice),

@@ -115,9 +115,123 @@ export default function SubwayPage() {
   return (
     <>
       <Head>
-        <title>수인분당선 지하철 정보 - 논현동 정보 허브</title>
-        <meta name="description" content="호구포역, 인천논현역, 소래포구역의 실시간 열차 도착 정보와 역 정보를 확인하세요." />
-        <meta name="keywords" content="수인분당선, 호구포역, 인천논현역, 소래포구역, 지하철, 실시간, 논현동" />
+        <title>수인분당선 지하철 정보 - 호구포역, 인천논현역, 소래포구역 실시간 도착정보 | 논현동 정보 허브</title>
+        <meta name="description" content="수인분당선 호구포역(K258), 인천논현역(K259), 소래포구역(K260) 실시간 열차 도착 정보, 역 출구 안내, 편의시설 정보를 확인하세요. 논현동 주민들을 위한 지하철 종합 정보." />
+        <meta name="keywords" content="수인분당선, 호구포역, 인천논현역, 소래포구역, K258, K259, K260, 지하철 시간표, 실시간 도착정보, 논현동 지하철, 전철 정보, 지하철역 출구, 수인선, 분당선" />
+        
+        {/* Open Graph for Social Media */}
+        <meta property="og:title" content="수인분당선 지하철 정보 - 논현동 정보 허브" />
+        <meta property="og:description" content="호구포역, 인천논현역, 소래포구역의 실시간 열차 도착 정보와 역 정보를 한눈에 확인하세요." />
+        <meta property="og:url" content="https://nonhyeon-info-site.vercel.app/subway" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://nonhyeon-info-site.vercel.app/og-image.jpg" />
+        
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="수인분당선 지하철 정보 - 논현동 정보 허브" />
+        <meta name="twitter:description" content="호구포역, 인천논현역, 소래포구역의 실시간 열차 도착 정보와 역 정보를 한눈에 확인하세요." />
+        
+        {/* 지역 정보 메타 태그 */}
+        <meta name="geo.region" content="KR-28" />
+        <meta name="geo.placename" content="인천광역시 남동구" />
+        <meta name="geo.position" content="37.3894;126.7317" />
+        
+        {/* 구조화된 데이터 - 지하철 정보 */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebPage",
+              "name": "수인분당선 지하철 정보",
+              "description": "호구포역, 인천논현역, 소래포구역의 실시간 열차 도착 정보 및 역 상세 정보",
+              "url": "https://nonhyeon-info-site.vercel.app/subway",
+              "mainEntity": [
+                {
+                  "@type": "TrainStation",
+                  "name": "호구포역",
+                  "identifier": "K258",
+                  "alternateName": ["호구포", "Hogupo"],
+                  "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "KR",
+                    "addressRegion": "인천광역시",
+                    "addressLocality": "남동구",
+                    "streetAddress": "논현동"
+                  },
+                  "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 37.3814,
+                    "longitude": 126.7286
+                  },
+                  "amenityFeature": [
+                    {"@type": "LocationFeatureSpecification", "name": "엘리베이터"},
+                    {"@type": "LocationFeatureSpecification", "name": "에스컬레이터"},
+                    {"@type": "LocationFeatureSpecification", "name": "장애인화장실"},
+                    {"@type": "LocationFeatureSpecification", "name": "수유실"}
+                  ]
+                },
+                {
+                  "@type": "TrainStation",
+                  "name": "인천논현역",
+                  "identifier": "K259",
+                  "alternateName": ["인천논현", "Incheon Nonhyeon"],
+                  "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "KR",
+                    "addressRegion": "인천광역시",
+                    "addressLocality": "남동구",
+                    "streetAddress": "논현동"
+                  },
+                  "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 37.3990,
+                    "longitude": 126.7240
+                  },
+                  "amenityFeature": [
+                    {"@type": "LocationFeatureSpecification", "name": "엘리베이터"},
+                    {"@type": "LocationFeatureSpecification", "name": "에스컬레이터"},
+                    {"@type": "LocationFeatureSpecification", "name": "장애인화장실"},
+                    {"@type": "LocationFeatureSpecification", "name": "수유실"},
+                    {"@type": "LocationFeatureSpecification", "name": "무인민원발급기"}
+                  ]
+                },
+                {
+                  "@type": "TrainStation",
+                  "name": "소래포구역",
+                  "identifier": "K260",
+                  "alternateName": ["소래포구", "Soraepogu"],
+                  "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "KR",
+                    "addressRegion": "인천광역시",
+                    "addressLocality": "남동구",
+                    "streetAddress": "논현동"
+                  },
+                  "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 37.4067,
+                    "longitude": 126.7194
+                  },
+                  "amenityFeature": [
+                    {"@type": "LocationFeatureSpecification", "name": "엘리베이터"},
+                    {"@type": "LocationFeatureSpecification", "name": "에스컬레이터"},
+                    {"@type": "LocationFeatureSpecification", "name": "장애인화장실"},
+                    {"@type": "LocationFeatureSpecification", "name": "수유실"},
+                    {"@type": "LocationFeatureSpecification", "name": "관광안내소"}
+                  ]
+                }
+              ],
+              "provider": {
+                "@type": "Organization",
+                "name": "논현동 정보 허브",
+                "url": "https://nonhyeon-info-site.vercel.app"
+              },
+              "dateModified": new Date().toISOString(),
+              "inLanguage": "ko-KR"
+            })
+          }}
+        />
       </Head>
 
       <div className="min-h-screen bg-gray-50">

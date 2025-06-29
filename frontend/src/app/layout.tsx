@@ -13,12 +13,16 @@ export const metadata: Metadata = {
     default: "논현동 정보 허브 | 인천 남동구 논현동 지역 정보",
     template: "%s | 논현동 정보 허브"
   },
-  description: "인천 남동구 논현동 주민들을 위한 종합 정보 플랫폼. 실시간 뉴스, 맛집, 카페, 부동산, 육아, 교통 정보를 한눈에 확인하세요. 에코메트로, 소래포구, 호구포 정보까지!",
+  description: "인천 남동구 논현동 주민들을 위한 종합 정보 플랫폼. 실시간 뉴스, 수인분당선 지하철 정보, 병원/약국 정보, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요. 호구포역, 인천논현역, 소래포구역까지!",
   keywords: [
     "논현동", "인천 논현동", "남동구 논현동", "논현지구", "에코메트로",
     "논현동 맛집", "논현동 카페", "논현동 부동산", "논현동 육아",
+    "논현동 병원", "논현동 약국", "논현동 의료", "논현동 내과", "논현동 소아과",
+    "논현동 치과", "논현동 응급실", "논현동 야간진료", "인천논현역 병원",
+    "수인분당선", "인천논현역", "호구포역", "소래포구역", "지하철 시간표",
+    "논현동 지하철", "수인선", "지하철 실시간", "전철 도착시간", "지하철역 정보",
     "소래포구", "호구포", "논현동 정보", "논현동 뉴스", "논현동 생활정보",
-    "인천 남동구", "논현동 아파트", "논현동 교통", "논현동 병원", "논현동 학원"
+    "인천 남동구", "논현동 아파트", "논현동 교통", "논현동 학원"
   ],
   authors: [{ name: "논현동 정보 허브", url: "https://nonhyeon-info-site.vercel.app" }],
   creator: "논현동 정보 허브",
@@ -40,7 +44,7 @@ export const metadata: Metadata = {
     url: "https://nonhyeon-info-site.vercel.app",
     siteName: "논현동 정보 허브",
     title: "논현동 정보 허브 | 인천 남동구 논현동 지역 정보",
-    description: "인천 남동구 논현동 주민들을 위한 종합 정보 플랫폼. 실시간 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요.",
+    description: "인천 남동구 논현동 주민들을 위한 종합 정보 플랫폼. 실시간 뉴스, 수인분당선 지하철 정보, 병원/약국 정보, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요.",
     images: [
       {
         url: "/og-image.jpg",
@@ -53,7 +57,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "논현동 정보 허브 | 인천 남동구 논현동 지역 정보",
-    description: "인천 남동구 논현동 주민들을 위한 종합 정보 플랫폼. 실시간 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요.",
+    description: "인천 남동구 논현동 주민들을 위한 종합 정보 플랫폼. 실시간 뉴스, 수인분당선 지하철 정보, 병원/약국 정보, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요.",
     images: ["/og-image.jpg"],
     creator: "@nonhyeon_info",
   },
@@ -112,8 +116,8 @@ export default function RootLayout({
         
         {/* Google AdSense 인증 */}
         <meta name="google-adsense-account" content="ca-pub-2592538242403472" />
-        <meta name="description" content="인천 남동구 논현동 주민들을 위한 종합 정보 플랫폼. 실시간 뉴스, 맛집, 카페, 부동산, 육아, 교통 정보를 한눈에 확인하세요." />
-        <meta name="keywords" content="논현동,인천논현동,남동구논현동,논현지구,에코메트로,논현동맛집,논현동카페,논현동부동산,논현동육아,소래포구,호구포" />
+        <meta name="description" content="인천 남동구 논현동 주민들을 위한 종합 정보 플랫폼. 실시간 뉴스, 수인분당선 지하철 정보, 병원/약국 정보, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요." />
+        <meta name="keywords" content="논현동,인천논현동,남동구논현동,논현지구,에코메트로,논현동맛집,논현동카페,논현동부동산,논현동육아,논현동병원,논현동약국,논현동의료,수인분당선,인천논현역,호구포역,소래포구역,지하철시간표,소래포구,호구포" />
         <meta name="author" content="논현동 정보 허브" />
         <meta name="publisher" content="논현동 정보 허브" />
         <meta name="copyright" content="논현동 정보 허브" />
@@ -126,7 +130,7 @@ export default function RootLayout({
         <meta property="og:site_name" content="논현동 정보 허브" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="논현동 정보 허브 | 인천 남동구 논현동 지역 정보" />
-        <meta property="og:description" content="인천 남동구 논현동 주민들을 위한 종합 정보 플랫폼. 실시간 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요." />
+        <meta property="og:description" content="인천 남동구 논현동 주민들을 위한 종합 정보 플랫폼. 실시간 뉴스, 수인분당선 지하철 정보, 병원/약국 정보, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요." />
         <meta property="og:url" content="https://nonhyeon-info-site.vercel.app" />
         <meta property="og:image" content="https://nonhyeon-info-site.vercel.app/og-image.jpg" />
         <meta property="og:image:width" content="1200" />
@@ -139,7 +143,8 @@ export default function RootLayout({
         <meta name="geo.position" content="37.3894;126.7317" />
         <meta name="ICBM" content="37.3894, 126.7317" />
         
-        {/* 파비콘 */}
+        {/* 파비콘 - 논현동 건물 스타일 */}
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
@@ -151,6 +156,7 @@ export default function RootLayout({
         <link rel="alternate" type="application/rss+xml" title="논현동 정보 허브 - 뉴스" href="/api/rss?category=뉴스" />
         <link rel="alternate" type="application/rss+xml" title="논현동 정보 허브 - 블로그" href="/api/rss?category=블로그" />
         <link rel="alternate" type="application/rss+xml" title="논현동 정보 허브 - 유튜브" href="/api/rss?category=유튜브" />
+        <link rel="alternate" type="application/rss+xml" title="논현동 정보 허브 - 의료정보" href="/api/rss?category=의료" />
         
         {/* 구조화된 데이터 - 지역 비즈니스 */}
         <script
@@ -180,7 +186,9 @@ export default function RootLayout({
               },
               "knowsAbout": [
                 "논현동 맛집", "논현동 카페", "논현동 부동산", 
-                "논현동 육아", "에코메트로", "소래포구", "호구포"
+                "논현동 육아", "논현동 병원", "논현동 약국", "논현동 의료",
+                "수인분당선", "지하철 정보", "호구포역", "인천논현역", "소래포구역",
+                "에코메트로", "소래포구", "호구포"
               ]
             })
           }}
@@ -242,8 +250,9 @@ export default function RootLayout({
               },
               "knowsAbout": [
                 "논현동 지역정보", "논현동 맛집", "논현동 카페", 
-                "논현동 부동산", "논현동 육아", "에코메트로", 
-                "소래포구", "호구포", "논현지구"
+                "논현동 부동산", "논현동 육아", "논현동 병원", "논현동 약국", 
+                "논현동 의료", "수인분당선", "지하철 정보", "호구포역", "인천논현역", "소래포구역",
+                "에코메트로", "소래포구", "호구포", "논현지구"
               ],
               "sameAs": [
                 "https://nonhyeon-info-site.vercel.app"
@@ -278,6 +287,140 @@ export default function RootLayout({
                 "geographicArea": {
                   "@type": "Place",
                   "name": "인천광역시 남동구 논현동"
+                }
+              }
+            })
+          }}
+        />
+
+        {/* 구조화된 데이터 - 의료 정보 서비스 */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "MedicalWebPage",
+              "name": "논현동 병원/약국 정보",
+              "url": "https://nonhyeon-info-site.vercel.app",
+              "description": "인천 남동구 논현동 주변 병원 및 약국 정보를 실시간으로 제공하는 의료 정보 서비스",
+              "about": {
+                "@type": "MedicalCondition",
+                "name": "지역 의료 서비스"
+              },
+              "mainEntity": {
+                "@type": "ItemList",
+                "name": "논현동 의료기관 목록",
+                "description": "논현동 및 인근 지역의 병원, 약국 정보",
+                "itemListElement": [
+                  {
+                    "@type": "MedicalOrganization",
+                    "name": "논현동 지역 병원",
+                    "description": "내과, 외과, 소아과, 치과 등 다양한 진료과목"
+                  },
+                  {
+                    "@type": "Pharmacy",
+                    "name": "논현동 지역 약국",
+                    "description": "처방전 조제 및 일반의약품 판매"
+                  }
+                ]
+              },
+              "provider": {
+                "@type": "Organization",
+                "name": "논현동 정보 허브"
+              },
+              "areaServed": {
+                "@type": "Place",
+                "name": "인천광역시 남동구 논현동",
+                "geo": {
+                  "@type": "GeoCoordinates",
+                  "latitude": 37.3894,
+                  "longitude": 126.7317
+                }
+              }
+            })
+          }}
+        />
+
+        {/* 구조화된 데이터 - 지하철 교통 정보 서비스 */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebPage",
+              "name": "논현동 지하철 정보",
+              "url": "https://nonhyeon-info-site.vercel.app/subway",
+              "description": "수인분당선 호구포역, 인천논현역, 소래포구역의 실시간 열차 도착 정보 및 역 정보",
+              "about": {
+                "@type": "PublicTransportHub",
+                "name": "수인분당선 논현동 구간"
+              },
+              "mainEntity": {
+                "@type": "ItemList",
+                "name": "논현동 지하철역 목록",
+                "description": "수인분당선 논현동 인근 지하철역 정보",
+                "itemListElement": [
+                  {
+                    "@type": "TrainStation",
+                    "name": "호구포역",
+                    "identifier": "K258",
+                    "address": {
+                      "@type": "PostalAddress",
+                      "addressCountry": "KR",
+                      "addressRegion": "인천광역시",
+                      "addressLocality": "남동구"
+                    },
+                    "geo": {
+                      "@type": "GeoCoordinates",
+                      "latitude": 37.3814,
+                      "longitude": 126.7286
+                    }
+                  },
+                  {
+                    "@type": "TrainStation",
+                    "name": "인천논현역",
+                    "identifier": "K259",
+                    "address": {
+                      "@type": "PostalAddress",
+                      "addressCountry": "KR",
+                      "addressRegion": "인천광역시",
+                      "addressLocality": "남동구"
+                    },
+                    "geo": {
+                      "@type": "GeoCoordinates",
+                      "latitude": 37.3990,
+                      "longitude": 126.7240
+                    }
+                  },
+                  {
+                    "@type": "TrainStation",
+                    "name": "소래포구역",
+                    "identifier": "K260",
+                    "address": {
+                      "@type": "PostalAddress",
+                      "addressCountry": "KR",
+                      "addressRegion": "인천광역시",
+                      "addressLocality": "남동구"
+                    },
+                    "geo": {
+                      "@type": "GeoCoordinates",
+                      "latitude": 37.4067,
+                      "longitude": 126.7194
+                    }
+                  }
+                ]
+              },
+              "provider": {
+                "@type": "Organization",
+                "name": "논현동 정보 허브"
+              },
+              "areaServed": {
+                "@type": "Place",
+                "name": "인천광역시 남동구 논현동",
+                "geo": {
+                  "@type": "GeoCoordinates",
+                  "latitude": 37.3894,
+                  "longitude": 126.7317
                 }
               }
             })

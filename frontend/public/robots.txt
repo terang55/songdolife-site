@@ -26,6 +26,13 @@ Allow: /ads.txt
 Allow: /?category=뉴스
 Allow: /?category=블로그
 Allow: /?category=유튜브
+Allow: /?category=병원/약국
+
+# 의료 정보 API 허용
+Allow: /api/medical
+
+# 지하철 정보 API 허용
+Allow: /api/subway
 
 # 검색엔진별 최적화
 User-agent: Googlebot

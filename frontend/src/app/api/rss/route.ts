@@ -136,7 +136,7 @@ export async function GET(request: NextRequest) {
 <rss version="2.0">
   <channel>
     <title>${escapeXml(`논현동 정보 허브${categoryTitle}`)}</title>
-    <description>${escapeXml('인천 남동구 논현동 주민들을 위한 종합 정보 플랫폼. 실시간 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요.')}</description>
+    <description>${escapeXml('인천 남동구 논현동 주민들을 위한 종합 정보 플랫폼. 실시간 뉴스, 수인분당선 지하철 정보, 병원/약국 정보, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요.')}</description>
     <link>${baseUrl}</link>
     <language>ko-kr</language>
     <lastBuildDate>${currentDate}</lastBuildDate>

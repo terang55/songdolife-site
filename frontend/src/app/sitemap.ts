@@ -33,6 +33,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'daily' as const,
       priority: 0.9,
     },
+    // 병원/약국 정보 페이지
+    {
+      url: `${baseUrl}/#medical`,
+      lastModified: now,
+      changeFrequency: 'daily' as const,
+      priority: 0.9,
+    },
     // 정책 페이지들
     {
       url: `${baseUrl}/privacy`,
@@ -52,6 +59,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: now,
       changeFrequency: 'daily' as const,
       priority: 0.8,
+    },
+    // 지하철 관련 키워드 페이지들
+    {
+      url: `${baseUrl}/subway?station=호구포역`,
+      lastModified: now,
+      changeFrequency: 'hourly' as const,
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/subway?station=인천논현역`,
+      lastModified: now,
+      changeFrequency: 'hourly' as const,
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/subway?station=소래포구역`,
+      lastModified: now,
+      changeFrequency: 'hourly' as const,
+      priority: 0.7,
     },
     // API 엔드포인트들 (robots.txt에서 차단하지만 sitemap에는 포함하지 않음)
     // 중요한 지역 정보 키워드 페이지들 (실제로는 검색 결과지만 SEO를 위해 포함)
@@ -102,6 +128,80 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: now,
       changeFrequency: 'weekly' as const,
       priority: 0.7,
+    },
+    // 의료 관련 키워드 페이지들
+    {
+      url: `${baseUrl}/#논현동-병원`,
+      lastModified: now,
+      changeFrequency: 'daily' as const,
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/#논현동-약국`,
+      lastModified: now,
+      changeFrequency: 'daily' as const,
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/#논현동-내과`,
+      lastModified: now,
+      changeFrequency: 'weekly' as const,
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/#논현동-소아과`,
+      lastModified: now,
+      changeFrequency: 'weekly' as const,
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/#논현동-치과`,
+      lastModified: now,
+      changeFrequency: 'weekly' as const,
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/#논현동-응급실`,
+      lastModified: now,  
+      changeFrequency: 'daily' as const,
+      priority: 0.8,
+    },
+    // 지하철 관련 키워드 페이지들
+    {
+      url: `${baseUrl}/#수인분당선`,
+      lastModified: now,
+      changeFrequency: 'daily' as const,
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/#인천논현역`,
+      lastModified: now,
+      changeFrequency: 'hourly' as const,
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/#호구포역`,
+      lastModified: now,
+      changeFrequency: 'hourly' as const,
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/#소래포구역`,
+      lastModified: now,
+      changeFrequency: 'hourly' as const,
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/#지하철-시간표`,
+      lastModified: now,
+      changeFrequency: 'hourly' as const,
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/#논현동-지하철`,
+      lastModified: now,
+      changeFrequency: 'daily' as const,
+      priority: 0.8,
     },
   ]
 

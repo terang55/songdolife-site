@@ -6,7 +6,6 @@ import Image from 'next/image';
 import Head from 'next/head';
 import WeatherWidget from './components/WeatherWidget';
 import MedicalWidget from './components/MedicalWidget';
-import RealEstateWidget from './components/RealEstateWidget';
 
 interface NewsItem {
   title: string;

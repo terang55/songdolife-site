@@ -65,8 +65,7 @@ const categories = [
   '뉴스',
   '블로그', 
   '유튜브',
-  '병원/약국',
-  '부동산'
+  '병원/약국'
 ];
 
 export default function HomePage() {
@@ -353,16 +352,25 @@ export default function HomePage() {
       <section className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row items-center justify-center py-3 sm:py-4 gap-2 sm:gap-6">
-            <a 
-              href="/subway" 
-              className="flex items-center space-x-2 px-4 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors min-h-[44px] w-full sm:w-auto justify-center"
-            >
-              <span className="text-lg">🚇</span>
-              <span className="text-sm font-medium">지하철 정보</span>
-            </a>
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto">
+              <a 
+                href="/realestate" 
+                className="flex items-center space-x-2 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors min-h-[44px] w-full sm:w-auto justify-center"
+              >
+                <span className="text-lg">🏢</span>
+                <span className="text-sm font-medium">부동산 정보</span>
+              </a>
+              <a 
+                href="/subway" 
+                className="flex items-center space-x-2 px-4 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors min-h-[44px] w-full sm:w-auto justify-center"
+              >
+                <span className="text-lg">🚇</span>
+                <span className="text-sm font-medium">지하철 정보</span>
+              </a>
+            </div>
             <div className="text-xs sm:text-sm text-gray-600 text-center">
-              <span className="block sm:hidden">호구포 · 인천논현 · 소래포구</span>
-              <span className="hidden sm:block">호구포역 · 인천논현역 · 소래포구역 실시간 정보</span>
+              <span className="block sm:hidden">실거래가 · 지하철 정보</span>
+              <span className="hidden sm:block">논현동 실거래가 · 호구포역 · 인천논현역 · 소래포구역 실시간 정보</span>
             </div>
           </div>
         </div>
@@ -449,10 +457,7 @@ export default function HomePage() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
-        {/* 부동산 위젯을 메인 중앙에 전체 너비로 표시 */}
-        <div className="mb-8">
-          <RealEstateWidget />
-        </div>
+
 
         {/* 병원/약국 정보 위젯 (병원/약국 카테고리 선택시에만) */}
         {selectedCategory === '병원/약국' && <MedicalWidget />}

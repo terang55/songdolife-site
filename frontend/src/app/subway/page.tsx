@@ -247,10 +247,18 @@ export default function SubwayPage() {
                   <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                   </svg>
-                  <span className="text-sm sm:text-base">홈으로</span>
+                  <span className="text-sm sm:text-base">홈</span>
                 </Link>
                 <span className="text-gray-300 hidden sm:inline">|</span>
-                <span className="text-gray-700 font-medium text-sm sm:text-base">🚇 지하철 정보</span>
+                <Link 
+                  href="/realestate" 
+                  className="flex items-center text-blue-600 hover:text-blue-800 transition-colors touch-manipulation"
+                >
+                  <span className="text-lg mr-1">🏢</span>
+                  <span className="text-sm sm:text-base">부동산</span>
+                </Link>
+                <span className="text-gray-300 hidden sm:inline">|</span>
+                <span className="text-gray-700 font-medium text-sm sm:text-base">🚇 지하철</span>
               </div>
               <Link 
                 href="/"
@@ -259,7 +267,7 @@ export default function SubwayPage() {
                 <svg className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
-                <span className="hidden sm:inline">메인 페이지로</span>
+                <span className="hidden sm:inline">메인으로</span>
                 <span className="sm:hidden">메인</span>
               </Link>
             </div>

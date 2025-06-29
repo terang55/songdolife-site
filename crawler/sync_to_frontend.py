@@ -83,13 +83,13 @@ class DataSyncManager:
                     
                     # all_platforms 파일만 선택 (중복 방지)
                     if keyword == "all_platforms":
-                    # 키워드별로 가장 최신 파일만 선택
-                    if keyword not in latest_files or timestamp > latest_files[keyword]['timestamp']:
-                        latest_files[keyword] = {
-                            'path': file_path,
-                            'timestamp': timestamp,
-                            'filename': filename
-                        }
+                        # 키워드별로 가장 최신 파일만 선택
+                        if keyword not in latest_files or timestamp > latest_files[keyword]['timestamp']:
+                            latest_files[keyword] = {
+                                'path': file_path,
+                                'timestamp': timestamp,
+                                'filename': filename
+                            }
             
             logger.info(f"통합 파일 {len(latest_files)}개 선택 (중복 방지)")
             return latest_files

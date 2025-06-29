@@ -5,27 +5,7 @@ import { XMLParser } from 'fast-xml-parser';
 const MOLIT_API_KEY = 'aTgFhrZehAYOxHq4Z3z1iSYeysHfG9Tu43JQhF26U3mdGzr0H8+jR9MzrwPoqr8yOegDO5OO56GmvXzS7rwkdw==';
 const MOLIT_BASE_URL = 'https://apis.data.go.kr/1613000/RTMSDataSvcAptTrade/getRTMSDataSvcAptTrade';
 
-// 논현동 지역코드
-const NONHYEON_AREA_CODE = '28200'; // 인천 남동구 전체
-
-// 테스트용: 서울 종로구(11110), 2023년 11월로 고정
-const TEST_AREA_CODE = '11110'; // 서울 종로구
-const TEST_DEAL_YMD = '202311'; // 2023년 11월
-
 const AREA_CODE = '28200'; // 인천 남동구
-
-interface ApartmentDeal {
-  아파트: string;
-  전용면적: string;
-  층: string;
-  거래금액: string;
-  거래년: string;
-  거래월: string;
-  거래일: string;
-  건축년도: string;
-  법정동: string;
-  지번: string;
-}
 
 interface ProcessedDeal {
   apartment_name: string;
@@ -74,7 +54,7 @@ function formatPrice(price: number): string {
   }
 }
 
-export async function GET(request: NextRequest) {
+export async function GET(): Promise<NextResponse> {
   try {
     console.log('🏠 인천 남동구 논현동 아파트 실거래가 최근 6개월 조회 시작');
     const deals: ProcessedDeal[] = [];
@@ -114,7 +94,6 @@ export async function GET(request: NextRequest) {
               const day = item.dealDay || '';
               const buildYear = item.buildYear || '';
               const dong = item.umdNm || '';
-              const jibun = item.jibun || '';
               if (apartment && priceStr) {
                 const price = parsePrice(priceStr);
                 const dealDate = formatDealDate(year, month, day);
@@ -153,28 +132,40 @@ export async function GET(request: NextRequest) {
     const avgPrice = totalDeals > 0 ? Math.round(uniqueDeals.reduce((sum, deal) => sum + deal.price_numeric, 0) / totalDeals) : 0;
     const maxPrice = totalDeals > 0 ? Math.max(...uniqueDeals.map(deal => deal.price_numeric)) : 0;
     const minPrice = totalDeals > 0 ? Math.min(...uniqueDeals.map(deal => deal.price_numeric)) : 0;
-    // 아파트별 통계
-    const apartmentStats = uniqueDeals.reduce((acc: any, deal) => {
-      if (!acc[deal.apartment_name]) {
-        acc[deal.apartment_name] = {
-          name: deal.apartment_name,
+    // 아파트별 통계 계산
+    interface ApartmentStatMapEntry {
+      name: string;
+      count: number;
+      totalPrice: number;
+      deals: ProcessedDeal[];
+    }
+
+    const apartmentStatsMap: Record<string, ApartmentStatMapEntry> = {};
+
+    for (const deal of uniqueDeals) {
+      const key = deal.apartment_name;
+      if (!apartmentStatsMap[key]) {
+        apartmentStatsMap[key] = {
+          name: key,
           count: 0,
-          avg_price: 0,
+          totalPrice: 0,
           deals: []
         };
       }
-      acc[deal.apartment_name].count++;
-      acc[deal.apartment_name].deals.push(deal);
-      return acc;
-    }, {});
-    // 아파트별 평균가 계산
-    Object.values(apartmentStats).forEach((stat: any) => {
-      const avgPrice = Math.round(stat.deals.reduce((sum: number, deal: ProcessedDeal) => sum + deal.price_numeric, 0) / stat.count);
-      stat.avg_price = formatPrice(avgPrice);
-      stat.avg_price_numeric = avgPrice;
-    });
-    // 아파트별 통계를 배열로 변환하고 평균가 순으로 정렬
-    const apartmentStatsArray = Object.values(apartmentStats).sort((a: any, b: any) => b.avg_price_numeric - a.avg_price_numeric);
+      apartmentStatsMap[key].count += 1;
+      apartmentStatsMap[key].totalPrice += deal.price_numeric;
+      apartmentStatsMap[key].deals.push(deal);
+    }
+
+    const apartmentStatsArray = Object.values(apartmentStatsMap).map((entry) => {
+      const avgNumeric = Math.round(entry.totalPrice / entry.count);
+      return {
+        name: entry.name,
+        count: entry.count,
+        avg_price: formatPrice(avgNumeric),
+        avg_price_numeric: avgNumeric,
+      };
+    }).sort((a, b) => b.avg_price_numeric - a.avg_price_numeric);
     console.log(`✅ 논현동 실거래가 최근 6개월 수집 완료: ${totalDeals}건`);
     return NextResponse.json({
       success: true,

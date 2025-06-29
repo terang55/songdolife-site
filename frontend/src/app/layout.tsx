@@ -447,6 +447,59 @@ export default function RootLayout({
             `,
           }}
         />
+
+        {/* FAQPage 구조화 데이터 */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "논현동 지하철 정보는 얼마나 자주 업데이트되나요?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "호구포역, 인천논현역, 소래포구역의 실시간 도착 정보를 1분 간격으로 갱신합니다."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "논현동 맛집·카페 추천 데이터는 어디서 수집하나요?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "네이버 플레이스와 카카오맵 리뷰 데이터를 기반으로 매일 인기 지수를 분석해 선정합니다."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "병원·약국 정보의 정확도는 어느 정도인가요?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "보건복지부 공공데이터 포털에서 제공하는 최신 의료기관 정보를 매일 동기화하여 제공합니다."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "뉴스·블로그·유튜브 콘텐츠는 언제 수집되나요?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "자동으로 최신 콘텐츠를 수집하고 유사도 검사를 거쳐 반영합니다."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "광고 문의는 어떻게 하나요?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "상단 메뉴의 '광고문의' 버튼을 눌러 이메일로 요청하시면 24시간 이내 담당자가 회신드립니다."
+                  }
+                }
+              ]
+            })
+          }}
+        />
       </head>
       <body
         className={`${inter.variable} font-sans antialiased bg-gray-50`}

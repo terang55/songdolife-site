@@ -740,8 +740,6 @@ class EnhancedNonhyeonCrawler:
             logger.error(f"네이버 카페 크롤링 오류: {str(e)}")
             return []
 
-
-
     def _normalize_text(self, text):
         """텍스트 정규화 - 중복 검사를 위한 전처리"""
         if not text:

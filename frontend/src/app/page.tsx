@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Head from 'next/head';
 import WeatherWidget from './components/WeatherWidget';
 import MedicalWidget from './components/MedicalWidget';
+import RealEstateWidget from './components/RealEstateWidget';
 
 interface NewsItem {
   title: string;
@@ -56,6 +57,7 @@ const categoryIcons: { [key: string]: React.ReactNode } = {
   '블로그': <span className="text-base">📝</span>,
   '유튜브': <span className="text-base">🎥</span>,
   '병원/약국': <span className="text-base">🏥</span>,
+  '부동산': <span className="text-base">🏠</span>,
 };
 
 const categories = [
@@ -63,7 +65,8 @@ const categories = [
   '뉴스',
   '블로그', 
   '유튜브',
-  '병원/약국'
+  '병원/약국',
+  '부동산'
 ];
 
 export default function HomePage() {
@@ -106,13 +109,13 @@ export default function HomePage() {
   }, [selectedCategory]);
 
   useEffect(() => {
-    // 병원/약국 카테고리가 아닐 때만 뉴스 로딩
-    if (selectedCategory !== '병원/약국') {
+    // 병원/약국, 부동산 카테고리가 아닐 때만 뉴스 로딩
+    if (selectedCategory !== '병원/약국' && selectedCategory !== '부동산') {
       fetchNews();
       fetchSyncStatus();
       fetchStats();
     } else {
-      // 병원/약국 카테고리일 때는 로딩 상태 해제
+      // 병원/약국, 부동산 카테고리일 때는 로딩 상태 해제
       setLoading(false);
       setError(null);
       setNews([]);
@@ -374,7 +377,7 @@ export default function HomePage() {
             <div className="flex-1 text-center">
               <h2 className="text-2xl sm:text-4xl font-bold mb-2 sm:mb-4">논현동 생활을 더 편리하게</h2>
               <p className="text-sm sm:text-xl text-blue-100">
-                우리 동네 소식, 맛집, 육아, 교통, 병원 정보까지 한번에
+                우리 동네 소식, 부동산 정보, 맛집, 육아, 교통, 병원 정보까지 한번에
               </p>
             </div>
             
@@ -446,153 +449,128 @@ export default function HomePage() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
-        {/* RSS 리디렉션 알림 */}
-        {typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('external') && (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-8">
-            <div className="flex">
-              <div className="flex-shrink-0">
-                <span className="text-blue-400">🔗</span>
-              </div>
-              <div className="ml-3">
-                <h3 className="text-sm font-medium text-blue-800">RSS 피드에서 접속</h3>
-                <div className="mt-2 text-sm text-blue-700">
-                  잠시 후 원문 페이지로 이동합니다. 인천논현라이프를 방문해 주셔서 감사합니다!
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+        {/* 부동산 위젯을 메인 중앙에 전체 너비로 표시 */}
+        <div className="mb-8">
+          <RealEstateWidget />
+        </div>
 
         {/* 병원/약국 정보 위젯 (병원/약국 카테고리 선택시에만) */}
         {selectedCategory === '병원/약국' && <MedicalWidget />}
 
-        {/* 뉴스 콘텐츠 (병원/약국 카테고리가 아닐 때만) */}
+        {/* 메인 콘텐츠: 뉴스/블로그/유튜브 */}
         {selectedCategory !== '병원/약국' && (
-          <>
-            {/* 에러 메시지 */}
-            {error && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-8">
-                <div className="flex">
-                  <div className="flex-shrink-0">
-                    <span className="text-red-400">⚠️</span>
-                  </div>
-                  <div className="ml-3">
-                    <h3 className="text-sm font-medium text-red-800">오류 발생</h3>
-                    <div className="mt-2 text-sm text-red-700">{error}</div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* 로딩 */}
-            {loading && (
-              <div className="text-center py-8 sm:py-12">
-                <div className="inline-block animate-spin rounded-full h-6 w-6 sm:h-8 sm:w-8 border-b-2 border-blue-600"></div>
-                <p className="mt-2 text-sm sm:text-base text-gray-600">데이터를 불러오는 중...</p>
-              </div>
-            )}
-
-            {/* 뉴스 목록 */}
-            {!loading && news.length > 0 && (
-              <div className="grid gap-3 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {news.map((item, index) => (
-                  <div
-                    key={index}
-                    className="bg-white rounded-xl shadow-sm border hover:shadow-md transition-all duration-200 overflow-hidden"
-                  >
-                    {/* 유튜브 썸네일 */}
-                    {item.type === 'youtube' && item.thumbnail && (
-                      <div className="aspect-video bg-gray-100 rounded-t-lg overflow-hidden relative">
-                        <Image 
-                          src={item.thumbnail} 
-                          alt={item.title}
-                          fill
-                          className="object-cover"
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        />
-                      </div>
-                    )}
-                    
-                    <div className="p-3 sm:p-6">
-                      {/* 헤더 */}
-                      <div className="flex items-start justify-between mb-2 sm:mb-3">
-                        <span className={`inline-flex items-center gap-1 px-2 sm:px-2.5 py-1 rounded-full text-xs font-medium ${
-                          item.type === 'youtube' ? 'bg-red-100 text-red-800' :
-                          item.type === 'blog' ? 'bg-green-100 text-green-800' :
-                          getCategoryColor(item.type)
-                        }`}>
-                          {getTypeIcon(item.type)} {getTypeLabel(item.type)}
-                        </span>
-                        <span className="text-xs text-gray-500 flex-shrink-0 ml-2">
-                          {item.type === 'youtube' ? item.views : ''}
-                        </span>
-                      </div>
-
-                      {/* 제목 */}
-                      <h3 className="text-sm sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-3 line-clamp-2 leading-relaxed">
-                        <a 
-                          href={item.url} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="hover:text-blue-600 transition-colors touch-manipulation"
-                        >
-                          {item.title}
-                        </a>
-                      </h3>
-
-                      {/* 내용 */}
-                      {item.type !== 'youtube' && (
-                        <p className="text-gray-600 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2 sm:line-clamp-3 leading-relaxed">
-                          {item.content}
-                        </p>
-                      )}
-
-                      {/* 하단 정보 */}
-                      <div className="flex items-center justify-between text-xs sm:text-sm pt-2 border-t border-gray-100">
-                        <span className="font-medium text-gray-900 truncate mr-2 flex items-center gap-1">
-                          <span className="text-gray-400 text-xs">🏢</span>
-                          <span className="min-w-0 truncate">{item.type === 'youtube' ? item.channel : item.source}</span>
-                        </span>
-                        <span className="text-gray-500 text-xs flex-shrink-0 flex items-center gap-1">
-                          <span className="text-gray-400">🕒</span>
-                          {item.type === 'youtube' ? 
-                            (item.upload_time && item.upload_time.trim() !== '' && !item.upload_time.includes('불명') ? item.upload_time : '') : 
-                            formatDate(item.date, item)
-                          }
-                        </span>
-                      </div>
-                      
-                      {/* 키워드 태그 (모든 타입에 하단 표시) */}
-                      {item.keyword && (
-                        <div className="mt-2 sm:mt-3 pt-2 sm:pt-3 border-t">
-                          <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium ${
-                            item.type === 'youtube' ? 'bg-red-100 text-red-700' :
-                            item.type === 'blog' ? 'bg-green-100 text-green-700' :
-                            'bg-blue-100 text-blue-700'
-                          }`}>
-                            #{item.keyword}
-                          </span>
-                        </div>
-                      )}
+          <div className="flex flex-col gap-8">
+            <div className="flex-1">
+              {/* 에러 메시지 */}
+              {error && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-8">
+                  <div className="flex">
+                    <div className="flex-shrink-0">
+                      <span className="text-red-400">⚠️</span>
+                    </div>
+                    <div className="ml-3">
+                      <h3 className="text-sm font-medium text-red-800">오류 발생</h3>
+                      <div className="mt-2 text-sm text-red-700">{error}</div>
                     </div>
                   </div>
-                ))}
-              </div>
-            )}
-
-            {/* 데이터 없음 */}
-            {!loading && news.length === 0 && !error && (
-              <div className="text-center py-8 sm:py-12">
-                <div className="text-4xl sm:text-6xl mb-3 sm:mb-4">🤔</div>
-                <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2">
-                  검색 결과가 없습니다
-                </h3>
-                <p className="text-sm sm:text-base text-gray-600">
-                  다른 키워드나 카테고리로 검색해보세요.
-                </p>
-              </div>
-            )}
-          </>
+                </div>
+              )}
+              {loading && (
+                <div className="text-center py-8 sm:py-12">
+                  <div className="inline-block animate-spin rounded-full h-6 w-6 sm:h-8 sm:w-8 border-b-2 border-blue-600"></div>
+                  <p className="mt-2 text-sm sm:text-base text-gray-600">데이터를 불러오는 중...</p>
+                </div>
+              )}
+              {!loading && news.length > 0 && (
+                <div className="grid gap-3 sm:gap-6 md:grid-cols-3 xl:grid-cols-3">
+                  {news.map((item, index) => (
+                    <div
+                      key={index}
+                      className="bg-white rounded-xl shadow-sm border hover:shadow-md transition-all duration-200 overflow-hidden"
+                    >
+                      {/* 유튜브 썸네일 */}
+                      {item.type === 'youtube' && item.thumbnail && (
+                        <div className="aspect-video bg-gray-100 rounded-t-lg overflow-hidden relative">
+                          <Image 
+                            src={item.thumbnail} 
+                            alt={item.title}
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          />
+                        </div>
+                      )}
+                      <div className="p-3 sm:p-6">
+                        {/* 헤더 */}
+                        <div className="flex items-start justify-between mb-2 sm:mb-3">
+                          <span className={`inline-flex items-center gap-1 px-2 sm:px-2.5 py-1 rounded-full text-xs font-medium ${
+                            item.type === 'youtube' ? 'bg-red-100 text-red-800' :
+                            item.type === 'blog' ? 'bg-green-100 text-green-800' :
+                            getCategoryColor(item.type)
+                          }`}>
+                            {getTypeIcon(item.type)} {getTypeLabel(item.type)}
+                          </span>
+                          <span className="text-xs text-gray-500 flex-shrink-0 ml-2">
+                            {item.type === 'youtube' ? item.views : ''}
+                          </span>
+                        </div>
+                        <h3 className="text-sm sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-3 line-clamp-2 leading-relaxed">
+                          <a 
+                            href={item.url} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="hover:text-blue-600 transition-colors touch-manipulation"
+                          >
+                            {item.title}
+                          </a>
+                        </h3>
+                        {item.type !== 'youtube' && (
+                          <p className="text-gray-600 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2 sm:line-clamp-3 leading-relaxed">
+                            {item.content}
+                          </p>
+                        )}
+                        <div className="flex items-center justify-between text-xs sm:text-sm pt-2 border-t border-gray-100">
+                          <span className="font-medium text-gray-900 truncate mr-2 flex items-center gap-1">
+                            <span className="text-gray-400 text-xs">🏢</span>
+                            <span className="min-w-0 truncate">{item.type === 'youtube' ? item.channel : item.source}</span>
+                          </span>
+                          <span className="text-gray-500 text-xs flex-shrink-0 flex items-center gap-1">
+                            <span className="text-gray-400">🕒</span>
+                            {item.type === 'youtube' ? 
+                              (item.upload_time && item.upload_time.trim() !== '' && !item.upload_time.includes('불명') ? item.upload_time : '') : 
+                              formatDate(item.date, item)
+                            }
+                          </span>
+                        </div>
+                        {item.keyword && (
+                          <div className={`mt-2 sm:mt-3 pt-2 sm:pt-3 border-t`}>
+                            <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium ${
+                              item.type === 'youtube' ? 'bg-red-100 text-red-700' :
+                              item.type === 'blog' ? 'bg-green-100 text-green-700' :
+                              'bg-blue-100 text-blue-700'
+                            }`}>
+                              #{item.keyword}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {!loading && news.length === 0 && !error && (
+                <div className="text-center py-8 sm:py-12">
+                  <div className="text-4xl sm:text-6xl mb-3 sm:mb-4">🤔</div>
+                  <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2">
+                    검색 결과가 없습니다
+                  </h3>
+                  <p className="text-sm sm:text-base text-gray-600">
+                    다른 키워드나 카테고리로 검색해보세요.
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
         )}
       </main>
 

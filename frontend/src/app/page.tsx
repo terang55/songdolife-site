@@ -271,7 +271,7 @@ export default function HomePage() {
     const structuredData = {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
-      "name": "논현동 정보 허브 - 지역 뉴스 및 정보",
+      "name": "인천논현라이프 - 지역 뉴스 및 정보",
       "description": "인천 남동구 논현동의 최신 뉴스, 블로그, 유튜브 정보를 한눈에 확인하세요.",
       "url": "https://your-domain.com",
       "mainEntity": {
@@ -305,12 +305,12 @@ export default function HomePage() {
   return (
     <>
       <Head>
-        <title>논현동 정보 허브 - 인천 남동구 논현동 지역 정보</title>
+        <title>인천논현라이프 - 인천 남동구 논현동 생활정보 플랫폼</title>
         <meta name="description" content="인천 남동구 논현동의 최신 뉴스, 맛집, 카페, 부동산, 육아 정보를 실시간으로 확인하세요. 논현지구, 에코메트로, 소래포구 주변 정보도 함께 제공합니다." />
         <meta name="keywords" content="논현동, 인천 남동구, 논현지구, 에코메트로, 소래포구, 호구포, 지역정보, 뉴스, 맛집, 카페, 부동산, 육아" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta property="og:title" content="논현동 정보 허브 - 인천 남동구 논현동 지역 정보" />
-        <meta property="og:description" content="논현동 주민들을 위한 실시간 지역 정보를 제공합니다. 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요." />
+        <meta property="og:title" content="인천논현라이프 - 인천 남동구 논현동 생활정보 플랫폼" />
+        <meta property="og:description" content="인천논현라이프 주민들을 위한 실시간 지역 정보를 제공합니다. 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요." />
         <meta property="og:url" content="https://your-domain.com" />
         <meta property="og:type" content="website" />
         <meta property="og:image" content="https://your-domain.com/og-image.jpg" />
@@ -326,8 +326,8 @@ export default function HomePage() {
             <div className="flex items-center space-x-2 sm:space-x-3">
               <span className="text-2xl sm:text-3xl">🏙️</span>
               <div>
-                <h1 className="text-lg sm:text-2xl font-bold text-gray-900">🏠 인천 논현동 알리미</h1>
-                <p className="text-xs sm:text-sm text-gray-500">인천 남동구 논현동 실시간 정보</p>
+                <h1 className="text-lg sm:text-2xl font-bold text-gray-900">🏠 인천논현라이프</h1>
+                <p className="text-xs sm:text-sm text-gray-500">논현동에서의 매일매일</p>
               </div>
             </div>
             <div className="hidden sm:flex items-center space-x-2 text-sm text-gray-600">
@@ -372,9 +372,9 @@ export default function HomePage() {
           <div className="flex justify-between items-start mb-8">
             {/* 제목과 설명 */}
             <div className="flex-1 text-center">
-              <h2 className="text-2xl sm:text-4xl font-bold mb-2 sm:mb-4">인천 논현동 주민들을 위한 정보 허브</h2>
+              <h2 className="text-2xl sm:text-4xl font-bold mb-2 sm:mb-4">논현동 생활을 더 편리하게</h2>
               <p className="text-sm sm:text-xl text-blue-100">
-                실시간 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요
+                우리 동네 소식, 맛집, 육아, 교통, 병원 정보까지 한번에
               </p>
             </div>
             
@@ -456,7 +456,7 @@ export default function HomePage() {
               <div className="ml-3">
                 <h3 className="text-sm font-medium text-blue-800">RSS 피드에서 접속</h3>
                 <div className="mt-2 text-sm text-blue-700">
-                  잠시 후 원문 페이지로 이동합니다. 논현동 정보 허브를 방문해 주셔서 감사합니다!
+                  잠시 후 원문 페이지로 이동합니다. 인천논현라이프를 방문해 주셔서 감사합니다!
                 </div>
               </div>
             </div>
@@ -605,12 +605,12 @@ export default function HomePage() {
               <div className="flex items-center space-x-2 sm:space-x-3 mb-3 sm:mb-4">
                 <span className="text-2xl sm:text-3xl">🏙️</span>
                 <div>
-                  <div className="text-lg sm:text-xl font-bold">논현동 정보 허브</div>
+                  <div className="text-lg sm:text-xl font-bold">인천논현라이프</div>
                   <div className="text-sm text-gray-400">인천 남동구 논현동 지역 정보</div>
                 </div>
               </div>
               <p className="text-sm text-gray-300 text-center md:text-left max-w-sm">
-                논현동 주민들을 위한 실시간 지역 정보를 제공합니다. 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요.
+                인천논현라이프 주민들을 위한 실시간 지역 정보를 제공합니다. 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요.
               </p>
             </div>
 
@@ -651,7 +651,7 @@ export default function HomePage() {
           <div className="border-t border-gray-700 pt-6 sm:pt-8">
             <div className="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
               <div className="text-xs sm:text-sm text-gray-400">
-                © 2025 논현동 정보 허브. 모든 권리 보유.
+                © 2025 인천논현라이프. 모든 권리 보유.
               </div>
               <div className="flex items-center space-x-4 text-xs sm:text-sm">
                 <a 

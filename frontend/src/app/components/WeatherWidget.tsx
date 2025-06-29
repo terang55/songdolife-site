@@ -114,12 +114,12 @@ export default function WeatherWidget() {
       <div className="flex items-center justify-between gap-4">
         {/* 현재 날씨 (왼쪽) */}
         <div className="flex items-center gap-3">
-          <div>
+        <div>
             <div className="text-xs text-blue-100">📍 논현동</div>
             <div className="text-2xl font-bold">{weather.current.temp}°C</div>
             <div className="text-xs text-blue-100">
               체감 {weather.current.feels_like}° · 습도 {weather.current.humidity}%
-            </div>
+        </div>
           </div>
           <div className="text-center">
             <div className="text-3xl">{getWeatherIcon(weather.current.weather[0].icon)}</div>
@@ -140,12 +140,12 @@ export default function WeatherWidget() {
                 <div className="text-xs text-blue-100">
                   <div>최고 {day.temp_max}°</div>
                   <div>최저 {day.temp_min}°</div>
-                </div>
-              </div>
+      </div>
+      </div>
               <div className="text-xs text-blue-200">{day.weather.description}</div>
             </div>
           ))}
-        </div>
+          </div>
       </div>
     </div>
   );

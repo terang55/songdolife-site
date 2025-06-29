@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: '이용약관',
-  description: '논현동 정보 허브의 이용약관입니다.',
+  description: '인천논현라이프의 이용약관입니다.',
   robots: {
     index: true,
     follow: true,
@@ -18,13 +18,13 @@ export default function TermsPage() {
           
           <div className="prose max-w-none">
             <p className="text-gray-600 mb-6">
-              논현동 정보 허브(이하 &ldquo;회사&rdquo;)가 제공하는 인터넷 관련 서비스(이하 &ldquo;서비스&rdquo;)를 이용함에 있어 이용자의 권리·의무 및 책임사항을 규정함을 목적으로 합니다.
+              인천논현라이프(이하 &ldquo;회사&rdquo;)가 제공하는 인터넷 관련 서비스(이하 &ldquo;서비스&rdquo;)를 이용함에 있어 이용자의 권리·의무 및 책임사항을 규정함을 목적으로 합니다.
             </p>
 
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-gray-800 mb-4">제1조 (목적)</h2>
               <p className="text-gray-600">
-                이 약관은 논현동 정보 허브(이하 &ldquo;회사&rdquo;)가 제공하는 인터넷 관련 서비스(이하 &ldquo;서비스&rdquo;)를 이용함에 있어 이용자의 권리·의무 및 책임사항을 규정함을 목적으로 합니다.
+                이 약관은 인천논현라이프(이하 &ldquo;회사&rdquo;)가 제공하는 인터넷 관련 서비스(이하 &ldquo;서비스&rdquo;)를 이용함에 있어 이용자의 권리·의무 및 책임사항을 규정함을 목적으로 합니다.
               </p>
             </section>
 
@@ -123,7 +123,7 @@ export default function TermsPage() {
               <p className="text-gray-600">
                 이용약관에 대한 문의사항이 있으시면 아래로 연락해 주세요.<br />
                 이메일: rainbowcr55@gmail.com<br />
-                담당부서: 논현동 정보 허브 운영팀
+                담당부서: 인천논현라이프 운영팀
               </p>
             </div>
           </div>

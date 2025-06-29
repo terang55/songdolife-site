@@ -120,7 +120,7 @@ export async function GET() {
 
     const currentData = await currentResponse.json();
     const forecastData = await forecastResponse.json();
-    
+
     console.log('🌡️ 현재 날씨 원본 데이터:', {
       온도: currentData.main.temp,
       체감온도: currentData.main.feels_like,

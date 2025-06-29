@@ -135,19 +135,19 @@ export async function GET(request: NextRequest) {
     const rssXml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
-    <title>${escapeXml(`논현동 정보 허브${categoryTitle}`)}</title>
+    <title>${escapeXml(`인천논현라이프${categoryTitle}`)}</title>
     <description>${escapeXml('인천 남동구 논현동 주민들을 위한 종합 정보 플랫폼. 실시간 뉴스, 수인분당선 지하철 정보, 병원/약국 정보, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요.')}</description>
     <link>${baseUrl}</link>
     <language>ko-kr</language>
     <lastBuildDate>${currentDate}</lastBuildDate>
     <pubDate>${currentDate}</pubDate>
     <ttl>60</ttl>
-    <managingEditor>rainbowcr55@gmail.com (논현동 정보 허브)</managingEditor>
-    <webMaster>rainbowcr55@gmail.com (논현동 정보 허브)</webMaster>
+    <managingEditor>rainbowcr55@gmail.com (인천논현라이프)</managingEditor>
+    <webMaster>rainbowcr55@gmail.com (인천논현라이프)</webMaster>
     <category>지역정보</category>
     <image>
       <url>${baseUrl}/og-image.jpg</url>
-      <title>${escapeXml(`논현동 정보 허브${categoryTitle}`)}</title>
+      <title>${escapeXml(`인천논현라이프${categoryTitle}`)}</title>
       <link>${baseUrl}</link>
     </image>
 ${rssItems}
@@ -169,7 +169,7 @@ ${rssItems}
     const errorRss = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
-    <title>논현동 정보 허브</title>
+    <title>인천논현라이프</title>
     <description>인천 남동구 논현동 지역 정보</description>
     <link>https://nonhyeon-info-site.vercel.app</link>
     <language>ko-kr</language>

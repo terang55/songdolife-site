@@ -115,12 +115,12 @@ export default function SubwayPage() {
   return (
     <>
       <Head>
-        <title>수인분당선 지하철 정보 - 호구포역, 인천논현역, 소래포구역 실시간 도착정보 | 논현동 정보 허브</title>
+        <title>수인분당선 지하철 정보 - 호구포역, 인천논현역, 소래포구역 실시간 도착정보 | 인천논현라이프</title>
         <meta name="description" content="수인분당선 호구포역(K258), 인천논현역(K259), 소래포구역(K260) 실시간 열차 도착 정보, 역 출구 안내, 편의시설 정보를 확인하세요. 논현동 주민들을 위한 지하철 종합 정보." />
         <meta name="keywords" content="수인분당선, 호구포역, 인천논현역, 소래포구역, K258, K259, K260, 지하철 시간표, 실시간 도착정보, 논현동 지하철, 전철 정보, 지하철역 출구, 수인선, 분당선" />
         
         {/* Open Graph for Social Media */}
-        <meta property="og:title" content="수인분당선 지하철 정보 - 논현동 정보 허브" />
+        <meta property="og:title" content="수인분당선 지하철 정보 - 인천논현라이프" />
         <meta property="og:description" content="호구포역, 인천논현역, 소래포구역의 실시간 열차 도착 정보와 역 정보를 한눈에 확인하세요." />
         <meta property="og:url" content="https://nonhyeon-info-site.vercel.app/subway" />
         <meta property="og:type" content="website" />
@@ -128,7 +128,7 @@ export default function SubwayPage() {
         
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="수인분당선 지하철 정보 - 논현동 정보 허브" />
+        <meta name="twitter:title" content="수인분당선 지하철 정보 - 인천논현라이프" />
         <meta name="twitter:description" content="호구포역, 인천논현역, 소래포구역의 실시간 열차 도착 정보와 역 정보를 한눈에 확인하세요." />
         
         {/* 지역 정보 메타 태그 */}
@@ -224,7 +224,7 @@ export default function SubwayPage() {
               ],
               "provider": {
                 "@type": "Organization",
-                "name": "논현동 정보 허브",
+                "name": "인천논현라이프",
                 "url": "https://nonhyeon-info-site.vercel.app"
               },
               "dateModified": new Date().toISOString(),
@@ -613,7 +613,7 @@ export default function SubwayPage() {
                 <div className="flex items-center space-x-2 sm:space-x-3 mb-3 sm:mb-4">
                   <span className="text-2xl sm:text-3xl">🏙️</span>
                   <div>
-                    <div className="text-lg sm:text-xl font-bold">논현동 정보 허브</div>
+                    <div className="text-lg sm:text-xl font-bold">인천논현라이프</div>
                     <div className="text-sm text-gray-400">인천 남동구 논현동 지역 정보</div>
                   </div>
                 </div>
@@ -659,7 +659,7 @@ export default function SubwayPage() {
             <div className="border-t border-gray-700 pt-6 sm:pt-8">
               <div className="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
                 <div className="text-xs sm:text-sm text-gray-400">
-                  © 2025 논현동 정보 허브. 모든 권리 보유.
+                  © 2025 인천논현라이프. 모든 권리 보유.
                 </div>
                 <div className="flex items-center space-x-4 text-xs sm:text-sm">
                   <Link 

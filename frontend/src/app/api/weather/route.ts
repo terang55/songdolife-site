@@ -43,6 +43,12 @@ interface WeatherData {
     wind: {
       speed: number;
     };
+    air_quality?: {
+      pm10: number;
+      pm25: number;
+      status: string;
+      color: string;
+    };
   };
   forecast: Array<{
     date: string;
@@ -87,39 +93,84 @@ export async function GET() {
     // 5일 예보 정보 가져오기
     const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${NONHYEON_LAT}&lon=${NONHYEON_LON}&appid=${API_KEY}&units=metric&lang=kr`;
 
+    // 미세먼지 정보 가져오기
+    const airPollutionUrl = `https://api.openweathermap.org/data/2.5/air_pollution?lat=${NONHYEON_LAT}&lon=${NONHYEON_LON}&appid=${API_KEY}`;
+
+    // 미세먼지 상태 판단 함수
+    const getAirQualityStatus = (pm10: number, pm25: number) => {
+      // 한국 환경부 기준 (WHO 기준보다 엄격)
+      const pm10Status = pm10 <= 30 ? 'good' : pm10 <= 80 ? 'moderate' : pm10 <= 150 ? 'unhealthy' : 'very_unhealthy';
+      const pm25Status = pm25 <= 15 ? 'good' : pm25 <= 35 ? 'moderate' : pm25 <= 75 ? 'unhealthy' : 'very_unhealthy';
+      
+      // 더 나쁜 상태를 기준으로 설정
+      const statusPriority = { 'good': 0, 'moderate': 1, 'unhealthy': 2, 'very_unhealthy': 3 };
+      const finalStatus = statusPriority[pm10Status] >= statusPriority[pm25Status] ? pm10Status : pm25Status;
+      
+      const statusMap = {
+        'good': { text: '좋음', color: '#3B82F6' },
+        'moderate': { text: '보통', color: '#10B981' },
+        'unhealthy': { text: '나쁨', color: '#F59E0B' },
+        'very_unhealthy': { text: '매우나쁨', color: '#EF4444' }
+      };
+      
+      return statusMap[finalStatus as keyof typeof statusMap];
+    };
+
     console.log('🔗 API 요청 URL:', {
       current: currentWeatherUrl.replace(API_KEY!, 'API_KEY_HIDDEN'),
-      forecast: forecastUrl.replace(API_KEY!, 'API_KEY_HIDDEN')
+      forecast: forecastUrl.replace(API_KEY!, 'API_KEY_HIDDEN'),
+      airPollution: airPollutionUrl.replace(API_KEY!, 'API_KEY_HIDDEN')
     });
 
-    const [currentResponse, forecastResponse] = await Promise.all([
+    const [currentResponse, forecastResponse, airPollutionResponse] = await Promise.all([
       fetch(currentWeatherUrl),
-      fetch(forecastUrl)
+      fetch(forecastUrl),
+      fetch(airPollutionUrl)
     ]);
 
     console.log('📡 API 응답 상태:', {
       current: currentResponse.status,
       forecast: forecastResponse.status,
+      airPollution: airPollutionResponse.status,
       currentOk: currentResponse.ok,
-      forecastOk: forecastResponse.ok
+      forecastOk: forecastResponse.ok,
+      airPollutionOk: airPollutionResponse.ok
     });
 
+    // 필수 API (날씨, 예보) 체크
     if (!currentResponse.ok || !forecastResponse.ok) {
       const currentError = !currentResponse.ok ? await currentResponse.text() : null;
       const forecastError = !forecastResponse.ok ? await forecastResponse.text() : null;
       
-      console.error('❌ API 응답 에러:', {
+      console.error('❌ 필수 API 응답 에러:', {
         currentStatus: currentResponse.status,
         forecastStatus: forecastResponse.status,
         currentError,
         forecastError
       });
       
-      throw new Error(`날씨 API 호출 실패: Current(${currentResponse.status}), Forecast(${forecastResponse.status})`);
+      throw new Error(`필수 API 호출 실패: Current(${currentResponse.status}), Forecast(${forecastResponse.status})`);
     }
 
     const currentData = await currentResponse.json();
     const forecastData = await forecastResponse.json();
+    
+    // 미세먼지 API는 선택적으로 처리
+    let airPollutionData = null;
+    if (airPollutionResponse.ok) {
+      try {
+        airPollutionData = await airPollutionResponse.json();
+        console.log('✅ 미세먼지 API 성공');
+      } catch (error) {
+        console.error('❌ 미세먼지 데이터 파싱 실패:', error);
+      }
+    } else {
+      const airPollutionError = await airPollutionResponse.text();
+      console.error('❌ 미세먼지 API 실패:', {
+        status: airPollutionResponse.status,
+        error: airPollutionError
+      });
+    }
 
     console.log('🌡️ 현재 날씨 원본 데이터:', {
       온도: currentData.main.temp,
@@ -127,6 +178,16 @@ export async function GET() {
       습도: currentData.main.humidity,
       날씨: currentData.weather[0]
     });
+    
+    if (airPollutionData) {
+      console.log('🌡️ 미세먼지 원본 데이터:', {
+        PM10: airPollutionData.list[0].components.pm10,
+        PM25: airPollutionData.list[0].components.pm2_5,
+        전체데이터: airPollutionData.list[0]
+      });
+    } else {
+      console.log('⚠️ 미세먼지 데이터 없음 - 기본값 사용');
+    }
     
     console.log('📅 예보 데이터 첫 5개 항목:', 
       forecastData.list.slice(0, 5).map((item: ForecastItem) => ({
@@ -186,6 +247,7 @@ export async function GET() {
         };
       });
 
+    // 날씨 데이터 구성
     const weatherData: WeatherData = {
       current: {
         temp: Math.round(currentData.main.temp),
@@ -198,6 +260,20 @@ export async function GET() {
       },
       forecast: dailyForecast
     };
+
+    // 미세먼지 데이터가 있으면 추가
+    if (airPollutionData) {
+      const pm10 = Math.round(airPollutionData.list[0].components.pm10);
+      const pm25 = Math.round(airPollutionData.list[0].components.pm2_5);
+      const airQualityStatus = getAirQualityStatus(pm10, pm25);
+      
+      weatherData.current.air_quality = {
+        pm10,
+        pm25,
+        status: airQualityStatus.text,
+        color: airQualityStatus.color
+      };
+    }
 
     console.log('✅ 날씨 정보 조회 성공');
 
@@ -227,6 +303,12 @@ export async function GET() {
           }],
           wind: {
             speed: 2.1
+          },
+          air_quality: {
+            pm10: 25,
+            pm25: 12,
+            status: '좋음',
+            color: '#3B82F6'
           }
         },
         forecast: [

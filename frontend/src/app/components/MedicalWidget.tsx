@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 interface MedicalInfo {
   id: string;
@@ -44,7 +44,7 @@ const MedicalWidget: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
 
-  const fetchMedicalData = async () => {
+  const fetchMedicalData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -71,13 +71,13 @@ const MedicalWidget: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedType, selectedCategory, emergencyOnly, nightOnly]);
 
   useEffect(() => {
     if (isDataLoaded) {
       fetchMedicalData();
     }
-  }, [selectedType, selectedCategory, emergencyOnly, nightOnly]);
+  }, [isDataLoaded, fetchMedicalData]);
 
   const getTypeIcon = (type: 'hospital' | 'pharmacy') => {
     return type === 'hospital' ? '🏥' : '💊';

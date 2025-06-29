@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     "소래포구", "호구포", "논현동 정보", "논현동 뉴스", "논현동 생활정보",
     "인천 남동구", "논현동 아파트", "논현동 교통", "논현동 학원"
   ],
-  authors: [{ name: "인천논현라이프", url: "https://nonhyeon-info-site.vercel.app" }],
+  authors: [{ name: "인천논현라이프", url: BASE_URL }],
   creator: "인천논현라이프",
   publisher: "인천논현라이프",
   robots: {
@@ -97,7 +97,7 @@ export default function RootLayout({
               'https://wcs.naver.net/wcslog.js');
               wcs_add_config({
                 'account': 'NAVER_ANALYTICS_ID',
-                'domain': 'nonhyeon-info-site.vercel.app'
+                'domain': 'nonhyeon.life'
               });
               wcs_do();
             `,

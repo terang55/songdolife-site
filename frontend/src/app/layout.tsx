@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     default: "인천논현라이프 | 인천 남동구 논현동 생활정보 플랫폼",
     template: "%s | 인천논현라이프"
   },
-  description: "인천 남동구 논현동 주민들을 위한 종합 정보 플랫폼. 실시간 뉴스, 수인분당선 지하철 정보, 병원/약국 정보, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요. 호구포역, 인천논현역, 소래포구역까지!",
+  description: "논현동 주민을 위한 실시간 뉴스·지하철·부동산 등 생활정보 플랫폼",
   keywords: [
     "논현동", "인천 논현동", "남동구 논현동", "논현지구", "에코메트로",
     "논현동 맛집", "논현동 카페", "논현동 부동산", "논현동 육아",
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     url: BASE_URL,
     siteName: "인천논현라이프",
     title: "인천논현라이프 | 인천 남동구 논현동 생활정보 플랫폼",
-    description: "인천 남동구 논현동 주민들을 위한 종합 정보 플랫폼. 실시간 뉴스, 수인분당선 지하철 정보, 병원/약국 정보, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요.",
+    description: "논현동 주민을 위한 실시간 뉴스·지하철·부동산 등 생활정보 플랫폼",
     images: [
       {
         url: "/og-image.jpg",
@@ -117,7 +117,7 @@ export default function RootLayout({
         
         {/* Google AdSense 인증 */}
         <meta name="google-adsense-account" content="ca-pub-2592538242403472" />
-        <meta name="description" content="인천 남동구 논현동 주민들을 위한 종합 정보 플랫폼. 실시간 뉴스, 수인분당선 지하철 정보, 병원/약국 정보, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요." />
+        <meta name="description" content="논현동 주민을 위한 실시간 뉴스·지하철·부동산 등 생활정보 플랫폼" />
         <meta name="keywords" content="논현동,인천논현동,남동구논현동,논현지구,에코메트로,논현동맛집,논현동카페,논현동부동산,논현동육아,논현동병원,논현동약국,논현동의료,수인분당선,인천논현역,호구포역,소래포구역,지하철시간표,소래포구,호구포" />
         <meta name="author" content="인천논현라이프" />
         <meta name="publisher" content="인천논현라이프" />
@@ -131,7 +131,7 @@ export default function RootLayout({
         <meta property="og:site_name" content="인천논현라이프" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="인천논현라이프 | 인천 남동구 논현동 생활정보 플랫폼" />
-        <meta property="og:description" content="인천 남동구 논현동 주민들을 위한 종합 정보 플랫폼. 실시간 뉴스, 수인분당선 지하철 정보, 병원/약국 정보, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요." />
+        <meta property="og:description" content="논현동 주민을 위한 실시간 뉴스·지하철·부동산 등 생활정보 플랫폼" />
         <meta property="og:url" content={BASE_URL} />
         <meta property="og:image" content={`${BASE_URL}/og-image.jpg`} />
         <meta property="og:image:width" content="1200" />

@@ -82,90 +82,143 @@ export default function RealEstatePage() {
 
         {/* 추가 정보 섹션 */}
         <div className="mt-8 grid gap-6 md:grid-cols-2">
-          {/* 지역 정보 */}
+          {/* 현재 운행 노선 */}
           <div className="bg-white rounded-xl shadow-sm border p-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
-              📍 논현동 주요 아파트 단지
+              ✅ 현재 운행 노선
             </h2>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-200">
-                <div>
-                  <span className="font-medium text-gray-800">에코메트로 시리즈</span>
-                  <div className="text-sm text-gray-600">에코메트로1~12단지</div>
+            <div className="space-y-4">
+              <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                <h3 className="font-semibold text-blue-800 mb-2 flex items-center">
+                  🚄 수인분당선
+                </h3>
+                <div className="text-sm text-gray-700 space-y-2">
+                  <div>
+                    <span className="font-medium">북쪽 방향:</span> 왕십리 → 건대입구 → 선릉 → 판교 → 수원
+                  </div>
+                  <div>
+                    <span className="font-medium">남쪽 방향:</span> 인천 → 월곶 → 소래포구 → 오이도
+                  </div>
+                  <div className="mt-3 p-2 bg-blue-100 rounded text-xs">
+                    <div className="font-medium text-blue-900 mb-1">주요 환승역</div>
+                    <div className="text-blue-800 space-y-1">
+                      <div>• 왕십리: 2호선, 5호선, 중앙선</div>
+                      <div>• 건대입구: 2호선, 7호선</div>
+                      <div>• 선릉: 2호선, 분당선</div>
+                    </div>
+                  </div>
                 </div>
-                <span className="text-sm text-blue-600 font-medium">대단지</span>
               </div>
-              <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
-                <div>
-                  <span className="font-medium text-gray-800">논현센트럴푸르지오</span>
-                  <div className="text-sm text-gray-600">대우건설</div>
+              
+              <div className="p-3 bg-gray-50 rounded-lg border border-gray-200">
+                <h4 className="font-medium text-gray-800 mb-2">운행 정보</h4>
+                <div className="text-sm text-gray-600 space-y-1">
+                  <div>• <span className="font-medium">운행시간:</span> 05:30 ~ 24:00</div>
+                  <div>• <span className="font-medium">배차간격:</span> 평일 4-6분, 주말 6-8분</div>
+                  <div>• <span className="font-medium">왕십리까지:</span> 약 90분</div>
                 </div>
-                <span className="text-sm text-green-600 font-medium">프리미엄</span>
               </div>
-              <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg border border-purple-200">
-                <div>
-                  <span className="font-medium text-gray-800">논현힐스데이트</span>
-                  <div className="text-sm text-gray-600">현대건설</div>
+
+              <div className="p-4 bg-red-50 rounded-lg border border-red-200">
+                <h3 className="font-semibold text-red-800 mb-2 flex items-center">
+                  🚌 광역급행버스
+                </h3>
+                <div className="space-y-3">
+                  <div className="p-2 bg-red-100 rounded">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="font-medium text-red-900">M6410</span>
+                      <span className="text-xs bg-red-200 text-red-700 px-2 py-1 rounded">운행중</span>
+                    </div>
+                    <div className="text-xs text-gray-700 space-y-1">
+                      <div>• 논현동(사리울중학교) → 강남역·양재역</div>
+                      <div>• 소요시간: 약 1시간</div>
+                    </div>
+                  </div>
+                  <div className="p-2 bg-red-100 rounded">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="font-medium text-red-900">M6461</span>
+                      <span className="text-xs bg-red-200 text-red-700 px-2 py-1 rounded">2025.3 신설</span>
+                    </div>
+                    <div className="text-xs text-gray-700 space-y-1">
+                      <div>• 논현동(소래포구역) → 서울 강남권 직행</div>
+                      <div>• 역삼역까지 직행 운행</div>
+                      <div>• 기존 M6410 수요 분산 효과</div>
+                    </div>
+                  </div>
                 </div>
-                <span className="text-sm text-purple-600 font-medium">신축급</span>
-              </div>
-              <div className="flex items-center justify-between p-3 bg-orange-50 rounded-lg border border-orange-200">
-                <div>
-                  <span className="font-medium text-gray-800">뜨란채</span>
-                  <div className="text-sm text-gray-600">8단지, 11단지</div>
-                </div>
-                <span className="text-sm text-orange-600 font-medium">주공</span>
-              </div>
-              <div className="flex items-center justify-between p-3 bg-teal-50 rounded-lg border border-teal-200">
-                <div>
-                  <span className="font-medium text-gray-800">냇마을신영지웰</span>
-                  <div className="text-sm text-gray-600">신영건설</div>
-                </div>
-                <span className="text-sm text-teal-600 font-medium">브랜드</span>
               </div>
             </div>
           </div>
 
-          {/* 교통 정보 */}
+          {/* 미래 운행 노선 */}
           <div className="bg-white rounded-xl shadow-sm border p-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
-              🚇 교통 접근성
+              🚀 미래 운행 노선
             </h2>
             <div className="space-y-3">
-              <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-200">
-                <div>
-                  <span className="font-medium text-blue-800">인천논현역 (K259)</span>
-                  <div className="text-sm text-gray-600">수인분당선 • 논현동 중심</div>
+              <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
+                <div className="flex items-center justify-between mb-1">
+                  <h4 className="font-semibold text-blue-800">경강선 (송도~강릉)</h4>
+                  <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">2028년</span>
                 </div>
-                <span className="text-sm text-blue-600 font-medium">도보 5-15분</span>
+                <div className="text-xs text-gray-600 space-y-1">
+                  <div>• 논현역 정차 추진 중!</div>
+                  <div>• 판교 40분, 광명KTX 15분</div>
+                  <div>• 판교테크노밸리 직행</div>
+                </div>
               </div>
-              <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
-                <div>
-                  <span className="font-medium text-green-800">호구포역 (K258)</span>
-                  <div className="text-sm text-gray-600">수인분당선 • 논현동 북쪽</div>
+
+              <div className="p-3 bg-green-50 rounded-lg border border-green-200">
+                <div className="flex items-center justify-between mb-1">
+                  <h4 className="font-semibold text-green-800">인천발 KTX</h4>
+                  <span className="text-xs bg-green-100 text-green-600 px-2 py-1 rounded">2026년</span>
                 </div>
-                <span className="text-sm text-green-600 font-medium">도보 10-20분</span>
+                <div className="text-xs text-gray-600 space-y-1">
+                  <div>• 송도역서 전국 KTX 이용</div>
+                  <div>• 부산 2시간30분, 목포 2시간10분</div>
+                  <div>• 수인분당선 연계</div>
+                </div>
               </div>
-              <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg border border-purple-200">
-                <div>
-                  <span className="font-medium text-purple-800">소래포구역 (K260)</span>
-                  <div className="text-sm text-gray-600">수인분당선 • 논현동 남쪽</div>
+
+              <div className="p-3 bg-purple-50 rounded-lg border border-purple-200">
+                <div className="flex items-center justify-between mb-1">
+                  <h4 className="font-semibold text-purple-800">제2경인선</h4>
+                  <span className="text-xs bg-purple-100 text-purple-600 px-2 py-1 rounded">2033-35년</span>
                 </div>
-                <span className="text-sm text-purple-600 font-medium">도보 15-25분</span>
+                <div className="text-xs text-gray-600 space-y-1">
+                  <div>• 노량진~청학, 논현역 경유</div>
+                  <div>• 서울 영등포 직결</div>
+                  <div>• 21.9km, 17개역</div>
+                </div>
               </div>
-              <div className="flex items-center justify-between p-3 bg-orange-50 rounded-lg border border-orange-200">
-                <div>
-                  <span className="font-medium text-orange-800">버스 교통</span>
-                  <div className="text-sm text-gray-600">논현동사거리, 에코메트로 정류장</div>
+
+              <div className="p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+                <div className="flex items-center justify-between mb-1">
+                  <h4 className="font-semibold text-yellow-800">인천2호선 연장</h4>
+                  <span className="text-xs bg-yellow-100 text-yellow-600 px-2 py-1 rounded">계획승인</span>
                 </div>
-                <span className="text-sm text-orange-600 font-medium">다수 노선</span>
+                <div className="text-xs text-gray-600 space-y-1">
+                  <div>• 남동구청~논현역 연결</div>
+                  <div>• 7.52km, 4개역</div>
+                  <div>• 남동구 전역 직결</div>
+                </div>
               </div>
-              <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200">
-                <div>
-                  <span className="font-medium text-gray-800">주요 도로</span>
-                  <div className="text-sm text-gray-600">청능대로, 논현로</div>
+            </div>
+
+            {/* 교통 허브 전망 */}
+            <div className="mt-4 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border">
+              <h4 className="font-semibold text-gray-800 mb-2 flex items-center">
+                🌟 논현동 교통 허브 전망
+              </h4>
+              <div className="text-sm text-gray-700 space-y-1">
+                <div>• <strong>현재:</strong> 수인분당선 1개 노선</div>
+                <div>• <strong>미래:</strong> 최대 4개 노선 교차</div>
+                <div>• <strong>효과:</strong> 수도권 메가 허브 발전</div>
+              </div>
+              <div className="mt-2 p-2 bg-white rounded text-xs">
+                <div className="text-center font-medium text-gray-800">
+                  수인분당선 ↔ 경강선 ↔ 제2경인선 ↔ 인천2호선
                 </div>
-                <span className="text-sm text-gray-600 font-medium">간선도로</span>
               </div>
             </div>
           </div>

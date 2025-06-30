@@ -368,7 +368,7 @@ export default function HomePage() {
               </a>
               </div>
             <div className="text-xs sm:text-sm text-gray-600 text-center">
-              <span className="block sm:hidden">실거래가 · 지하철 정보</span>
+              <span className="block sm:hidden">부동산 실거래가 · 지하철 실시간 정보</span>
               <span className="hidden sm:block">논현동 실거래가 · 호구포역 · 인천논현역 · 소래포구역 실시간 정보</span>
             </div>
           </div>

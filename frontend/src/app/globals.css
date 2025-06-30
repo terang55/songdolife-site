@@ -56,22 +56,49 @@ body {
   }
   
   /* 커스텀 스크롤바 */
+  .custom-scrollbar {
+    -webkit-overflow-scrolling: touch; /* iOS에서 부드러운 스크롤 */
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: #c1c1c1 #f1f1f1; /* Firefox */
+    position: relative;
+  }
+  
   .custom-scrollbar::-webkit-scrollbar {
-    width: 8px;
+    width: 4px;
   }
   
   .custom-scrollbar::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: rgba(241, 241, 241, 0.8);
     border-radius: 10px;
+    margin: 2px;
   }
   
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
+    background: rgba(193, 193, 193, 0.8);
     border-radius: 10px;
+    transition: background 0.2s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
   }
   
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #a8a8a8;
+    background: rgba(168, 168, 168, 0.9);
+  }
+  
+  /* 다크 테마나 검은 배경에서도 잘 보이도록 */
+  .custom-scrollbar::-webkit-scrollbar-thumb:active {
+    background: rgba(120, 120, 120, 0.9);
+  }
+  
+  /* 모바일에서 스크롤바 숨기기 */
+  @media (max-width: 768px) {
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 0px;
+      background: transparent;
+    }
+    
+    .custom-scrollbar {
+      padding-right: 0 !important;
+    }
   }
   
   /* 호버 효과 */

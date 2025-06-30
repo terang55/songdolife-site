@@ -119,26 +119,26 @@ export default function RealEstateWidget() {
         <span className="text-xs text-gray-500">{data.statistics.period}</span>
       </div>
       {/* 전체 통계 요약 */}
-      <div className="grid grid-cols-3 gap-4 mb-4 p-3 bg-gray-50 rounded-lg">
+      <div className="grid grid-cols-3 gap-2 mb-2 p-2 bg-gray-50 rounded-lg">
         <div className="text-center">
           <p className="text-xs text-gray-600">평균가</p>
-          <p className="text-sm font-semibold text-blue-600">{data.statistics.avg_price}</p>
+          <p className="text-sm font-semibold text-blue-600 whitespace-nowrap">{data.statistics.avg_price}</p>
         </div>
         <div className="text-center">
           <p className="text-xs text-gray-600">최고가</p>
-          <p className="text-sm font-semibold text-red-600">{data.statistics.max_price}</p>
+          <p className="text-sm font-semibold text-red-600 whitespace-nowrap">{data.statistics.max_price}</p>
         </div>
         <div className="text-center">
           <p className="text-xs text-gray-600">최저가</p>
-          <p className="text-sm font-semibold text-green-600">{data.statistics.min_price}</p>
+          <p className="text-sm font-semibold text-green-600 whitespace-nowrap">{data.statistics.min_price}</p>
         </div>
       </div>
       {/* 좌우 2단 레이아웃 */}
-      <div className="flex flex-col md:flex-row gap-6">
+      <div className="flex flex-col md:flex-row gap-4">
         {/* 최신 거래 */}
-        <div className="flex-1">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="font-bold text-blue-700">최신 거래</h3>
+        <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between mb-1">
+              <h3 className="font-bold text-blue-700">최신 거래</h3>
             <button
               onClick={() => setShowAllDeals(!showAllDeals)}
               className="text-xs text-blue-600 hover:text-blue-800 transition-colors"
@@ -146,10 +146,10 @@ export default function RealEstateWidget() {
               {showAllDeals ? '접기' : `전체보기 (${data.deals.length}건)`}
             </button>
           </div>
-          <div className="space-y-3 max-h-96 overflow-y-auto">
+          <div className="space-y-2 max-h-96 overflow-y-auto custom-scrollbar pr-4 pb-3">
             {data.deals.slice(0, showAllDeals ? data.deals.length : 10).map((deal, index) => (
-              <div key={index} className="border-l-4 border-blue-500 pl-3 py-2 bg-gray-50 rounded-r">
-                <div className="flex justify-between items-start mb-1">
+              <div key={index} className="border-l-4 border-blue-500 pl-3 py-1.5 bg-gray-50 rounded-r">
+                <div className="flex justify-between items-start mb-0.5">
                   <h3 className="font-semibold text-gray-800 text-sm">{deal.apartment_name}</h3>
                   <span className="text-xs text-gray-500">{deal.deal_date}</span>
                 </div>
@@ -157,7 +157,7 @@ export default function RealEstateWidget() {
                   <div className="text-xs text-gray-600">
                     <span>{deal.area} • {deal.floor} • {deal.build_year}년</span>
                   </div>
-                  <div className="text-right">
+                  <div className="text-right pr-1 md:pr-2 lg:pr-3">
                     <p className="font-bold text-blue-600 text-sm">{deal.price}</p>
                     <p className="text-xs text-gray-500">평당 {deal.price_per_pyeong}</p>
                   </div>
@@ -167,9 +167,9 @@ export default function RealEstateWidget() {
           </div>
         </div>
         {/* 아파트별 통계 */}
-        <div className="flex-1">
-          <h3 className="font-bold mb-2 text-green-700">아파트별 통계</h3>
-          <div className="space-y-3 max-h-96 overflow-y-auto">
+        <div className="flex-1 min-w-0">
+          <h3 className="font-bold mb-1 text-green-700">아파트별 통계</h3>
+          <div className="space-y-2 max-h-96 overflow-y-auto custom-scrollbar pr-4 pb-3">
             {data.apartment_stats.map((stat, index) => {
               const apartmentDeals = data.deals.filter(deal => deal.apartment_name === stat.name);
               const isExpanded = expandedApartment === stat.name;
@@ -177,10 +177,10 @@ export default function RealEstateWidget() {
               return (
                 <div key={index} className="border border-gray-200 rounded-lg overflow-hidden">
                   <div 
-                    className="p-3 hover:bg-gray-50 transition-colors cursor-pointer"
+                    className="p-2.5 hover:bg-gray-50 transition-colors cursor-pointer"
                     onClick={() => setExpandedApartment(isExpanded ? null : stat.name)}
                   >
-                    <div className="flex justify-between items-center mb-2">
+                    <div className="flex justify-between items-center mb-1.5">
                       <div className="flex items-center space-x-2">
                         <h3 className="font-semibold text-gray-800 text-sm">{stat.name}</h3>
                         <span className={`text-xs transition-transform ${isExpanded ? 'rotate-90' : ''}`}>
@@ -199,11 +199,11 @@ export default function RealEstateWidget() {
                   
                   {/* 확장된 거래 내역 */}
                   {isExpanded && (
-                    <div className="border-t bg-gray-50 p-3">
+                    <div className="border-t bg-gray-50 p-2.5">
                       <h4 className="text-xs font-semibold text-gray-700 mb-2">
                         {stat.name} 거래 내역 ({apartmentDeals.length}건)
                       </h4>
-                      <div className="space-y-2 max-h-80 overflow-y-auto">
+                      <div className="space-y-1 max-h-80 overflow-y-auto custom-scrollbar pr-4 pb-2">
                         {apartmentDeals.map((deal, dealIndex) => (
                           <div key={dealIndex} className="bg-white p-2 rounded border text-xs">
                             <div className="flex justify-between items-start mb-1">
@@ -215,7 +215,7 @@ export default function RealEstateWidget() {
                                   {deal.deal_date}
                                 </div>
                               </div>
-                              <div className="text-right ml-2">
+                              <div className="text-right ml-2 pr-1 md:pr-2 lg:pr-3">
                                 <div className="font-bold text-blue-600">
                                   {deal.price}
                                 </div>

@@ -146,7 +146,7 @@ export default function RealEstateWidget() {
               {showAllDeals ? '접기' : `전체보기 (${data.deals.length}건)`}
             </button>
           </div>
-          <div className="space-y-3 max-h-80 overflow-y-auto">
+          <div className="space-y-3 max-h-96 overflow-y-auto">
             {data.deals.slice(0, showAllDeals ? data.deals.length : 10).map((deal, index) => (
               <div key={index} className="border-l-4 border-blue-500 pl-3 py-2 bg-gray-50 rounded-r">
                 <div className="flex justify-between items-start mb-1">
@@ -169,7 +169,7 @@ export default function RealEstateWidget() {
         {/* 아파트별 통계 */}
         <div className="flex-1">
           <h3 className="font-bold mb-2 text-green-700">아파트별 통계</h3>
-          <div className="space-y-3 max-h-80 overflow-y-auto">
+          <div className="space-y-3 max-h-96 overflow-y-auto">
             {data.apartment_stats.map((stat, index) => {
               const apartmentDeals = data.deals.filter(deal => deal.apartment_name === stat.name);
               const isExpanded = expandedApartment === stat.name;
@@ -203,7 +203,7 @@ export default function RealEstateWidget() {
                       <h4 className="text-xs font-semibold text-gray-700 mb-2">
                         {stat.name} 거래 내역 ({apartmentDeals.length}건)
                       </h4>
-                      <div className="space-y-2 max-h-60 overflow-y-auto">
+                      <div className="space-y-2 max-h-80 overflow-y-auto">
                         {apartmentDeals.map((deal, dealIndex) => (
                           <div key={dealIndex} className="bg-white p-2 rounded border text-xs">
                             <div className="flex justify-between items-start mb-1">

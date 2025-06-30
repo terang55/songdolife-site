@@ -281,16 +281,6 @@ export default function SubwayPage() {
                 <span className="text-gray-300 hidden sm:inline">|</span>
                 <span className="text-gray-700 font-medium text-sm sm:text-base">🚇 지하철</span>
               </div>
-              <Link 
-                href="/"
-                className="inline-flex items-center px-3 py-2 sm:px-4 sm:py-2 bg-green-600 text-white text-xs sm:text-sm font-medium rounded-lg hover:bg-green-700 transition-colors touch-manipulation min-h-[44px] justify-center"
-              >
-                <svg className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-                <span className="hidden sm:inline">메인으로</span>
-                <span className="sm:hidden">메인</span>
-              </Link>
             </div>
           </div>
         </div>
@@ -694,7 +684,7 @@ export default function SubwayPage() {
             <div className="border-t border-gray-700 pt-6 sm:pt-8">
               <div className="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
                 <div className="text-xs sm:text-sm text-gray-400">
-                  © 2025 인천논현라이프. 모든 권리 보유.
+                  © 2025 인천논현라이프. All rights reserved.
                 </div>
                 <div className="flex items-center space-x-4 text-xs sm:text-sm">
                   <Link 

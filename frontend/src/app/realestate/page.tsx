@@ -4,6 +4,7 @@ import RealEstateWidget from '../components/RealEstateWidget';
 import Head from 'next/head';
 import type { Metadata } from 'next';
 import { BASE_URL } from '@/lib/siteConfig';
+import Footer from '../components/Footer';
 
 export const metadata: Metadata = {
   title: '인천논현동 아파트 실거래가 | 인천논현라이프',
@@ -269,31 +270,8 @@ export default function RealEstatePage() {
         </div>
       </main>
 
-      {/* 푸터 */}
-      <footer className="bg-gray-800 text-white py-8 mt-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <div className="flex items-center justify-center space-x-2 mb-4">
-              <span className="text-2xl">🏙️</span>
-              <div className="text-lg font-bold">인천논현라이프</div>
-            </div>
-            <p className="text-sm text-gray-400">
-              인천 남동구 논현동 지역 정보를 제공합니다.
-            </p>
-            <div className="mt-4 flex justify-center space-x-6">
-              <Link href="/" className="text-gray-400 hover:text-white transition-colors">
-                홈
-              </Link>
-              <Link href="/realestate" className="text-gray-400 hover:text-white transition-colors">
-                부동산
-              </Link>
-              <Link href="/subway" className="text-gray-400 hover:text-white transition-colors">
-                지하철
-              </Link>
-            </div>
-          </div>
-        </div>
-      </footer>
+      {/* 공통 푸터 */}
+      <Footer variant="dark" />
     </div>
   );
 } 

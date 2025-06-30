@@ -1,12 +1,43 @@
-'use client';
-
 import React from 'react';
 import Link from 'next/link';
 import RealEstateWidget from '../components/RealEstateWidget';
+import Head from 'next/head';
+import type { Metadata } from 'next';
+import { BASE_URL } from '@/lib/siteConfig';
+
+export const metadata: Metadata = {
+  title: '인천논현동 아파트 실거래가 | 인천논현라이프',
+  description: '인천 남동구 논현동 아파트(에코메트로·논현센트럴뷰 등) 최근 6개월 실거래가, 평당가, 거래건수 통계를 실시간으로 확인하세요.',
+  keywords: [
+    '인천논현동 실거래가','에코메트로','논현센트럴뷰','인천논현 아파트 매매','평당가','부동산 가격','국토부 실거래','남동구 부동산'
+  ],
+  openGraph: {
+    title: '인천논현동 아파트 실거래가 | 인천논현라이프',
+    description: '인천논현 주요 단지 실거래가, 평당가, 거래 통계를 실시간 제공.',
+    url: `${BASE_URL}/realestate`,
+    type: 'article',
+    images: [`${BASE_URL}/og-image.jpg`]
+  },
+  alternates: { canonical: `${BASE_URL}/realestate` },
+};
 
 export default function RealEstatePage() {
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'Dataset',
+    name: '인천논현동 아파트 실거래가',
+    description: '국토교통부 실거래가 공개시스템 기반 최신 6개월 데이터',
+    url: `${BASE_URL}/realestate`,
+    keywords: ['논현동 실거래가','에코메트로','논현센트럴뷰'],
+    creator: { '@type': 'Organization', name: '인천논현라이프' },
+    license: 'https://www.law.go.kr'
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
+      <Head>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+      </Head>
       {/* 헤더 */}
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -114,7 +145,7 @@ export default function RealEstatePage() {
                 <h4 className="font-medium text-gray-800 mb-2">운행 정보</h4>
                 <div className="text-sm text-gray-600 space-y-1">
                   <div>• <span className="font-medium">운행시간:</span> 05:30 ~ 24:00</div>
-                  <div>• <span className="font-medium">배차간격:</span> 평일 4-6분, 주말 6-8분</div>
+                  <div>• <span className="font-medium">배차간격:</span> 평일 5-10분, 주말 10-15분</div>
                   <div>• <span className="font-medium">왕십리까지:</span> 약 90분</div>
                 </div>
               </div>
@@ -162,7 +193,7 @@ export default function RealEstatePage() {
                   <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">2028년</span>
                 </div>
                 <div className="text-xs text-gray-600 space-y-1">
-                  <div>• 논현역 정차 추진 중!</div>
+                  <div>• 인천논현역 정차 추진 중!</div>
                   <div>• 판교 40분, 광명KTX 15분</div>
                   <div>• 판교테크노밸리 직행</div>
                 </div>

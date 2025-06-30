@@ -137,7 +137,7 @@ export default function WeatherWidget() {
           </div>
           <div className="text-lg">{getWeatherIcon(weather.current.weather[0].icon)}</div>
         </div>
-
+        
         {/* 오늘 예보 (가운데) */}
         <div className="text-center border-l border-r border-blue-300 px-1">
           {weather.forecast.slice(0, 1).map((day, index) => (
@@ -147,11 +147,11 @@ export default function WeatherWidget() {
               <div className="text-xs text-blue-100">
                 <div>최고 {day.temp_max}°</div>
                 <div>최저 {day.temp_min}°</div>
-              </div>
-            </div>
+          </div>
+          </div>
           ))}
-        </div>
-
+      </div>
+      
         {/* 미세먼지 (오른쪽) */}
         {weather.current.air_quality && (
           <div className="text-center">
@@ -162,7 +162,7 @@ export default function WeatherWidget() {
               style={{ backgroundColor: weather.current.air_quality.color }}
             >
               {weather.current.air_quality.status}
-            </div>
+      </div>
             <div className="text-xs text-blue-100">
               <div>PM10: {weather.current.air_quality.pm10}</div>
               <div>PM2.5: {weather.current.air_quality.pm25}</div>

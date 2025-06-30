@@ -409,10 +409,10 @@ export default function SubwayPage() {
                                   <span className="text-blue-600 font-medium text-sm sm:text-base">↗️ {train.destination}</span>
                                 </div>
                                 <span className="text-xs text-gray-400 order-first sm:order-last">
-                                  {new Date(train.updatedAt).toLocaleTimeString('ko-KR')}
-                                </span>
-                              </div>
-                              
+                          {new Date(train.updatedAt).toLocaleTimeString('ko-KR')}
+                        </span>
+                      </div>
+                      
                               <div className="space-y-1.5 sm:space-y-2 mb-3">
                                 <div className="text-xs sm:text-sm text-gray-600">
                                   🚇 현재 위치: {train.currentLocation}
@@ -471,26 +471,26 @@ export default function SubwayPage() {
                               <div className="space-y-1.5 sm:space-y-2 mb-3">
                                 <div className="text-xs sm:text-sm text-gray-600">
                                   🚇 현재 위치: {train.currentLocation}
-                                </div>
+                        </div>
                                 {train.stationsLeft && (
                                   <div className="flex items-center gap-1">
                                     <span className="text-orange-500">📍</span>
                                     <span className="text-xs sm:text-sm font-medium text-orange-600">{train.stationsLeft}</span>
-                                  </div>
+                        </div>
                                 )}
-                              </div>
-                              
-                              <div className="flex justify-between items-center">
+                      </div>
+                      
+                      <div className="flex justify-between items-center">
                                 <span className="text-lg sm:text-xl font-bold text-red-600">
-                                  {train.arrivalTime}
-                                </span>
+                          {train.arrivalTime}
+                        </span>
                                 <span className={`px-2.5 sm:px-3 py-1 rounded-full text-xs font-medium ${
-                                  train.status === '도착' ? 'bg-green-100 text-green-800' :
-                                  train.status === '진입' ? 'bg-yellow-100 text-yellow-800' :
+                          train.status === '도착' ? 'bg-green-100 text-green-800' :
+                          train.status === '진입' ? 'bg-yellow-100 text-yellow-800' :
                                   'bg-red-100 text-red-800'
-                                }`}>
-                                  {train.status}
-                                </span>
+                        }`}>
+                          {train.status}
+                        </span>
                               </div>
                             </div>
                           ))}
@@ -576,19 +576,19 @@ export default function SubwayPage() {
                 </div>
                 <div className="text-xs sm:text-sm text-gray-600 leading-relaxed">
                   <strong className="text-gray-800">운행 시간:</strong> 첫차 약 05:00 ~ 막차 약 24:00 (역별로 다름)
-                </div>
+              </div>
                 <div className="text-xs sm:text-sm text-gray-600 leading-relaxed">
                   <strong className="text-gray-800">배차 간격:</strong> 평일 6-8분 / 주말 8-12분
-                </div>
+              </div>
                 <div className="text-xs sm:text-sm text-gray-600 leading-relaxed mb-3 sm:mb-4">
                   <strong className="text-gray-800">주요 경유역:</strong> 인천, 송도, 수원, 분당, 왕십리, 청량리
-                </div>
-                
+              </div>
+              
                 <div className="flex flex-wrap gap-1.5 sm:gap-2 text-xs">
-                  <span className="px-2 py-1 bg-green-100 text-green-800 rounded">논현동 구간</span>
-                  <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded">호구포역</span>
-                  <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded font-bold">인천논현역</span>
-                  <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded">소래포구역</span>
+                <span className="px-2 py-1 bg-green-100 text-green-800 rounded">논현동 구간</span>
+                <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded">호구포역</span>
+                <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded font-bold">인천논현역</span>
+                <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded">소래포구역</span>
                 </div>
               </div>
             </div>

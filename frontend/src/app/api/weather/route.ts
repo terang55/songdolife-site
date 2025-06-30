@@ -154,7 +154,7 @@ export async function GET() {
 
     const currentData = await currentResponse.json();
     const forecastData = await forecastResponse.json();
-    
+
     // 미세먼지 API는 선택적으로 처리
     let airPollutionData = null;
     if (airPollutionResponse.ok) {

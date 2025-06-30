@@ -158,15 +158,15 @@ export default function RealEstateWidget() {
       <div className="grid grid-cols-3 gap-2 mb-2 p-2 bg-gray-50 rounded-lg">
         <div className="text-center">
           <p className="text-xs text-gray-600">평균가</p>
-          <p className="text-sm font-semibold text-blue-600 whitespace-nowrap">{data.statistics.avg_price}</p>
+          <p className="text-xs sm:text-sm font-semibold text-blue-600 sm:whitespace-nowrap">{data.statistics.avg_price}</p>
         </div>
         <div className="text-center">
           <p className="text-xs text-gray-600">최고가</p>
-          <p className="text-sm font-semibold text-red-600 whitespace-nowrap">{data.statistics.max_price}</p>
+          <p className="text-xs sm:text-sm font-semibold text-red-600 sm:whitespace-nowrap">{data.statistics.max_price}</p>
         </div>
         <div className="text-center">
           <p className="text-xs text-gray-600">최저가</p>
-          <p className="text-sm font-semibold text-green-600 whitespace-nowrap">{data.statistics.min_price}</p>
+          <p className="text-xs sm:text-sm font-semibold text-green-600 sm:whitespace-nowrap">{data.statistics.min_price}</p>
         </div>
       </div>
       {/* 좌우 2단 레이아웃 */}

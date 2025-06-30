@@ -47,6 +47,7 @@ export default function RealEstateWidget() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showAllDeals, setShowAllDeals] = useState(false);
+  const [expandedApartment, setExpandedApartment] = useState<string | null>(null);
 
   useEffect(() => {
     fetchRealEstateData();
@@ -169,20 +170,68 @@ export default function RealEstateWidget() {
         <div className="flex-1">
           <h3 className="font-bold mb-2 text-green-700">아파트별 통계</h3>
           <div className="space-y-3 max-h-80 overflow-y-auto">
-            {data.apartment_stats.map((stat, index) => (
-              <div key={index} className="p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                <div className="flex justify-between items-center mb-2">
-                  <h3 className="font-semibold text-gray-800 text-sm">{stat.name}</h3>
-                  <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">
-                    {stat.count}건
-                  </span>
+            {data.apartment_stats.map((stat, index) => {
+              const apartmentDeals = data.deals.filter(deal => deal.apartment_name === stat.name);
+              const isExpanded = expandedApartment === stat.name;
+              
+              return (
+                <div key={index} className="border border-gray-200 rounded-lg overflow-hidden">
+                  <div 
+                    className="p-3 hover:bg-gray-50 transition-colors cursor-pointer"
+                    onClick={() => setExpandedApartment(isExpanded ? null : stat.name)}
+                  >
+                    <div className="flex justify-between items-center mb-2">
+                      <div className="flex items-center space-x-2">
+                        <h3 className="font-semibold text-gray-800 text-sm">{stat.name}</h3>
+                        <span className={`text-xs transition-transform ${isExpanded ? 'rotate-90' : ''}`}>
+                          ▶️
+                        </span>
+                      </div>
+                      <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">
+                        {stat.count}건
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-gray-600">평균 거래가</span>
+                      <span className="font-bold text-blue-600 text-sm">{stat.avg_price}</span>
+                    </div>
+                  </div>
+                  
+                  {/* 확장된 거래 내역 */}
+                  {isExpanded && (
+                    <div className="border-t bg-gray-50 p-3">
+                      <h4 className="text-xs font-semibold text-gray-700 mb-2">
+                        {stat.name} 거래 내역 ({apartmentDeals.length}건)
+                      </h4>
+                      <div className="space-y-2 max-h-60 overflow-y-auto">
+                        {apartmentDeals.map((deal, dealIndex) => (
+                          <div key={dealIndex} className="bg-white p-2 rounded border text-xs">
+                            <div className="flex justify-between items-start mb-1">
+                              <div className="flex-1">
+                                <div className="font-medium text-gray-800">
+                                  {deal.area} • {deal.floor} • {deal.build_year}년
+                                </div>
+                                <div className="text-gray-500">
+                                  {deal.deal_date}
+                                </div>
+                              </div>
+                              <div className="text-right ml-2">
+                                <div className="font-bold text-blue-600">
+                                  {deal.price}
+                                </div>
+                                <div className="text-gray-500">
+                                  평당 {deal.price_per_pyeong}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-xs text-gray-600">평균 거래가</span>
-                  <span className="font-bold text-blue-600 text-sm">{stat.avg_price}</span>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>

@@ -87,19 +87,41 @@ export default function RealEstatePage() {
             <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
               📍 논현동 주요 아파트 단지
             </h2>
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <span className="text-2xl">🚧</span>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-200">
+                <div>
+                  <span className="font-medium text-gray-800">에코메트로 시리즈</span>
+                  <div className="text-sm text-gray-600">에코메트로1~12단지</div>
                 </div>
-                <div className="ml-3">
-                  <h3 className="text-sm font-medium text-yellow-800">
-                    업데이트 예정
-                  </h3>
-                  <div className="mt-1 text-sm text-yellow-700">
-                    <p>정확한 아파트 단지 정보를 수집하여 곧 업데이트할 예정입니다.</p>
-                  </div>
+                <span className="text-sm text-blue-600 font-medium">대단지</span>
+              </div>
+              <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
+                <div>
+                  <span className="font-medium text-gray-800">논현센트럴푸르지오</span>
+                  <div className="text-sm text-gray-600">대우건설</div>
                 </div>
+                <span className="text-sm text-green-600 font-medium">프리미엄</span>
+              </div>
+              <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg border border-purple-200">
+                <div>
+                  <span className="font-medium text-gray-800">논현힐스데이트</span>
+                  <div className="text-sm text-gray-600">현대건설</div>
+                </div>
+                <span className="text-sm text-purple-600 font-medium">신축급</span>
+              </div>
+              <div className="flex items-center justify-between p-3 bg-orange-50 rounded-lg border border-orange-200">
+                <div>
+                  <span className="font-medium text-gray-800">뜨란채</span>
+                  <div className="text-sm text-gray-600">8단지, 11단지</div>
+                </div>
+                <span className="text-sm text-orange-600 font-medium">주공</span>
+              </div>
+              <div className="flex items-center justify-between p-3 bg-teal-50 rounded-lg border border-teal-200">
+                <div>
+                  <span className="font-medium text-gray-800">냇마을신영지웰</span>
+                  <div className="text-sm text-gray-600">신영건설</div>
+                </div>
+                <span className="text-sm text-teal-600 font-medium">브랜드</span>
               </div>
             </div>
           </div>
@@ -109,19 +131,41 @@ export default function RealEstatePage() {
             <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
               🚇 교통 접근성
             </h2>
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <span className="text-2xl">🚧</span>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-200">
+                <div>
+                  <span className="font-medium text-blue-800">인천논현역 (K259)</span>
+                  <div className="text-sm text-gray-600">수인분당선 • 논현동 중심</div>
                 </div>
-                <div className="ml-3">
-                  <h3 className="text-sm font-medium text-yellow-800">
-                    업데이트 예정
-                  </h3>
-                  <div className="mt-1 text-sm text-yellow-700">
-                    <p>정확한 교통 접근성 정보를 수집하여 곧 업데이트할 예정입니다.</p>
-                  </div>
+                <span className="text-sm text-blue-600 font-medium">도보 5-15분</span>
+              </div>
+              <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
+                <div>
+                  <span className="font-medium text-green-800">호구포역 (K258)</span>
+                  <div className="text-sm text-gray-600">수인분당선 • 논현동 북쪽</div>
                 </div>
+                <span className="text-sm text-green-600 font-medium">도보 10-20분</span>
+              </div>
+              <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg border border-purple-200">
+                <div>
+                  <span className="font-medium text-purple-800">소래포구역 (K260)</span>
+                  <div className="text-sm text-gray-600">수인분당선 • 논현동 남쪽</div>
+                </div>
+                <span className="text-sm text-purple-600 font-medium">도보 15-25분</span>
+              </div>
+              <div className="flex items-center justify-between p-3 bg-orange-50 rounded-lg border border-orange-200">
+                <div>
+                  <span className="font-medium text-orange-800">버스 교통</span>
+                  <div className="text-sm text-gray-600">논현동사거리, 에코메트로 정류장</div>
+                </div>
+                <span className="text-sm text-orange-600 font-medium">다수 노선</span>
+              </div>
+              <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200">
+                <div>
+                  <span className="font-medium text-gray-800">주요 도로</span>
+                  <div className="text-sm text-gray-600">청능대로, 논현로</div>
+                </div>
+                <span className="text-sm text-gray-600 font-medium">간선도로</span>
               </div>
             </div>
           </div>

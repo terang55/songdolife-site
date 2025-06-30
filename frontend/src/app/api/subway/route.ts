@@ -10,6 +10,7 @@ interface TrainInfo {
   status: string;
   currentLocation: string;
   stationsLeft?: string; // 몇 개 역 남았는지
+  remainingMinutes?: number; // 남은 시간(분)
   updatedAt: string;
 }
 
@@ -60,6 +61,7 @@ export async function GET(request: NextRequest) {
         status: '미운행중',
         currentLocation: '미운행중',
         stationsLeft: '미운행중',
+        remainingMinutes: undefined,
         updatedAt: new Date().toISOString()
       },
       {
@@ -72,6 +74,7 @@ export async function GET(request: NextRequest) {
         status: '미운행중',
         currentLocation: '미운행중',
         stationsLeft: '미운행중',
+        remainingMinutes: undefined,
         updatedAt: new Date().toISOString()
       }
     ];
@@ -108,6 +111,9 @@ export async function GET(request: NextRequest) {
           const arvlMsg2 = rowData.match(/<arvlMsg2>(.*?)<\/arvlMsg2>/)?.[1] || '';
           const arvlMsg3 = rowData.match(/<arvlMsg3>(.*?)<\/arvlMsg3>/)?.[1] || '';
           const btrainSttus = rowData.match(/<btrainSttus>(.*?)<\/btrainSttus>/)?.[1] || '';
+          const barvlDtStr = rowData.match(/<barvlDt>(.*?)<\/barvlDt>/)?.[1] || '';
+          const remainingSeconds = parseInt(barvlDtStr, 10);
+          const remainingMinutes = !isNaN(remainingSeconds) && remainingSeconds > 0 ? Math.ceil(remainingSeconds / 60) : undefined;
           
           // stationsLeft 정보 추출 (예: "[6]번째 전역 (인하대)" -> "6개 역 전")
           let stationsLeft = '';
@@ -127,6 +133,7 @@ export async function GET(request: NextRequest) {
             status: '운행',
             currentLocation: arvlMsg3 || '위치 정보 없음',
             stationsLeft: stationsLeft || undefined,
+            remainingMinutes: remainingMinutes,
             updatedAt: new Date().toISOString()
           });
         }

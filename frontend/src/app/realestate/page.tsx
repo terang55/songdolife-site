@@ -168,7 +168,7 @@ export default function RealEstatePage() {
                   <div className="p-2 bg-red-100 rounded">
                     <div className="flex items-center justify-between mb-1">
                       <span className="font-medium text-red-900">M6461</span>
-                      <span className="text-xs bg-red-200 text-red-700 px-2 py-1 rounded">2025.3 신설</span>
+                      <span className="text-xs bg-red-200 text-red-700 px-2 py-1 rounded">운행중</span>
                     </div>
                     <div className="text-xs text-gray-700 space-y-1">
                       <div>• 논현동(소래포구역) → 서울 강남권 직행</div>
@@ -214,7 +214,7 @@ export default function RealEstatePage() {
               <div className="p-3 bg-purple-50 rounded-lg border border-purple-200">
                 <div className="flex items-center justify-between mb-1">
                   <h4 className="font-semibold text-purple-800">제2경인선</h4>
-                  <span className="text-xs bg-purple-100 text-purple-600 px-2 py-1 rounded">2033-35년</span>
+                  <span className="text-xs bg-purple-100 text-purple-600 px-2 py-1 rounded">2035년</span>
                 </div>
                 <div className="text-xs text-gray-600 space-y-1">
                   <div>• 노량진~청학, 논현역 경유</div>

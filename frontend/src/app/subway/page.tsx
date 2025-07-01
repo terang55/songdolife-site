@@ -68,6 +68,8 @@ const stations: StationInfo[] = [
   }
 ];
 
+const BUS_FEATURE_DISABLED = true; // 광역버스 실시간 정보 기능 비활성화 (업데이트 예정)
+
 export default function SubwayPage() {
   const [selectedStation, setSelectedStation] = useState('인천논현역');
   const [trainInfo, setTrainInfo] = useState<TrainInfo[]>([]);
@@ -115,8 +117,11 @@ export default function SubwayPage() {
     }
   };
 
-  // 버스 정보 가져오기
+  // 버스 정보 가져오기 (현재 기능 비활성화)
   const fetchBusInfo = async () => {
+    if (BUS_FEATURE_DISABLED) {
+      return;
+    }
     setBusLoading(true);
     try {
       // 서버사이드 fetch는 정책상 차단될 수 있음 (공공데이터포털)
@@ -145,20 +150,25 @@ export default function SubwayPage() {
 
   useEffect(() => {
     fetchTrainInfo(selectedStation);
-    fetchBusInfo();
+    if (!BUS_FEATURE_DISABLED) {
+      fetchBusInfo();
+    }
     
     // 지하철: 30초, 버스: 20초마다 자동 갱신 (실제 API 사용시 더 자주)
     const trainInterval = setInterval(() => {
       fetchTrainInfo(selectedStation);
     }, 30000);
     
-    const busInterval = setInterval(() => {
-      fetchBusInfo();
-    }, isRealBusAPI ? 20000 : 30000); // 실제 API 사용시 더 자주 갱신
+    let busInterval: NodeJS.Timeout | undefined;
+    if (!BUS_FEATURE_DISABLED) {
+      busInterval = setInterval(() => {
+        fetchBusInfo();
+      }, isRealBusAPI ? 20000 : 30000);
+    }
     
     return () => {
       clearInterval(trainInterval);
-      clearInterval(busInterval);
+      if (busInterval) clearInterval(busInterval);
     };
   }, [selectedStation, isRealBusAPI]);
 
@@ -616,13 +626,15 @@ export default function SubwayPage() {
                     {busLastUpdate}
                   </span>
                 )}
-                <button
-                  onClick={() => fetchBusInfo()}
-                  disabled={busLoading}
-                  className="px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors text-sm font-medium touch-manipulation min-h-[44px] w-full sm:w-auto order-1 sm:order-2"
-                >
-                  {busLoading ? '새로고침 중...' : '🚌 버스 새로고침'}
-                </button>
+                {!BUS_FEATURE_DISABLED && (
+                  <button
+                    onClick={() => fetchBusInfo()}
+                    disabled={busLoading}
+                    className="px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors text-sm font-medium touch-manipulation min-h-[44px] w-full sm:w-auto order-1 sm:order-2"
+                  >
+                    🚌 버스 새로고침
+                  </button>
+                )}
               </div>
             </div>
 
@@ -652,102 +664,95 @@ export default function SubwayPage() {
               </div>
             )}
 
-            {busLoading ? (
-              <div className="text-center py-8">
-                <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                <p className="mt-2 text-gray-600">버스 정보 로딩 중...</p>
+            {BUS_FEATURE_DISABLED ? (
+              <div className="text-center py-6 text-gray-500 text-sm sm:text-base leading-relaxed">
+                <p>M6410 광역버스 <span className="font-semibold">실시간 위치 정보</span>는&nbsp;
+                  <span className="font-semibold text-red-600">업데이트 예정</span>입니다.</p>
+                <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-gray-400">
+                  ※ 현재 공공데이터포털 정책상 서버사이드에서의 실시간 호출이 제한되어 있습니다.<br />
+                  추후 안정적인 데이터 수집 방법 확보 후 제공될 예정이니 양해 부탁드립니다.
+                </p>
               </div>
-            ) : (
+            ) : busLoading ? (
+              <div className="text-gray-500">버스 위치 정보를 불러오는 중...</div>
+            ) : busInfo.length > 0 ? (
               <>
-                {/* 운행종료 시에는 버스 정보 표시하지 않음 */}
-                {busServiceEnded ? (
-                  <div className="text-center py-12">
-                    <div className="text-gray-400 mb-4">
-                      <span className="text-6xl">🌙</span>
-                    </div>
-                    <h3 className="text-xl font-semibold text-gray-700 mb-2">버스 운행이 종료되었습니다</h3>
-                    <p className="text-gray-600">내일 오전 5시부터 운행을 재개합니다.</p>
-                  </div>
-                ) : busInfo.length > 0 ? (
-                  <>
-                    {/* 노선별 분리 표시 */}
-                    <div className="grid grid-cols-1 gap-4 sm:gap-6">
-                      {/* M6410 노선 */}
-                      <div className="space-y-3 sm:space-y-4">
-                        {busInfo.map((bus, idx) => (
-                          <div key={`m6410-${idx}`} className="bg-white rounded-xl shadow-md p-3 sm:p-4 border-l-4 border-red-500 hover:shadow-lg transition-shadow">
-                            <div className="flex flex-col sm:flex-row justify-between items-start mb-3 gap-2 sm:gap-0">
-                              <div className="flex items-center gap-2 flex-wrap">
-                                <span className="inline-block bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-1 rounded-full">
-                                  {bus.routeId}
-                                </span>
-                                <span className="text-red-600 font-medium text-sm sm:text-base">🔴 {bus.direction}</span>
-                                {bus.lowFloor && (
-                                  <span className="inline-block bg-green-100 text-green-800 text-xs font-semibold px-2 py-0.5 rounded">
-                                    ♿ 저상
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-                            
-                            <div className="space-y-1.5 sm:space-y-2 mb-3">
-                              <div className="text-xs sm:text-sm text-gray-600">
-                                🚌 정류장: {bus.stationName}
-                              </div>
-                              <div className="flex items-center gap-1">
-                                <span className="text-orange-500">📍</span>
-                                <span className="text-xs sm:text-sm font-medium text-orange-600">{bus.remainingStops}개 정류장 전</span>
-                              </div>
-                            </div>
-                            
-                            <div className="flex justify-between items-center">
-                              <span className="text-lg sm:text-xl font-bold text-red-600">
-                                {bus.routeId}
+                {/* 노선별 분리 표시 */}
+                <div className="grid grid-cols-1 gap-4 sm:gap-6">
+                  {/* M6410 노선 */}
+                  <div className="space-y-3 sm:space-y-4">
+                    {busInfo.map((bus, idx) => (
+                      <div key={`m6410-${idx}`} className="bg-white rounded-xl shadow-md p-3 sm:p-4 border-l-4 border-red-500 hover:shadow-lg transition-shadow">
+                        <div className="flex flex-col sm:flex-row justify-between items-start mb-3 gap-2 sm:gap-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="inline-block bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-1 rounded-full">
+                              {bus.routeId}
+                            </span>
+                            <span className="text-red-600 font-medium text-sm sm:text-base">🔴 {bus.direction}</span>
+                            {bus.lowFloor && (
+                              <span className="inline-block bg-green-100 text-green-800 text-xs font-semibold px-2 py-0.5 rounded">
+                                ♿ 저상
                               </span>
-                              <div className="flex gap-1">
-                                {isRealBusAPI && (
-                                  <span className="px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
-                                    실시간
-                                  </span>
-                                )}
-                                <span className="px-2.5 sm:px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                  도착예정
-                                </span>
-                              </div>
-                            </div>
+                            )}
                           </div>
-                        ))}
-                        {busInfo.length === 0 && (
-                          <div className="text-center py-6 text-gray-500 text-sm sm:text-base leading-relaxed">
-                            <p>M6410 광역버스 <span className="font-semibold">실시간 위치 정보</span>는&nbsp;
-                              <span className="font-semibold text-red-600">업데이트 예정</span>입니다.</p>
-                            <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-gray-400">
-                              ※ 현재 공공데이터포털 정책상 서버사이드에서의 실시간 호출이 제한되어 있습니다.<br />
-                              추후 안정적인 데이터 수집 방법 확보 후 제공될 예정이니 양해 부탁드립니다.
-                            </p>
+                        </div>
+                        
+                        <div className="space-y-1.5 sm:space-y-2 mb-3">
+                          <div className="text-xs sm:text-sm text-gray-600">
+                            🚌 정류장: {bus.stationName}
                           </div>
-                        )}
+                          <div className="flex items-center gap-1">
+                            <span className="text-orange-500">📍</span>
+                            <span className="text-xs sm:text-sm font-medium text-orange-600">{bus.remainingStops}개 정류장 전</span>
+                          </div>
+                        </div>
+                        
+                        <div className="flex justify-between items-center">
+                          <span className="text-lg sm:text-xl font-bold text-red-600">
+                            {bus.routeId}
+                          </span>
+                          <div className="flex gap-1">
+                            {isRealBusAPI && (
+                              <span className="px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+                                실시간
+                              </span>
+                            )}
+                            <span className="px-2.5 sm:px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                              도착예정
+                            </span>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </>
-                ) : (
-                  <div className="text-center py-8">
-                    <div className="text-gray-500 mb-4">
-                      <span className="text-4xl">🚫</span>
-                    </div>
-                    <p className="text-gray-600 mb-2">현재 버스 운행 정보를 가져올 수 없습니다.</p>
-                    <p className="text-sm text-gray-500">
-                      API 연결 상태를 확인하거나 잠시 후 다시 시도해주세요.
-                    </p>
-                    <button
-                      onClick={() => fetchBusInfo()}
-                      className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                      다시 시도
-                    </button>
+                    ))}
+                    {busInfo.length === 0 && (
+                      <div className="text-center py-6 text-gray-500 text-sm sm:text-base leading-relaxed">
+                        <p>M6410 광역버스 <span className="font-semibold">실시간 위치 정보</span>는&nbsp;
+                          <span className="font-semibold text-red-600">업데이트 예정</span>입니다.</p>
+                        <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-gray-400">
+                          ※ 현재 공공데이터포털 정책상 서버사이드에서의 실시간 호출이 제한되어 있습니다.<br />
+                          추후 안정적인 데이터 수집 방법 확보 후 제공될 예정이니 양해 부탁드립니다.
+                        </p>
+                      </div>
+                    )}
                   </div>
-                )}
+                </div>
               </>
+            ) : (
+              <div className="text-center py-8">
+                <div className="text-gray-500 mb-4">
+                  <span className="text-4xl">🚫</span>
+                </div>
+                <p className="text-gray-600 mb-2">현재 버스 운행 정보를 가져올 수 없습니다.</p>
+                <p className="text-sm text-gray-500">
+                  API 연결 상태를 확인하거나 잠시 후 다시 시도해주세요.
+                </p>
+                <button
+                  onClick={() => fetchBusInfo()}
+                  className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  다시 시도
+                </button>
+              </div>
             )}
           </div>
 

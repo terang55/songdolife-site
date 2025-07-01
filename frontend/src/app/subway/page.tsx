@@ -718,9 +718,13 @@ export default function SubwayPage() {
                           </div>
                         ))}
                         {busInfo.length === 0 && (
-                          <div className="text-center py-6 text-gray-500">
-                            <span className="text-2xl">🚫</span>
-                            <p className="mt-2">M6410 버스 정보 없음</p>
+                          <div className="text-center py-6 text-gray-500 text-sm sm:text-base leading-relaxed">
+                            <p>M6410 광역버스 <span className="font-semibold">실시간 위치 정보</span>는&nbsp;
+                              <span className="font-semibold text-red-600">업데이트 예정</span>입니다.</p>
+                            <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-gray-400">
+                              ※ 현재 공공데이터포털 정책상 서버사이드에서의 실시간 호출이 제한되어 있습니다.<br />
+                              추후 안정적인 데이터 수집 방법 확보 후 제공될 예정이니 양해 부탁드립니다.
+                            </p>
                           </div>
                         )}
                       </div>

@@ -133,6 +133,8 @@ export default function SubwayPage() {
         setIsRealBusAPI(false);
       }
     } catch (error) {
+      // 오류 로깅
+      console.error('🚌 버스 정보 로딩 오류:', error);
       setBusInfo([]);
       setBusServiceEnded(false);
       setIsRealBusAPI(false);

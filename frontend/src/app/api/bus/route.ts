@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
 interface BusLocationItem {
   BUSID: string;
@@ -35,12 +35,12 @@ function parseXML(xml: string): BusLocationItem[] {
   let m;
   while ((m = blockRegex.exec(xml)) !== null) {
     const raw = m[1];
-    const obj: any = {};
+    const obj: Record<string, string> = {};
     raw.replace(/<([^/][^>]*)>([\s\S]*?)<\/\1>/g, (_s, tag: string, val: string) => {
       obj[tag] = val.trim();
       return '';
     });
-    list.push(obj as BusLocationItem);
+    list.push(obj as unknown as BusLocationItem);
   }
   return list;
 }
@@ -77,7 +77,7 @@ async function fetchM6410(): Promise<BusArrival[]> {
   }
 }
 
-export async function GET(_req: NextRequest) {
+export async function GET() {
   const now = new Date();
   const data = await fetchM6410();
   return NextResponse.json({

@@ -70,19 +70,31 @@ export async function GET(): Promise<NextResponse> {
     }
     for (const yearMonth of yearMonths) {
       console.log(`📅 ${yearMonth} 데이터 수집 중...`);
-      const apiUrl = new URL(MOLIT_BASE_URL);
-      apiUrl.searchParams.append('serviceKey', MOLIT_API_KEY);
-      apiUrl.searchParams.append('LAWD_CD', AREA_CODE);
-      apiUrl.searchParams.append('DEAL_YMD', yearMonth);
-      apiUrl.searchParams.append('numOfRows', '100');
-      apiUrl.searchParams.append('pageNo', '1');
-      try {
-        const response = await fetch(apiUrl.toString());
-        const xmlText = await response.text();
-        const parsed = parser.parse(xmlText);
-        const items = parsed?.response?.body?.items?.item;
-        if (items) {
+      // 페이지네이션 처리: 100건(1페이지) 초과 시 다음 페이지 반복 호출
+      let pageNo = 1;
+      const numOfRows = 100;
+
+      while (true) {
+        const apiUrl = new URL(MOLIT_BASE_URL);
+        apiUrl.searchParams.append('serviceKey', MOLIT_API_KEY);
+        apiUrl.searchParams.append('LAWD_CD', AREA_CODE);
+        apiUrl.searchParams.append('DEAL_YMD', yearMonth);
+        apiUrl.searchParams.append('numOfRows', numOfRows.toString());
+        apiUrl.searchParams.append('pageNo', pageNo.toString());
+
+        try {
+          const response = await fetch(apiUrl.toString());
+          const xmlText = await response.text();
+          const parsed = parser.parse(xmlText);
+          const items = parsed?.response?.body?.items?.item;
+
+          // items가 없으면 해당 월의 페이지 루프 종료
+          if (!items) {
+            break;
+          }
+
           const itemArray = Array.isArray(items) ? items : [items];
+
           for (const item of itemArray) {
             try {
               const apartment = item.aptNm || '';
@@ -94,10 +106,12 @@ export async function GET(): Promise<NextResponse> {
               const day = item.dealDay || '';
               const buildYear = item.buildYear || '';
               const dong = item.umdNm || '';
+
               if (apartment && priceStr) {
                 const price = parsePrice(priceStr);
                 const dealDate = formatDealDate(year, month, day);
                 const pricePerPyeong = calculatePricePerPyeong(price, area);
+
                 if (dong === '논현동') {
                   deals.push({
                     apartment_name: apartment,
@@ -108,7 +122,7 @@ export async function GET(): Promise<NextResponse> {
                     deal_date: dealDate,
                     build_year: buildYear,
                     location: dong,
-                    price_per_pyeong: pricePerPyeong
+                    price_per_pyeong: pricePerPyeong,
                   });
                 }
               }
@@ -116,9 +130,17 @@ export async function GET(): Promise<NextResponse> {
               console.error('❌ 개별 데이터 파싱 오류:', parseError);
             }
           }
+
+          // 마지막 페이지 체크: 가져온 레코드 수가 페이지당 요청 수보다 적으면 종료
+          if (itemArray.length < numOfRows) {
+            break;
+          }
+
+          pageNo += 1;
+        } catch (pageError) {
+          console.error(`❌ ${yearMonth} ${pageNo}페이지 데이터 수집 실패:`, pageError);
+          break; // 에러 발생 시 루프 탈출
         }
-      } catch (monthError) {
-        console.error(`❌ ${yearMonth} 데이터 수집 실패:`, monthError);
       }
     }
     // 최신 거래일 순으로 정렬

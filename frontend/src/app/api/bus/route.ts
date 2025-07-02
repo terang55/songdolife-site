@@ -55,7 +55,8 @@ interface BusArrival {
 
 // ------------------ 설정 ------------------
 
-const GBIS_BASE = 'http://openapi.gbis.go.kr/ws/rest';
+// GBIS v2 엔드포인트 (경기도 공공데이터포털)
+const GBIS_BASE = 'https://apis.data.go.kr/6410000';
 // TODO: 환경 변수를 사용하세요. (Vercel: process.env.GBIS_SERVICE_KEY)
 const SERVICE_KEY = process.env.GBIS_SERVICE_KEY || 'YOUR_GBIS_SERVICE_KEY';
 const ROUTE_NAME = 'M6410';
@@ -100,14 +101,14 @@ async function getRouteIdByName(routeName: string): Promise<string | null> {
 }
 
 async function fetchLocations(routeId: string): Promise<GBISLocationItem[]> {
-  const url = `${GBIS_BASE}/buslocationservice?serviceKey=${SERVICE_KEY}&routeId=${routeId}`;
+  const url = `${GBIS_BASE}/buslocationservice/v2/getBusLocationList?serviceKey=${SERVICE_KEY}&routeId=${routeId}&format=xml`;
   const res = await fetch(url, { headers: { Accept: 'application/xml' } });
   const text = await res.text();
   return parseList<GBISLocationItem>(text, 'busLocationList');
 }
 
 async function fetchArrival(stationId: string, routeId: string): Promise<GBISArrivalItem | null> {
-  const url = `${GBIS_BASE}/busarrivalservice?serviceKey=${SERVICE_KEY}&stationId=${stationId}&routeId=${routeId}`;
+  const url = `${GBIS_BASE}/busarrivalservice/v2/getBusArrivalList?serviceKey=${SERVICE_KEY}&stationId=${stationId}&routeId=${routeId}&format=xml`;
   const res = await fetch(url, { headers: { Accept: 'application/xml' } });
   const text = await res.text();
   const items = parseList<GBISArrivalItem>(text, 'busArrivalList');

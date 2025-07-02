@@ -60,9 +60,9 @@ export async function GET(): Promise<NextResponse> {
     const deals: ProcessedDeal[] = [];
     const parser = new XMLParser({ ignoreAttributes: false, trimValues: true });
     const now = new Date();
-    // 최근 6개월 yearMonth 리스트 생성
+    // 최근 3개월 yearMonth 리스트 생성
     const yearMonths: string[] = [];
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 3; i++) {
       const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
       const y = d.getFullYear();
       const m = (d.getMonth() + 1).toString().padStart(2, '0');
@@ -198,7 +198,7 @@ export async function GET(): Promise<NextResponse> {
           avg_price: formatPrice(avgPrice),
           max_price: formatPrice(maxPrice),
           min_price: formatPrice(minPrice),
-          period: `최근 6개월`
+          period: `최근 3개월`
         },
         apartment_stats: apartmentStatsArray
       },

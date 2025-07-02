@@ -74,17 +74,10 @@ const SERVICE_KEY = 'aTgFhrZehAYOxHq4Z3z1iSYeysHfG9Tu43JQhF26U3mdGzr0H8%2BjR9Mzr
 const ROUTE_NAME = 'M6410';
 const ROUTE_ID = '216000044'; // 고정된 노선 ID
 
-// 논현동 주요 정류소 (경기도 관할) - 사리울중, 소래포구역 등
-// ※ 실제 stationId 는 GBIS 정류소 조회 서비스에서 확인 필요
-const TARGET_STATIONS: { id: string; name: string; direction: string }[] = [
-  { id: '228000555', name: '사리울중학교', direction: '강남역' },
-  { id: '228000231', name: '소래포구역', direction: '강남역' },
-];
+// 논현동 주요 정류소 상수는 현재 사용되지 않아 제거
 
 // ------------------ 유틸 ------------------
-function safeText(elem: string | undefined): string {
-  return (elem || '').trim();
-}
+// safeText 함수는 현재 사용되지 않아 제거
 
 function parseList<T = Record<string, string>>(xml: string, tag: string): T[] {
   const out: T[] = [];
@@ -104,13 +97,7 @@ function parseList<T = Record<string, string>>(xml: string, tag: string): T[] {
 
 // ------------------ API ------------------
 
-async function getRouteIdByName(routeName: string): Promise<string | null> {
-  const url = `${GBIS_BASE}/busrouteservice?serviceKey=${SERVICE_KEY}&keyword=${routeName}`;
-  const res = await fetch(url, { headers: { Accept: 'application/xml' } });
-  const text = await res.text();
-  const items = parseList<GBISRouteItem>(text, 'busRouteList');
-  return items.length ? items[0].routeId : null;
-}
+// getRouteIdByName 함수는 현재 사용되지 않아 제거
 
 async function fetchLocations(routeId: string): Promise<GBISLocationItem[]> {
   const url = `${GBIS_BASE}/buslocationservice/v2/getBusLocationListv2?serviceKey=${SERVICE_KEY}&routeId=${routeId}&format=xml`;
@@ -127,29 +114,12 @@ async function fetchLocations(routeId: string): Promise<GBISLocationItem[]> {
     console.log('🚌 첫 번째 위치 데이터 전체 필드:', JSON.stringify(locations[0], null, 2));
     return locations;
   } catch (error) {
+    console.error('❌ 위치 조회 에러', error);
     return [];
   }
 }
 
-async function fetchArrival(stationId: string, routeId: string): Promise<GBISArrivalItem | null> {
-  const url = `${GBIS_BASE}/busarrivalservice/v2/getBusArrivalListv2?serviceKey=${SERVICE_KEY}&stationId=${stationId}&routeId=${routeId}&format=xml`;
-  
-  try {
-    const response = await fetch(url);
-    
-    if (!response.ok) {
-      return null;
-    }
-    
-    const xmlText = await response.text();
-    
-    const arrivals = parseList<GBISArrivalItem>(xmlText, 'busArrivalList');
-    
-    return arrivals.length ? arrivals[0] : null;
-  } catch (error) {
-    return null;
-  }
-}
+// fetchArrival 함수는 현재 사용되지 않아 제거
 
 // 노선 정류장 목록 캐시
 let routeStationsCache: Array<{ stationId: string; stationName: string; stationSeq: number }> = [];
@@ -178,7 +148,7 @@ async function fetchRouteStations(routeId: string): Promise<Array<{ stationId: s
     const xmlText = await response.text();
     console.log(`📄 노선 정류장 XML 응답 (처음 800자): ${xmlText.substring(0, 800)}`);
     
-    const stationList = parseList<any>(xmlText, 'busRouteStationList');
+    const stationList = parseList<GBISRouteStationItem>(xmlText, 'busRouteStationList');
     console.log(`🔍 파싱된 정류장 수: ${stationList.length}`);
     
     if (stationList.length > 0) {
@@ -206,8 +176,20 @@ async function fetchRouteStations(routeId: string): Promise<Array<{ stationId: s
   return [];
 }
 
+// 노선 정류장 XML 아이템 타입
+interface GBISRouteStationItem {
+  stationId: string;
+  stationName: string;
+  stationSeq: string; // 문자열로 전달됨
+}
+
+// 정류장 상세 XML 아이템 타입
+interface GBISBusStationInfoItem {
+  stationName: string;
+}
+
 // 정류장 정보 조회 - GBIS busStationInfov2 API 사용
-async function getStationInfo(stationId: string, routeId: string): Promise<{ stationName: string }> {
+async function getStationInfo(stationId: string): Promise<{ stationName: string }> {
   console.log(`🔍 정류장 조회: ${stationId}`);
   
   // 1. 먼저 로컬 Station.json에서 찾아보기
@@ -234,7 +216,7 @@ async function getStationInfo(stationId: string, routeId: string): Promise<{ sta
     console.log(`📄 정류장 XML 응답 (처음 300자): ${xmlText.substring(0, 300)}`);
     
     // busStationInfo 태그에서 정류장명 추출
-    const stationInfoList = parseList<any>(xmlText, 'busStationInfo');
+    const stationInfoList = parseList<GBISBusStationInfoItem>(xmlText, 'busStationInfo');
     
     if (stationInfoList.length > 0) {
       const stationName = stationInfoList[0].stationName || `정류장${stationId.slice(-3)}`;
@@ -262,7 +244,7 @@ async function buildArrivalObjects(): Promise<BusArrival[]> {
     const locations = await fetchLocations(routeId);
 
     // 위치 데이터를 BusArrival 형태로 변환 (정류장명 포함)
-    const arrivals: BusArrival[] = await Promise.all(locations.map(async (loc, index) => {
+    const arrivals: BusArrival[] = await Promise.all(locations.map(async (loc) => {
       const crowdedLevel = Number(loc.crowded || '1');
       let congestionText = '-';
       if (crowdedLevel === 1) congestionText = '여유';
@@ -270,7 +252,7 @@ async function buildArrivalObjects(): Promise<BusArrival[]> {
       else if (crowdedLevel === 3) congestionText = '혼잡';
 
       // 정류장 정보 조회
-      const stationInfo = await getStationInfo(loc.stationId, routeId);
+      const stationInfo = await getStationInfo(loc.stationId);
       const stationNameResolved = stationInfo?.stationName || `정류장${loc.stationSeq}`;
 
       // 다음 정류장 정보 계산

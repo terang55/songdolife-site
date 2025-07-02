@@ -10,15 +10,6 @@ interface StationInfo {
   ROUTE_NM: string;
   STATION_NM: string;
 }
-interface GBISRouteItem {
-  routeId: string;
-  routeName: string;
-  regionName: string;
-  routeTypeCd: string;
-  routeTypeName: string;
-  startStationName: string;
-  endStationName: string;
-}
 
 interface GBISLocationItem {
   stationId: string;
@@ -38,20 +29,6 @@ interface GBISLocationItem {
   nextStationName?: string;
   crowded?: string; // 혼잡도
   lowPlate?: string; // 저상버스 여부 (Y/N)
-}
-
-interface GBISArrivalItem {
-  stationId: string;
-  stationName: string;
-  routeId: string;
-  locationNo1: string; // 첫번째 차량 남은정류장 수
-  predictTime1: string; // 첫번째 차량 도착예상 시간(분)
-  plateNo1: string;
-  lowPlateYn1: string;
-  locationNo2: string;
-  predictTime2: string;
-  plateNo2: string;
-  lowPlateYn2: string;
 }
 
 interface BusArrival {

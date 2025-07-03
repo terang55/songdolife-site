@@ -71,7 +71,11 @@ function extractSpecialties(categoryName: string): string[] {
   if (categoryName.includes('피부과')) specialties.push('피부과');
   if (categoryName.includes('비뇨기과')) specialties.push('비뇨기과');
   if (categoryName.includes('신경과')) specialties.push('신경과');
-  if (categoryName.includes('정신과')) specialties.push('정신과');
+  if (categoryName.includes('정신건강의학과') || categoryName.includes('정신과')) specialties.push('정신건강의학과');
+  if (categoryName.includes('성형외과')) specialties.push('성형외과');
+  if (categoryName.includes('통증') || categoryName.includes('마취통증')) specialties.push('통증의학과');
+  if (categoryName.includes('가정의학과') || categoryName.includes('일반의원')) specialties.push('가정의학과');
+  if (categoryName.includes('한방')) specialties.push('한방');
   
   return specialties;
 }
@@ -96,14 +100,14 @@ export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
     const type = searchParams.get('type') || 'all'; // hospital, pharmacy, all
-    const category = searchParams.get('category'); // 내과, 외과 등
+    const categoryParam = searchParams.get('category'); // 내과, 외과 등
     const emergency = searchParams.get('emergency') === 'true';
     const night = searchParams.get('night') === 'true';
     const radius = parseInt(searchParams.get('radius') || '2000'); // 기본 2km
 
     console.log('🏥 의료기관 정보 요청:', {
       type,
-      category,
+      category: categoryParam,
       emergency,
       night,
       radius
@@ -132,6 +136,12 @@ export async function GET(request: NextRequest) {
     }
     if (type === 'all' || type === 'pharmacy') {
       categoryQueries.push({ code: 'PM9', name: '약국' });
+    }
+
+    // 소아과 → 소아청소년과로 정규화 (카카오 표기와 맞추기)
+    let category: string | null = categoryParam;
+    if (categoryParam === '소아과') {
+      category = '소아청소년과';
     }
 
     // 카테고리별로 카카오맵 API 호출 (페이징 포함)
@@ -180,10 +190,25 @@ export async function GET(request: NextRequest) {
             // 타입 필터링
             if (type !== 'all' && type !== medicalType) return;
             
-            // 카테고리 필터링
-            if (category && !place.category_name.includes(category)) return;
-            
+            // 진료과목 추출(다중 사용)
             const specialties = extractSpecialties(place.category_name);
+
+            // 카테고리 필터링 (명칭 + 추출된 진료과목 모두 고려)
+            if (category) {
+              // 기타 카테고리는 지정된 특수 과목 집합과 매칭
+              if (category === '기타') {
+                const etcSet = ['정신건강의학과', '성형외과', '통증의학과', '가정의학과', '한방'];
+                const hasEtc = specialties.some(sp => etcSet.includes(sp));
+                if (!hasEtc) return;
+              } else {
+                const inName = place.category_name.includes(category);
+                const inSpecialties = specialties.includes(category);
+                if (!inName && !inSpecialties) {
+                  return;
+                }
+              }
+            }
+            
             const isEmergency = hasEmergency(place.category_name, place.place_name);
             const isNightCare = hasNightCare(place.place_name, place.category_name);
             
@@ -233,12 +258,12 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      data: results.slice(0, 50), // 최대 50개까지
+      data: results, // 모든 결과 반환
       total: results.length,
       timestamp: new Date().toISOString(),
       params: {
         type,
-        category,
+        category: categoryParam,
         emergency,
         night,
         radius

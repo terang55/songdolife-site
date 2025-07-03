@@ -113,7 +113,17 @@ const MedicalWidget: React.FC = () => {
     );
   };
 
-  const categories = ['내과', '외과', '정형외과', '소아과', '이비인후과', '안과', '치과', '피부과'];
+  const categories = [
+    '내과',
+    '외과',
+    '정형외과',
+    '소아청소년과',
+    '이비인후과',
+    '안과',
+    '치과',
+    '피부과',
+    '기타'
+  ];
 
   return (
     <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-4 sm:mb-6">

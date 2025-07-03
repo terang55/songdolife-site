@@ -62,7 +62,9 @@ function extractSpecialties(categoryName: string): string[] {
   if (categoryName.includes('외과')) specialties.push('외과');
   if (categoryName.includes('정형외과')) specialties.push('정형외과');
   if (categoryName.includes('산부인과')) specialties.push('산부인과');
-  if (categoryName.includes('소아과')) specialties.push('소아과');
+  if (categoryName.includes('소아청소년과') || categoryName.includes('소아과')) {
+    specialties.push('소아청소년과');
+  }
   if (categoryName.includes('이비인후과')) specialties.push('이비인후과');
   if (categoryName.includes('안과')) specialties.push('안과');
   if (categoryName.includes('치과')) specialties.push('치과');
@@ -136,8 +138,8 @@ export async function GET(request: NextRequest) {
     for (const categoryQuery of categoryQueries) {
       console.log(`🔍 ${categoryQuery.name} 검색 중... (${categoryQuery.code})`);
       
-      // 최대 3페이지까지 호출 (15 x 3 = 45개)
-      for (let page = 1; page <= 3; page++) {
+      // 카카오 API는 최대 45페이지(15*45=675개)까지 지원하지만, 실사용 범위 내에서 15페이지 정도면 충분
+      for (let page = 1; page <= 15; page++) {
         try {
           const apiUrl = `https://dapi.kakao.com/v2/local/search/category.json`;
           const params = new URLSearchParams({
@@ -165,7 +167,7 @@ export async function GET(request: NextRequest) {
           const data: KakaoSearchResult = await response.json();
           console.log(`✅ ${categoryQuery.name} ${page}페이지: ${data.documents.length}개 발견`);
           
-          // 더 이상 결과가 없으면 중단
+          // 마지막 페이지(is_end) 이거나 결과가 없으면 루프 종료
           if (data.documents.length === 0 || data.meta.is_end) {
             console.log(`📄 ${categoryQuery.name} 검색 완료 (${page}페이지에서 종료)`);
             break;

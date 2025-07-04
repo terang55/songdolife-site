@@ -34,10 +34,9 @@ export default function Footer({ variant = 'light' }: FooterProps) {
         </div>
         {/* 비즈니스 문의 */}
         <div>
-          <h3 className="text-xs font-semibold text-gray-700 mb-1">비즈니스 문의</h3>
+          <h3 className="text-xs font-semibold text-gray-700 mb-1">💼사이트 문의</h3>
           <div className="flex flex-col items-center gap-1">
             <span className="text-base">📧 <a href="mailto:rainbowcr55@gmail.com" className="underline hover:text-blue-600">rainbowcr55@gmail.com</a></span>
-            <span className="text-base">💼 제휴 및 사이트 문의</span>
           </div>
         </div>
         {/* 저작권 및 정책 */}

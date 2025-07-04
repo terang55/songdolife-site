@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 
-// 논현동 좌표 (인천 남동구 논현동)
-const NONHYEON_LAT = 37.3894;
-const NONHYEON_LON = 126.7317;
+// 인천 남동구 논현동 행정동 중심 좌표
+const NONHYEON_LAT = 37.3988;
+const NONHYEON_LON = 126.7359;
 
 // OpenWeather API 키 (환경변수에서만 가져오기)
 const API_KEY = process.env.OPENWEATHER_API_KEY;

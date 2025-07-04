@@ -610,7 +610,7 @@ export default function HomePage() {
 
             {/* 비즈니스 문의 */}
             <div className="text-center md:text-left">
-              <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">비즈니스 문의</h3>
+              <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">💼사이트 문의</h3>
               <div className="space-y-2 text-sm text-gray-300">
                 <div className="flex items-center justify-center md:justify-start space-x-2">
                   <span className="text-base">📧</span>
@@ -620,10 +620,6 @@ export default function HomePage() {
                   >
                     rainbowcr55@gmail.com
                   </a>
-                </div>
-                <div className="flex items-center justify-center md:justify-start space-x-2">
-                  <span className="text-base">💼</span>
-                  <span>제휴 및 사이트 문의</span>
                 </div>
               </div>
             </div>

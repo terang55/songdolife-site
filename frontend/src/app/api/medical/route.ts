@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// 인천논현역 중심 좌표 (인천 남동구 논현동)
-const NONHYEON_LAT = 37.3990;
-const NONHYEON_LON = 126.7240;
+// 인천 남동구 논현동 행정동 중심 좌표 (보다 넓은 범위 커버)
+const NONHYEON_LAT = 37.3988;
+const NONHYEON_LON = 126.7359;
 
 // 카카오맵 API 키 (환경변수에서 가져오기)
 const KAKAO_API_KEY = process.env.KAKAO_API_KEY;

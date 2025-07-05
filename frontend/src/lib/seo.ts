@@ -235,3 +235,17 @@ export function generateTrainStationSchema(station: {
     }
   });
 } 
+
+// BreadcrumbList 구조화 데이터 생성 함수
+export function generateBreadcrumbSchema(crumbs: Array<{ name: string; path: string }>) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: crumbs.map((c, idx) => ({
+      '@type': 'ListItem',
+      position: idx + 1,
+      name: c.name,
+      item: `${BASE_URL}${c.path}`
+    }))
+  };
+} 

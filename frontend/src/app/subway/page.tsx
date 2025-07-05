@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
+import { generateBreadcrumbSchema } from '@/lib/seo';
 
 interface TrainInfo {
   station: string;
@@ -187,6 +188,11 @@ export default function SubwayPage() {
     return null;
   };
 
+  const breadcrumbData = generateBreadcrumbSchema([
+    { name: '홈', path: '/' },
+    { name: '실시간 교통', path: '/subway' }
+  ]);
+
   return (
     <>
       <Head>
@@ -307,6 +313,7 @@ export default function SubwayPage() {
             })
           }}
         />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }} />
       </Head>
 
       <div className="min-h-screen bg-gray-50">

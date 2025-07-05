@@ -5,6 +5,7 @@ import Head from 'next/head';
 import type { Metadata } from 'next';
 import { BASE_URL } from '@/lib/siteConfig';
 import Footer from '../components/Footer';
+import { generateBreadcrumbSchema } from '@/lib/seo';
 
 export const metadata: Metadata = {
   title: '인천논현동 부동산 실거래가 | 에코메트로·논현센트럴뷰 아파트 시세 | 인천논현라이프',
@@ -69,10 +70,16 @@ export default function RealEstatePage() {
     license: 'https://www.law.go.kr'
   };
 
+  const breadcrumbData = generateBreadcrumbSchema([
+    { name: '홈', path: '/' },
+    { name: '부동산', path: '/realestate' }
+  ]);
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Head>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }} />
       </Head>
       {/* 헤더 */}
       <header className="bg-white shadow-sm border-b">

@@ -16,7 +16,7 @@ interface NewsItem {
   category?: string;
 }
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     console.log('📡 RSS 피드 생성 시작');
     

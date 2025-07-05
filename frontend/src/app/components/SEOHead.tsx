@@ -10,7 +10,7 @@ interface SEOHeadProps {
   keywords?: string[];
   image?: string;
   noindex?: boolean;
-  structuredData?: any;
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 export default function SEOHead({
@@ -65,7 +65,21 @@ export default function SEOHead({
         metaKeywords.setAttribute('content', keywords.join(', '));
       }
     }
-    
+
+    // robots 메타 태그 업데이트 (noindex 처리)
+    const metaRobots = document.querySelector('meta[name="robots"]') || (() => {
+      const tag = document.createElement('meta');
+      tag.setAttribute('name', 'robots');
+      document.head.appendChild(tag);
+      return tag;
+    })();
+
+    if (noindex) {
+      metaRobots.setAttribute('content', 'noindex, nofollow');
+    } else {
+      metaRobots.setAttribute('content', 'index, follow');
+    }
+
     // Open Graph 메타 태그 업데이트
     if (title) {
       const ogTitle = document.querySelector('meta[property="og:title"]');
@@ -100,7 +114,7 @@ export default function SEOHead({
       canonicalLink.setAttribute('href', `${BASE_URL}${pathname}`);
     }
     
-  }, [title, description, keywords, image, pathname]);
+  }, [title, description, keywords, image, pathname, noindex]);
   
   useEffect(() => {
     // 구조화된 데이터 동적 추가
@@ -132,6 +146,6 @@ export default function SEOHead({
 // 타입 확장 (전역 타입 정의)
 declare global {
   interface Window {
-    gtag: (...args: any[]) => void;
+    gtag: (...args: unknown[]) => void;
   }
 } 

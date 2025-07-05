@@ -2,6 +2,13 @@
 
 import { useState, useEffect } from 'react';
 
+// BeforeInstallPromptEvent 타입 정의 (표준화되지 않은 브라우저 이벤트)
+interface BeforeInstallPromptEvent extends Event {
+  readonly platforms: string[];
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
+}
+
 interface PWAStatus {
   isInstalled: boolean;
   isOnline: boolean;
@@ -23,7 +30,7 @@ export function usePWA(): PWAStatus & PWAActions {
   const [canInstall, setCanInstall] = useState(false);
   const [hasUpdate, setHasUpdate] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [registration, setRegistration] = useState<ServiceWorkerRegistration | null>(null);
 
   useEffect(() => {
@@ -68,7 +75,7 @@ export function usePWA(): PWAStatus & PWAActions {
     // 설치 상태 확인
     const checkInstallStatus = () => {
       const standalone = window.matchMedia('(display-mode: standalone)').matches;
-      const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && (window.navigator as any).standalone;
+      const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && Boolean((window.navigator as unknown as { standalone?: boolean }).standalone);
       setIsInstalled(standalone || iOS);
     };
 
@@ -81,7 +88,7 @@ export function usePWA(): PWAStatus & PWAActions {
     // 설치 프롬프트 이벤트
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
-      setDeferredPrompt(e);
+      setDeferredPrompt(e as BeforeInstallPromptEvent);
       setCanInstall(true);
     };
 
@@ -203,7 +210,7 @@ export function usePWA(): PWAStatus & PWAActions {
 
     try {
       // TypeScript 타입 오류 회피를 위한 타입 단언
-      const syncManager = (registration as any).sync;
+      const syncManager = (registration as unknown as { sync?: { register: (tag: string) => Promise<void> } }).sync;
       if (syncManager) {
         await syncManager.register('news-sync');
         console.log('✅ 백그라운드 동기화 등록 완료');

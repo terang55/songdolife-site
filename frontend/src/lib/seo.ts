@@ -51,7 +51,7 @@ export function generateSEOMetadata(params: {
   } = params;
 
   // 동적 키워드 생성
-  let dynamicKeywords = [...CORE_KEYWORDS];
+  const dynamicKeywords: string[] = [...CORE_KEYWORDS];
   
   if (category && CATEGORY_KEYWORDS[category]) {
     dynamicKeywords.push(...CATEGORY_KEYWORDS[category]);
@@ -129,7 +129,7 @@ export function generateSEOMetadata(params: {
 }
 
 // 구조화된 데이터 생성 함수
-export function generateStructuredData(type: string, data: any) {
+export function generateStructuredData<T extends Record<string, unknown>>(type: string, data: T) {
   const baseStructure = {
     '@context': 'https://schema.org',
     '@type': type,

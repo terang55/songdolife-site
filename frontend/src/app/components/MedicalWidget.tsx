@@ -224,8 +224,8 @@ const MedicalWidget: React.FC<MedicalWidgetProps> = ({ initialType = 'all' }) =>
               {selectedType === 'pharmacy' ? '논현동 주변 약국 정보' : selectedType === 'hospital' ? '논현동 주변 병원 정보' : '논현동 주변 병원/약국 정보'}
             </h3>
             <p className="text-gray-600 mb-6 max-w-md mx-auto text-sm sm:text-base leading-relaxed">
-              논현역 중심 2km 반경 내 병원과 약국 정보를 실시간으로 확인하세요.
-              진료과목, 응급실, 야간진료 여부까지 한눈에!
+              논현동의 모든 의료기관 정보를 확인하세요.
+              공공데이터(보건복지부) + 위치기반 거리정보로 최신 상태를 제공합니다.
             </p>
             <button
               onClick={fetchMedicalData}
@@ -538,8 +538,8 @@ const MedicalWidget: React.FC<MedicalWidgetProps> = ({ initialType = 'all' }) =>
 
       <div className="mt-6 pt-4 border-t border-gray-200 text-center">
         <div className="text-xs sm:text-sm text-gray-500 space-y-1">
-          <div className="font-medium">📍 논현역 중심 2km 반경 내 의료기관 정보</div>
-          <div className="text-gray-400">실시간 업데이트 • 카카오맵 연동</div>
+          <div className="font-medium">📍 논현동의 의료기관 정보</div>
+          <div className="text-gray-400">보건복지부 공공데이터 • 거리순 정렬</div>
         </div>
       </div>
     </div>

@@ -1,0 +1,146 @@
+"use client";
+
+import React, { useEffect, useState } from 'react';
+import Head from 'next/head';
+import { generateBreadcrumbSchema } from '@/lib/seo';
+import Link from 'next/link';
+
+interface AcademyItem {
+  ACA_NM: string;          // 학원명
+  REALM_SC_NM: string;     // 분야명
+  LE_CRSE_NM: string;      // 교습과정명
+  FA_RDNMA: string;        // 도로명주소
+  FA_RDNDA: string;        // 상세주소
+  FA_TELNO: string | null; // 전화번호
+}
+
+interface ApiResponse {
+  success: boolean;
+  total: number;
+  data: AcademyItem[];
+}
+
+export default function AcademyPage() {
+  const [academies, setAcademies] = useState<AcademyItem[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [query, setQuery] = useState<string>('');
+  const [realm, setRealm] = useState<string>('');
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const params = new URLSearchParams();
+      if (realm) params.append('realm', realm);
+      // dong 파라미터는 기본 논현동이므로 생략
+      const res = await fetch(`/api/academy${params.size ? '?' + params.toString() : ''}`);
+      const json: ApiResponse = await res.json();
+      if (json.success) {
+        let list = json.data;
+        if (query) {
+          const q = query.trim();
+          list = list.filter((a) => a.ACA_NM.includes(q));
+        }
+        setAcademies(list);
+      } else {
+        setError('데이터를 가져오지 못했습니다');
+      }
+    } catch (err) {
+      console.error(err);
+      setError('API 호출 중 오류가 발생했습니다');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [realm]);
+
+  const breadcrumbData = generateBreadcrumbSchema([
+    { name: '홈', path: '/' },
+    { name: '교육·학원', path: '/academy' }
+  ]);
+
+  const realmOptions = [
+    '입시.검정 및 보습',
+    '예능(대)',
+    '국제화',
+    '기타'
+  ];
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <Head>
+        <title>논현동 학원 정보 | 인천논현라이프</title>
+        <meta name="description" content="인천시 남동구 논현동 학원·교습소 정보를 과목별로 검색해 보세요." />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }} />
+      </Head>
+
+      <header className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+          <Link href="/" className="text-lg font-bold">🏙️ 인천논현라이프</Link>
+          <nav className="space-x-4 text-sm">
+            <Link href="/" className="hover:text-blue-600">홈</Link>
+            <Link href="/realestate" className="hover:text-blue-600">부동산</Link>
+            <Link href="/subway" className="hover:text-blue-600">교통</Link>
+            <span className="text-blue-600 font-semibold">학원</span>
+          </nav>
+        </div>
+      </header>
+
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <h1 className="text-2xl font-bold mb-6">🎓 논현동 학원 정보</h1>
+
+        {/* 검색 & 필터 */}
+        <div className="flex flex-col sm:flex-row gap-3 mb-6">
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="학원명 검색"
+            className="flex-1 border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
+          />
+
+          <select
+            value={realm}
+            onChange={(e) => setRealm(e.target.value)}
+            className="w-full sm:w-48 border rounded-lg px-2 py-2 text-sm"
+          >
+            <option value="">전체 분야</option>
+            {realmOptions.map((r) => (
+              <option key={r} value={r}>{r}</option>
+            ))}
+          </select>
+
+          <button
+            onClick={fetchData}
+            className="w-full sm:w-auto bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700"
+          >
+            검색
+          </button>
+        </div>
+
+        {/* 목록 */}
+        {loading && <p className="text-gray-600">로딩 중...</p>}
+        {error && <p className="text-red-600">{error}</p>}
+        {!loading && academies.length === 0 && !error && (
+          <p className="text-gray-600">해당 조건의 학원이 없습니다.</p>
+        )}
+
+        <ul className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+          {academies.map((a) => (
+            <li key={a.ACA_NM} className="bg-white border rounded-lg p-4 shadow-sm">
+              <h2 className="font-semibold text-gray-900 mb-1">{a.ACA_NM}</h2>
+              <p className="text-xs text-gray-500 mb-1">{a.REALM_SC_NM} · {a.LE_CRSE_NM}</p>
+              <p className="text-sm text-gray-700 mb-1">{a.FA_RDNMA} {a.FA_RDNDA}</p>
+              {a.FA_TELNO && <p className="text-sm text-gray-700">☎ {a.FA_TELNO}</p>}
+            </li>
+          ))}
+        </ul>
+      </main>
+    </div>
+  );
+} 

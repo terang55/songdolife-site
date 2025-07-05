@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 // 필요한 아이콘만 import (현재 사용 중인 아이콘 없음)
 import Image from 'next/image';
 import Head from 'next/head';
@@ -59,6 +60,7 @@ const categoryIcons: { [key: string]: React.ReactNode } = {
   '병원': <span className="text-base">🏥</span>,
   '약국': <span className="text-base">💊</span>,
   '부동산': <span className="text-base">🏠</span>,
+  '학원': <span className="text-base">🎓</span>,
 };
 
 const categories = [
@@ -67,12 +69,14 @@ const categories = [
   '블로그', 
   '유튜브',
   '병원',
-  '약국'
+  '약국',
+  '학원'
 ];
 
 export default function HomePage() {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState('전체');
 
   const [error, setError] = useState<string | null>(null);
@@ -85,7 +89,7 @@ export default function HomePage() {
       setError(null);
       
       const params = new URLSearchParams();
-      if (selectedCategory !== '전체' && selectedCategory !== '병원' && selectedCategory !== '약국') {
+      if (selectedCategory !== '전체' && selectedCategory !== '병원' && selectedCategory !== '약국' && selectedCategory !== '학원') {
         params.append('category', selectedCategory);
       }
       params.append('limit', '100');
@@ -111,7 +115,7 @@ export default function HomePage() {
 
   useEffect(() => {
     // 병원, 약국, 부동산 카테고리가 아닐 때만 뉴스 로딩
-    if (selectedCategory !== '병원' && selectedCategory !== '약국' && selectedCategory !== '부동산') {
+    if (selectedCategory !== '병원' && selectedCategory !== '약국' && selectedCategory !== '부동산' && selectedCategory !== '학원') {
     fetchNews();
     fetchSyncStatus();
     fetchStats();
@@ -444,7 +448,13 @@ export default function HomePage() {
               {categories.map(category => (
                 <button
                   key={category}
-                  onClick={() => setSelectedCategory(category)}
+                  onClick={() => {
+                    if (category === '학원') {
+                      router.push('/academy');
+                    } else {
+                      setSelectedCategory(category);
+                    }
+                  }}
                   className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-medium transition-colors ${
                     selectedCategory === category
                       ? 'bg-blue-600 text-white'
@@ -471,7 +481,7 @@ export default function HomePage() {
         {selectedCategory === '약국' && <MedicalWidget initialType="pharmacy" />}
 
         {/* 메인 콘텐츠: 뉴스/블로그/유튜브 */}
-        {selectedCategory !== '병원' && selectedCategory !== '약국' && (
+        {selectedCategory !== '병원' && selectedCategory !== '약국' && selectedCategory !== '학원' && (
           <div className="flex flex-col gap-8">
             <div className="flex-1">
         {/* 에러 메시지 */}

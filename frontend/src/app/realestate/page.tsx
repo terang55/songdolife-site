@@ -9,7 +9,7 @@ import { generateBreadcrumbSchema } from '@/lib/seo';
 
 export const metadata: Metadata = {
   title: '인천논현동 부동산 실거래가 | 에코메트로·논현센트럴뷰 아파트 시세 | 인천논현라이프',
-  description: '인천시 남동구 논현동 아파트(에코메트로·논현센트럴뷰 등) 최근 6개월 실거래가, 평당가, 거래건수 통계를 실시간으로 확인하세요. 매매·전세·월세 가격 비교 및 시장 동향 분석.',
+  description: '인천시 남동구 논현동 아파트(에코메트로·논현센트럴뷰 등) 최근 3개월 실거래가, 평당가, 거래건수 통계를 실시간으로 확인하세요. 매매·전세·월세 가격 비교 및 시장 동향 분석.',
   keywords: [
     '인천논현동 부동산', '인천논현동 아파트', '인천논현동 실거래가', '에코메트로', '논현센트럴뷰', 
     '인천논현 아파트 매매', '평당가', '부동산 가격', '국토부 실거래', '남동구 부동산',
@@ -63,7 +63,7 @@ export default function RealEstatePage() {
     '@context': 'https://schema.org',
     '@type': 'Dataset',
     name: '인천논현동 아파트 실거래가',
-    description: '국토교통부 실거래가 공개시스템 기반 최신 6개월 데이터',
+    description: '국토교통부 실거래가 공개시스템 기반 최신 3개월 데이터',
     url: `${BASE_URL}/realestate`,
     keywords: ['논현동 실거래가','에코메트로','논현센트럴뷰'],
     creator: { '@type': 'Organization', name: '인천논현라이프' },
@@ -114,7 +114,7 @@ export default function RealEstatePage() {
                 href="/subway" 
                 className="text-gray-600 hover:text-blue-600 transition-colors font-medium"
               >
-                🚇🚌 지하철·버스
+                🚇 실시간 교통
               </Link>
             </nav>
 
@@ -130,7 +130,7 @@ export default function RealEstatePage() {
                 href="/subway" 
                 className="text-gray-600 hover:text-blue-600 transition-colors"
               >
-                🚇🚌
+                🚇
               </Link>
             </div>
           </div>
@@ -305,7 +305,7 @@ export default function RealEstatePage() {
           </h3>
           <ul className="text-sm text-blue-800 space-y-1">
             <li>• 국토교통부 실거래가 공개시스템 기준 데이터입니다.</li>
-            <li>• 최근 6개월간의 거래 내역을 제공합니다.</li>
+            <li>• 최근 3개월간의 거래 내역을 제공합니다.</li>
             <li>• 평당 가격은 3.3㎡ 기준으로 계산됩니다.</li>
             <li>• 데이터는 주기적으로 업데이트됩니다.</li>
           </ul>

@@ -16,6 +16,10 @@ interface AcademyItem {
   [key: string]: unknown;
 }
 
+interface NEISResponse {
+  acaInsTiInfo?: [Record<string, unknown>, { row: AcademyItem[] }];
+}
+
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const dongKeyword = searchParams.get('dong') || '논현동';
@@ -34,7 +38,7 @@ export async function GET(request: NextRequest) {
     // 최대 5페이지(500건)까지만 조회하여 과도한 호출 방지
     for (let page = 1; page <= 15; page++) {
       const res = await fetch(makeUrl(page), { next: { revalidate: 3600 } }); // 1시간 CDN 캐시
-      const json = (await res.json()) as any;
+      const json = (await res.json()) as NEISResponse;
       const pageRows: AcademyItem[] | undefined = json.acaInsTiInfo?.[1]?.row;
       if (!pageRows || pageRows.length === 0) break;
       rows.push(...pageRows);

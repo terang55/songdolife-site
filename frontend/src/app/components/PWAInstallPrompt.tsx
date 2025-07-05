@@ -191,12 +191,18 @@ export function usePWAInstall() {
   const [isInstalled, setIsInstalled] = useState(false);
   const [canInstall, setCanInstall] = useState(false);
 
+  // window.navigator.standalone 타입 확장
+  interface NavigatorStandalone extends Navigator {
+    standalone?: boolean;
+  }
+
   useEffect(() => {
     // 설치 상태 확인
     const checkInstallStatus = () => {
       const standalone = window.matchMedia('(display-mode: standalone)').matches;
       // iOS PWA 설치 여부 안전하게 체크
-      const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && (typeof (window.navigator as any).standalone === 'boolean' ? (window.navigator as any).standalone : false);
+      const nav = window.navigator as NavigatorStandalone;
+      const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && nav.standalone === true;
       setIsInstalled(standalone || iOS);
     };
 

@@ -61,6 +61,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'daily' as const,
       priority: 0.8,
     },
+    // 부동산 정보 페이지
+    {
+      url: `${baseUrl}/realestate`,
+      lastModified: now,
+      changeFrequency: 'daily' as const,
+      priority: 0.8,
+    },
+    // 오프라인 페이지
+    {
+      url: `${baseUrl}/offline`,
+      lastModified: now,
+      changeFrequency: 'monthly' as const,
+      priority: 0.1,
+    },
     // 지하철 관련 키워드 페이지들
     {
       url: `${baseUrl}/subway?station=호구포역`,
@@ -83,25 +97,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // API 엔드포인트들 (robots.txt에서 차단하지만 sitemap에는 포함하지 않음)
     // 중요한 지역 정보 키워드 페이지들 (실제로는 검색 결과지만 SEO를 위해 포함)
     {
-      url: `${baseUrl}/#논현동-맛집`,
+      url: `${baseUrl}/#인천논현동-맛집`,
       lastModified: now,
       changeFrequency: 'daily' as const,
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/#논현동-카페`,
+      url: `${baseUrl}/#인천논현동-카페`,
       lastModified: now,
       changeFrequency: 'daily' as const,
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/#논현동-부동산`,
+      url: `${baseUrl}/#인천논현동-부동산`,
       lastModified: now,
       changeFrequency: 'daily' as const,
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/#논현동-육아`,
+      url: `${baseUrl}/#인천논현동-육아`,
       lastModified: now,
       changeFrequency: 'daily' as const,
       priority: 0.8,
@@ -132,37 +146,37 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     // 의료 관련 키워드 페이지들
     {
-      url: `${baseUrl}/#논현동-병원`,
+      url: `${baseUrl}/#인천논현동-병원`,
       lastModified: now,
       changeFrequency: 'daily' as const,
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/#논현동-약국`,
+      url: `${baseUrl}/#인천논현동-약국`,
       lastModified: now,
       changeFrequency: 'daily' as const,
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/#논현동-내과`,
+      url: `${baseUrl}/#인천논현동-내과`,
       lastModified: now,
       changeFrequency: 'weekly' as const,
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/#논현동-소아과`,
+      url: `${baseUrl}/#인천논현동-소아과`,
       lastModified: now,
       changeFrequency: 'weekly' as const,
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/#논현동-치과`,
+      url: `${baseUrl}/#인천논현동-치과`,
       lastModified: now,
       changeFrequency: 'weekly' as const,
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/#논현동-응급실`,
+      url: `${baseUrl}/#인천논현동-응급실`,
       lastModified: now,  
       changeFrequency: 'daily' as const,
       priority: 0.8,

@@ -7,19 +7,54 @@ import { BASE_URL } from '@/lib/siteConfig';
 import Footer from '../components/Footer';
 
 export const metadata: Metadata = {
-  title: '인천논현동 아파트 실거래가 | 인천논현라이프',
-  description: '인천 남동구 논현동 아파트(에코메트로·논현센트럴뷰 등) 최근 6개월 실거래가, 평당가, 거래건수 통계를 실시간으로 확인하세요.',
+  title: '인천논현동 부동산 실거래가 | 에코메트로·논현센트럴뷰 아파트 시세 | 인천논현라이프',
+  description: '인천시 남동구 논현동 아파트(에코메트로·논현센트럴뷰 등) 최근 6개월 실거래가, 평당가, 거래건수 통계를 실시간으로 확인하세요. 매매·전세·월세 가격 비교 및 시장 동향 분석.',
   keywords: [
-    '인천논현동 실거래가','에코메트로','논현센트럴뷰','인천논현 아파트 매매','평당가','부동산 가격','국토부 실거래','남동구 부동산'
+    '인천논현동 부동산', '인천논현동 아파트', '인천논현동 실거래가', '에코메트로', '논현센트럴뷰', 
+    '인천논현 아파트 매매', '평당가', '부동산 가격', '국토부 실거래', '남동구 부동산',
+    '아파트 시세', '매매 가격', '전세 가격', '월세 정보', '부동산 시장', '논현지구 아파트',
+    '인천 부동산', '아파트 매매', '주택 가격', '부동산 투자', '인천논현동 시세',
+    '남동구 논현동 부동산', '인천시 남동구 논현동', '남동구 논현동 아파트'
   ],
   openGraph: {
-    title: '인천논현동 아파트 실거래가 | 인천논현라이프',
-    description: '인천논현 주요 단지 실거래가, 평당가, 거래 통계를 실시간 제공.',
+    title: '인천논현동 부동산 실거래가 | 에코메트로·논현센트럴뷰 아파트 시세',
+    description: '인천논현동 주요 단지 실거래가, 평당가, 거래 통계를 실시간 제공. 매매·전세·월세 가격 비교 및 시장 동향 분석.',
     url: `${BASE_URL}/realestate`,
-    type: 'article',
+    type: 'website',
+    siteName: '인천논현라이프',
+    images: [
+      {
+        url: `${BASE_URL}/og-image.jpg`,
+        width: 1200,
+        height: 630,
+        alt: '논현동 부동산 실거래가 정보 - 인천논현라이프'
+      }
+    ]
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: '인천논현동 부동산 실거래가 | 에코메트로·논현센트럴뷰 아파트 시세',
+    description: '인천논현동 주요 단지 실거래가, 평당가, 거래 통계를 실시간 제공.',
     images: [`${BASE_URL}/og-image.jpg`]
   },
   alternates: { canonical: `${BASE_URL}/realestate` },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  other: {
+    'geo.region': 'KR-28',
+    'geo.placename': '인천광역시 남동구 논현동',
+    'geo.position': '37.3894;126.7317',
+    'ICBM': '37.3894, 126.7317',
+  },
 };
 
 export default function RealEstatePage() {
@@ -72,7 +107,7 @@ export default function RealEstatePage() {
                 href="/subway" 
                 className="text-gray-600 hover:text-blue-600 transition-colors font-medium"
               >
-                🚇 지하철
+                🚇🚌 지하철·버스
               </Link>
             </nav>
 
@@ -88,7 +123,7 @@ export default function RealEstatePage() {
                 href="/subway" 
                 className="text-gray-600 hover:text-blue-600 transition-colors"
               >
-                🚇
+                🚇🚌
               </Link>
             </div>
           </div>
@@ -100,10 +135,10 @@ export default function RealEstatePage() {
         {/* 페이지 제목 */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            🏢 논현동 부동산 실거래가
+            🏢 인천논현동 부동산 실거래가
           </h1>
           <p className="text-gray-600">
-            인천 남동구 논현동 아파트 실거래가 정보를 실시간으로 확인하세요.
+            인천시 남동구 논현동 아파트 실거래가 정보를 실시간으로 확인하세요.
           </p>
         </div>
 

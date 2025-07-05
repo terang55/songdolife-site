@@ -190,13 +190,13 @@ export default function SubwayPage() {
   return (
     <>
       <Head>
-        <title>논현동 교통정보 - 지하철·버스 실시간 도착정보 | 인천논현라이프</title>
-        <meta name="description" content="논현동 수인분당선 지하철과 M6410 광역버스의 실시간 도착 정보를 한눈에 확인하세요. 호구포역, 인천논현역, 소래포구역과 주변 버스정류장 정보를 제공합니다." />
-        <meta name="keywords" content="논현동 교통, 수인분당선, 호구포역, 인천논현역, 소래포구역, M6410, 광역버스, 실시간 도착정보, 논현동 버스, 논현동 지하철, 대중교통" />
+        <title>인천논현동 교통정보 - 지하철·버스 실시간 도착정보 | 인천논현라이프</title>
+        <meta name="description" content="인천논현동 수인분당선 지하철과 M6410 광역버스의 실시간 도착 정보를 한눈에 확인하세요. 호구포역, 인천논현역, 소래포구역과 주변 버스정류장 정보를 제공합니다." />
+        <meta name="keywords" content="인천논현동 교통, 수인분당선, 호구포역, 인천논현역, 소래포구역, M6410, 광역버스, 실시간 도착정보, 인천논현동 버스, 인천논현동 지하철, 대중교통, 남동구 논현동 교통, 인천시 남동구 논현동" />
         
         {/* Open Graph for Social Media */}
-        <meta property="og:title" content="논현동 교통정보 - 지하철·버스 실시간 도착정보" />
-        <meta property="og:description" content="논현동 수인분당선 지하철과 M6410 광역버스의 실시간 도착 정보를 한눈에 확인하세요." />
+        <meta property="og:title" content="인천논현동 교통정보 - 지하철·버스 실시간 도착정보" />
+        <meta property="og:description" content="인천논현동 수인분당선 지하철과 M6410 광역버스의 실시간 도착 정보를 한눈에 확인하세요." />
         <meta property="og:url" content="https://nonhyeon-info-site.vercel.app/subway" />
         <meta property="og:type" content="website" />
         <meta property="og:image" content="https://nonhyeon-info-site.vercel.app/og-image.jpg" />
@@ -218,8 +218,8 @@ export default function SubwayPage() {
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebPage",
-              "name": "논현동 교통정보",
-              "description": "논현동 수인분당선 지하철과 M6410 광역버스의 실시간 도착 정보",
+              "name": "인천논현동 교통정보",
+              "description": "인천논현동 수인분당선 지하철과 M6410 광역버스의 실시간 도착 정보",
               "url": "https://nonhyeon-info-site.vercel.app/subway",
               "mainEntity": [
                 {
@@ -343,7 +343,7 @@ export default function SubwayPage() {
         <div className="bg-gradient-to-r from-green-600 to-green-800 text-white py-6 sm:py-8">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4">🚌 논현동 교통정보</h1>
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4">🚌 인천논현동 교통정보</h1>
               <p className="text-sm sm:text-base lg:text-lg text-green-100 max-w-2xl mx-auto leading-relaxed">
                 지하철 · 버스 실시간 도착 정보와 역 안내
               </p>
@@ -859,7 +859,7 @@ export default function SubwayPage() {
 
               {/* 비즈니스 문의 */}
               <div className="text-center md:text-left">
-                <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">비즈니스 문의</h3>
+                <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">💼 사이트 문의</h3>
                 <div className="space-y-2 text-sm text-gray-300">
                   <div className="flex items-center justify-center md:justify-start space-x-2">
                     <span className="text-base">📧</span>
@@ -869,10 +869,6 @@ export default function SubwayPage() {
                     >
                       rainbowcr55@gmail.com
                     </a>
-                  </div>
-                  <div className="flex items-center justify-center md:justify-start space-x-2">
-                    <span className="text-base">💼</span>
-                    <span>제휴 및 사이트 문의</span>
                   </div>
                 </div>
               </div>

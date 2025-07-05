@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Head from 'next/head';
 import WeatherWidget from './components/WeatherWidget';
 import MedicalWidget from './components/MedicalWidget';
+import SEOHead from './components/SEOHead';
 
 interface NewsItem {
   title: string;
@@ -307,13 +308,23 @@ export default function HomePage() {
 
   return (
     <>
+        <SEOHead
+          title="인천논현라이프 | 인천논현동 생활정보 플랫폼"
+          description="인천시 남동구 논현동 주민을 위한 실시간 뉴스, 지하철 정보, 부동산 정보, 의료 정보를 한눈에 확인하세요."
+          keywords={[
+            '인천논현동', '인천 논현동', '인천시 남동구 논현동', '남동구 논현동', '논현지구', '에코메트로',
+            '수인분당선', '인천논현역', '호구포역', '소래포구역',
+            '인천논현동 뉴스', '인천논현동 맛집', '인천논현동 부동산', '인천논현동 병원'
+          ]}
+          structuredData={generateNewsStructuredData()}
+        />
         <Head>
-        <title>인천논현라이프 - 인천 남동구 논현동 생활정보 플랫폼</title>
-        <meta name="description" content="인천 남동구 논현동의 최신 뉴스, 맛집, 카페, 부동산, 육아 정보를 실시간으로 확인하세요. 논현지구, 에코메트로, 소래포구 주변 정보도 함께 제공합니다." />
-        <meta name="keywords" content="논현동, 인천 남동구, 논현지구, 에코메트로, 소래포구, 호구포, 지역정보, 뉴스, 맛집, 카페, 부동산, 육아" />
+        <title>인천논현라이프 - 인천시 남동구 논현동 생활정보 플랫폼</title>
+        <meta name="description" content="인천시 남동구 논현동의 최신 뉴스, 맛집, 카페, 부동산, 육아 정보를 실시간으로 확인하세요. 논현지구, 에코메트로, 소래포구 주변 정보도 함께 제공합니다." />
+        <meta name="keywords" content="인천논현동, 인천시 남동구 논현동, 남동구 논현동, 논현지구, 에코메트로, 소래포구, 호구포, 지역정보, 뉴스, 맛집, 카페, 부동산, 육아" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta property="og:title" content="인천논현라이프 - 인천 남동구 논현동 생활정보 플랫폼" />
-        <meta property="og:description" content="인천논현라이프 주민들을 위한 실시간 지역 정보를 제공합니다. 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요." />
+        <meta property="og:title" content="인천논현라이프 - 인천시 남동구 논현동 생활정보 플랫폼" />
+        <meta property="og:description" content="인천논현동 주민들을 위한 실시간 지역 정보를 제공합니다. 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요." />
         <meta property="og:url" content="https://your-domain.com" />
         <meta property="og:type" content="website" />
         <meta property="og:image" content="https://your-domain.com/og-image.jpg" />
@@ -366,7 +377,7 @@ export default function HomePage() {
                 className="flex items-center space-x-2 px-4 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors min-h-[44px] w-full sm:w-auto justify-center"
               >
                 <span className="text-lg">🚇</span>
-                <span className="text-sm font-medium">지하철 정보</span>
+                <span className="text-sm font-medium">실시간 교통</span>
               </a>
               </div>
             <div className="text-xs sm:text-sm text-gray-600 text-center">
@@ -591,11 +602,11 @@ export default function HomePage() {
                 <span className="text-2xl sm:text-3xl">🏙️</span>
                 <div>
                   <div className="text-lg sm:text-xl font-bold">인천논현라이프</div>
-                  <div className="text-sm text-gray-400">인천 남동구 논현동 지역 정보</div>
+                  <div className="text-sm text-gray-400">인천시 남동구 논현동 지역 정보</div>
                 </div>
               </div>
               <p className="text-sm text-gray-300 text-center md:text-left max-w-sm">
-                인천논현라이프 주민들을 위한 실시간 지역 정보를 제공합니다. 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요.
+                인천논현동 주민들을 위한 실시간 지역 정보를 제공합니다. 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요.
               </p>
             </div>
 
@@ -603,7 +614,7 @@ export default function HomePage() {
             <div className="text-center md:text-left">
               <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">주요 지역</h3>
               <ul className="space-y-1 sm:space-y-2 text-sm text-gray-300">
-                <li>📍 논현동</li>
+                <li>📍 인천논현동</li>
                 <li>🚇 에코메트로</li>
                 <li>🦐 소래포구</li>
                 <li>⚓ 호구포</li>

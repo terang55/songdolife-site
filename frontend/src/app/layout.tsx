@@ -3,6 +3,9 @@ import { Inter } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { BASE_URL } from '@/lib/siteConfig';
+import PWAInstallPrompt from './components/PWAInstallPrompt';
+import PWAUpdateNotification from './components/PWAUpdateNotification';
+import NetworkStatus from './components/NetworkStatus';
 
 const inter = Inter({
   subsets: ["latin"],
@@ -82,6 +85,17 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
+        {/* PWA 메타 태그 */}
+        <meta name="application-name" content="논현라이프" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="논현라이프" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="msapplication-config" content="/browserconfig.xml" />
+        <meta name="msapplication-TileColor" content="#2563eb" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <meta name="theme-color" content="#2563eb" />
         
         {/* 네이버 애널리틱스 */}
         <script
@@ -521,7 +535,10 @@ export default function RootLayout({
           `}
         </Script>
 
+        <NetworkStatus />
         {children}
+        <PWAInstallPrompt />
+        <PWAUpdateNotification />
       </body>
     </html>
   );

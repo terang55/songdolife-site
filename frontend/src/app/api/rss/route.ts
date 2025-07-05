@@ -1,192 +1,154 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { readFileSync, readdirSync } from 'fs';
-import { join } from 'path';
+import { BASE_URL } from '@/lib/siteConfig';
+import fs from 'fs';
+import path from 'path';
 
 interface NewsItem {
   title: string;
-  content: string;
-  source: string;
-  date: string;
   url: string;
-  keyword: string;
-  content_length: number;
-  type?: string;
-  channel?: string;
-  views?: string;
-  upload_time?: string;
-  thumbnail?: string;
-}
-
-function escapeXml(text: string): string {
-  return text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
-
-function formatDate(dateString: string): string {
-  try {
-    const date = new Date(dateString);
-    if (isNaN(date.getTime())) {
-      return new Date().toUTCString();
-    }
-    return date.toUTCString();
-  } catch {
-    return new Date().toUTCString();
-  }
-}
-
-function getTypeLabel(type?: string): string {
-  const typeMap: { [key: string]: string } = {
-    'news': '뉴스',
-    'blog': '블로그',
-    'youtube': '유튜브'
-  };
-  return typeMap[type || ''] || '정보';
+  description: string;
+  date: string;
+  source: string;
+  platform: string;
+  summary?: string;
+  image?: string;
+  author?: string;
+  category?: string;
 }
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const category = searchParams.get('category');
-    const limit = parseInt(searchParams.get('limit') || '50');
-
-    // frontend/public/data/enhanced_news 디렉토리 경로
-    const dataDir = join(process.cwd(), 'public', 'data', 'enhanced_news');
+    console.log('📡 RSS 피드 생성 시작');
     
-    // enhanced_news 디렉토리의 모든 JSON 파일 읽기
-    const files = readdirSync(dataDir).filter(file => file.endsWith('.json'));
+    // 최신 뉴스 데이터 파일 찾기
+    const dataPath = path.join(process.cwd(), 'public', 'data', 'enhanced_news');
+    let newsData: NewsItem[] = [];
     
-    let allNews: NewsItem[] = [];
-    
-    // 각 파일의 뉴스 데이터 읽기
-    files.forEach(file => {
-      try {
-        const filePath = join(dataDir, file);
-        const fileContent = readFileSync(filePath, 'utf-8');
-        const newsData = JSON.parse(fileContent);
-        
-        if (Array.isArray(newsData)) {
-          const processedData = newsData.map(item => ({
-            ...item,
-            date: item.date || item.upload_time || item.crawled_at || new Date().toISOString(),
-            source: item.type === 'youtube' ? (item.channel || '유튜브') : (item.source || item.press || '알 수 없음')
-          }));
-          allNews = allNews.concat(processedData);
-        }
-      } catch (error) {
-        console.error(`Error reading file ${file}:`, error);
-      }
-    });
-
-    // 중복 제거 (URL 기준)
-    const uniqueNews = allNews.filter((item, index, self) => 
-      index === self.findIndex(t => t.url === item.url)
-    );
-
-    // 날짜순 정렬 (최신순)
-    uniqueNews.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-
-    // 카테고리 필터링
-    let filteredNews = uniqueNews;
-    if (category && category !== '전체') {
-      const typeMap: { [key: string]: string } = {
-        '뉴스': 'news',
-        '블로그': 'blog',
-        '유튜브': 'youtube'
-      };
+    if (fs.existsSync(dataPath)) {
+      const files = fs.readdirSync(dataPath);
+      const latestFile = files
+        .filter(file => file.startsWith('all_platforms_') && file.endsWith('.json'))
+        .sort()
+        .reverse()[0];
       
-      const targetType = typeMap[category];
-      if (targetType) {
-        filteredNews = filteredNews.filter(item => item.type === targetType);
+      if (latestFile) {
+        const filePath = path.join(dataPath, latestFile);
+        const fileContent = fs.readFileSync(filePath, 'utf-8');
+        const data = JSON.parse(fileContent);
+        
+        // 최신 30개 항목만 선택
+        newsData = data.slice(0, 30);
+        console.log(`📰 RSS 피드용 뉴스 ${newsData.length}개 로드`);
       }
     }
-
-    // 제한된 개수만 사용
-    const limitedNews = filteredNews.slice(0, limit);
-
-    // RSS XML 생성
-    const baseUrl = 'https://nonhyeon-info-site.vercel.app';
-    const currentDate = new Date().toUTCString();
-    const categoryTitle = category ? ` - ${category}` : '';
     
-    const rssItems = limitedNews.map((item, index) => {
-      const itemDate = formatDate(item.date);
-      const itemContent = escapeXml((item.content || item.title || '내용 없음').substring(0, 300));
-      const itemType = getTypeLabel(item.type);
-      const originalUrl = item.url || '#';
+    // RSS XML 생성
+    const rssItems = newsData.map(item => {
+      const pubDate = new Date(item.date).toUTCString();
+      const cleanTitle = item.title.replace(/[<>&'"]/g, (char) => {
+        switch (char) {
+          case '<': return '&lt;';
+          case '>': return '&gt;';
+          case '&': return '&amp;';
+          case "'": return '&apos;';
+          case '"': return '&quot;';
+          default: return char;
+        }
+      });
       
-      // 네이버 RSS 호환을 위해 내부 링크 사용
-      const internalLink = `${baseUrl}/?ref=rss&external=${encodeURIComponent(originalUrl)}`;
-      const uniqueGuid = `${baseUrl}/rss-item/${Date.now()}-${index}`;
+      const cleanDescription = (item.summary || item.description || '').replace(/[<>&'"]/g, (char) => {
+        switch (char) {
+          case '<': return '&lt;';
+          case '>': return '&gt;';
+          case '&': return '&amp;';
+          case "'": return '&apos;';
+          case '"': return '&quot;';
+          default: return char;
+        }
+      });
       
-      return `    <item>
-      <title>${escapeXml(`[${itemType}] ${item.title || '제목 없음'}`)}</title>
-      <description>${itemContent}${itemContent.length >= 300 ? '...' : ''}</description>
-      <link>${internalLink}</link>
-      <guid isPermaLink="false">${uniqueGuid}</guid>
-      <pubDate>${itemDate}</pubDate>
-      <category>${escapeXml(itemType)}</category>
-    </item>`;
-    }).join('\n');
+      return `
+        <item>
+          <title>${cleanTitle}</title>
+          <link>${item.url}</link>
+          <description><![CDATA[${cleanDescription}]]></description>
+          <pubDate>${pubDate}</pubDate>
+          <guid>${item.url}</guid>
+          <source>${item.source}</source>
+          <category>${item.platform}</category>
+          ${item.author ? `<author>${item.author}</author>` : ''}
+          ${item.image ? `<enclosure url="${item.image}" type="image/jpeg" />` : ''}
+        </item>
+      `;
+    }).join('');
     
     const rssXml = `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/">
   <channel>
-    <title>${escapeXml(`인천논현라이프${categoryTitle}`)}</title>
-    <description>${escapeXml('인천 남동구 논현동 주민들을 위한 종합 정보 플랫폼. 실시간 뉴스, 수인분당선 지하철 정보, 병원/약국 정보, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요.')}</description>
-    <link>${baseUrl}</link>
-    <language>ko-kr</language>
-    <lastBuildDate>${currentDate}</lastBuildDate>
-    <pubDate>${currentDate}</pubDate>
-    <ttl>60</ttl>
-    <managingEditor>rainbowcr55@gmail.com (인천논현라이프)</managingEditor>
-    <webMaster>rainbowcr55@gmail.com (인천논현라이프)</webMaster>
+    <title>인천논현라이프 - 인천논현동 최신 소식</title>
+    <link>${BASE_URL}</link>
+    <description>인천시 남동구 논현동 지역의 최신 뉴스, 블로그, 유튜브 콘텐츠를 실시간으로 제공합니다.</description>
+    <language>ko-KR</language>
+    <copyright>© 2025 인천논현라이프. All rights reserved.</copyright>
+    <managingEditor>info@nonhyeon.life (인천논현라이프)</managingEditor>
+    <webMaster>info@nonhyeon.life (인천논현라이프)</webMaster>
+    <pubDate>${new Date().toUTCString()}</pubDate>
+    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     <category>지역정보</category>
+    <category>논현동</category>
+    <category>인천</category>
+    <category>남동구</category>
+    <ttl>60</ttl>
     <image>
-      <url>${baseUrl}/og-image.jpg</url>
-      <title>${escapeXml(`인천논현라이프${categoryTitle}`)}</title>
-      <link>${baseUrl}</link>
+      <url>${BASE_URL}/android-chrome-192x192.png</url>
+      <title>인천논현라이프</title>
+      <link>${BASE_URL}</link>
+      <width>192</width>
+      <height>192</height>
     </image>
-${rssItems}
+    <atom:link href="${BASE_URL}/api/rss" rel="self" type="application/rss+xml" />
+    ${rssItems}
   </channel>
 </rss>`;
 
+    console.log('✅ RSS 피드 생성 완료');
+    
     return new NextResponse(rssXml, {
       status: 200,
       headers: {
         'Content-Type': 'application/rss+xml; charset=utf-8',
-        'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
+        'Cache-Control': 'public, max-age=3600, s-maxage=3600',
+        'CDN-Cache-Control': 'public, max-age=3600',
+        'Vercel-CDN-Cache-Control': 'public, max-age=3600',
       },
     });
-
-  } catch (error) {
-    console.error('RSS Feed Error:', error);
     
-    // 에러 발생시 기본 RSS 반환
+  } catch (error) {
+    console.error('❌ RSS 피드 생성 오류:', error);
+    
+    // 오류 시 기본 RSS 반환
     const errorRss = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
-    <title>인천논현라이프</title>
-    <description>인천 남동구 논현동 지역 정보</description>
-    <link>https://nonhyeon-info-site.vercel.app</link>
-    <language>ko-kr</language>
-    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+         <title>인천논현라이프 - 인천논현동 최신 소식</title>
+     <link>${BASE_URL}</link>
+     <description>인천시 남동구 논현동 지역의 최신 뉴스, 블로그, 유튜브 콘텐츠를 실시간으로 제공합니다.</description>
+    <language>ko-KR</language>
+    <pubDate>${new Date().toUTCString()}</pubDate>
     <item>
-      <title>RSS 피드 오류</title>
-      <description>RSS 피드를 생성하는 중 오류가 발생했습니다.</description>
-      <link>https://nonhyeon-info-site.vercel.app</link>
+      <title>인천논현라이프 서비스 점검 중</title>
+      <link>${BASE_URL}</link>
+      <description>현재 RSS 피드 서비스 점검 중입니다. 잠시 후 다시 시도해주세요.</description>
       <pubDate>${new Date().toUTCString()}</pubDate>
     </item>
   </channel>
 </rss>`;
 
     return new NextResponse(errorRss, {
-      status: 500,
+      status: 200,
       headers: {
         'Content-Type': 'application/rss+xml; charset=utf-8',
+        'Cache-Control': 'public, max-age=300, s-maxage=300',
       },
     });
   }

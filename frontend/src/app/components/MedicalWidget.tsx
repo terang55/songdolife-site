@@ -17,6 +17,13 @@ interface MedicalInfo {
   specialties?: string[];
   hasEmergency?: boolean;
   hasNightCare?: boolean;
+  weekdayHours?: string;
+  weekendHours?: {
+    sat?: string;
+    sun?: string;
+  };
+  holidayHours?: string;
+  is24Hours?: boolean;
 }
 
 interface MedicalApiResponse {
@@ -34,15 +41,22 @@ interface MedicalApiResponse {
   note?: string;
 }
 
-const MedicalWidget: React.FC = () => {
+interface MedicalWidgetProps {
+  initialType?: 'all' | 'hospital' | 'pharmacy';
+}
+
+const MedicalWidget: React.FC<MedicalWidgetProps> = ({ initialType = 'all' }) => {
   const [medicalData, setMedicalData] = useState<MedicalInfo[]>([]);
   const [loading, setLoading] = useState(false);
-  const [selectedType, setSelectedType] = useState<'all' | 'hospital' | 'pharmacy'>('all');
+  const [selectedType, setSelectedType] = useState<'all' | 'hospital' | 'pharmacy'>(initialType);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [emergencyOnly, setEmergencyOnly] = useState(false);
   const [nightOnly, setNightOnly] = useState(false);
+  const [satOpenOnly, setSatOpenOnly] = useState(false);
+  const [sunOpenOnly, setSunOpenOnly] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [isDataLoaded, setIsDataLoaded] = useState(false);
+  // 최초 로드 시 바로 데이터를 가져오기 위해 true로 설정
+  const [isDataLoaded, setIsDataLoaded] = useState(true);
 
   const fetchMedicalData = useCallback(async () => {
     try {
@@ -52,15 +66,29 @@ const MedicalWidget: React.FC = () => {
       const params = new URLSearchParams();
       if (selectedType !== 'all') params.append('type', selectedType);
       if (selectedCategory) params.append('category', selectedCategory);
-      if (emergencyOnly) params.append('emergency', 'true');
-      if (nightOnly) params.append('night', 'true');
+      if (selectedType !== 'pharmacy') {
+        if (emergencyOnly) params.append('emergency', 'true');
+        if (nightOnly) params.append('night', 'true');
+      }
       params.append('radius', '2000'); // 2km 반경
 
       const response = await fetch(`/api/medical?${params.toString()}`);
       const result: MedicalApiResponse = await response.json();
 
       if (result.success) {
-        setMedicalData(result.data);
+        let filtered = result.data;
+
+        // 약국 전용 필터: 토/일 영업
+        if (selectedType === 'pharmacy') {
+          if (satOpenOnly) {
+            filtered = filtered.filter(p => p.weekendHours?.sat);
+          }
+          if (sunOpenOnly) {
+            filtered = filtered.filter(p => p.weekendHours?.sun);
+          }
+        }
+
+        setMedicalData(filtered);
         setIsDataLoaded(true);
       } else {
         setError('의료기관 정보를 불러오는데 실패했습니다.');
@@ -71,7 +99,7 @@ const MedicalWidget: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [selectedType, selectedCategory, emergencyOnly, nightOnly]);
+  }, [selectedType, selectedCategory, emergencyOnly, nightOnly, satOpenOnly, sunOpenOnly]);
 
   useEffect(() => {
     if (isDataLoaded) {
@@ -125,49 +153,53 @@ const MedicalWidget: React.FC = () => {
     '기타'
   ];
 
+  const showTypeSelector = initialType === 'all';
+
   return (
     <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-4 sm:mb-6">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg sm:text-xl font-bold text-gray-800 flex items-center">
-          🏥 논현동 병원/약국 정보
-        </h2>
-        {isDataLoaded && (
-          <button
-            onClick={fetchMedicalData}
-            disabled={loading}
-            className="px-3 py-2 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 min-h-[36px] min-w-[80px]"
-          >
-            {loading ? '⟳' : '새로고침'}
-          </button>
-        )}
-      </div>
-
       {!isDataLoaded && !loading ? (
-        <div className="text-center py-12">
-          <div className="text-6xl mb-4">🏥</div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
-            논현동 주변 병원/약국 정보
-          </h3>
-          <p className="text-gray-600 mb-6 max-w-md mx-auto text-sm sm:text-base leading-relaxed">
-            논현역 중심 2km 반경 내 병원과 약국 정보를 실시간으로 확인하세요. 
-            진료과목, 응급실, 야간진료 여부까지 한눈에!
-          </p>
-          <button
-            onClick={fetchMedicalData}
-            className="px-8 py-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-colors font-medium flex items-center gap-2 mx-auto text-sm sm:text-base min-h-[44px]"
-          >
-            <span>🔍</span>
-            병원/약국 정보 보기
-          </button>
-          <div className="mt-4 text-xs sm:text-sm text-gray-500 space-y-1">
-            <div>💡 실시간 정보 • 전화연결 • 지도보기</div>
-            <div>진료과목 필터링 • 응급실/야간진료 검색</div>
-          </div>
-        </div>
-      ) : (
+        /* --- 초기 안내/로딩 전 --- */
         <>
-          <div className="mb-4 space-y-4">
-            {/* 타입 선택 */}
+          <div className="text-center py-12">
+            <div className="text-6xl mb-4">🏥</div>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              {selectedType === 'pharmacy' ? '논현동 주변 약국 정보' : selectedType === 'hospital' ? '논현동 주변 병원 정보' : '논현동 주변 병원/약국 정보'}
+            </h3>
+            <p className="text-gray-600 mb-6 max-w-md mx-auto text-sm sm:text-base leading-relaxed">
+              논현역 중심 2km 반경 내 병원과 약국 정보를 실시간으로 확인하세요.
+              진료과목, 응급실, 야간진료 여부까지 한눈에!
+            </p>
+            <button
+              onClick={fetchMedicalData}
+              className="px-8 py-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-colors font-medium flex items-center gap-2 mx-auto text-sm sm:text-base min-h-[44px]"
+            >
+              <span>🔍</span>
+              {selectedType === 'pharmacy' ? '약국 정보 보기' : selectedType === 'hospital' ? '병원 정보 보기' : '병원/약국 정보 보기'}
+            </button>
+            <div className="mt-4 text-xs sm:text-sm text-gray-500 space-y-1">
+              <div>💡 실시간 정보 • 전화연결 • 지도보기</div>
+              <div>진료과목 필터링 • 응급실/야간진료 검색</div>
+            </div>
+          </div>
+        </>
+      ) : (
+        /* --- 실제 데이터/필터/리스트 --- */
+        <div>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg sm:text-xl font-bold text-gray-800 flex items-center">
+              {selectedType === 'pharmacy' ? '💊 논현동 약국 정보' : selectedType === 'hospital' ? '🏥 논현동 병원 정보' : '🏥 논현동 병원/약국 정보'}
+            </h2>
+            <button
+              onClick={fetchMedicalData}
+              disabled={loading}
+              className="px-3 py-2 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 min-h-[36px] min-w-[80px]"
+            >
+              {loading ? '⟳' : '새로고침'}
+            </button>
+          </div>
+
+          {/* 타입 선택 (전체 모드에서만 표시) */}
+          {showTypeSelector && (
             <div className="overflow-x-auto">
               <div className="flex gap-2 pb-2 min-w-max">
                 <button
@@ -202,59 +234,84 @@ const MedicalWidget: React.FC = () => {
                 </button>
               </div>
             </div>
+          )}
 
-            {/* 진료과목 선택 */}
-            {selectedType !== 'pharmacy' && (
-              <div className="overflow-x-auto">
-                <div className="flex gap-2 pb-2 min-w-max">
+          {/* 진료과목 선택 */}
+          {selectedType !== 'pharmacy' && (
+            <div className="overflow-x-auto">
+              <div className="flex gap-2 pb-2 min-w-max">
+                <button
+                  onClick={() => setSelectedCategory('')}
+                  className={`px-4 py-2 text-sm font-medium rounded-full border whitespace-nowrap min-h-[36px] ${
+                    selectedCategory === ''
+                      ? 'bg-green-500 text-white border-green-500'
+                      : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 active:bg-gray-100'
+                  }`}
+                >
+                  전체과목
+                </button>
+                {categories.map((cat) => (
                   <button
-                    onClick={() => setSelectedCategory('')}
+                    key={cat}
+                    onClick={() => setSelectedCategory(cat)}
                     className={`px-4 py-2 text-sm font-medium rounded-full border whitespace-nowrap min-h-[36px] ${
-                      selectedCategory === ''
+                      selectedCategory === cat
                         ? 'bg-green-500 text-white border-green-500'
                         : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 active:bg-gray-100'
                     }`}
                   >
-                    전체과목
+                    {cat}
                   </button>
-                  {categories.map(category => (
-                    <button
-                      key={category}
-                      onClick={() => setSelectedCategory(category)}
-                      className={`px-4 py-2 text-sm font-medium rounded-full border whitespace-nowrap min-h-[36px] ${
-                        selectedCategory === category
-                          ? 'bg-green-500 text-white border-green-500'
-                          : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 active:bg-gray-100'
-                      }`}
-                    >
-                      {category}
-                    </button>
-                  ))}
-                </div>
+                ))}
               </div>
-            )}
-
-            {/* 특수 옵션 */}
-            <div className="flex flex-wrap gap-4">
-              <label className="flex items-center text-sm text-gray-700 cursor-pointer min-h-[36px]">
-                <input
-                  type="checkbox"
-                  checked={emergencyOnly}
-                  onChange={(e) => setEmergencyOnly(e.target.checked)}
-                  className="mr-3 w-4 h-4"
-                />
-                <span className="font-medium">🚨 응급실만</span>
-              </label>
-              <label className="flex items-center text-sm text-gray-700 cursor-pointer min-h-[36px]">
-                <input
-                  type="checkbox"
-                  checked={nightOnly}
-                  onChange={(e) => setNightOnly(e.target.checked)}
-                  className="mr-3 w-4 h-4"
-                />
-                <span className="font-medium">🌙 야간진료만</span>
-              </label>
             </div>
+          )}
+
+          {/* 특수 옵션 */}
+          <div className="flex flex-wrap gap-4">
+            {selectedType === 'pharmacy' ? (
+              <>
+                <label className="flex items-center text-sm text-gray-700 cursor-pointer min-h-[36px]">
+                  <input
+                    type="checkbox"
+                    checked={satOpenOnly}
+                    onChange={(e) => setSatOpenOnly(e.target.checked)}
+                    className="mr-3 w-4 h-4"
+                  />
+                  <span className="font-medium">📅 토요일 오픈</span>
+                </label>
+                <label className="flex items-center text-sm text-gray-700 cursor-pointer min-h-[36px]">
+                  <input
+                    type="checkbox"
+                    checked={sunOpenOnly}
+                    onChange={(e) => setSunOpenOnly(e.target.checked)}
+                    className="mr-3 w-4 h-4"
+                  />
+                  <span className="font-medium">☀️ 일요일 오픈</span>
+                </label>
+              </>
+            ) : (
+              <>
+                <label className="flex items-center text-sm text-gray-700 cursor-pointer min-h-[36px]">
+                  <input
+                    type="checkbox"
+                    checked={emergencyOnly}
+                    onChange={(e) => setEmergencyOnly(e.target.checked)}
+                    className="mr-3 w-4 h-4"
+                  />
+                  <span className="font-medium">🚨 응급실만</span>
+                </label>
+                <label className="flex items-center text-sm text-gray-700 cursor-pointer min-h-[36px]">
+                  <input
+                    type="checkbox"
+                    checked={nightOnly}
+                    onChange={(e) => setNightOnly(e.target.checked)}
+                    className="mr-3 w-4 h-4"
+                  />
+                  <span className="font-medium">🌙 야간진료만</span>
+                </label>
+              </>
+            )}
           </div>
 
           {loading ? (
@@ -356,6 +413,33 @@ const MedicalWidget: React.FC = () => {
                       {/* 진료과목 배지 */}
                       {getSpecialtyBadges(place.specialties)}
 
+                      {/* 진료/영업 시간 */}
+                      {(() => {
+                        if (place.is24Hours) {
+                          return (
+                            <div className="mt-3 text-sm text-gray-600 flex items-start gap-2">
+                              <span className="text-base">⏰</span>
+                              <span className="leading-relaxed">24시간 운영</span>
+                            </div>
+                          );
+                        }
+
+                        const parts: string[] = [];
+                        if (place.weekdayHours) parts.push(`평일 ${place.weekdayHours}`);
+                        if (place.weekendHours?.sat) parts.push(`토 ${place.weekendHours.sat}`);
+                        if (place.weekendHours?.sun) parts.push(`일 ${place.weekendHours.sun}`);
+                        if (place.holidayHours) parts.push(`공휴일 ${place.holidayHours}`);
+
+                        if (parts.length === 0) return null;
+
+                        return (
+                          <div className="mt-3 text-sm text-gray-600 flex items-start gap-2">
+                            <span className="text-base">⏰</span>
+                            <span className="leading-relaxed">{parts.join(' / ')}</span>
+                          </div>
+                        );
+                      })()}
+
                       {/* 액션 버튼들 */}
                       <div className="flex gap-2 mt-3 pt-3 border-t border-gray-100">
                         {place.phone && (
@@ -391,15 +475,15 @@ const MedicalWidget: React.FC = () => {
               )}
             </div>
           )}
-
-          <div className="mt-6 pt-4 border-t border-gray-200 text-center">
-            <div className="text-xs sm:text-sm text-gray-500 space-y-1">
-              <div className="font-medium">📍 논현역 중심 2km 반경 내 의료기관 정보</div>
-              <div className="text-gray-400">실시간 업데이트 • 카카오맵 연동</div>
-            </div>
-          </div>
-        </>
+        </div>
       )}
+
+      <div className="mt-6 pt-4 border-t border-gray-200 text-center">
+        <div className="text-xs sm:text-sm text-gray-500 space-y-1">
+          <div className="font-medium">📍 논현역 중심 2km 반경 내 의료기관 정보</div>
+          <div className="text-gray-400">실시간 업데이트 • 카카오맵 연동</div>
+        </div>
+      </div>
     </div>
   );
 };

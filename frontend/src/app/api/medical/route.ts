@@ -310,13 +310,18 @@ export async function GET(request: NextRequest) {
     const emergency = searchParams.get('emergency') === 'true';
     const night = searchParams.get('night') === 'true';
     const radius = parseInt(searchParams.get('radius') || '2000'); // 기본 2km
+    // 내 위치(위도, 경도) 파라미터
+    const userLat = searchParams.get('lat') ? parseFloat(searchParams.get('lat')!) : NONHYEON_LAT;
+    const userLon = searchParams.get('lon') ? parseFloat(searchParams.get('lon')!) : NONHYEON_LON;
 
     console.log('🏥 의료기관 정보 요청:', {
       type,
       category: categoryParam,
       emergency,
       night,
-      radius
+      radius,
+      userLat,
+      userLon
     });
 
     // 환경변수 확인
@@ -473,12 +478,13 @@ export async function GET(request: NextRequest) {
 
       // 거리 계산 함수 (Haversine)
       const toRad = (deg: number) => (deg * Math.PI) / 180;
+      // 내 위치 기준으로 거리 계산
       const calcDistance = (lat: number, lon: number) => {
         const R = 6371000; // 지구 반경(m)
-        const dLat = toRad(lat - NONHYEON_LAT);
-        const dLon = toRad(lon - NONHYEON_LON);
+        const dLat = toRad(lat - userLat);
+        const dLon = toRad(lon - userLon);
         const a = Math.sin(dLat / 2) ** 2 +
-                  Math.cos(toRad(NONHYEON_LAT)) * Math.cos(toRad(lat)) *
+                  Math.cos(toRad(userLat)) * Math.cos(toRad(lat)) *
                   Math.sin(dLon / 2) ** 2;
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return Math.round(R * c);

@@ -45,6 +45,9 @@ interface MedicalWidgetProps {
   initialType?: 'all' | 'hospital' | 'pharmacy';
 }
 
+const NONHYEON_LAT = 37.4011; // 논현역 위도
+const NONHYEON_LON = 126.7229; // 논현역 경도
+
 const MedicalWidget: React.FC<MedicalWidgetProps> = ({ initialType = 'all' }) => {
   const [medicalData, setMedicalData] = useState<MedicalInfo[]>([]);
   const [loading, setLoading] = useState(false);
@@ -57,6 +60,29 @@ const MedicalWidget: React.FC<MedicalWidgetProps> = ({ initialType = 'all' }) =>
   const [error, setError] = useState<string | null>(null);
   // 최초 로드 시 바로 데이터를 가져오기 위해 true로 설정
   const [isDataLoaded, setIsDataLoaded] = useState(true);
+  // 사용자 위치 상태 추가
+  const [userLocation, setUserLocation] = useState<{ lat: number; lon: number } | null>(null);
+  const [locationError, setLocationError] = useState<string | null>(null);
+
+  // 위치 정보 요청 (최초 1회)
+  useEffect(() => {
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          setUserLocation({ lat: pos.coords.latitude, lon: pos.coords.longitude });
+          setLocationError(null);
+        },
+        (err) => {
+          setUserLocation({ lat: NONHYEON_LAT, lon: NONHYEON_LON }); // 권한 거부 시 논현역 고정
+          setLocationError('위치 권한이 거부되어 논현역 기준으로 거리를 표시합니다.');
+        },
+        { enableHighAccuracy: true, timeout: 5000 }
+      );
+    } else {
+      setUserLocation({ lat: NONHYEON_LAT, lon: NONHYEON_LON });
+      setLocationError('이 브라우저는 위치 정보를 지원하지 않습니다. 논현역 기준으로 거리를 표시합니다.');
+    }
+  }, []);
 
   const fetchMedicalData = useCallback(async () => {
     try {
@@ -71,6 +97,11 @@ const MedicalWidget: React.FC<MedicalWidgetProps> = ({ initialType = 'all' }) =>
         if (nightOnly) params.append('night', 'true');
       }
       params.append('radius', '2000'); // 2km 반경
+      // 내 위치 정보 추가
+      if (userLocation) {
+        params.append('lat', userLocation.lat.toString());
+        params.append('lon', userLocation.lon.toString());
+      }
 
       const response = await fetch(`/api/medical?${params.toString()}`);
       const result: MedicalApiResponse = await response.json();
@@ -99,7 +130,7 @@ const MedicalWidget: React.FC<MedicalWidgetProps> = ({ initialType = 'all' }) =>
     } finally {
       setLoading(false);
     }
-  }, [selectedType, selectedCategory, emergencyOnly, nightOnly, satOpenOnly, sunOpenOnly]);
+  }, [selectedType, selectedCategory, emergencyOnly, nightOnly, satOpenOnly, sunOpenOnly, userLocation]);
 
   useEffect(() => {
     if (isDataLoaded) {
@@ -157,6 +188,16 @@ const MedicalWidget: React.FC<MedicalWidgetProps> = ({ initialType = 'all' }) =>
 
   return (
     <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-4 sm:mb-6">
+      {/* 내 위치 기준 거리 안내 */}
+      {userLocation && (
+        <div className="mb-2 text-xs text-blue-700 bg-blue-50 rounded px-2 py-1">
+          {locationError ? (
+            <span>📍 {locationError}</span>
+          ) : (
+            <span>📍 내 위치 기준 거리로 정렬됩니다.</span>
+          )}
+        </div>
+      )}
       {!isDataLoaded && !loading ? (
         /* --- 초기 안내/로딩 전 --- */
         <>

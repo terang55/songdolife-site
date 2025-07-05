@@ -63,25 +63,34 @@ const MedicalWidget: React.FC<MedicalWidgetProps> = ({ initialType = 'all' }) =>
   // 사용자 위치 상태 추가
   const [userLocation, setUserLocation] = useState<{ lat: number; lon: number } | null>(null);
   const [locationError, setLocationError] = useState<string | null>(null);
+  const [locationTried, setLocationTried] = useState(false); // 위치 권한 시도 여부
 
-  // 위치 정보 요청 (최초 1회)
-  useEffect(() => {
+  // 위치 정보 요청 함수 (버튼 클릭 시 실행)
+  const requestUserLocation = () => {
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
           setUserLocation({ lat: pos.coords.latitude, lon: pos.coords.longitude });
           setLocationError(null);
+          setLocationTried(true);
         },
         () => {
           setUserLocation({ lat: NONHYEON_LAT, lon: NONHYEON_LON }); // 권한 거부 시 논현역 고정
           setLocationError('위치 권한이 거부되어 논현역 기준으로 거리를 표시합니다.');
+          setLocationTried(true);
         },
         { enableHighAccuracy: true, timeout: 5000 }
       );
     } else {
       setUserLocation({ lat: NONHYEON_LAT, lon: NONHYEON_LON });
       setLocationError('이 브라우저는 위치 정보를 지원하지 않습니다. 논현역 기준으로 거리를 표시합니다.');
+      setLocationTried(true);
     }
+  };
+
+  // 최초 진입 시에는 위치 권한 요청하지 않음
+  useEffect(() => {
+    // 아무 동작 없음 (버튼 클릭 시에만 위치 요청)
   }, []);
 
   const fetchMedicalData = useCallback(async () => {
@@ -188,17 +197,24 @@ const MedicalWidget: React.FC<MedicalWidgetProps> = ({ initialType = 'all' }) =>
 
   return (
     <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-4 sm:mb-6">
-      {/* 내 위치 기준 거리 안내 */}
-      {userLocation && (
-        <div className="mb-2 text-xs text-blue-700 bg-blue-50 rounded px-2 py-1">
-          <span>📍 위치 권한을 허용하면 내 위치 기준으로 거리가 표시됩니다.</span><br />
-          {locationError ? (
+      {/* 내 위치 기준 거리 안내 및 버튼 */}
+      <div className="mb-2 text-xs text-blue-700 bg-blue-50 rounded px-2 py-1">
+        <span>📍 위치 권한을 허용하면 내 위치 기준으로 거리가 표시됩니다.</span><br />
+        {locationTried ? (
+          locationError ? (
             <span>📍 {locationError}</span>
           ) : (
             <span>📍 내 위치 기준 거리로 정렬됩니다.</span>
-          )}
-        </div>
-      )}
+          )
+        ) : (
+          <button
+            onClick={requestUserLocation}
+            className="mt-1 px-3 py-1.5 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-xs font-medium"
+          >
+            내 위치로 거리 재계산
+          </button>
+        )}
+      </div>
       {!isDataLoaded && !loading ? (
         /* --- 초기 안내/로딩 전 --- */
         <>

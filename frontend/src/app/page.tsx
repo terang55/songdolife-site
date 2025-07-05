@@ -269,8 +269,8 @@ export default function HomePage() {
     return colors[type || 'news'] || 'bg-gray-100 text-gray-800';
   };
 
-  const generateNewsStructuredData = () => {
-    if (news.length === 0) return null;
+  const generateNewsStructuredData = (): Record<string, unknown> | undefined => {
+    if (news.length === 0) return undefined;
 
     const structuredData = {
       "@context": "https://schema.org",
@@ -296,14 +296,9 @@ export default function HomePage() {
           }
       }))
       }
-  };
+    };
 
-    return (
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
-    );
+    return structuredData;
   };
 
   return (
@@ -329,7 +324,7 @@ export default function HomePage() {
         <meta property="og:type" content="website" />
         <meta property="og:image" content="https://your-domain.com/og-image.jpg" />
         <link rel="canonical" href="https://your-domain.com" />
-        {generateNewsStructuredData()}
+        {/* structured data는 SEOHead에서 주입됨 */}
         </Head>
       
       <div className="min-h-screen bg-gray-50">

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { BASE_URL } from '@/lib/siteConfig';
 import fs from 'fs';
 import path from 'path';
@@ -16,7 +16,7 @@ interface NewsItem {
   category?: string;
 }
 
-export async function GET(_request: NextRequest) {
+export async function GET() {
   try {
     console.log('📡 RSS 피드 생성 시작');
     

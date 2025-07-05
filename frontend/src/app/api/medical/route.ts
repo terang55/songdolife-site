@@ -363,8 +363,8 @@ export async function GET(request: NextRequest) {
           const apiUrl = `https://dapi.kakao.com/v2/local/search/category.json`;
           const params = new URLSearchParams({
             category_group_code: categoryQuery.code,
-            x: NONHYEON_LON.toString(),
-            y: NONHYEON_LAT.toString(),
+            x: userLon.toString(),
+            y: userLat.toString(),
             radius: radius.toString(),
             sort: 'distance',
             size: '15',
@@ -571,10 +571,10 @@ export async function GET(request: NextRequest) {
       const toRad = (deg: number) => (deg * Math.PI) / 180;
       const calcDistance = (lat: number, lon: number) => {
         const R = 6371000; // 지구 반경(m)
-        const dLat = toRad(lat - NONHYEON_LAT);
-        const dLon = toRad(lon - NONHYEON_LON);
+        const dLat = toRad(lat - userLat);
+        const dLon = toRad(lon - userLon);
         const a = Math.sin(dLat / 2) ** 2 +
-                  Math.cos(toRad(NONHYEON_LAT)) * Math.cos(toRad(lat)) *
+                  Math.cos(toRad(userLat)) * Math.cos(toRad(lat)) *
                   Math.sin(dLon / 2) ** 2;
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return Math.round(R * c);

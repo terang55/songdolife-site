@@ -127,6 +127,15 @@ export default function HomePage() {
     }
   }, [fetchNews, selectedCategory]);
 
+  // URL 파라미터에서 카테고리 읽기
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const categoryParam = urlParams.get('category');
+    if (categoryParam && categories.includes(categoryParam)) {
+      setSelectedCategory(categoryParam);
+    }
+  }, []);
+
   // RSS 리디렉션 처리
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -453,6 +462,9 @@ export default function HomePage() {
                       router.push('/academy');
                     } else {
                       setSelectedCategory(category);
+                      // URL 파라미터 업데이트
+                      const newUrl = category === '전체' ? '/' : `/?category=${encodeURIComponent(category)}`;
+                      window.history.pushState({}, '', newUrl);
                     }
                   }}
                   className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-medium transition-colors ${

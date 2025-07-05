@@ -6,6 +6,7 @@ import { BASE_URL } from '@/lib/siteConfig';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 import PWAUpdateNotification from './components/PWAUpdateNotification';
 import NetworkStatus from './components/NetworkStatus';
+import BottomNavigation from './components/BottomNavigation';
 
 const inter = Inter({
   subsets: ["latin"],
@@ -537,6 +538,7 @@ export default function RootLayout({
 
         <NetworkStatus />
         {children}
+        <BottomNavigation />
         <PWAInstallPrompt />
         <PWAUpdateNotification />
       </body>

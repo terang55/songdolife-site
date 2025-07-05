@@ -72,7 +72,7 @@ const MedicalWidget: React.FC<MedicalWidgetProps> = ({ initialType = 'all' }) =>
           setUserLocation({ lat: pos.coords.latitude, lon: pos.coords.longitude });
           setLocationError(null);
         },
-        (err) => {
+        () => {
           setUserLocation({ lat: NONHYEON_LAT, lon: NONHYEON_LON }); // 권한 거부 시 논현역 고정
           setLocationError('위치 권한이 거부되어 논현역 기준으로 거리를 표시합니다.');
         },
@@ -191,6 +191,7 @@ const MedicalWidget: React.FC<MedicalWidgetProps> = ({ initialType = 'all' }) =>
       {/* 내 위치 기준 거리 안내 */}
       {userLocation && (
         <div className="mb-2 text-xs text-blue-700 bg-blue-50 rounded px-2 py-1">
+          <span>📍 위치 권한을 허용하면 내 위치 기준으로 거리가 표시됩니다.</span><br />
           {locationError ? (
             <span>📍 {locationError}</span>
           ) : (

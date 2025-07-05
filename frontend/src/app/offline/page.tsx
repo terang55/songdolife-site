@@ -1,16 +1,5 @@
 "use client";
 
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: '오프라인 상태 | 인천논현라이프',
-  description: '인터넷 연결을 확인해주세요',
-  robots: {
-    index: false,
-    follow: false,
-  },
-};
-
 export default function OfflinePage() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4">

@@ -55,7 +55,8 @@ const categoryIcons: { [key: string]: React.ReactNode } = {
   '뉴스': <span className="text-base">📰</span>,
   '블로그': <span className="text-base">📝</span>,
   '유튜브': <span className="text-base">🎥</span>,
-  '병원/약국': <span className="text-base">🏥</span>,
+  '병원': <span className="text-base">🏥</span>,
+  '약국': <span className="text-base">💊</span>,
   '부동산': <span className="text-base">🏠</span>,
 };
 
@@ -64,7 +65,8 @@ const categories = [
   '뉴스',
   '블로그', 
   '유튜브',
-  '병원/약국'
+  '병원',
+  '약국'
 ];
 
 export default function HomePage() {
@@ -82,7 +84,7 @@ export default function HomePage() {
       setError(null);
       
       const params = new URLSearchParams();
-      if (selectedCategory !== '전체' && selectedCategory !== '병원/약국') {
+      if (selectedCategory !== '전체' && selectedCategory !== '병원' && selectedCategory !== '약국') {
         params.append('category', selectedCategory);
       }
       params.append('limit', '100');
@@ -107,13 +109,13 @@ export default function HomePage() {
   }, [selectedCategory]);
 
   useEffect(() => {
-    // 병원/약국, 부동산 카테고리가 아닐 때만 뉴스 로딩
-    if (selectedCategory !== '병원/약국' && selectedCategory !== '부동산') {
+    // 병원, 약국, 부동산 카테고리가 아닐 때만 뉴스 로딩
+    if (selectedCategory !== '병원' && selectedCategory !== '약국' && selectedCategory !== '부동산') {
     fetchNews();
     fetchSyncStatus();
     fetchStats();
     } else {
-      // 병원/약국, 부동산 카테고리일 때는 로딩 상태 해제
+      // 병원, 약국, 부동산 카테고리일 때는 로딩 상태 해제
       setLoading(false);
       setError(null);
       setNews([]);
@@ -458,11 +460,12 @@ export default function HomePage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
 
 
-        {/* 병원/약국 정보 위젯 (병원/약국 카테고리 선택시에만) */}
-        {selectedCategory === '병원/약국' && <MedicalWidget />}
+        {/* 병원/약국 정보 위젯 */}
+        {selectedCategory === '병원' && <MedicalWidget initialType="hospital" />}
+        {selectedCategory === '약국' && <MedicalWidget initialType="pharmacy" />}
 
         {/* 메인 콘텐츠: 뉴스/블로그/유튜브 */}
-        {selectedCategory !== '병원/약국' && (
+        {selectedCategory !== '병원' && selectedCategory !== '약국' && (
           <div className="flex flex-col gap-8">
             <div className="flex-1">
         {/* 에러 메시지 */}

@@ -115,7 +115,7 @@ export default function PWAInstallPrompt({ onInstall, onDismiss }: PWAInstallPro
               </h3>
               <p className="text-xs text-gray-600 mb-3">
                 Safari에서 <span className="inline-flex items-center px-1 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">공유</span> 버튼을 누른 후 
-                <span className="inline-flex items-center px-1 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 ml-1">"홈 화면에 추가"</span>를 선택하세요.
+                <span className="inline-flex items-center px-1 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 ml-1">&quot;홈 화면에 추가&quot;</span>를 선택하세요.
               </p>
               <div className="flex items-center space-x-2">
                 <button
@@ -195,7 +195,8 @@ export function usePWAInstall() {
     // 설치 상태 확인
     const checkInstallStatus = () => {
       const standalone = window.matchMedia('(display-mode: standalone)').matches;
-      const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && (window.navigator as any).standalone;
+      // iOS PWA 설치 여부 안전하게 체크
+      const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && (typeof (window.navigator as any).standalone === 'boolean' ? (window.navigator as any).standalone : false);
       setIsInstalled(standalone || iOS);
     };
 

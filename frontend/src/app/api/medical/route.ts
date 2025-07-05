@@ -13,7 +13,7 @@ const HIRA_API_KEY = process.env.HIRA_SERVICE_KEY || 'aTgFhrZehAYOxHq4Z3z1iSYeys
 // 전역 캐시 (메모리) 설정 - 10분간 유지
 const CACHE_TTL = 10 * 60 * 1000; // 10분(ms)
 let hiraHospitalCache: { items: HiraHospitalItem[]; timestamp: number } | null = null;
-let hiraPharmacyCache: { items: any[]; timestamp: number } | null = null;
+let hiraPharmacyCache: { items: unknown[]; timestamp: number } | null = null;
 
 // 디버깅용 로그
 console.log('🔧 환경변수 디버깅:');
@@ -503,7 +503,7 @@ export async function GET(request: NextRequest) {
         }
 
         // 거리 계산 및 반경 필터
-        let distance = calcDistance(lat, lon);
+        const distance = calcDistance(lat, lon);
         if (distance > radius) continue;
 
         const combinedCategory = `${item.clCdNm}`;

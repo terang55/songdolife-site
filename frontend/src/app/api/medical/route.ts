@@ -132,20 +132,35 @@ async function fetchHiraPharmacyList() {
       numOfRows: '1000'
     });
     const url = `http://apis.data.go.kr/B552657/ErmctInsttInfoInqireService/getParmacyListInfoInqire?${params}`;
+    
+    // 디버깅: URL과 파라미터 출력
+    console.log(`🔗 HIRA 약국 API 호출:`, url);
+    console.log(`📋 약국 파라미터:`, Object.fromEntries(params));
+    
     const response = await fetch(url);
     if (!response.ok) {
-      console.error('❌ HIRA 약국 API 호출 실패', response.status);
+      console.error('❌ HIRA 약국 API 호출 실패', response.status, response.statusText);
+      const errorText = await response.text();
+      console.error('❌ 약국 응답 내용:', errorText);
       return [];
     }
     const xml = await response.text();
+    
+    // 디버깅: XML 응답 일부 출력
+    console.log('📄 HIRA 약국 XML 응답 (처음 500자):', xml.substring(0, 500));
+    
     try {
       const { XMLParser } = await import('fast-xml-parser');
       const parser = new XMLParser({ ignoreAttributes: false });
       const json = parser.parse(xml);
       const items = json?.response?.body?.items?.item;
-      return items ? (Array.isArray(items) ? items : [items]) : [];
+      const result = items ? (Array.isArray(items) ? items : [items]) : [];
+      
+      console.log(`✅ HIRA 약국 파싱 결과: ${result.length}개`);
+      
+      return result;
     } catch (err) {
-      console.error('❌ HIRA XML 파싱 실패', err);
+      console.error('❌ HIRA 약국 XML 파싱 실패', err);
       return [];
     }
   };
@@ -200,18 +215,29 @@ async function fetchHiraHospitalList(): Promise<HiraHospitalItem[]> {
     const params = new URLSearchParams({
       ServiceKey: svcKey,
       sidoCd: '220000',      // 인천광역시 코드
-      sgguCd: '220006',      // 인천 연수구
-      emdongNm: '송도동',    // 행정동(송도동)으로 범위 제한
+      sgguCd: '220007',      // 인천 연수구
+      emdongNm: '송도동',    // 송도동으로 범위 제한
       numOfRows: '100',
       pageNo: String(page)
     });
     const url = `https://apis.data.go.kr/B551182/hospInfoServicev2/getHospBasisList?${params}`;
+    
+    // 디버깅: URL과 파라미터 출력
+    console.log(`🔗 HIRA 병원 API 호출 (${page}페이지):`, url);
+    console.log(`📋 파라미터:`, Object.fromEntries(params));
+    
     const response = await fetch(url);
     if (!response.ok) {
-      console.error('❌ HIRA 병원 API 호출 실패', response.status);
+      console.error('❌ HIRA 병원 API 호출 실패', response.status, response.statusText);
+      const errorText = await response.text();
+      console.error('❌ 응답 내용:', errorText);
       return { items: [], total: 0 };
     }
     const xml = await response.text();
+    
+    // 디버깅: XML 응답 일부 출력
+    console.log('📄 HIRA XML 응답 (처음 500자):', xml.substring(0, 500));
+    
     try {
       const { XMLParser } = await import('fast-xml-parser');
       const parser = new XMLParser({ ignoreAttributes: false });
@@ -220,6 +246,9 @@ async function fetchHiraHospitalList(): Promise<HiraHospitalItem[]> {
       const totalCount = parseInt(body?.totalCount || '0', 10);
       const rawItems = body?.items?.item;
       const items: HiraHospitalItem[] = rawItems ? (Array.isArray(rawItems) ? rawItems : [rawItems]) : [];
+      
+      console.log(`✅ HIRA 병원 파싱 결과 (${page}페이지): ${items.length}개, 총 ${totalCount}개`);
+      
       return { items, total: totalCount };
     } catch (err) {
       console.error('❌ HIRA 병원 XML 파싱 실패', err);
@@ -323,6 +352,10 @@ export async function GET(request: NextRequest) {
       userLat,
       userLon
     });
+
+    // 디버깅: API 키 확인
+    console.log('🔑 HIRA API 키 존재:', !!HIRA_API_KEY);
+    console.log('🔑 Kakao API 키 존재:', !!KAKAO_API_KEY);
 
     // 환경변수 확인
     console.log('🔑 카카오 API 키 상태:', KAKAO_API_KEY ? '로드됨' : '❌ 로드 실패');
@@ -491,12 +524,8 @@ export async function GET(request: NextRequest) {
       };
 
       for (const item of hiraHospitals) {
-        // 송도동/센트럴파크 필터링 (주소 또는 행정동명)
-        const isInSongdo = (item.emdongNm && item.emdongNm.includes('송도동')) ||
-                             item.addr?.includes('송도동') ||
-                             item.addr?.includes('센트럴파크');
-        if (!isInSongdo) continue;
-
+        // HIRA API에서 이미 송도동으로 필터링됨 - 추가 필터링 불필요
+        
         let lat = parseFloat(item.YPos ?? '');
         let lon = parseFloat(item.XPos ?? '');
 
@@ -508,9 +537,8 @@ export async function GET(request: NextRequest) {
           lon = fixed.lon;
         }
 
-        // 거리 계산 및 반경 필터
+        // 거리 계산 (송도동은 거리 제한 없음)
         const distance = calcDistance(lat, lon);
-        if (distance > radius) continue;
 
         const combinedCategory = `${item.clCdNm}`;
 
@@ -593,7 +621,7 @@ export async function GET(request: NextRequest) {
         }
 
         // 송도동 여부
-        const isInSongdo = item.dutyAddr?.includes('송도동');
+        const isInSongdo = item.dutyAddr?.includes('송도');
         if (!isInSongdo) continue;
 
         // 좌표가 없거나 반경 밖이면 Kakao 지오코딩으로 보정
@@ -603,16 +631,8 @@ export async function GET(request: NextRequest) {
           ({ lat, lon } = fixed);
         }
 
-        // 거리 계산
+        // 거리 계산 (송도동은 거리 제한 없음)
         let distance = calcDistance(lat, lon);
-        if (distance > radius) {
-          const fixed = await geocodeAddress(item.dutyAddr); // 좌표 오등록 의심 → 재보정
-          if (fixed) {
-            ({ lat, lon } = fixed);
-            distance = calcDistance(lat, lon);
-          }
-        }
-        if (distance > radius) continue; // 최종 반경 초과 시 제외
 
         const sat = makeHourRange(item.dutyTime6s, item.dutyTime6c);
         const sun = makeHourRange(item.dutyTime7s, item.dutyTime7c);

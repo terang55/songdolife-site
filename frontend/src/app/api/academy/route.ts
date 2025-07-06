@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
   const apiKey = process.env.ACADEMY_API_KEY || 'be1e77cd70ae4203b94e26667165c55d';
 
   const baseUrl =
-    'https://open.neis.go.kr/hub/acaInsTiInfo?Type=json&pSize=100&ATPT_OFCDC_SC_CODE=E10&ADMST_ZONE_NM=%EB%82%A8%EB%8F%99%EA%B5%AC';
+    'https://open.neis.go.kr/hub/acaInsTiInfo?Type=json&pSize=100&ATPT_OFCDC_SC_CODE=E10&ADMST_ZONE_NM=연수구';
 
   const makeUrl = (page: number) => `${baseUrl}&pIndex=${page}&KEY=${apiKey}`;
 

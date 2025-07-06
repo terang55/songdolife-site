@@ -5,7 +5,7 @@ import { XMLParser } from 'fast-xml-parser';
 const MOLIT_API_KEY = 'aTgFhrZehAYOxHq4Z3z1iSYeysHfG9Tu43JQhF26U3mdGzr0H8+jR9MzrwPoqr8yOegDO5OO56GmvXzS7rwkdw==';
 const MOLIT_BASE_URL = 'https://apis.data.go.kr/1613000/RTMSDataSvcAptTrade/getRTMSDataSvcAptTrade';
 
-const AREA_CODE = '28710'; // 인천 연수구
+const AREA_CODE = '28185'; // 인천 연수구
 
 interface ProcessedDeal {
   apartment_name: string;
@@ -112,6 +112,7 @@ export async function GET(): Promise<NextResponse> {
                 const dealDate = formatDealDate(year, month, day);
                 const pricePerPyeong = calculatePricePerPyeong(price, area);
 
+                // 송도동 필터 적용
                 if (dong === '송도동') {
                   deals.push({
                     apartment_name: apartment,

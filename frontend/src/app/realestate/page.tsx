@@ -145,7 +145,7 @@ export default function RealEstatePage() {
             🏢 송도 부동산 실거래가
           </h1>
           <p className="text-gray-600">
-            송도 아파트 실거래가 정보를 실시간으로 확인하세요.
+            송도국제도시 아파트 실거래가 정보를 실시간으로 확인하세요.
           </p>
         </div>
 
@@ -164,21 +164,20 @@ export default function RealEstatePage() {
             <div className="space-y-4">
               <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
                 <h3 className="font-semibold text-blue-800 mb-2 flex items-center">
-                  🚄 수인분당선
+                  🚇 인천 1호선
                 </h3>
                 <div className="text-sm text-gray-700 space-y-2">
                   <div>
-                    <span className="font-medium">북쪽 방향:</span> 왕십리 → 건대입구 → 선릉 → 판교 → 수원
+                    <span className="font-medium">전체 구간:</span> 계양역 ↔ 송도달빛축제공원역 (37개 역)
                   </div>
                   <div>
-                    <span className="font-medium">남쪽 방향:</span> 인천 → 월곶 → 송도 → 오이도
+                    <span className="font-medium">송도 구간:</span> 캠퍼스타운 → 테크노파크 → 지식정보단지 → 인천대입구 → 센트럴파크 → 국제업무지구 → 송도달빛축제공원
                   </div>
                   <div className="mt-3 p-2 bg-blue-100 rounded text-xs">
                     <div className="font-medium text-blue-900 mb-1">주요 환승역</div>
                     <div className="text-blue-800 space-y-1">
-                      <div>• 왕십리: 2호선, 5호선, 중앙선</div>
-                      <div>• 건대입구: 2호선, 7호선</div>
-                      <div>• 선릉: 2호선, 분당선</div>
+                      <div>• 원인재역: 수인·분당선 환승</div>
+                      <div>• 부평구청역: 수도권 1호선 환승</div>
                     </div>
                   </div>
                 </div>
@@ -187,9 +186,9 @@ export default function RealEstatePage() {
               <div className="p-3 bg-gray-50 rounded-lg border border-gray-200">
                 <h4 className="font-medium text-gray-800 mb-2">운행 정보</h4>
                 <div className="text-sm text-gray-600 space-y-1">
-                  <div>• <span className="font-medium">운행시간:</span> 05:30 ~ 24:00</div>
-                  <div>• <span className="font-medium">배차간격:</span> 평일 5-10분, 주말 10-15분</div>
-                  <div>• <span className="font-medium">왕십리까지:</span> 약 90분</div>
+                  <div>• <span className="font-medium">운행시간:</span> 05:30 ~ 00:10-00:30</div>
+                  <div>• <span className="font-medium">배차간격:</span> 출퇴근 4-6분, 평시 7-10분</div>
+                  <div>• <span className="font-medium">서울 시내까지:</span> 환승 1회로 접근</div>
                 </div>
               </div>
 
@@ -200,23 +199,14 @@ export default function RealEstatePage() {
                 <div className="space-y-3">
                   <div className="p-2 bg-red-100 rounded">
                     <div className="flex items-center justify-between mb-1">
-                      <span className="font-medium text-red-900">M6410</span>
+                      <span className="font-medium text-red-900">M6405</span>
                       <span className="text-xs bg-red-200 text-red-700 px-2 py-1 rounded">운행중</span>
                     </div>
                     <div className="text-xs text-gray-700 space-y-1">
-                      <div>• 송도동(사리울중학교) → 강남역·양재역</div>
-                      <div>• 송도동(송도역) → 서울 강남권 직행</div>
-                    </div>
-                  </div>
-                  <div className="p-2 bg-red-100 rounded">
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="font-medium text-red-900">M6461</span>
-                      <span className="text-xs bg-red-200 text-red-700 px-2 py-1 rounded">운행중</span>
-                    </div>
-                    <div className="text-xs text-gray-700 space-y-1">
-                      <div>• 송도동(센트럴파크역) → 서울 강남권 직행</div>
-                      <div>• 역삼역까지 직행 운행</div>
-                      <div>• 기존 M6410 수요 분산 효과</div>
+                      <div>• 송도(웰카운티) → 서울 강남권(삼성역·교대역)</div>
+                      <div>• 제3경인고속화도로 경유 직행</div>
+                      <div>• 배차간격: 출퇴근 10-15분, 평시 15-30분</div>
+                      <div>• 요금: 교통카드 3,400원</div>
                     </div>
                   </div>
                 </div>
@@ -227,54 +217,44 @@ export default function RealEstatePage() {
           {/* 미래 운행 노선 */}
           <div className="bg-white rounded-xl shadow-sm border p-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
-              🚀 미래 운행 노선
+              🚀 미래 교통 계획
             </h2>
             <div className="space-y-3">
               <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
                 <div className="flex items-center justify-between mb-1">
-                  <h4 className="font-semibold text-blue-800">경강선 (송도~강릉)</h4>
-                  <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">2028년</span>
+                  <h4 className="font-semibold text-blue-800">GTX-B 노선 (수도권광역급행철도)</h4>
+                  <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">2031년</span>
                 </div>
                 <div className="text-xs text-gray-600 space-y-1">
-                  <div>• 송도역 정차 추진 중!</div>
-                  <div>• 판교 40분, 광명KTX 15분</div>
-                  <div>• 판교테크노밸리 직행</div>
+                  <div>• 송도(인천대입구역) → 마석역 (남양주)</div>
+                  <div>• 총 연장: 82.7km, 14개 정거장</div>
+                  <div>• 송도 → 서울역: 27-30분 (기존 80-110분)</div>
+                  <div>• 최고속도: 180km/h, 평균 100km/h</div>
                 </div>
               </div>
 
               <div className="p-3 bg-green-50 rounded-lg border border-green-200">
                 <div className="flex items-center justify-between mb-1">
-                  <h4 className="font-semibold text-green-800">인천발 KTX</h4>
-                  <span className="text-xs bg-green-100 text-green-600 px-2 py-1 rounded">2026년</span>
+                  <h4 className="font-semibold text-green-800">송도트램 (순환형)</h4>
+                  <span className="text-xs bg-green-100 text-green-600 px-2 py-1 rounded">2032년</span>
                 </div>
                 <div className="text-xs text-gray-600 space-y-1">
-                  <div>• 송도역서 전국 KTX 이용</div>
-                  <div>• 부산 2시간30분, 목포 2시간10분</div>
-                  <div>• 수인분당선 연계</div>
+                  <div>• 송도달빛축제공원역 → 인천대입구역 → 연세대 → 지식정보단지역</div>
+                  <div>• 총 연장: 23.06km, 30개 정거장</div>
+                  <div>• 도시 내 이동시간: 45분 → 28분 (38% 단축)</div>
+                  <div>• 사업비: 4,429억원 (국비 60%)</div>
                 </div>
               </div>
 
               <div className="p-3 bg-purple-50 rounded-lg border border-purple-200">
                 <div className="flex items-center justify-between mb-1">
-                  <h4 className="font-semibold text-purple-800">제2경인선</h4>
-                  <span className="text-xs bg-purple-100 text-purple-600 px-2 py-1 rounded">2035년</span>
+                  <h4 className="font-semibold text-purple-800">인천 1호선 연장 (8공구)</h4>
+                  <span className="text-xs bg-purple-100 text-purple-600 px-2 py-1 rounded">계획중</span>
                 </div>
                 <div className="text-xs text-gray-600 space-y-1">
-                  <div>• 노량진~청학, 인천대입구역 경유</div>
-                  <div>• 서울 영등포 직결</div>
-                  <div>• 21.9km, 17개역</div>
-                </div>
-              </div>
-
-              <div className="p-3 bg-yellow-50 rounded-lg border border-yellow-200">
-                <div className="flex items-center justify-between mb-1">
-                  <h4 className="font-semibold text-yellow-800">인천2호선 연장</h4>
-                  <span className="text-xs bg-yellow-100 text-yellow-600 px-2 py-1 rounded">계획승인</span>
-                </div>
-                <div className="text-xs text-gray-600 space-y-1">
-                  <div>• 연수구청~인천대입구역 연결</div>
-                  <div>• 7.52km, 4개역</div>
-                  <div>• 연수구 전역 직결</div>
+                  <div>• GTX-B와 연계한 환승 허브 구축</div>
+                  <div>• 송도 내부 접근성 강화</div>
+                  <div>• 트램과의 환승 연계 시스템</div>
                 </div>
               </div>
             </div>
@@ -285,13 +265,13 @@ export default function RealEstatePage() {
                 🌟 송도 교통 허브 전망
               </h4>
               <div className="text-sm text-gray-700 space-y-1">
-                <div>• <strong>현재:</strong> 수인분당선 1개 노선</div>
-                <div>• <strong>미래:</strong> 최대 4개 노선 교차</div>
-                <div>• <strong>효과:</strong> 수도권 메가 허브 발전</div>
+                <div>• <strong>현재:</strong> 인천 1호선 1개 노선</div>
+                <div>• <strong>미래:</strong> GTX-B + 송도트램 + 인천1호선 통합</div>
+                <div>• <strong>효과:</strong> 수도권 서부 메가 허브 완성</div>
               </div>
               <div className="mt-2 p-2 bg-white rounded text-xs">
                 <div className="text-center font-medium text-gray-800">
-                  수인분당선 ↔ 경강선 ↔ 제2경인선 ↔ 인천2호선
+                  GTX-B ↔ 송도트램 ↔ 인천 1호선 환승 시스템
                 </div>
               </div>
             </div>

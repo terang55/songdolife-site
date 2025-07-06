@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { generateBreadcrumbSchema } from '@/lib/seo';
@@ -100,7 +100,7 @@ export default function SubwayPage() {
   const [isRealBusAPI, setIsRealBusAPI] = useState(false);
 
   // 시간표 기반 다음 열차 정보 계산
-  const calculateNextTrains = (stationName: string): NextTrainInfo => {
+  const calculateNextTrains = (): NextTrainInfo => {
     const now = new Date();
     const currentTime = now.getHours() * 60 + now.getMinutes(); // 분 단위로 변환
     
@@ -175,14 +175,14 @@ export default function SubwayPage() {
   };
 
   // 시간표 정보 가져오기
-  const fetchTrainSchedule = async (stationName: string) => {
+  const fetchTrainSchedule = useCallback(async (stationName: string) => {
     setLoading(true);
     try {
       console.log('🚇 지하철 시간표 정보 계산:', stationName);
       
       // 실제로는 API에서 시간표 데이터를 가져와야 하지만, 
       // 현재는 로컬 계산으로 처리
-      const nextTrains = calculateNextTrains(stationName);
+      const nextTrains = calculateNextTrains();
       
       console.log('🚇 다음 열차 정보:', nextTrains);
       setNextTrainInfo(nextTrains);
@@ -200,7 +200,7 @@ export default function SubwayPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   // 버스 정보 가져오기 (M6405 G-BIS API)
   const fetchBusInfo = async () => {
@@ -252,7 +252,7 @@ export default function SubwayPage() {
     if (!BUS_FEATURE_DISABLED) {
       fetchBusInfo();
     }
-  }, [selectedStation]);
+  }, [selectedStation, fetchTrainSchedule]);
 
   // 1분마다 시간표 정보 업데이트
   useEffect(() => {
@@ -261,7 +261,7 @@ export default function SubwayPage() {
     }, 60000); // 1분마다 업데이트
 
     return () => clearInterval(interval);
-  }, [selectedStation]);
+  }, [selectedStation, fetchTrainSchedule]);
 
   const selectedStationInfo = stations.find(s => s.name === selectedStation);
 

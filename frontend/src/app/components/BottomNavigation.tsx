@@ -38,7 +38,7 @@ export default function BottomNavigation() {
     });
     
     setActiveItem(currentItem?.path + (currentItem?.categoryName || '') || '/');
-  }, [pathname]);
+  }, [pathname, navItems]);
 
   const handleNavClick = (item: NavItem) => {
     if (item.isCategory && item.categoryName) {

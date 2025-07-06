@@ -30,14 +30,6 @@ interface BusArrival {
   updatedAt: string; // 갱신 시각
 }
 
-interface StationInfo {
-  name: string;
-  code: string;
-  exits: string[];
-  facilities: string[];
-  nearbyPlaces: string[];
-}
-
 const stations = [
   {
     name: '인천대입구역',

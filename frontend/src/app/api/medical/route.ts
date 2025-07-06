@@ -632,7 +632,7 @@ export async function GET(request: NextRequest) {
         }
 
         // 거리 계산 (송도동은 거리 제한 없음)
-        let distance = calcDistance(lat, lon);
+        const distance = calcDistance(lat, lon);
 
         const sat = makeHourRange(item.dutyTime6s, item.dutyTime6c);
         const sun = makeHourRange(item.dutyTime7s, item.dutyTime7c);

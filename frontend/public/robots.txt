@@ -1,9 +1,10 @@
 User-agent: *
 Allow: /
 
+# 사이트맵 위치
 Sitemap: https://songdo.life/sitemap.xml
 
-# RSS Feed
+# RSS 피드
 RSS: https://songdo.life/api/rss
 
 # 기본적으로 모든 경로 허용하며, 내부 API·빌드 경로는 차단
@@ -20,9 +21,33 @@ Allow: /site.webmanifest
 Allow: /favicon.ico
 Allow: /android-chrome-*.png
 Allow: /apple-touch-icon.png
+Allow: /og-image.jpg
 
-# 크롤링 속도 제한 (1초 간격)
+# 중요한 SEO 페이지들 명시적 허용
+Allow: /subway
+Allow: /realestate
+Allow: /academy
+Allow: /privacy
+Allow: /terms
+
+# 검색엔진별 크롤링 속도 제한
 Crawl-delay: 1
 
+# 구글봇 특별 설정
+User-agent: Googlebot
+Crawl-delay: 0
+Allow: /
+
+# 네이버봇 특별 설정  
+User-agent: Yeti
+Crawl-delay: 1
+Allow: /
+
+# 다음봇 설정
+User-agent: Daumoa
+Crawl-delay: 1
+Allow: /
+
 # 송도라이프 - 인천 연수구 송도국제도시 생활정보 플랫폼
-# 최종 업데이트: 2025-07-05 
+# 실시간 뉴스, 지하철 정보, 부동산 정보, 의료 정보 제공
+# 최종 업데이트: 2025-07-06 

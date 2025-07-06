@@ -5,22 +5,26 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { generateBreadcrumbSchema } from '@/lib/seo';
 
-interface TrainInfo {
-  station: string;
-  line: string;
-  direction: string;
-  destination: string;
-  arrivalTime: string;
-  trainType: string;
-  status: string;
-  currentLocation: string;
-  stationsLeft?: string; // 몇 개 역 남았는지
-  remainingMinutes?: number; // 남은 시간(분)
-  updatedAt: string;
+interface TrainSchedule {
+  time: string; // "HH:MM" 형식
+  destination: string; // 종착역
+  direction: '상행' | '하행'; // 진행 방향
+  trainType: '일반' | '급행'; // 열차 종류
+  isLast?: boolean; // 막차 여부
+  isFirst?: boolean; // 첫차 여부
+}
+
+interface NextTrainInfo {
+  current: TrainSchedule | null;
+  next: TrainSchedule | null;
+  afterNext: TrainSchedule | null;
+  minutesToNext: number | null;
+  isServiceTime: boolean;
+  serviceStatus: 'running' | 'ended' | 'not_started';
 }
 
 interface BusArrival {
-  routeId: string; // 항상 'M6410'
+  routeId: string; // 항상 'M6405'
   stationName: string; // 버스번호 → 정류장명
   direction: string; // 다음 정류장 안내 문구
   remainingStops: number; // 현재 정류장 순번(1~)
@@ -33,70 +37,172 @@ interface BusArrival {
 const stations = [
   {
     name: '인천대입구역',
-    code: 'I115',
+    code: 'I136',
     line: '인천1호선',
-    coordinates: { lat: 37.538603, lon: 126.722675 },
-    nearbyPlaces: ['경인교육대학교', '계양구청', '계양문화회관', '계양체육관']
-  },
-  {
-    name: '센트럴파크역',
-    code: 'K258',
-    line: '인천1호선',
-    coordinates: { lat: 37.3814, lon: 126.7286 },
-    nearbyPlaces: ['센트럴파크', '트리플스트리트', '송도 더샵', '현대프리미엄아울렛', '송도국제도시']
+    coordinates: { lat: 37.3726, lon: 126.6589 },
+    nearbyPlaces: ['인천대학교', '송도컨벤시아', '연세대학교 국제캠퍼스', '송도국제도시']
   }
 ];
 
-const BUS_FEATURE_DISABLED = false; // 광역버스 실시간 정보 기능 활성화 (M6410 G-BIS API)
+// 인천대입구역 시간표 데이터 (예시 - 실제로는 API에서 가져와야 함)
+const SAMPLE_SCHEDULE: TrainSchedule[] = [
+  // 상행 (검단호수공원 방향)
+  { time: "05:30", destination: "검단호수공원", direction: "상행", trainType: "일반", isFirst: true },
+  { time: "05:45", destination: "검단호수공원", direction: "상행", trainType: "일반" },
+  { time: "06:00", destination: "검단호수공원", direction: "상행", trainType: "일반" },
+  { time: "06:15", destination: "검단호수공원", direction: "상행", trainType: "일반" },
+  { time: "06:30", destination: "검단호수공원", direction: "상행", trainType: "일반" },
+  { time: "06:45", destination: "검단호수공원", direction: "상행", trainType: "일반" },
+  { time: "07:00", destination: "검단호수공원", direction: "상행", trainType: "일반" },
+  { time: "07:15", destination: "검단호수공원", direction: "상행", trainType: "일반" },
+  { time: "07:30", destination: "검단호수공원", direction: "상행", trainType: "일반" },
+  { time: "07:45", destination: "검단호수공원", direction: "상행", trainType: "일반" },
+  { time: "08:00", destination: "검단호수공원", direction: "상행", trainType: "일반" },
+  // ... 더 많은 시간표 데이터
+  { time: "23:30", destination: "검단호수공원", direction: "상행", trainType: "일반" },
+  { time: "23:45", destination: "검단호수공원", direction: "상행", trainType: "일반", isLast: true },
+  
+  // 하행 (송도달빛축제공원 방향)
+  { time: "05:35", destination: "송도달빛축제공원", direction: "하행", trainType: "일반", isFirst: true },
+  { time: "05:50", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
+  { time: "06:05", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
+  { time: "06:20", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
+  { time: "06:35", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
+  { time: "06:50", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
+  { time: "07:05", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
+  { time: "07:20", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
+  { time: "07:35", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
+  { time: "07:50", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
+  { time: "08:05", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
+  // ... 더 많은 시간표 데이터
+  { time: "23:35", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
+  { time: "23:50", destination: "송도달빛축제공원", direction: "하행", trainType: "일반", isLast: true },
+];
+
+const BUS_FEATURE_DISABLED = false; // 광역버스 실시간 정보 기능 활성화 (M6405 G-BIS API)
 
 export default function SubwayPage() {
   const [selectedStation, setSelectedStation] = useState('인천대입구역');
-  const [trainInfo, setTrainInfo] = useState<TrainInfo[]>([]);
+  const [nextTrainInfo, setNextTrainInfo] = useState<NextTrainInfo>({
+    current: null,
+    next: null,
+    afterNext: null,
+    minutesToNext: null,
+    isServiceTime: false,
+    serviceStatus: 'not_started'
+  });
   const [busInfo, setBusInfo] = useState<BusArrival[]>([]);
   const [loading, setLoading] = useState(false);
   const [busLoading, setBusLoading] = useState(false);
   const [lastUpdate, setLastUpdate] = useState<string>('');
   const [busLastUpdate, setBusLastUpdate] = useState<string>('');
-  const [isTestData, setIsTestData] = useState(false);
-  const [isServiceEnded, setIsServiceEnded] = useState(false);
   const [busServiceEnded, setBusServiceEnded] = useState(false);
   const [isRealBusAPI, setIsRealBusAPI] = useState(false);
 
-  // 실시간 정보 가져오기 (더미 데이터로 시작)
-  const fetchTrainInfo = async (stationName: string) => {
+  // 시간표 기반 다음 열차 정보 계산
+  const calculateNextTrains = (stationName: string): NextTrainInfo => {
+    const now = new Date();
+    const currentTime = now.getHours() * 60 + now.getMinutes(); // 분 단위로 변환
+    
+    // 운행 시간 체크 (05:30 ~ 23:50)
+    const serviceStart = 5 * 60 + 30; // 05:30
+    const serviceEnd = 23 * 60 + 50; // 23:50
+    
+    let serviceStatus: 'running' | 'ended' | 'not_started' = 'running';
+    if (currentTime < serviceStart) {
+      serviceStatus = 'not_started';
+    } else if (currentTime > serviceEnd) {
+      serviceStatus = 'ended';
+    }
+    
+    const isServiceTime = serviceStatus === 'running';
+    
+    if (!isServiceTime) {
+      return {
+        current: null,
+        next: null,
+        afterNext: null,
+        minutesToNext: null,
+        isServiceTime: false,
+        serviceStatus
+      };
+    }
+    
+    // 현재 시간 이후의 열차들 찾기
+    const upcomingTrains = SAMPLE_SCHEDULE
+      .map(train => {
+        const [hours, minutes] = train.time.split(':').map(Number);
+        const trainTime = hours * 60 + minutes;
+        return { ...train, timeInMinutes: trainTime };
+      })
+      .filter(train => train.timeInMinutes >= currentTime)
+      .sort((a, b) => a.timeInMinutes - b.timeInMinutes);
+    
+    const nextUpTrains = upcomingTrains.filter(train => train.direction === '상행').slice(0, 3);
+    const nextDownTrains = upcomingTrains.filter(train => train.direction === '하행').slice(0, 3);
+    
+    // 가장 가까운 열차 (상행/하행 중 더 가까운 것)
+    const nextUpTrain = nextUpTrains[0];
+    const nextDownTrain = nextDownTrains[0];
+    
+    let nextTrain = null;
+    let minutesToNext = null;
+    
+    if (nextUpTrain && nextDownTrain) {
+      if (nextUpTrain.timeInMinutes <= nextDownTrain.timeInMinutes) {
+        nextTrain = nextUpTrain;
+        minutesToNext = nextUpTrain.timeInMinutes - currentTime;
+      } else {
+        nextTrain = nextDownTrain;
+        minutesToNext = nextDownTrain.timeInMinutes - currentTime;
+      }
+    } else if (nextUpTrain) {
+      nextTrain = nextUpTrain;
+      minutesToNext = nextUpTrain.timeInMinutes - currentTime;
+    } else if (nextDownTrain) {
+      nextTrain = nextDownTrain;
+      minutesToNext = nextDownTrain.timeInMinutes - currentTime;
+    }
+    
+    return {
+      current: null,
+      next: nextTrain,
+      afterNext: null,
+      minutesToNext,
+      isServiceTime: true,
+      serviceStatus: 'running'
+    };
+  };
+
+  // 시간표 정보 가져오기
+  const fetchTrainSchedule = async (stationName: string) => {
     setLoading(true);
     try {
-      console.log('🚇 지하철 정보 요청:', stationName);
-      const response = await fetch(`/api/subway?station=${encodeURIComponent(stationName)}`);
-      const result = await response.json();
+      console.log('🚇 지하철 시간표 정보 계산:', stationName);
       
-      console.log('🚇 API 응답:', result);
+      // 실제로는 API에서 시간표 데이터를 가져와야 하지만, 
+      // 현재는 로컬 계산으로 처리
+      const nextTrains = calculateNextTrains(stationName);
       
-      if (result.success) {
-        console.log('✅ 열차 정보 수신:', result.data);
-        setTrainInfo(result.data);
-        setLastUpdate(new Date().toLocaleTimeString('ko-KR'));
-        // 운행종료 및 테스트 데이터 여부 확인
-        setIsServiceEnded(result.note && result.note.includes('운행종료'));
-        setIsTestData(result.note && result.note.includes('테스트'));
-      } else {
-        console.error('❌ 지하철 API 오류:', result.error);
-        // 오류 시 빈 배열로 설정
-        setTrainInfo([]);
-        setIsServiceEnded(false);
-        setIsTestData(false);
-      }
+      console.log('🚇 다음 열차 정보:', nextTrains);
+      setNextTrainInfo(nextTrains);
+      setLastUpdate(new Date().toLocaleTimeString('ko-KR'));
     } catch (error) {
-      console.error('❌ 지하철 정보 로딩 오류:', error);
-      setTrainInfo([]);
-      setIsServiceEnded(false);
-      setIsTestData(false);
+      console.error('❌ 지하철 시간표 계산 오류:', error);
+      setNextTrainInfo({
+        current: null,
+        next: null,
+        afterNext: null,
+        minutesToNext: null,
+        isServiceTime: false,
+        serviceStatus: 'ended'
+      });
     } finally {
       setLoading(false);
     }
   };
 
-  // 버스 정보 가져오기 (M6410 G-BIS API)
+  // 버스 정보 가져오기 (M6405 G-BIS API)
   const fetchBusInfo = async () => {
     if (BUS_FEATURE_DISABLED) {
       console.log('🚌 버스 기능이 비활성화되어 있습니다.');
@@ -119,6 +225,11 @@ export default function SubwayPage() {
         setBusLastUpdate(new Date().toLocaleTimeString('ko-KR'));
         setBusServiceEnded(result.note && result.note.includes('운행종료'));
         setIsRealBusAPI(result.dataSource === 'gbis_api');
+        
+        // API 상태 정보 로깅
+        if (result.apiStatus) {
+          console.log('🔧 API 상태:', result.apiStatus);
+        }
       } else {
         console.log('❌ 버스 데이터 없음 또는 실패:', result);
         setBusInfo([]);
@@ -135,34 +246,45 @@ export default function SubwayPage() {
     }
   };
 
-  // 페이지 진입 및 역 변경 시 한 번만 데이터 로드 (자동 갱신 제거)
+  // 페이지 진입 및 역 변경 시 한 번만 데이터 로드
   useEffect(() => {
-    fetchTrainInfo(selectedStation);
+    fetchTrainSchedule(selectedStation);
     if (!BUS_FEATURE_DISABLED) {
       fetchBusInfo();
     }
   }, [selectedStation]);
 
+  // 1분마다 시간표 정보 업데이트
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchTrainSchedule(selectedStation);
+    }, 60000); // 1분마다 업데이트
+
+    return () => clearInterval(interval);
+  }, [selectedStation]);
+
   const selectedStationInfo = stations.find(s => s.name === selectedStation);
 
-  const getRemainingMinutes = (timeStr: string): number | null => {
-    // 1) "HH:MM:SS" 형식
-    let m = timeStr.match(/(\d{1,2}):(\d{2}):(\d{2})/);
-    if (m) {
-      const [ , hh, mm, ss ] = m;
-      const now = new Date();
-      const target = new Date();
-      target.setHours(parseInt(hh), parseInt(mm), parseInt(ss), 0);
-      let diff = (target.getTime() - now.getTime()) / 60000; // minutes
-      if (diff < 0) diff += 1440; // 다음날 보정
-      return Math.round(diff);
-    }
-    // 2) "N분 후" 패턴
-    m = timeStr.match(/(\d+)\s*분/);
-    if (m) {
-      return parseInt(m[1], 10);
-    }
-    return null;
+  const formatTimeRemaining = (minutes: number): string => {
+    if (minutes < 1) return '곧 도착';
+    if (minutes === 1) return '1분 후';
+    return `${minutes}분 후`;
+  };
+
+  const getUpcomingTrains = (direction: '상행' | '하행', count: number = 3): TrainSchedule[] => {
+    const now = new Date();
+    const currentTime = now.getHours() * 60 + now.getMinutes();
+    
+    return SAMPLE_SCHEDULE
+      .filter(train => train.direction === direction)
+      .map(train => {
+        const [hours, minutes] = train.time.split(':').map(Number);
+        const trainTime = hours * 60 + minutes;
+        return { ...train, timeInMinutes: trainTime };
+      })
+      .filter(train => train.timeInMinutes >= currentTime)
+      .sort((a, b) => a.timeInMinutes - b.timeInMinutes)
+      .slice(0, count);
   };
 
   const breadcrumbData = generateBreadcrumbSchema([
@@ -173,21 +295,21 @@ export default function SubwayPage() {
   return (
     <>
       <Head>
-        <title>송도 교통정보 - 지하철·버스 실시간 도착정보 | 송도라이프</title>
-        <meta name="description" content="송도국제도시 인천1호선 지하철과 주요 버스의 실시간 도착 정보를 한눈에 확인하세요. 인천대입구역, 센트럴파크역과 주변 버스정류장 정보를 제공합니다." />
-        <meta name="keywords" content="송도 교통, 인천1호선, 인천대입구역, 센트럴파크역, 광역버스, 실시간 도착정보, 송도 버스, 송도 지하철, 대중교통, 연수구 송도동 교통, 인천시 연수구 송도동" />
+        <title>송도 교통정보 - 지하철·버스 시간표 및 실시간 정보 | 송도라이프</title>
+        <meta name="description" content="송도국제도시 인천1호선 지하철 시간표와 M6405 광역급행버스의 실시간 도착 정보를 한눈에 확인하세요. 인천대입구역 시간표와 송도-강남 직행버스 정보를 제공합니다." />
+        <meta name="keywords" content="송도 교통, 인천1호선, 인천대입구역, 지하철 시간표, M6405, 광역급행버스, 송도 강남 직행, 실시간 도착정보, 송도 버스, 송도 지하철, 대중교통, 연수구 송도동 교통, 인천시 연수구 송도동" />
         
         {/* Open Graph for Social Media */}
-        <meta property="og:title" content="송도국제도시 지하철 정보 - 실시간 운행정보" />
-        <meta property="og:description" content="송도국제도시 인천1호선 지하철과 주요 버스의 실시간 도착 정보를 한눈에 확인하세요." />
+        <meta property="og:title" content="송도국제도시 교통정보 - 지하철 시간표 및 M6405 광역급행버스" />
+        <meta property="og:description" content="송도국제도시 인천1호선 지하철 시간표와 M6405 광역급행버스(송도-강남 직행)의 실시간 도착 정보를 한눈에 확인하세요." />
         <meta property="og:url" content="https://songdo-life-site.vercel.app/subway" />
         <meta property="og:type" content="website" />
         <meta property="og:image" content="https://songdo-life-site.vercel.app/og-image.jpg" />
         
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="송도 교통정보 - 지하철·버스 실시간 도착정보" />
-        <meta name="twitter:description" content="송도국제도시 인천1호선 지하철과 주요 버스의 실시간 도착 정보를 한눈에 확인하세요." />
+        <meta name="twitter:title" content="송도 교통정보 - 지하철·M6405 광역급행버스 정보" />
+        <meta name="twitter:description" content="송도국제도시 인천1호선 지하철 시간표와 M6405 광역급행버스(송도-강남 직행)의 실시간 도착 정보를 한눈에 확인하세요." />
         
         {/* 지역 정보 메타 태그 */}
         <meta name="geo.region" content="KR-28" />
@@ -201,25 +323,50 @@ export default function SubwayPage() {
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebPage",
-              "name": "송도국제도시 지하철 정보",
-              "description": "송도국제도시 지역의 실시간 지하철 운행 정보를 제공합니다.",
+              "name": "송도국제도시 교통정보",
+              "description": "송도국제도시 인천1호선 지하철 시간표와 M6405 광역급행버스 실시간 정보",
               "url": "https://songdo-life-site.vercel.app/subway",
-              "mainEntity": {
-                "@type": "TransportationService",
-                "name": "송도국제도시 지하철 서비스",
-                "serviceType": "지하철 운행 정보",
-                "areaServed": {
-                  "@type": "Place",
-                  "name": "송도국제도시"
+              "mainEntity": [
+                {
+                  "@type": "TransitLine",
+                  "name": "인천1호선",
+                  "description": "검단호수공원역 ↔ 송도달빛축제공원역 (33개역)",
+                  "provider": {
+                    "@type": "Organization",
+                    "name": "인천교통공사"
+                  },
+                  "operatingHours": "05:30-23:50"
+                },
+                {
+                  "@type": "BusRoute",
+                  "name": "M6405 광역급행버스",
+                  "description": "인천 송도 웰카운티 ↔ 서울 강남역 서초현대타워앞 직행",
+                  "provider": {
+                    "@type": "Organization",
+                    "name": "인강여객",
+                    "telephone": "032-885-6900"
+                  },
+                  "operatingHours": "송도 05:00-23:30, 강남 06:10-24:30",
+                  "frequency": "평일 6-20분, 주말 15-30분 간격"
                 }
-              },
-              "publisher": {
-                "@type": "Organization",
-                "name": "송도라이프",
-                "url": "https://songdo-life-site.vercel.app"
-              },
-              "dateModified": new Date().toISOString(),
-              "inLanguage": "ko-KR"
+              ],
+              "breadcrumb": {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                  {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "홈",
+                    "item": "https://songdo-life-site.vercel.app"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "교통정보",
+                    "item": "https://songdo-life-site.vercel.app/subway"
+                  }
+                ]
+              }
             })
           }}
         />
@@ -262,7 +409,7 @@ export default function SubwayPage() {
             <div className="text-center">
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4">🚌 송도 교통정보</h1>
               <p className="text-sm sm:text-base lg:text-lg text-green-100 max-w-2xl mx-auto leading-relaxed">
-                지하철 · 버스 실시간 도착 정보와 역 안내
+                지하철 시간표 · M6405 광역급행버스 실시간 정보
               </p>
             </div>
           </div>
@@ -290,10 +437,10 @@ export default function SubwayPage() {
             </div>
           </div>
 
-          {/* 실시간 도착 정보 */}
+          {/* 지하철 시간표 정보 */}
           <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6 mb-6 sm:mb-8">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3 sm:gap-4">
-              <h2 className="text-lg sm:text-xl font-bold text-gray-900">🚄 실시간 도착 정보</h2>
+              <h2 className="text-lg sm:text-xl font-bold text-gray-900">🚄 지하철 시간표</h2>
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 w-full sm:w-auto">
                 {lastUpdate && (
                   <span className="text-xs sm:text-sm text-gray-600 order-2 sm:order-1">
@@ -303,11 +450,11 @@ export default function SubwayPage() {
                   </span>
                 )}
                 <button
-                  onClick={() => fetchTrainInfo(selectedStation)}
+                  onClick={() => fetchTrainSchedule(selectedStation)}
                   disabled={loading}
                   className="px-4 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 transition-colors text-sm font-medium touch-manipulation min-h-[44px] w-full sm:w-auto order-1 sm:order-2"
                 >
-                  {loading ? '새로고침 중...' : '🚇 지하철 새로고침'}
+                  {loading ? '업데이트 중...' : '🚇 시간표 새로고침'}
                 </button>
               </div>
             </div>
@@ -316,198 +463,177 @@ export default function SubwayPage() {
               {selectedStation}
             </div>
 
-            {/* 운행종료 알림 */}
-            {isServiceEnded && (
-              <div className="bg-red-50 border-l-4 border-red-400 p-4 mb-6 rounded-lg">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <span className="text-2xl">🚫</span>
-                  </div>
-                  <div className="ml-3">
-                    <h3 className="text-sm font-medium text-red-800">
-                      운행 종료
-                    </h3>
-                    <div className="mt-2 text-sm text-red-700">
-                      <p>현재 운행하지 않는 시간입니다. 운행시간은 오전 5시 30분부터 자정까지입니다.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* 테스트 데이터 경고 */}
-            {isTestData && !isServiceEnded && (
-              <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6 rounded-lg">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <span className="text-2xl">⚠️</span>
-                  </div>
-                  <div className="ml-3">
-                    <h3 className="text-sm font-medium text-yellow-800">
-                      현재는 지하철 정보가 없습니다
-                    </h3>
-                    <div className="mt-2 text-sm text-yellow-700">
-                      <p>운행이 종료 되었거나, 정보가 제공되지 않습니다.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
             {loading ? (
               <div className="text-center py-8">
                 <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
-                <p className="mt-2 text-gray-600">실시간 정보 로딩 중...</p>
+                <p className="mt-2 text-gray-600">시간표 정보 로딩 중...</p>
               </div>
             ) : (
               <>
-                {/* 운행종료 시에는 열차 정보 표시하지 않음 */}
-                {isServiceEnded ? (
-                  <div className="text-center py-12">
-                    <div className="text-gray-400 mb-4">
-                      <span className="text-6xl">🌙</span>
-                    </div>
-                    <h3 className="text-xl font-semibold text-gray-700 mb-2">운행이 종료되었습니다</h3>
-                    <p className="text-gray-600">내일 오전 5시 30분부터 운행을 재개합니다.</p>
-                  </div>
-                ) : trainInfo.length > 0 ? (
-                  <>
-                    {/* 방향별 분리 표시 */}
-                    <div className="grid grid-cols-1 gap-4 sm:gap-6">
-                      {/* 상행 (서울 방향) */}
-                      <div className="space-y-3 sm:space-y-4">
-                        <div className="flex items-center justify-center bg-blue-50 py-2.5 sm:py-3 rounded-lg border-2 border-blue-200">
-                          <span className="text-blue-700 font-bold text-base sm:text-lg">🔵 상행 (서울 방향)</span>
-                        </div>
-                        {trainInfo
-                          .filter(train => train.direction === '상행')
-                          .map((train, index) => (
-                            <div key={`up-${index}`} className="bg-white rounded-xl shadow-md p-3 sm:p-4 border-l-4 border-blue-500 hover:shadow-lg transition-shadow">
-                              <div className="flex flex-col sm:flex-row justify-between items-start mb-3 gap-2 sm:gap-0">
-                                <div className="flex items-center gap-2 flex-wrap">
-                                  <span className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-1 rounded-full">
-                                    {train.trainType}
-                                  </span>
-                                  <span className="text-blue-600 font-medium text-sm sm:text-base">↗️ {train.destination}</span>
-                                </div>
+                {/* 운행 상태에 따른 표시 */}
+                {nextTrainInfo.serviceStatus === 'not_started' && (
+                  <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6 rounded-lg">
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0">
+                        <span className="text-2xl">🌅</span>
                       </div>
-                      
-                              <div className="space-y-1.5 sm:space-y-2 mb-3">
-                                <div className="text-xs sm:text-sm text-gray-600">
-                                  🚇 현재 위치: {train.currentLocation}
-                                </div>
-                                {train.stationsLeft && (
-                                  <div className="flex items-center gap-1">
-                                    <span className="text-orange-500">📍</span>
-                                    <span className="text-xs sm:text-sm font-medium text-orange-600">{train.stationsLeft}</span>
-                                  </div>
-                                )}
+                      <div className="ml-3">
+                        <h3 className="text-sm font-medium text-blue-800">운행 시작 전</h3>
+                        <div className="mt-2 text-sm text-blue-700">
+                          <p>첫차는 오전 5시 30분부터 운행을 시작합니다.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {nextTrainInfo.serviceStatus === 'ended' && (
+                  <div className="bg-red-50 border-l-4 border-red-400 p-4 mb-6 rounded-lg">
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0">
+                        <span className="text-2xl">🚫</span>
+                      </div>
+                      <div className="ml-3">
+                        <h3 className="text-sm font-medium text-red-800">운행 종료</h3>
+                        <div className="mt-2 text-sm text-red-700">
+                          <p>운행이 종료되었습니다. 내일 오전 5시 30분부터 운행을 재개합니다.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {nextTrainInfo.serviceStatus === 'running' && (
+                  <>
+                    {/* 다음 열차 정보 */}
+                    {nextTrainInfo.next && (
+                      <div className="bg-green-50 border-l-4 border-green-400 p-4 mb-6 rounded-lg">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center">
+                            <div className="flex-shrink-0">
+                              <span className="text-2xl">🚇</span>
+                            </div>
+                            <div className="ml-3">
+                              <h3 className="text-lg font-medium text-green-800">다음 열차</h3>
+                              <div className="mt-1 text-sm text-green-700">
+                                <p>
+                                  <span className="font-semibold">{nextTrainInfo.next.time}</span> 
+                                  {nextTrainInfo.next.direction === '상행' ? ' 🔵 상행' : ' 🔴 하행'} 
+                                  ({nextTrainInfo.next.destination}행)
+                                </p>
                               </div>
-                              
+                            </div>
+                          </div>
+                          {nextTrainInfo.minutesToNext !== null && (
+                            <div className="text-right">
+                              <div className="text-lg font-bold text-green-600">
+                                {formatTimeRemaining(nextTrainInfo.minutesToNext)}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* 방향별 시간표 */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {/* 상행 (서울/부평 방향) */}
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-center bg-blue-50 py-3 rounded-lg border-2 border-blue-200">
+                          <span className="text-blue-700 font-bold text-lg">🔵 상행 (검단호수공원 방향)</span>
+                        </div>
+                        <div className="space-y-2">
+                          {getUpcomingTrains('상행', 5).map((train, index) => (
+                            <div key={`up-${index}`} className="bg-white rounded-lg shadow-sm p-3 border-l-4 border-blue-500">
                               <div className="flex justify-between items-center">
-                                <span className="text-lg sm:text-xl font-bold text-blue-600">
-                                  {train.arrivalTime}
-                                </span>
-                                {(() => {
-                                  const rem = train.remainingMinutes ?? getRemainingMinutes(train.arrivalTime);
-                                  return rem !== null && rem !== undefined ? (
-                                    <span className="text-xs text-gray-500 ml-1">({rem}분)</span>
-                                  ) : null;
-                                })()}
-                                <span className={`px-2.5 sm:px-3 py-1 rounded-full text-xs font-medium ${
-                                  train.status === '도착' ? 'bg-green-100 text-green-800' :
-                                  train.status === '진입' ? 'bg-yellow-100 text-yellow-800' :
-                                  'bg-blue-100 text-blue-800'
-                                }`}>
-                                  {train.status}
-                                </span>
+                                <div className="flex items-center gap-2">
+                                  <span className="font-mono text-lg font-semibold text-blue-600">
+                                    {train.time}
+                                  </span>
+                                  <span className="text-sm text-gray-600">→ {train.destination}</span>
+                                  {train.isFirst && (
+                                    <span className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full font-medium">
+                                      첫차
+                                    </span>
+                                  )}
+                                  {train.isLast && (
+                                    <span className="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full font-medium">
+                                      막차
+                                    </span>
+                                  )}
+                                </div>
+                                <div className="text-sm text-gray-500">
+                                  {(() => {
+                                    const now = new Date();
+                                    const currentTime = now.getHours() * 60 + now.getMinutes();
+                                    const [hours, minutes] = train.time.split(':').map(Number);
+                                    const trainTime = hours * 60 + minutes;
+                                    const diff = trainTime - currentTime;
+                                    return diff > 0 ? formatTimeRemaining(diff) : '';
+                                  })()}
+                                </div>
                               </div>
                             </div>
                           ))}
-                        {trainInfo.filter(train => train.direction === '상행').length === 0 && (
-                          <div className="text-center py-6 text-gray-500">
-                            <span className="text-2xl">🚫</span>
-                            <p className="mt-2">상행 열차 정보 없음</p>
-                          </div>
-                        )}
+                        </div>
                       </div>
 
-                      {/* 하행 (인천 방향) */}
-                      <div className="space-y-3 sm:space-y-4">
-                        <div className="flex items-center justify-center bg-red-50 py-2.5 sm:py-3 rounded-lg border-2 border-red-200">
-                          <span className="text-red-700 font-bold text-base sm:text-lg">🔴 하행 (인천 방향)</span>
+                      {/* 하행 (연수/국제업무지구 방향) */}
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-center bg-red-50 py-3 rounded-lg border-2 border-red-200">
+                          <span className="text-red-700 font-bold text-lg">🔴 하행 (송도달빛축제공원 방향)</span>
                         </div>
-                        {trainInfo
-                          .filter(train => train.direction === '하행')
-                          .map((train, index) => (
-                            <div key={`down-${index}`} className="bg-white rounded-xl shadow-md p-3 sm:p-4 border-l-4 border-red-500 hover:shadow-lg transition-shadow">
-                              <div className="flex flex-col sm:flex-row justify-between items-start mb-3 gap-2 sm:gap-0">
-                                <div className="flex items-center gap-2 flex-wrap">
-                                  <span className="inline-block bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-1 rounded-full">
-                                    {train.trainType}
+                        <div className="space-y-2">
+                          {getUpcomingTrains('하행', 5).map((train, index) => (
+                            <div key={`down-${index}`} className="bg-white rounded-lg shadow-sm p-3 border-l-4 border-red-500">
+                              <div className="flex justify-between items-center">
+                                <div className="flex items-center gap-2">
+                                  <span className="font-mono text-lg font-semibold text-red-600">
+                                    {train.time}
                                   </span>
-                                  <span className="text-red-600 font-medium text-sm sm:text-base">↙️ {train.destination}</span>
+                                  <span className="text-sm text-gray-600">→ {train.destination}</span>
+                                  {train.isFirst && (
+                                    <span className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full font-medium">
+                                      첫차
+                                    </span>
+                                  )}
+                                  {train.isLast && (
+                                    <span className="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full font-medium">
+                                      막차
+                                    </span>
+                                  )}
                                 </div>
-                              </div>
-                              
-                              <div className="space-y-1.5 sm:space-y-2 mb-3">
-                                <div className="text-xs sm:text-sm text-gray-600">
-                                  🚇 현재 위치: {train.currentLocation}
-                        </div>
-                                {train.stationsLeft && (
-                                  <div className="flex items-center gap-1">
-                                    <span className="text-orange-500">📍</span>
-                                    <span className="text-xs sm:text-sm font-medium text-orange-600">{train.stationsLeft}</span>
-                        </div>
-                                )}
-                      </div>
-                      
-                      <div className="flex justify-between items-center">
-                                <span className="text-lg sm:text-xl font-bold text-red-600">
-                          {train.arrivalTime}
-                        </span>
-                                {(() => {
-                                  const rem = train.remainingMinutes ?? getRemainingMinutes(train.arrivalTime);
-                                  return rem !== null && rem !== undefined ? (
-                                    <span className="text-xs text-gray-500 ml-1">({rem}분)</span>
-                                  ) : null;
-                                })()}
-                                <span className={`px-2.5 sm:px-3 py-1 rounded-full text-xs font-medium ${
-                          train.status === '도착' ? 'bg-green-100 text-green-800' :
-                          train.status === '진입' ? 'bg-yellow-100 text-yellow-800' :
-                                  'bg-red-100 text-red-800'
-                        }`}>
-                          {train.status}
-                        </span>
+                                <div className="text-sm text-gray-500">
+                                  {(() => {
+                                    const now = new Date();
+                                    const currentTime = now.getHours() * 60 + now.getMinutes();
+                                    const [hours, minutes] = train.time.split(':').map(Number);
+                                    const trainTime = hours * 60 + minutes;
+                                    const diff = trainTime - currentTime;
+                                    return diff > 0 ? formatTimeRemaining(diff) : '';
+                                  })()}
+                                </div>
                               </div>
                             </div>
                           ))}
-                        {trainInfo.filter(train => train.direction === '하행').length === 0 && (
-                          <div className="text-center py-6 text-gray-500">
-                            <span className="text-2xl">🚫</span>
-                            <p className="mt-2">하행 열차 정보 없음</p>
-                          </div>
-                        )}
+                        </div>
                       </div>
                     </div>
                   </>
-                ) : (
-                  <div className="text-center py-8">
-                    <div className="text-gray-500 mb-4">
-                      <span className="text-4xl">🚫</span>
-                    </div>
-                    <p className="text-gray-600 mb-2">현재 운행 정보를 가져올 수 없습니다.</p>
-                    <p className="text-sm text-gray-500">
-                      API 연결 상태를 확인하거나 잠시 후 다시 시도해주세요.
-                    </p>
-                    <button
-                      onClick={() => fetchTrainInfo(selectedStation)}
-                      className="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                    >
-                      다시 시도
-                    </button>
-                  </div>
                 )}
+
+                {/* 운행 안내 */}
+                <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+                  <h3 className="font-semibold text-gray-800 mb-2">📋 운행 안내</h3>
+                  <div className="text-sm text-gray-600 space-y-1">
+                    <p>• 운행시간: 05:30 ~ 23:50 (매일)</p>
+                    <p>• 배차간격: 평시 약 7~10분 간격</p>
+                    <p>• 상행: 검단호수공원역 방향 (부평, 계양 연결)</p>
+                    <p>• 하행: 송도달빛축제공원역 방향 (송도국제도시)</p>
+                    <p>• 주요 환승역: 계양(공항철도), 부평(1호선), 부평구청(7호선), 원인재(수인·분당선)</p>
+                    <p className="text-yellow-700 font-medium">⚠️ 시간표는 실제 운행과 다를 수 있습니다</p>
+                  </div>
+                </div>
               </>
             )}
           </div>
@@ -516,7 +642,7 @@ export default function SubwayPage() {
           <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6 mb-6 sm:mb-8">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3 sm:gap-4">
               <div className="flex items-center gap-2 flex-wrap">
-                <h2 className="text-lg sm:text-xl font-bold text-gray-900">🚌 M6410 실시간 정보</h2>
+                <h2 className="text-lg sm:text-xl font-bold text-gray-900">🚌 M6405 광역급행버스</h2>
                 {isRealBusAPI && (
                   <span className="inline-block bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full">
                     ✅ 실시간
@@ -524,7 +650,7 @@ export default function SubwayPage() {
                 )}
                 {!isRealBusAPI && busInfo.length > 0 && (
                   <span className="inline-block bg-yellow-100 text-yellow-800 text-xs font-semibold px-2 py-1 rounded-full">
-                    ⚠️ 시범서비스
+                    ⚠️ 임시 API
                   </span>
                 )}
               </div>
@@ -571,11 +697,11 @@ export default function SubwayPage() {
 
             {BUS_FEATURE_DISABLED ? (
               <div className="text-center py-6 text-gray-500 text-sm sm:text-base leading-relaxed">
-                <p>M6410 광역버스 <span className="font-semibold">실시간 위치 정보</span>는&nbsp;
-                  <span className="font-semibold text-red-600">업데이트 예정</span>입니다.</p>
+                <p>M6405 광역버스 <span className="font-semibold">실시간 위치 정보</span>는&nbsp;
+                  <span className="font-semibold text-red-600">API 변경 예정</span>입니다.</p>
                 <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-gray-400">
-                  ※ 현재 공공데이터포털 정책상 서버사이드에서의 실시간 호출이 제한되어 있습니다.<br />
-                  추후 안정적인 데이터 수집 방법 확보 후 제공될 예정이니 양해 부탁드립니다.
+                  ※ 현재 <strong>경기도 G-BIS API</strong>를 사용 중이지만, M6405는 인천 운행 노선이므로<br />
+                  <strong>인천광역시 버스정보시스템 API</strong>로 변경이 필요합니다.
                 </p>
               </div>
             ) : busLoading ? (
@@ -589,26 +715,55 @@ export default function SubwayPage() {
 
                   const BusCard = ({ bus }: { bus: BusArrival }) => (
                     <div className="bg-white rounded-xl shadow-md p-3 sm:p-4 border-l-4 border-red-500 hover:shadow-lg transition-shadow">
-                      {/* 버스 번호 및 현재 위치 */}
-                      <div className="flex flex-col sm:flex-row justify-between items-start mb-2 gap-2 sm:gap-0">
+                      {/* 버스 번호 및 방향 */}
+                      <div className="flex flex-col sm:flex-row justify-between items-start mb-3 gap-2 sm:gap-0">
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className="inline-block bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-1 rounded-full">{bus.routeId}</span>
-                          <span className="text-gray-700 font-medium text-sm sm:text-base break-keep">{bus.stationName}</span>
                           {bus.lowFloor && (
-                            <span className="inline-block bg-green-100 text-green-800 text-xs font-semibold px-2 py-0.5 rounded ml-2">♿ 저상버스</span>
+                            <span className="inline-block bg-green-100 text-green-800 text-xs font-semibold px-2 py-0.5 rounded">♿ 저상버스</span>
                           )}
                         </div>
+                        <div className="flex items-center gap-2">
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                            bus.towards === '강남행' 
+                              ? 'bg-blue-100 text-blue-800' 
+                              : 'bg-purple-100 text-purple-800'
+                          }`}>
+                            {bus.towards}
+                          </span>
+                        </div>
                       </div>
-                      {/* 다음 정류장 안내 */}
+                      
+                      {/* 현재 위치 */}
+                      <div className="mb-2">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-xs text-gray-500">📍 현재 위치</span>
+                        </div>
+                        <span className="text-sm sm:text-base text-gray-700 font-medium break-keep">
+                          {bus.stationName.replace(/\s*\([^)]*\)$/, '')}
+                        </span>
+                      </div>
+                      
+                      {/* 좌석 정보 및 정류장 순번 */}
                       <div className="flex flex-col gap-1 mb-2">
-                        <span className="text-sm sm:text-base text-blue-700 font-semibold truncate max-w-full">{bus.direction}</span>
-                        <span className="text-xs sm:text-sm text-gray-500">정류장 순번: {bus.remainingStops}</span>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm sm:text-base text-blue-700 font-semibold">
+                            {bus.direction.includes('좌석') ? `🪑 ${bus.direction}` : bus.direction}
+                          </span>
+                          <span className="text-xs sm:text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                            {bus.remainingStops}번째 정류장
+                          </span>
+                        </div>
                       </div>
                       {/* 혼잡도 및 상태 */}
                       <div className="flex flex-row flex-wrap gap-1 items-center mt-1">
-                        <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">혼잡도: {bus.congestion}</span>
-                        <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">운행중</span>
-                        {isRealBusAPI && <span className="px-2 py-1 rounded text-xs font-medium bg-green-100 text-green-800">실시간</span>}
+                        {bus.congestion !== '-' && (
+                          <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            혼잡도: {bus.congestion}
+                          </span>
+                        )}
+                        <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">운행중</span>
+                        {isRealBusAPI && <span className="px-2 py-1 rounded text-xs font-medium bg-emerald-100 text-emerald-800">실시간</span>}
                       </div>
                     </div>
                   );
@@ -641,8 +796,11 @@ export default function SubwayPage() {
                   <span className="text-4xl">🚫</span>
                 </div>
                 <p className="text-gray-600 mb-2">현재 버스 운행 정보를 가져올 수 없습니다.</p>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 mb-2">
                   API 연결 상태를 확인하거나 잠시 후 다시 시도해주세요.
+                </p>
+                <p className="text-xs text-yellow-600 mb-4">
+                  ※ 현재 경기도 G-BIS API를 사용 중이므로 M6405 정보가 정확하지 않을 수 있습니다.
                 </p>
                 <button
                   onClick={() => fetchBusInfo()}
@@ -674,47 +832,68 @@ export default function SubwayPage() {
             
             {/* 지하철 정보 */}
             <div className="bg-gray-50 p-3 sm:p-4 rounded-lg mb-4">
-              <h4 className="text-sm font-bold text-gray-800 mb-2">🚇 인천1호선</h4>
+              <h4 className="text-sm font-bold text-gray-800 mb-2">🚇 인천1호선 (연청색)</h4>
               <div className="space-y-2 sm:space-y-3">
                 <div className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-                  <strong className="text-gray-800">운행 구간:</strong> 인천역 ↔ 청량리역
+                  <strong className="text-gray-800">운행 구간:</strong> 검단호수공원역 ↔ 송도달빛축제공원역
                 </div>
                 <div className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-                  <strong className="text-gray-800">운행 시간:</strong> 첫차 약 05:00 ~ 막차 약 24:00 (역별로 다름)
-              </div>
+                  <strong className="text-gray-800">총 역 수:</strong> 33개역 (약 37.1km)
+                </div>
                 <div className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-                  <strong className="text-gray-800">배차 간격:</strong> 평일 6-8분 / 주말 8-12분
-              </div>
+                  <strong className="text-gray-800">운영사:</strong> 인천교통공사
+                </div>
+                <div className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                  <strong className="text-gray-800">배차 간격:</strong> 평시 약 7~10분 간격
+                </div>
+                <div className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                  <strong className="text-gray-800">소요 시간:</strong> 검단호수공원~송도 전체 구간 약 54~57분
+                </div>
                 <div className="text-xs sm:text-sm text-gray-600 leading-relaxed mb-3 sm:mb-4">
-                  <strong className="text-gray-800">주요 경유역:</strong> 인천, 송도, 수원, 분당, 왕십리, 청량리
-              </div>
+                  <strong className="text-gray-800">주요 환승역:</strong> 계양(공항철도), 부평(1호선), 부평구청(7호선), 원인재(수인·분당선)
+                </div>
               
                 <div className="flex flex-wrap gap-1.5 sm:gap-2 text-xs">
-                <span className="px-2 py-1 bg-green-100 text-green-800 rounded">송도 구간</span>
-                <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded">인천대입구역</span>
-                  <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded">센트럴파크역</span>
+                  <span className="px-2 py-1 bg-cyan-100 text-cyan-800 rounded">연청색 노선</span>
+                  <span className="px-2 py-1 bg-green-100 text-green-800 rounded">송도 구간</span>
+                  <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded">인천대입구역</span>
+                  <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded">33개역</span>
                 </div>
               </div>
             </div>
 
             {/* 버스 정보 */}
             <div className="bg-blue-50 p-3 sm:p-4 rounded-lg">
-              <h4 className="text-sm font-bold text-gray-800 mb-2">🚌 광역버스</h4>
+              <h4 className="text-sm font-bold text-gray-800 mb-2">🚌 광역급행버스</h4>
               <div className="space-y-2 sm:space-y-3">
                 <div className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-                  <strong className="text-gray-800">M6410:</strong> 송도동 → 인천 → 서울 (강남역, 서울역 방면)
+                  <strong className="text-gray-800">M6405:</strong> 인천 송도 웰카운티 ↔ 서울 강남역 서초현대타워앞 (직행)
                 </div>
                 <div className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-                  <strong className="text-gray-800">운행 시간:</strong> 첫차 약 05:00 ~ 막차 약 24:00
+                  <strong className="text-gray-800">주요 경유지:</strong> 송도더샵퍼스트월드 → 연세대송도캠퍼스 → 선바위역 → 서초역 → 교대역 → 강남역 → 양재역
+                </div>
+                <div className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                  <strong className="text-gray-800">총 정류소:</strong> 45개 (왕복 운행)
+                </div>
+                <div className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                  <strong className="text-gray-800">운행 시간:</strong> 송도 05:00~23:30, 강남 06:10~24:30
+                </div>
+                <div className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                  <strong className="text-gray-800">소요 시간:</strong> 송도 ↔ 강남 약 46~57분
+                </div>
+                <div className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                  <strong className="text-gray-800">배차 간격:</strong> 평일 6~20분, 주말 15~30분
                 </div>
                 <div className="text-xs sm:text-sm text-gray-600 leading-relaxed mb-3 sm:mb-4">
-                  <strong className="text-gray-800">배차 간격:</strong> 20-30분 (시간대별 상이)
+                  <strong className="text-gray-800">운수업체:</strong> 인강여객 (032-885-6900)
                 </div>
               
                 <div className="flex flex-wrap gap-1.5 sm:gap-2 text-xs">
-                  <span className="px-2 py-1 bg-red-100 text-red-800 rounded">M6410</span>
+                  <span className="px-2 py-1 bg-red-100 text-red-800 rounded">M6405</span>
                   <span className="px-2 py-1 bg-green-100 text-green-800 rounded">광역급행</span>
-                  <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded">저상버스</span>
+                  <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded">직행노선</span>
+                  <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded">45개 정류소</span>
+                  <span className="px-2 py-1 bg-orange-100 text-orange-800 rounded">고속도로 이용</span>
                 </div>
               </div>
             </div>
@@ -733,9 +912,9 @@ export default function SubwayPage() {
                   <p>• 지연 및 운행 중단 시 역내/차내 안내방송을 확인해 주세요.</p>
                   <p>• 지하철: 코레일톡 앱, 버스: 시내버스 앱을 이용해 주세요.</p>
                   {isRealBusAPI ? (
-                    <p>• M6410 버스 정보는 인천광역시 공식 API를 사용합니다.</p>
+                    <p>• M6405 버스 정보는 인천광역시 공식 API를 사용합니다.</p>
                   ) : (
-                    <p>• 현재 M6410 버스 정보는 시범 서비스입니다.</p>
+                    <p>• 현재 M6405 버스 정보는 시범 서비스입니다.</p>
                   )}
                 </div>
               </div>

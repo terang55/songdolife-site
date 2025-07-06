@@ -15,29 +15,49 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "송도라이프 | 인천 연수구 송도동 생활정보 플랫폼",
+    default: "송도라이프 | 인천 연수구 송도국제도시 생활정보 플랫폼",
     template: "%s | 송도라이프"
   },
-  description: "송도국제도시 주민을 위한 실시간 뉴스·지하철·부동산 등 생활정보 플랫폼",
+  description: "송도국제도시 주민을 위한 실시간 뉴스·지하철·부동산·병원·약국 정보 플랫폼. 센트럴파크, 인천1호선, 송도동 맛집, 카페, 육아 정보까지 모든 생활정보를 한곳에서 확인하세요.",
   keywords: [
-    "송도동", "인천 송도동", "연수구 송도동", "송도지구", "송도국제도시",
-    "송도동 맛집", "송도동 카페", "송도동 부동산", "송도동 육아",
-    "송도동 병원", "송도동 약국", "송도동 의료", "송도동 내과", "송도동 소아과",
-    "송도동 치과", "송도동 응급실", "송도동 야간진료", "인천대입구역 병원",
-    "인천1호선", "인천대입구역", "센트럴파크역", "국제업무지구역", "지하철 시간표",
-    "송도동 지하철", "수인선", "지하철 실시간", "전철 도착시간", "지하철역 정보",
-    "송도국제도시", "센트럴파크", "송도동 정보", "송도동 뉴스", "송도동 생활정보",
-    "인천 연수구", "송도동 아파트", "송도동 교통", "송도동 학원"
+    // 핵심 지역 키워드
+    "송도국제도시", "송도동", "인천 연수구", "연수구 송도동", "송도지구",
+    
+    // 주요 시설 및 랜드마크
+    "센트럴파크", "더샵 센트럴파크", "트리플스트리트", "송도 컨벤시아", "국제업무지구",
+    "송도 웰카운티", "송도 더샵", "송도 아이파크", "송도 롯데캐슬",
+    
+    // 교통 관련
+    "인천1호선", "인천대입구역", "센트럴파크역", "국제업무지구역", "송도달빛축제공원역",
+    "지하철 시간표", "송도 교통", "실시간 도착정보", "지하철 운행시간",
+    
+    // 생활 정보
+    "송도 맛집", "송도 카페", "송도 부동산", "송도 아파트", "송도 실거래가",
+    "송도 병원", "송도 약국", "송도 의료", "송도 내과", "송도 소아과", "송도 치과",
+    "송도 응급실", "송도 야간진료", "송도 육아", "송도 어린이집", "송도 유치원",
+    "송도 학원", "송도 교육", "송도 뉴스", "송도 소식", "송도 생활정보"
   ],
   authors: [{ name: "송도라이프", url: BASE_URL }],
-  creator: "@songdo_life",
+  creator: "송도라이프",
   publisher: "송도라이프",
+  applicationName: "송도라이프",
+  generator: "Next.js",
+  referrer: "origin-when-cross-origin",
+  colorScheme: "light",
+  themeColor: "#2563eb",
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 5,
+  },
   robots: {
     index: true,
     follow: true,
+    nocache: false,
     googleBot: {
       index: true,
       follow: true,
+      noimageindex: false,
       'max-video-preview': -1,
       'max-image-preview': 'large',
       'max-snippet': -1,
@@ -48,34 +68,49 @@ export const metadata: Metadata = {
     locale: "ko_KR",
     url: BASE_URL,
     siteName: "송도라이프",
-    title: "송도라이프 | 인천 연수구 송도동 생활정보 플랫폼",
-    description: "송도국제도시 주민을 위한 실시간 뉴스·지하철·부동산 등 생활정보 플랫폼",
+    title: "송도라이프 | 인천 연수구 송도국제도시 생활정보 플랫폼",
+    description: "송도국제도시 주민을 위한 실시간 뉴스·지하철·부동산·병원·약국 정보 플랫폼. 센트럴파크, 인천1호선, 송도동 모든 생활정보를 한곳에서 확인하세요.",
     images: [
       {
-        url: "/og-image.jpg",
+        url: `${BASE_URL}/og-image.jpg`,
         width: 1200,
         height: 630,
-        alt: "송도라이프 - 인천 연수구 송도동 생활정보 플랫폼",
+        alt: "송도라이프 - 인천 연수구 송도국제도시 생활정보 플랫폼",
+        type: "image/jpeg",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "송도라이프 | 인천 연수구 송도동 생활정보 플랫폼",
-    description: "인천 연수구 송도국제도시 주민들을 위한 종합 정보 플랫폼. 실시간 뉴스, 인천1호선 지하철 정보, 병원/약국 정보, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요.",
-    images: ["/og-image.jpg"],
+    site: "@songdo_life",
     creator: "@songdo_life",
+    title: "송도라이프 | 인천 연수구 송도국제도시 생활정보 플랫폼",
+    description: "송도국제도시 주민들을 위한 종합 정보 플랫폼. 실시간 뉴스, 인천1호선 지하철 정보, 병원/약국 정보, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요.",
+    images: [`${BASE_URL}/og-image.jpg`],
   },
   verification: {
-    google: "e3VR6BkZXX1VtX4dm2Zx6q0L2bgHC1FFCPHpnJ6n_hI", // Google Search Console 인증 코드
+    google: "e3VR6BkZXX1VtX4dm2Zx6q0L2bgHC1FFCPHpnJ6n_hI",
     other: {
-      "naver-site-verification": "naver-verification-code", // 네이버 서치어드바이저 코드
+      "naver-site-verification": "6f6f6592110192cd2491d3c5bf4133592c100558",
+      "msvalidate.01": "YOUR_BING_VERIFICATION_CODE", // Bing 웹마스터 도구
     },
   },
   alternates: {
     canonical: BASE_URL,
+    languages: {
+      'ko-KR': BASE_URL,
+    },
   },
   category: "지역정보",
+  classification: "지역 생활정보 플랫폼",
+  other: {
+    "mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-status-bar-style": "default",
+    "format-detection": "telephone=no",
+    "msapplication-TileColor": "#2563eb",
+    "msapplication-config": "/browserconfig.xml",
+  },
 };
 
 export default function RootLayout({
@@ -145,13 +180,13 @@ export default function RootLayout({
         <meta property="og:locale" content="ko_KR" />
         <meta property="og:site_name" content="송도라이프" />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="송도라이프 | 인천 연수구 송도동 생활정보 플랫폼" />
-        <meta property="og:description" content="송도국제도시 주민을 위한 실시간 뉴스·지하철·부동산 등 생활정보 플랫폼" />
+        <meta property="og:title" content="송도라이프 | 인천 연수구 송도국제도시 생활정보 플랫폼" />
+        <meta property="og:description" content="송도국제도시 주민을 위한 실시간 뉴스·지하철·부동산·병원·약국 정보 플랫폼. 센트럴파크, 인천1호선, 송도동 모든 생활정보를 한곳에서 확인하세요." />
         <meta property="og:url" content={BASE_URL} />
         <meta property="og:image" content={`${BASE_URL}/og-image.jpg`} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="송도라이프 - 인천 연수구 송도동 생활정보 플랫폼" />
+        <meta property="og:image:alt" content="송도라이프 - 인천 연수구 송도국제도시 생활정보 플랫폼" />
         
         {/* 지역 정보 메타 태그 */}
         <meta name="geo.region" content="KR-28" />

@@ -7,7 +7,6 @@ import Image from 'next/image';
 import Head from 'next/head';
 import WeatherWidget from './components/WeatherWidget';
 import MedicalWidget from './components/MedicalWidget';
-import SEOHead from './components/SEOHead';
 
 interface NewsItem {
   title: string;
@@ -283,60 +282,236 @@ export default function HomePage() {
   };
 
   const generateNewsStructuredData = (): Record<string, unknown> | undefined => {
-    if (news.length === 0) return undefined;
+    if (!news || news.length === 0) return undefined;
 
-    const structuredData = {
+    const articles = news.slice(0, 10).map(item => ({
+      "@type": "NewsArticle",
+      "headline": item.title,
+      "description": item.content.substring(0, 200) + "...",
+      "url": item.url,
+      "datePublished": item.date || new Date().toISOString(),
+      "dateModified": item.date || new Date().toISOString(),
+      "author": {
+        "@type": "Organization",
+        "name": item.source || "송도라이프"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "송도라이프",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://songdo.life/og-image.jpg"
+        }
+      },
+      "image": item.thumbnail || "https://songdo.life/og-image.jpg",
+      "keywords": [item.keyword, "송도국제도시", "송도동", "인천 연수구"],
+      "articleSection": item.type === 'news' ? "뉴스" : item.type === 'blog' ? "블로그" : "유튜브",
+      "about": {
+        "@type": "Place",
+        "name": "송도국제도시",
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "KR",
+          "addressRegion": "인천광역시",
+          "addressLocality": "연수구",
+          "streetAddress": "송도동"
+        }
+      }
+    }));
+
+    return {
       "@context": "https://schema.org",
-      "@type": "CollectionPage",
-      "name": "송도라이프 - 지역 뉴스 및 정보",
-      "description": "송도국제도시의 최신 뉴스, 블로그, 유튜브 정보를 한눈에 확인하세요.",
-      "url": "https://your-domain.com",
-      "mainEntity": {
       "@type": "ItemList",
-        "itemListElement": news.slice(0, 10).map((item, index) => ({
+      "name": "송도라이프 - 송도국제도시 최신 정보",
+      "description": "송도국제도시 관련 최신 뉴스, 블로그, 유튜브 정보를 한곳에서 확인하세요",
+      "url": "https://songdo.life",
+      "numberOfItems": articles.length,
+      "itemListElement": articles.map((article, index) => ({
         "@type": "ListItem",
         "position": index + 1,
-          "item": {
-            "@type": "NewsArticle",
-            "headline": item.title,
-            "description": item.content,
-            "url": item.url,
-            "datePublished": item.date,
-            "publisher": {
-              "@type": "Organization",
-              "name": item.source
-            }
-          }
+        "item": article
       }))
+    };
+  };
+
+  const generateWebsiteStructuredData = () => {
+    return {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "송도라이프",
+      "alternateName": "송도국제도시 생활정보 플랫폼",
+      "description": "인천 연수구 송도국제도시 주민들을 위한 종합 정보 플랫폼. 실시간 뉴스, 지하철 정보, 병원/약국 정보, 부동산 정보를 제공합니다.",
+      "url": "https://songdo.life",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://songdo.life/?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "송도라이프",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://songdo.life/og-image.jpg",
+          "width": 1200,
+          "height": 630
+        }
+      },
+      "mainEntity": {
+        "@type": "Organization",
+        "@id": "https://songdo.life/#organization",
+        "name": "송도라이프",
+        "description": "송도국제도시 생활정보 플랫폼",
+        "url": "https://songdo.life",
+        "logo": "https://songdo.life/og-image.jpg",
+        "sameAs": [
+          "https://songdo.life"
+        ],
+        "areaServed": {
+          "@type": "Place",
+          "name": "송도국제도시",
+          "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "KR",
+            "addressRegion": "인천광역시",
+            "addressLocality": "연수구",
+            "streetAddress": "송도동"
+          },
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 37.538603,
+            "longitude": 126.722675
+          }
+        }
       }
     };
+  };
 
-    return structuredData;
+  const generateBreadcrumbStructuredData = () => {
+    const breadcrumbs = [
+      { name: "홈", url: "https://songdo.life" }
+    ];
+
+    if (selectedCategory !== '전체') {
+      breadcrumbs.push({
+        name: selectedCategory,
+        url: `https://songdo.life/?category=${selectedCategory}`
+      });
+    }
+
+    return {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": breadcrumbs.map((item, index) => ({
+        "@type": "ListItem",
+        "position": index + 1,
+        "name": item.name,
+        "item": item.url
+      }))
+    };
   };
 
   return (
     <>
-        <SEOHead
-          title="송도라이프 | 송도동 생활정보 플랫폼"
-          description="송도국제도시 주민을 위한 실시간 뉴스, 지하철 정보, 부동산 정보, 의료 정보를 한눈에 확인하세요."
-          keywords={[
-            '송도동', '송도국제도시', '연수구 송도동', '센트럴파크', '더샵',
-            '트리플스트리트', '인천1호선', '센트럴파크역', '인천대입구역'
-          ]}
-          structuredData={generateNewsStructuredData()}
-        />
         <Head>
-        <title>송도라이프 - 인천 연수구 송도동 생활정보 플랫폼</title>
-        <meta name="description" content="송도국제도시 주민들을 위한 실시간 지역 정보를 제공합니다. 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요." />
-        <meta name="keywords" content="송도동, 송도국제도시, 연수구 송도동, 센트럴파크, 더샵, 트리플스트리트, 지역정보, 뉴스, 맛집, 카페, 부동산, 육아" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta property="og:title" content="송도라이프 - 인천 연수구 송도동 생활정보 플랫폼" />
-        <meta property="og:description" content="송도국제도시 주민들을 위한 실시간 지역 정보를 제공합니다. 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요." />
-        <meta property="og:url" content="https://your-domain.com" />
-        <meta property="og:type" content="website" />
-        <meta property="og:image" content="https://your-domain.com/og-image.jpg" />
-        <link rel="canonical" href="https://your-domain.com" />
-        {/* structured data는 SEOHead에서 주입됨 */}
+          {/* 기본 메타 태그 */}
+          <title>
+            {selectedCategory === '전체' 
+              ? '송도라이프 | 인천 연수구 송도국제도시 생활정보 플랫폼' 
+              : `송도라이프 | ${selectedCategory} 정보 - 송도국제도시`
+            }
+          </title>
+          <meta 
+            name="description" 
+            content={
+              selectedCategory === '전체'
+                ? "송도국제도시 주민들을 위한 실시간 뉴스, 지하철 정보, 부동산 정보, 의료 정보를 한눈에 확인하세요. 센트럴파크, 인천1호선, 송도동 맛집까지 모든 정보를 제공합니다."
+                : `송도국제도시 ${selectedCategory} 정보를 실시간으로 확인하세요. 송도동 지역의 최신 ${selectedCategory} 소식과 정보를 한곳에서 제공합니다.`
+            } 
+          />
+          <meta 
+            name="keywords" 
+            content={`송도국제도시, 송도동, 인천 연수구, 센트럴파크, 인천1호선, 인천대입구역, 센트럴파크역, 국제업무지구역, 송도 ${selectedCategory}, ${selectedCategory} 정보, 송도 생활정보, 송도 뉴스, 송도 맛집, 송도 카페, 송도 부동산, 송도 병원, 송도 약국, 송도 육아, 송도 교통`} 
+          />
+          
+          {/* Open Graph */}
+          <meta 
+            property="og:title" 
+            content={
+              selectedCategory === '전체' 
+                ? '송도라이프 | 인천 연수구 송도국제도시 생활정보 플랫폼' 
+                : `송도라이프 | ${selectedCategory} 정보 - 송도국제도시`
+            } 
+          />
+          <meta 
+            property="og:description" 
+            content={
+              selectedCategory === '전체'
+                ? "송도국제도시 주민들을 위한 실시간 뉴스, 지하철 정보, 부동산 정보, 의료 정보를 한눈에 확인하세요."
+                : `송도국제도시 ${selectedCategory} 정보를 실시간으로 확인하세요. 송도동 지역의 최신 정보를 제공합니다.`
+            } 
+          />
+          <meta 
+            property="og:url" 
+            content={
+              selectedCategory === '전체' 
+                ? 'https://songdo.life' 
+                : `https://songdo.life/?category=${encodeURIComponent(selectedCategory)}`
+            } 
+          />
+          <meta property="og:type" content="website" />
+          <meta property="og:image" content="https://songdo.life/og-image.jpg" />
+          <meta property="og:image:width" content="1200" />
+          <meta property="og:image:height" content="630" />
+          <meta property="og:locale" content="ko_KR" />
+          <meta property="og:site_name" content="송도라이프" />
+          
+          {/* Twitter Card */}
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:site" content="@songdo_life" />
+          <meta name="twitter:creator" content="@songdo_life" />
+          
+          {/* 정규 URL */}
+          <link 
+            rel="canonical" 
+            href={
+              selectedCategory === '전체' 
+                ? 'https://songdo.life' 
+                : `https://songdo.life/?category=${encodeURIComponent(selectedCategory)}`
+            } 
+          />
+          
+          {/* 지역 정보 */}
+          <meta name="geo.region" content="KR-28" />
+          <meta name="geo.placename" content="인천광역시 연수구 송도동" />
+          <meta name="geo.position" content="37.538603;126.722675" />
+          <meta name="ICBM" content="37.538603, 126.722675" />
+          
+          {/* 구조화된 데이터 - 웹사이트 */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(generateWebsiteStructuredData())
+            }}
+          />
+          
+          {/* 구조화된 데이터 - 뉴스 목록 (뉴스가 있을 때만) */}
+          {news.length > 0 && (
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{
+                __html: JSON.stringify(generateNewsStructuredData())
+              }}
+            />
+          )}
+          
+          {/* 구조화된 데이터 - 브레드크럼 */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(generateBreadcrumbStructuredData())
+            }}
+          />
         </Head>
       
       <div className="min-h-screen bg-gray-50">

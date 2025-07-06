@@ -1,0 +1,40 @@
+{
+  "total_items": 57,
+  "total_before_dedup": 59,
+  "duplicates_removed": 2,
+  "platform_breakdown": {
+    "news": {
+      "keywords": [
+        "인천 연수구 송도동",
+        "인천 송도",
+        "송도국제도시"
+      ],
+      "items": 14
+    },
+    "blog": {
+      "keywords": [
+        "인천 연수구 송도동",
+        "송도국제도시",
+        "송도국제도시 아파트",
+        "송도국제도시 카페",
+        "송도국제도시 맛집"
+      ],
+      "items": 21
+    },
+    "youtube": {
+      "keywords": [
+        "송도국제도시",
+        "인천 송도",
+        "송도국제도시 맛집",
+        "송도 맛집"
+      ],
+      "items": 24
+    },
+    "cafe": {
+      "keywords": [],
+      "items": 0
+    }
+  },
+  "crawl_time": "2025-07-06T20:09:52.536407",
+  "summary": "57개 유니크 항목이 플랫폼별 키워드로 수집됨"
+}

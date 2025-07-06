@@ -22,7 +22,7 @@ import config
 import difflib
 import re
 
-class EnhancedNonhyeonCrawler:
+class EnhancedSongdoCrawler:
     def __init__(self):
         """개선된 크롤러 초기화"""
         self.setup_logging()

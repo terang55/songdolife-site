@@ -5,7 +5,7 @@
 import sys
 import os
 from datetime import datetime
-from enhanced_crawler import EnhancedNonhyeonCrawler
+from enhanced_crawler import EnhancedSongdoCrawler
 import config
 
 def main():
@@ -33,7 +33,7 @@ def main():
     
     try:
         # 크롤러 인스턴스 생성
-        crawler = EnhancedNonhyeonCrawler()
+        crawler = EnhancedSongdoCrawler()
         
         # 플랫폼별 키워드 크롤링 실행
         success = crawler.run_enhanced_crawl_with_platform_keywords()

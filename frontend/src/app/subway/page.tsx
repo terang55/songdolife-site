@@ -38,27 +38,27 @@ interface StationInfo {
   nearbyPlaces: string[];
 }
 
-const stations: StationInfo[] = [
+const stations = [
+  {
+    name: '인천대입구역',
+    code: 'I115',
+    line: '인천1호선',
+    coordinates: { lat: 37.538603, lon: 126.722675 },
+    nearbyPlaces: ['경인교육대학교', '계양구청', '계양문화회관', '계양체육관']
+  },
   {
     name: '센트럴파크역',
     code: 'K258',
-    exits: ['1번 출구: 센트럴파크, 트리플스트리트', '2번 출구: 송도 더샵 아파트, 현대프리미엄아울렛'],
-    facilities: ['엘리베이터', '에스컬레이터', '장애인화장실', '수유실'],
+    line: '인천1호선',
+    coordinates: { lat: 37.3814, lon: 126.7286 },
     nearbyPlaces: ['센트럴파크', '트리플스트리트', '송도 더샵', '현대프리미엄아울렛', '송도국제도시']
-  },
-  {
-    name: '송도역',
-    code: 'K259',
-    exits: ['1번 출구: 송도국제도시, 연세대 국제캠퍼스', '2번 출구: 송도 트리플스트리트, 센트럴파크'],
-    facilities: ['엘리베이터', '에스컬레이터', '장애인화장실', '수유실', '무인민원발급기'],
-    nearbyPlaces: ['송도국제도시', '연세대 국제캠퍼스', '트리플스트리트', '센트럴파크']
   }
 ];
 
 const BUS_FEATURE_DISABLED = false; // 광역버스 실시간 정보 기능 활성화 (M6410 G-BIS API)
 
 export default function SubwayPage() {
-  const [selectedStation, setSelectedStation] = useState('센트럴파크역');
+  const [selectedStation, setSelectedStation] = useState('인천대입구역');
   const [trainInfo, setTrainInfo] = useState<TrainInfo[]>([]);
   const [busInfo, setBusInfo] = useState<BusArrival[]>([]);
   const [loading, setLoading] = useState(false);
@@ -182,15 +182,15 @@ export default function SubwayPage() {
     <>
       <Head>
         <title>송도 교통정보 - 지하철·버스 실시간 도착정보 | 송도라이프</title>
-        <meta name="description" content="송도국제도시 인천1호선 지하철과 주요 버스의 실시간 도착 정보를 한눈에 확인하세요. 센트럴파크역, 송도역과 주변 버스정류장 정보를 제공합니다." />
-        <meta name="keywords" content="송도 교통, 인천1호선, 센트럴파크역, 송도역, 광역버스, 실시간 도착정보, 송도 버스, 송도 지하철, 대중교통, 연수구 송도동 교통, 인천시 연수구 송도동" />
+        <meta name="description" content="송도국제도시 인천1호선 지하철과 주요 버스의 실시간 도착 정보를 한눈에 확인하세요. 인천대입구역, 센트럴파크역과 주변 버스정류장 정보를 제공합니다." />
+        <meta name="keywords" content="송도 교통, 인천1호선, 인천대입구역, 센트럴파크역, 광역버스, 실시간 도착정보, 송도 버스, 송도 지하철, 대중교통, 연수구 송도동 교통, 인천시 연수구 송도동" />
         
         {/* Open Graph for Social Media */}
-        <meta property="og:title" content="송도 교통정보 - 지하철·버스 실시간 도착정보" />
+        <meta property="og:title" content="송도국제도시 지하철 정보 - 실시간 운행정보" />
         <meta property="og:description" content="송도국제도시 인천1호선 지하철과 주요 버스의 실시간 도착 정보를 한눈에 확인하세요." />
-        <meta property="og:url" content="https://nonhyeon-info-site.vercel.app/subway" />
+        <meta property="og:url" content="https://songdo-life-site.vercel.app/subway" />
         <meta property="og:type" content="website" />
-        <meta property="og:image" content="https://nonhyeon-info-site.vercel.app/og-image.jpg" />
+        <meta property="og:image" content="https://songdo-life-site.vercel.app/og-image.jpg" />
         
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
@@ -200,7 +200,7 @@ export default function SubwayPage() {
         {/* 지역 정보 메타 태그 */}
         <meta name="geo.region" content="KR-28" />
         <meta name="geo.placename" content="인천광역시 연수구" />
-        <meta name="geo.position" content="37.3894;126.7317" />
+        <meta name="geo.position" content="37.538603;126.722675" />
         
         {/* 구조화된 데이터 - 교통정보 */}
         <script
@@ -209,64 +209,22 @@ export default function SubwayPage() {
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebPage",
-              "name": "송도 교통정보",
-              "description": "송도국제도시 인천1호선 지하철과 주요 버스의 실시간 도착 정보",
-              "url": "https://nonhyeon-info-site.vercel.app/subway",
-              "mainEntity": [
-                {
-                  "@type": "TrainStation",
-                  "name": "센트럴파크역",
-                  "identifier": "K258",
-                  "alternateName": ["센트럴파크", "Central Park"],
-                  "address": {
-                    "@type": "PostalAddress",
-                    "addressCountry": "KR",
-                    "addressRegion": "인천광역시",
-                    "addressLocality": "연수구",
-                    "streetAddress": "송도동"
-                  },
-                  "geo": {
-                    "@type": "GeoCoordinates",
-                    "latitude": 37.3814,
-                    "longitude": 126.7286
-                  },
-                  "amenityFeature": [
-                    {"@type": "LocationFeatureSpecification", "name": "엘리베이터"},
-                    {"@type": "LocationFeatureSpecification", "name": "에스컬레이터"},
-                    {"@type": "LocationFeatureSpecification", "name": "장애인화장실"},
-                    {"@type": "LocationFeatureSpecification", "name": "수유실"}
-                  ]
-                },
-                {
-                  "@type": "TrainStation",
-                  "name": "송도역",
-                  "identifier": "K259",
-                  "alternateName": ["송도", "Songdo"],
-                  "address": {
-                    "@type": "PostalAddress",
-                    "addressCountry": "KR",
-                    "addressRegion": "인천광역시",
-                    "addressLocality": "연수구",
-                    "streetAddress": "송도동"
-                  },
-                  "geo": {
-                    "@type": "GeoCoordinates",
-                    "latitude": 37.3990,
-                    "longitude": 126.7240
-                  },
-                  "amenityFeature": [
-                    {"@type": "LocationFeatureSpecification", "name": "엘리베이터"},
-                    {"@type": "LocationFeatureSpecification", "name": "에스컬레이터"},
-                    {"@type": "LocationFeatureSpecification", "name": "장애인화장실"},
-                    {"@type": "LocationFeatureSpecification", "name": "수유실"},
-                    {"@type": "LocationFeatureSpecification", "name": "무인민원발급기"}
-                  ]
+              "name": "송도국제도시 지하철 정보",
+              "description": "송도국제도시 지역의 실시간 지하철 운행 정보를 제공합니다.",
+              "url": "https://songdo-life-site.vercel.app/subway",
+              "mainEntity": {
+                "@type": "TransportationService",
+                "name": "송도국제도시 지하철 서비스",
+                "serviceType": "지하철 운행 정보",
+                "areaServed": {
+                  "@type": "Place",
+                  "name": "송도국제도시"
                 }
-              ],
-              "provider": {
+              },
+              "publisher": {
                 "@type": "Organization",
                 "name": "송도라이프",
-                "url": "https://nonhyeon-info-site.vercel.app"
+                "url": "https://songdo-life-site.vercel.app"
               },
               "dateModified": new Date().toISOString(),
               "inLanguage": "ko-KR"
@@ -741,8 +699,8 @@ export default function SubwayPage() {
               
                 <div className="flex flex-wrap gap-1.5 sm:gap-2 text-xs">
                 <span className="px-2 py-1 bg-green-100 text-green-800 rounded">송도 구간</span>
-                <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded">센트럴파크역</span>
-                  <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded">송도역</span>
+                <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded">인천대입구역</span>
+                  <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded">센트럴파크역</span>
                 </div>
               </div>
             </div>

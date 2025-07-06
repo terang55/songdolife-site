@@ -51,7 +51,7 @@ const SERVICE_KEY = 'aTgFhrZehAYOxHq4Z3z1iSYeysHfG9Tu43JQhF26U3mdGzr0H8%2BjR9Mzr
 const ROUTE_NAME = 'M6410';
 const ROUTE_ID = '216000044'; // 고정된 노선 ID
 
-// 논현동 주요 정류소 상수는 현재 사용되지 않아 제거 → 송도동에 맞추어 업데이트 예정
+// 송도동 주요 정류소 상수는 현재 사용되지 않아 제거 → 송도동에 맞추어 업데이트 예정
 
 // ------------------ 유틸 ------------------
 // safeText 함수는 현재 사용되지 않아 제거

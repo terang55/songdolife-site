@@ -134,7 +134,7 @@ export default function SEOHead({
   
   useEffect(() => {
     // 네이버 서치어드바이저 페이지 등록
-    if (typeof window !== 'undefined' && window.location.hostname === 'nonhyeon.life') {
+    if (typeof window !== 'undefined' && window.location.hostname === 'songdo.life') {
       // 페이지 방문 시 네이버에 색인 요청 (실제 구현 시 API 키 필요)
       console.log('📊 네이버 서치어드바이저 페이지 등록:', window.location.href);
     }

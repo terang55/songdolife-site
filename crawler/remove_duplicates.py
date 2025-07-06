@@ -6,7 +6,7 @@ import os
 import json
 import glob
 from datetime import datetime
-from enhanced_crawler import EnhancedNonhyeonCrawler
+from enhanced_crawler import EnhancedSongdoCrawler
 from loguru import logger
 import config
 
@@ -16,7 +16,7 @@ def remove_duplicates_from_existing_data():
         print("🔍 기존 데이터에서 중복 제거를 시작합니다...")
         
         # 크롤러 인스턴스 생성 (중복 제거 메서드 사용을 위해)
-        crawler = EnhancedNonhyeonCrawler()
+        crawler = EnhancedSongdoCrawler()
         
         # enhanced_news 디렉토리의 모든 JSON 파일 찾기
         enhanced_news_dir = f"{config.DATA_DIR}/enhanced_news"
@@ -91,7 +91,7 @@ def remove_duplicates_across_files():
     try:
         print("\n🔍 파일 간 중복 제거를 시작합니다...")
         
-        crawler = EnhancedNonhyeonCrawler()
+        crawler = EnhancedSongdoCrawler()
         enhanced_news_dir = f"{config.DATA_DIR}/enhanced_news"
         json_files = glob.glob(f"{enhanced_news_dir}/*_enhanced_news_*.json")
         

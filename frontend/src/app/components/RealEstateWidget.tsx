@@ -145,7 +145,7 @@ export default function RealEstateWidget() {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           list="apartment-options"
-          placeholder="단지명을 입력하세요 (예: 에코메트로)"
+          placeholder="단지명을 입력하세요 (예: 송도센트럴파크)"
           className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500"
         />
         <datalist id="apartment-options">

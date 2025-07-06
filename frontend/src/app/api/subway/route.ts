@@ -15,10 +15,10 @@ interface TrainInfo {
 }
 
 // 역명 매핑: UI에서 보여주는 이름 → API 요청용 이름
-const stationNameMapping: { [key: string]: string } = {
-  '호구포역': '호구포',
-  '송도역': '송도',
-  '소래포구역': '소래포구'
+const stationMap: { [key: string]: string } = {
+  '센트럴파크역': '센트럴파크',
+  '인천대입구역': '경인교대입구',
+  '국제업무지구역': '국제업무지구'
 };
 
 // 서울교통공사 API 키 (환경변수에서 가져오기)
@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
     console.log('🔑 API 키 상태:', SUBWAY_API_KEY ? `로드됨 (${SUBWAY_API_KEY.substring(0, 10)}...)` : '❌ 로드 실패');
     
     // 역명 매핑 적용
-    const mappedStationName = stationNameMapping[stationParam] || stationParam;
+    const mappedStationName = stationMap[stationParam] || stationParam;
     console.log('🚇 매핑된 역명:', mappedStationName);
 
     // 테스트용 더미 데이터 (실제 API 연동 전까지)

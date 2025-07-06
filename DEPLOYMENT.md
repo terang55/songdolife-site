@@ -31,4 +31,4 @@ OPENWEATHER_API_KEY=fec0e5d8daec1747581d667dc08e95cb
 - **Provider**: OpenWeatherMap
 - **Plan**: Free (하루 1000회 호출 제한)
 - **Features**: 현재 날씨 + 5일 예보
-- **Location**: 인천 남동구 논현동 (37.3894, 126.7317) 
+- **Location**: 인천 연수구 송도국제도시 (37.538603, 126.722675) 

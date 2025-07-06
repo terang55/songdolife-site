@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// 인천논현역 중심 좌표 (Suin·Bundang Line)
-const NONHYEON_LAT = 37.4011;
-const NONHYEON_LON = 126.7229;
+// 인천대입구역 중심 좌표 (Incheon Line 1)
+const SONGDO_LAT = 37.538603;
+const SONGDO_LON = 126.722675;
 
 // 카카오맵 API 키 (환경변수에서 가져오기)
 const KAKAO_API_KEY = process.env.KAKAO_API_KEY;
@@ -113,7 +113,7 @@ function hasNightCare(placeName: string, categoryName: string): boolean {
          categoryName.includes('응급실');
 }
 
-// HIRA 약국 목록 조회 (남동구 논현동 전체)
+// HIRA 약국 목록 조회 (연수구 송도동 전체)
 async function fetchHiraPharmacyList() {
   // 캐시 확인
   if (hiraPharmacyCache && Date.now() - hiraPharmacyCache.timestamp < CACHE_TTL) {
@@ -126,7 +126,7 @@ async function fetchHiraPharmacyList() {
     const params = new URLSearchParams({
       serviceKey: svcKey,
       Q0: '인천광역시',
-      Q1: '남동구',
+      Q1: '연수구',
       ORD: 'NAME',
       pageNo: '1',
       numOfRows: '1000'
@@ -169,7 +169,7 @@ async function fetchHiraPharmacyList() {
 }
 
 // ---------------------------------------------------------------------------
-// HIRA 병원 목록 조회 (남동구 논현동/논현지구)
+// HIRA 병원 목록 조회 (연수구 송도동/송도지구)
 //   - 종합병원, 병원, 요양병원, 정신병원 등 포함
 //   - 좌표 미제공 시 Kakao 지오코딩으로 보정
 // ---------------------------------------------------------------------------
@@ -200,7 +200,7 @@ async function fetchHiraHospitalList(): Promise<HiraHospitalItem[]> {
     const params = new URLSearchParams({
       ServiceKey: svcKey,
       sidoCd: '220000',      // 인천광역시 코드
-      sgguCd: '220006',      // 인천 남동구
+      sgguCd: '220006',      // 인천 연수구
       emdongNm: '송도동',    // 행정동(송도동)으로 범위 제한
       numOfRows: '100',
       pageNo: String(page)
@@ -311,8 +311,8 @@ export async function GET(request: NextRequest) {
     const night = searchParams.get('night') === 'true';
     const radius = parseInt(searchParams.get('radius') || '2000'); // 기본 2km
     // 내 위치(위도, 경도) 파라미터
-    const userLat = searchParams.get('lat') ? parseFloat(searchParams.get('lat')!) : NONHYEON_LAT;
-    const userLon = searchParams.get('lon') ? parseFloat(searchParams.get('lon')!) : NONHYEON_LON;
+      const userLat = searchParams.get('lat') ? parseFloat(searchParams.get('lat')!) : SONGDO_LAT;
+  const userLon = searchParams.get('lon') ? parseFloat(searchParams.get('lon')!) : SONGDO_LON;
 
     console.log('🏥 의료기관 정보 요청:', {
       type,

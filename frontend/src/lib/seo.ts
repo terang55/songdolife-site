@@ -16,7 +16,7 @@ export const LOCATION_KEYWORDS = {
   더샵: ['더샵', '송도 더샵', '송도 더샵 아파트'],
   센트럴파크: ['센트럴파크', '센트럴파크역', '송도 센트럴파크'],
   국제업무지구: ['국제업무지구', '국제업무지구역', '송도 국제업무지구'],
-  송도역: ['송도역', '논현역', '수인분당선 논현역']
+  인천대입구: ['인천대입구역', '경인교대입구역', '인천대학교']
 };
 
 // 카테고리별 키워드 (서울 송도동과 구분)
@@ -26,7 +26,7 @@ export const CATEGORY_KEYWORDS = {
   카페: ['송도 카페', '송도 카페 추천', '송도국제도시 카페', '센트럴파크 카페', '연수구 송도동 카페'],
   부동산: ['송도 부동산', '송도 아파트', '송도국제도시 아파트', '더샵 매매', '연수구 송도동 부동산'],
   의료: ['송도 병원', '송도 약국', '송도 의료', '송도국제도시 병원', '연수구 송도동 병원'],
-  지하철: ['인천1호선', '송도역', '국제업무지구역', '센트럴파크역', '지하철 시간표'],
+  지하철: ['인천1호선', '인천대입구역', '국제업무지구역', '센트럴파크역', '지하철 시간표'],
   육아: ['송도 육아', '송도 어린이집', '송도 학원', '송도 초등학교', '연수구 송도동 육아']
 };
 
@@ -113,7 +113,7 @@ export function generateSEOMetadata(params: {
       title: finalTitle,
       description: finalDescription,
       images: [`${BASE_URL}/og-image.jpg`],
-      creator: '@nonhyeon_info',
+      creator: '@songdo_life',
     },
     alternates: {
       canonical: currentUrl,
@@ -122,8 +122,8 @@ export function generateSEOMetadata(params: {
       'last-modified': lastModified.toISOString(),
       'geo.region': 'KR-28',
       'geo.placename': '인천광역시 연수구 송도동',
-      'geo.position': '37.3894;126.7317',
-      'ICBM': '37.3894, 126.7317',
+      'geo.position': '37.538603;126.722675',
+      'ICBM': '37.538603, 126.722675',
     },
   };
 }
@@ -230,8 +230,8 @@ export function generateTrainStationSchema(station: {
     },
     geo: {
       '@type': 'GeoCoordinates',
-      latitude: station.latitude,
-      longitude: station.longitude
+      latitude: 37.538603,
+      longitude: 126.722675
     }
   });
 } 

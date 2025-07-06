@@ -23,9 +23,9 @@
   <!-- 배경 원 -->
   <circle cx="32" cy="32" r="32" fill="url(#skyGradient)"/>
   
-  <!-- 논현동 아파트 단지 실루엣 -->
+  <!-- 송도국제도시 아파트 단지 실루엣 -->
   
-  <!-- 메인 고층빌딩 (에코메트로 느낌) -->
+  <!-- 메인 고층빌딩 (송도국제도시 느낌) -->
   <rect x="20" y="8" width="8" height="48" fill="url(#buildingGradient)" rx="1"/>
   <rect x="21" y="8" width="6" height="48" fill="url(#shadowGradient)" rx="1"/>
   
@@ -73,7 +73,7 @@
   <rect x="40" y="20" width="1" height="1" fill="#FFFACD" opacity="0.8"/>
   <rect x="42" y="20" width="1" height="1" fill="#FFFACD" opacity="0.8"/>
   
-  <!-- 상단에 작은 포인트 (논현역 느낌) -->
+  <!-- 상단에 작은 포인트 (송도역 느낌) -->
   <circle cx="32" cy="10" r="2" fill="#FFD700" opacity="0.9"/>
   <circle cx="32" cy="10" r="1" fill="#FFA500"/>
 </svg> 

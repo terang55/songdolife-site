@@ -321,7 +321,7 @@ export default function HomePage() {
           description="송도국제도시 주민을 위한 실시간 뉴스, 지하철 정보, 부동산 정보, 의료 정보를 한눈에 확인하세요."
           keywords={[
             '송도동', '송도국제도시', '연수구 송도동', '센트럴파크', '더샵',
-            '트리플스트리트', '수인분당선', '센트럴파크역', '송도역'
+            '트리플스트리트', '인천1호선', '센트럴파크역', '인천대입구역'
           ]}
           structuredData={generateNewsStructuredData()}
         />

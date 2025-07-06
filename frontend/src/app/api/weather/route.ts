@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 
 // 인천 연수구 송도동 행정동 중심 좌표
-const SONGDO_LAT = 37.3988;
-const SONGDO_LON = 126.7359;
+const SONGDO_LAT = 37.538603;
+const SONGDO_LON = 126.722675;
 
 // OpenWeather API 키 (환경변수에서만 가져오기)
 const API_KEY = process.env.OPENWEATHER_API_KEY;

@@ -90,14 +90,14 @@ export async function GET() {
     <description>인천 연수구 송도동 지역의 최신 뉴스, 블로그, 유튜브 콘텐츠를 실시간으로 제공합니다.</description>
     <language>ko-KR</language>
     <copyright>© 2025 인천논현라이프. All rights reserved.</copyright>
-    <managingEditor>info@nonhyeon.life (인천논현라이프)</managingEditor>
-    <webMaster>info@nonhyeon.life (인천논현라이프)</webMaster>
+    <managingEditor>info@songdo.life (송도라이프)</managingEditor>
+    <webMaster>info@songdo.life (송도라이프)</webMaster>
     <pubDate>${new Date().toUTCString()}</pubDate>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     <category>지역정보</category>
     <category>송도동</category>
     <category>인천</category>
-    <category>남동구</category>
+    <category>연수구</category>
     <ttl>60</ttl>
     <image>
       <url>${BASE_URL}/android-chrome-192x192.png</url>

@@ -89,10 +89,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/subway?station=소래포구역`,
+      url: `${baseUrl}/subway?station=송도역`,
       lastModified: now,
       changeFrequency: 'hourly' as const,
       priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/subway?station=인천대입구역`,
+      lastModified: new Date(),
+      changeFrequency: 'hourly' as const,
+      priority: 0.8,
     },
     // API 엔드포인트들 (robots.txt에서 차단하지만 sitemap에는 포함하지 않음)
     // 중요한 지역 정보 키워드 페이지들 (실제로는 검색 결과지만 SEO를 위해 포함)
@@ -144,6 +150,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly' as const,
       priority: 0.7,
     },
+    {
+      url: `${baseUrl}/#인천대입구역`,
+      lastModified: new Date(),
+      changeFrequency: 'hourly' as const,
+      priority: 0.6,
+    },
     // 의료 관련 키워드 페이지들
     {
       url: `${baseUrl}/#송도-병원`,
@@ -181,6 +193,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'daily' as const,
       priority: 0.8,
     },
+    {
+      url: `${baseUrl}/#인천대입구역`,
+      lastModified: new Date(),
+      changeFrequency: 'hourly' as const,
+      priority: 0.5,
+    },
     // 지하철 관련 키워드 페이지들
     {
       url: `${baseUrl}/#수인분당선`,
@@ -201,7 +219,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/#소래포구역`,
+      url: `${baseUrl}/#송도역`,
       lastModified: now,
       changeFrequency: 'hourly' as const,
       priority: 0.8,

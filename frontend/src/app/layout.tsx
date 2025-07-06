@@ -20,17 +20,17 @@ export const metadata: Metadata = {
   },
   description: "송도국제도시 주민을 위한 실시간 뉴스·지하철·부동산 등 생활정보 플랫폼",
   keywords: [
-    "송도동", "인천 송도동", "남동구 송도동", "송도지구", "에코메트로",
+    "송도동", "인천 송도동", "연수구 송도동", "송도지구", "송도국제도시",
     "송도동 맛집", "송도동 카페", "송도동 부동산", "송도동 육아",
     "송도동 병원", "송도동 약국", "송도동 의료", "송도동 내과", "송도동 소아과",
-    "송도동 치과", "송도동 응급실", "송도동 야간진료", "인천송도역 병원",
-    "수인분당선", "인천송도역", "호구포역", "소래포구역", "지하철 시간표",
+    "송도동 치과", "송도동 응급실", "송도동 야간진료", "인천대입구역 병원",
+    "인천1호선", "인천대입구역", "센트럴파크역", "국제업무지구역", "지하철 시간표",
     "송도동 지하철", "수인선", "지하철 실시간", "전철 도착시간", "지하철역 정보",
-    "소래포구", "호구포", "송도동 정보", "송도동 뉴스", "송도동 생활정보",
-    "인천 남동구", "송도동 아파트", "송도동 교통", "송도동 학원"
+    "송도국제도시", "센트럴파크", "송도동 정보", "송도동 뉴스", "송도동 생활정보",
+    "인천 연수구", "송도동 아파트", "송도동 교통", "송도동 학원"
   ],
   authors: [{ name: "송도라이프", url: BASE_URL }],
-  creator: "송도라이프",
+  creator: "@songdo_life",
   publisher: "송도라이프",
   robots: {
     index: true,
@@ -62,9 +62,9 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "송도라이프 | 인천 연수구 송도동 생활정보 플랫폼",
-    description: "인천 남동구 송도동 주민들을 위한 종합 정보 플랫폼. 실시간 뉴스, 수인분당선 지하철 정보, 병원/약국 정보, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요.",
+    description: "인천 연수구 송도국제도시 주민들을 위한 종합 정보 플랫폼. 실시간 뉴스, 인천1호선 지하철 정보, 병원/약국 정보, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요.",
     images: ["/og-image.jpg"],
-    creator: "@nonhyeon_info",
+    creator: "@songdo_life",
   },
   verification: {
     google: "e3VR6BkZXX1VtX4dm2Zx6q0L2bgHC1FFCPHpnJ6n_hI", // Google Search Console 인증 코드
@@ -112,7 +112,7 @@ export default function RootLayout({
               'https://wcs.naver.net/wcslog.js');
               wcs_add_config({
                 'account': 'NAVER_ANALYTICS_ID',
-                'domain': 'nonhyeon.life'
+                'domain': 'songdo.life'
               });
               wcs_do();
             `,
@@ -133,7 +133,7 @@ export default function RootLayout({
         {/* Google AdSense 인증 */}
         <meta name="google-adsense-account" content="ca-pub-2592538242403472" />
         <meta name="description" content="송도국제도시 주민을 위한 실시간 뉴스·지하철·부동산 등 생활정보 플랫폼" />
-        <meta name="keywords" content="송도국제도시,수인분당선,인천송도역,호구포역,소래포구역,지하철시간표,소래포구,호구포" />
+        <meta name="keywords" content="송도국제도시,인천1호선,인천대입구역,센트럴파크역,국제업무지구역,지하철시간표,송도,센트럴파크" />
         <meta name="author" content="송도라이프" />
         <meta name="publisher" content="송도라이프" />
         <meta name="copyright" content="송도라이프" />
@@ -156,8 +156,8 @@ export default function RootLayout({
         {/* 지역 정보 메타 태그 */}
         <meta name="geo.region" content="KR-28" />
         <meta name="geo.placename" content="인천광역시 연수구 송도동" />
-        <meta name="geo.position" content="37.3894;126.7317" />
-        <meta name="ICBM" content="37.3894, 126.7317" />
+        <meta name="geo.position" content="37.538603;126.722675" />
+        <meta name="ICBM" content="37.538603, 126.722675" />
         
         {/* 파비콘 - 송도동 건물 스타일 */}
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -188,23 +188,23 @@ export default function RootLayout({
                 "@type": "PostalAddress",
                 "addressCountry": "KR",
                 "addressRegion": "인천광역시",
-                "addressLocality": "남동구",
+                "addressLocality": "연수구",
                 "streetAddress": "송도동"
               },
               "geo": {
                 "@type": "GeoCoordinates",
-                "latitude": 37.3894,
-                "longitude": 126.7317
+                "latitude": 37.538603,
+                "longitude": 126.722675
               },
               "areaServed": {
                 "@type": "Place",
-                "name": "인천광역시 남동구 송도동"
+                "name": "인천광역시 연수구 송도동"
               },
               "knowsAbout": [
                 "송도동 맛집", "송도동 카페", "송도동 부동산", 
                 "송도동 육아", "송도동 병원", "송도동 약국", "송도동 의료",
-                "수인분당선", "지하철 정보", "호구포역", "인천송도역", "소래포구역",
-                "에코메트로", "소래포구", "호구포"
+                "인천1호선", "지하철 정보", "센트럴파크역", "인천대입구역", "국제업무지구역",
+                "송도국제도시", "송도", "센트럴파크"
               ]
             })
           }}
@@ -234,8 +234,8 @@ export default function RootLayout({
                 "name": "인천광역시 연수구 송도동",
                 "geo": {
                   "@type": "GeoCoordinates",
-                  "latitude": 37.3894,
-                  "longitude": 126.7317
+                  "latitude": 37.538603,
+                  "longitude": 126.722675
                 }
               }
             })
@@ -257,18 +257,18 @@ export default function RootLayout({
                 "@type": "PostalAddress",
                 "addressCountry": "KR",
                 "addressRegion": "인천광역시",
-                "addressLocality": "남동구",
+                "addressLocality": "연수구",
                 "streetAddress": "송도동"
               },
               "areaServed": {
                 "@type": "Place",
-                "name": "인천광역시 남동구 송도동"
+                "name": "인천광역시 연수구 송도동"
               },
               "knowsAbout": [
                 "송도동 지역정보", "송도동 맛집", "송도동 카페", 
                 "송도동 부동산", "송도동 육아", "송도동 병원", "송도동 약국", 
-                "송도동 의료", "수인분당선", "지하철 정보", "호구포역", "인천송도역", "소래포구역",
-                "에코메트로", "소래포구", "호구포", "송도지구"
+                "송도동 의료", "인천1호선", "지하철 정보", "센트럴파크역", "인천대입구역", "국제업무지구역",
+                "송도국제도시", "송도", "센트럴파크", "송도지구"
               ],
               "sameAs": [
                 BASE_URL
@@ -296,13 +296,13 @@ export default function RootLayout({
               "publishingPrinciples": BASE_URL,
               "areaServed": {
                 "@type": "Place",
-                "name": "인천광역시 남동구 송도동"
+                "name": "인천광역시 연수구 송도동"
               },
               "audience": {
                 "@type": "Audience",
                 "geographicArea": {
                   "@type": "Place",
-                  "name": "인천광역시 남동구 송도동"
+                  "name": "인천광역시 연수구 송도동"
                 }
               }
             })
@@ -346,11 +346,11 @@ export default function RootLayout({
               },
               "areaServed": {
                 "@type": "Place",
-                "name": "인천광역시 남동구 송도동",
+                "name": "인천광역시 연수구 송도동",
                 "geo": {
                   "@type": "GeoCoordinates",
-                  "latitude": 37.3894,
-                  "longitude": 126.7317
+                  "latitude": 37.538603,
+                  "longitude": 126.722675
                 }
               }
             })
@@ -366,7 +366,7 @@ export default function RootLayout({
               "@type": "WebPage",
               "name": "송도라이프 지하철 정보",
               "url": `${BASE_URL}/subway`,
-              "description": "인천1호선 센트럴파크역, 송도역의 실시간 열차 도착 정보 및 역 정보",
+              "description": "인천1호선 센트럴파크역, 인천대입구역의 실시간 열차 도착 정보 및 역 정보",
               "about": {
                 "@type": "PublicTransportHub",
                 "name": "수인분당선 송도동 구간"
@@ -378,18 +378,18 @@ export default function RootLayout({
                 "itemListElement": [
                   {
                     "@type": "TrainStation",
-                    "name": "송도역",
+                    "name": "인천대입구역",
                     "identifier": "K259",
                     "address": {
                       "@type": "PostalAddress",
                       "addressCountry": "KR",
                       "addressRegion": "인천광역시",
-                      "addressLocality": "남동구"
+                      "addressLocality": "연수구"
                     },
                     "geo": {
                       "@type": "GeoCoordinates",
-                      "latitude": 37.3990,
-                      "longitude": 126.7240
+                      "latitude": 37.538603,
+                      "longitude": 126.722675
                     }
                   }
                 ]
@@ -400,11 +400,11 @@ export default function RootLayout({
               },
               "areaServed": {
                 "@type": "Place",
-                "name": "인천광역시 남동구 송도동",
+                "name": "인천광역시 연수구 송도동",
                 "geo": {
                   "@type": "GeoCoordinates",
-                  "latitude": 37.3894,
-                  "longitude": 126.7317
+                  "latitude": 37.538603,
+                  "longitude": 126.722675
                 }
               }
             })
@@ -444,7 +444,7 @@ export default function RootLayout({
                   "name": "송도동 지하철 정보는 얼마나 자주 업데이트되나요?",
                   "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "호구포역, 인천송도역, 소래포구역의 실시간 도착 정보를 1분 간격으로 갱신합니다."
+                    "text": "센트럴파크역, 인천대입구역, 국제업무지구역의 실시간 도착 정보를 1분 간격으로 갱신합니다."
                   }
                 },
                 {

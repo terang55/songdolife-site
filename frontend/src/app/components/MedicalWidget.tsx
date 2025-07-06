@@ -45,8 +45,8 @@ interface MedicalWidgetProps {
   initialType?: 'all' | 'hospital' | 'pharmacy';
 }
 
-const NONHYEON_LAT = 37.4011; // 논현역 위도
-const NONHYEON_LON = 126.7229; // 논현역 경도
+  const SONGDO_LAT = 37.538603; // 인천대입구역 위도
+  const SONGDO_LON = 126.722675; // 인천대입구역 경도
 
 const MedicalWidget: React.FC<MedicalWidgetProps> = ({ initialType = 'all' }) => {
   const [medicalData, setMedicalData] = useState<MedicalInfo[]>([]);
@@ -75,15 +75,15 @@ const MedicalWidget: React.FC<MedicalWidgetProps> = ({ initialType = 'all' }) =>
           setLocationTried(true);
         },
         () => {
-          setUserLocation({ lat: NONHYEON_LAT, lon: NONHYEON_LON }); // 권한 거부 시 논현역 고정
-          setLocationError('위치 권한이 거부되어 논현역 기준으로 거리를 표시합니다.');
+          setUserLocation({ lat: SONGDO_LAT, lon: SONGDO_LON }); // 권한 거부 시 인천대입구역 고정
+          setLocationError('위치 권한이 거부되어 인천대입구역 기준으로 거리를 표시합니다.');
           setLocationTried(true);
         },
         { enableHighAccuracy: true, timeout: 5000 }
       );
     } else {
-      setUserLocation({ lat: NONHYEON_LAT, lon: NONHYEON_LON });
-      setLocationError('이 브라우저는 위치 정보를 지원하지 않습니다. 논현역 기준으로 거리를 표시합니다.');
+      setUserLocation({ lat: SONGDO_LAT, lon: SONGDO_LON });
+      setLocationError('이 브라우저는 위치 정보를 지원하지 않습니다. 인천대입구역 기준으로 거리를 표시합니다.');
       setLocationTried(true);
     }
   };

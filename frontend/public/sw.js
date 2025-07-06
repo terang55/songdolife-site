@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nonhyeon-life-v1.0.0';
+const CACHE_NAME = 'songdo-life-v1.0.0';
 const STATIC_CACHE = 'static-v1';
 const DYNAMIC_CACHE = 'dynamic-v1';
 

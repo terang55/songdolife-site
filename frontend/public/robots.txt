@@ -1,11 +1,10 @@
 User-agent: *
 Allow: /
 
-# 사이트맵 위치
-Sitemap: https://nonhyeon.life/sitemap.xml
+Sitemap: https://songdo.life/sitemap.xml
 
-# RSS 피드 위치
-RSS: https://nonhyeon.life/api/rss
+# RSS Feed
+RSS: https://songdo.life/api/rss
 
 # 기본적으로 모든 경로 허용하며, 내부 API·빌드 경로는 차단
 Disallow: /api/
@@ -25,5 +24,5 @@ Allow: /apple-touch-icon.png
 # 크롤링 속도 제한 (1초 간격)
 Crawl-delay: 1
 
-# 인천논현라이프 - 인천 남동구 논현동 생활정보 플랫폼
+# 송도라이프 - 인천 연수구 송도국제도시 생활정보 플랫폼
 # 최종 업데이트: 2025-07-05 

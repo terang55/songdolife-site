@@ -53,8 +53,8 @@ export const metadata: Metadata = {
   other: {
     'geo.region': 'KR-28',
     'geo.placename': '인천광역시 연수구 송도동',
-    'geo.position': '37.3894;126.7317',
-    'ICBM': '37.3894, 126.7317',
+    'geo.position': '37.538603;126.722675',
+    'ICBM': '37.538603, 126.722675',
   },
 };
 
@@ -171,7 +171,7 @@ export default function RealEstatePage() {
                     <span className="font-medium">북쪽 방향:</span> 왕십리 → 건대입구 → 선릉 → 판교 → 수원
                   </div>
                   <div>
-                    <span className="font-medium">남쪽 방향:</span> 인천 → 월곶 → 소래포구 → 오이도
+                    <span className="font-medium">남쪽 방향:</span> 인천 → 월곶 → 송도 → 오이도
                   </div>
                   <div className="mt-3 p-2 bg-blue-100 rounded text-xs">
                     <div className="font-medium text-blue-900 mb-1">주요 환승역</div>
@@ -260,7 +260,7 @@ export default function RealEstatePage() {
                   <span className="text-xs bg-purple-100 text-purple-600 px-2 py-1 rounded">2035년</span>
                 </div>
                 <div className="text-xs text-gray-600 space-y-1">
-                  <div>• 노량진~청학, 논현역 경유</div>
+                  <div>• 노량진~청학, 인천대입구역 경유</div>
                   <div>• 서울 영등포 직결</div>
                   <div>• 21.9km, 17개역</div>
                 </div>
@@ -272,9 +272,9 @@ export default function RealEstatePage() {
                   <span className="text-xs bg-yellow-100 text-yellow-600 px-2 py-1 rounded">계획승인</span>
                 </div>
                 <div className="text-xs text-gray-600 space-y-1">
-                  <div>• 남동구청~논현역 연결</div>
+                  <div>• 연수구청~인천대입구역 연결</div>
                   <div>• 7.52km, 4개역</div>
-                  <div>• 남동구 전역 직결</div>
+                  <div>• 연수구 전역 직결</div>
                 </div>
               </div>
             </div>

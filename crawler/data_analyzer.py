@@ -12,7 +12,7 @@ import re
 from loguru import logger
 import config
 
-class NonhyeonDataAnalyzer:
+class SongdoDataAnalyzer:
     def __init__(self):
         """분석기 초기화"""
         self.data_dir = config.DATA_DIR
@@ -319,7 +319,7 @@ class NonhyeonDataAnalyzer:
 
 def main():
     """메인 실행 함수"""
-    analyzer = NonhyeonDataAnalyzer()
+    analyzer = SongdoDataAnalyzer()
     
     print("📊 송도동 정보 데이터 분석기")
     print("=" * 50)

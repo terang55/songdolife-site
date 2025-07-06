@@ -90,10 +90,10 @@ export const metadata: Metadata = {
     images: [`${BASE_URL}/og-image.jpg`],
   },
   verification: {
-    google: "e3VR6BkZXX1VtX4dm2Zx6q0L2bgHC1FFCPHpnJ6n_hI",
+    google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION || "SONGDO-LIFE-GOOGLE-VERIFICATION",
     other: {
-      "naver-site-verification": "6f6f6592110192cd2491d3c5bf4133592c100558",
-      "msvalidate.01": "YOUR_BING_VERIFICATION_CODE", // Bing 웹마스터 도구
+      "naver-site-verification": process.env.NEXT_PUBLIC_NAVER_VERIFICATION || "SONGDO-LIFE-NAVER-VERIFICATION",
+      "msvalidate.01": process.env.NEXT_PUBLIC_BING_VERIFICATION || "SONGDO-LIFE-BING-VERIFICATION",
     },
   },
   alternates: {
@@ -164,7 +164,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content="송도라이프" />
         
         {/* 네이버 SEO 최적화 메타 태그 */}
-        <meta name="naver-site-verification" content="6f6f6592110192cd2491d3c5bf4133592c100558" />
+        <meta name="naver-site-verification" content={process.env.NEXT_PUBLIC_NAVER_VERIFICATION || "SONGDO-LIFE-NAVER-VERIFICATION"} />
         
         {/* Google AdSense 인증 */}
         <meta name="google-adsense-account" content="ca-pub-2592538242403472" />
@@ -525,7 +525,7 @@ export default function RootLayout({
       >
         {/* Google Analytics */}
         <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-SSEDR2CED7"
+          src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID || 'G-SONGDO-LIFE-NEW'}`}
           strategy="afterInteractive"
         />
         <Script id="google-analytics" strategy="afterInteractive">
@@ -533,9 +533,12 @@ export default function RootLayout({
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-SSEDR2CED7', {
-              page_title: document.title,
+            gtag('config', '${process.env.NEXT_PUBLIC_GA_ID || 'G-SONGDO-LIFE-NEW'}', {
+              page_title: '송도라이프 - 송도국제도시 생활정보',
               page_location: window.location.href,
+              send_page_view: true,
+              anonymize_ip: true,
+              cookie_flags: 'SameSite=None;Secure'
             });
           `}
         </Script>

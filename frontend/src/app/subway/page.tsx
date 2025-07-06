@@ -305,16 +305,40 @@ export default function SubwayPage() {
         <meta property="og:url" content="https://songdo-life-site.vercel.app/subway" />
         <meta property="og:type" content="website" />
         <meta property="og:image" content="https://songdo-life-site.vercel.app/og-image.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="송도 교통정보 - 인천1호선 지하철 시간표 및 M6405 광역급행버스" />
         
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="송도 교통정보 - 지하철·M6405 광역급행버스 정보" />
         <meta name="twitter:description" content="송도국제도시 인천1호선 지하철 시간표와 M6405 광역급행버스(송도-강남 직행)의 실시간 도착 정보를 한눈에 확인하세요." />
+        <meta name="twitter:image" content="https://songdo-life-site.vercel.app/og-image.jpg" />
         
         {/* 지역 정보 메타 태그 */}
         <meta name="geo.region" content="KR-28" />
         <meta name="geo.placename" content="인천광역시 연수구" />
         <meta name="geo.position" content="37.538603;126.722675" />
+        <meta name="ICBM" content="37.538603, 126.722675" />
+        
+        {/* 추가 SEO 메타 태그 */}
+        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+        <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+        <meta name="bingbot" content="index, follow" />
+        <meta name="yandex" content="index, follow" />
+        <meta name="revisit-after" content="1 days" />
+        <meta name="content-language" content="ko" />
+        <meta name="author" content="송도라이프" />
+        <meta name="publisher" content="송도라이프" />
+        <meta name="copyright" content="© 2024 송도라이프. All rights reserved." />
+        
+        {/* 페이지 특화 메타 태그 */}
+        <meta name="page-topic" content="교통정보" />
+        <meta name="page-type" content="실시간 정보" />
+        <meta name="audience" content="송도국제도시 주민, 대중교통 이용자" />
+        <meta name="coverage" content="인천광역시 연수구 송도동" />
+        <meta name="distribution" content="global" />
+        <meta name="rating" content="general" />
         
         {/* 구조화된 데이터 - 교통정보 */}
         <script
@@ -326,6 +350,18 @@ export default function SubwayPage() {
               "name": "송도국제도시 교통정보",
               "description": "송도국제도시 인천1호선 지하철 시간표와 M6405 광역급행버스 실시간 정보",
               "url": "https://songdo-life-site.vercel.app/subway",
+              "inLanguage": "ko-KR",
+              "dateModified": new Date().toISOString(),
+              "datePublished": "2024-01-01T00:00:00+09:00",
+              "publisher": {
+                "@type": "Organization",
+                "name": "송도라이프",
+                "url": "https://songdo-life-site.vercel.app",
+                "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://songdo-life-site.vercel.app/android-chrome-192x192.png"
+                }
+              },
               "mainEntity": [
                 {
                   "@type": "TransitLine",
@@ -333,9 +369,15 @@ export default function SubwayPage() {
                   "description": "검단호수공원역 ↔ 송도달빛축제공원역 (33개역)",
                   "provider": {
                     "@type": "Organization",
-                    "name": "인천교통공사"
+                    "name": "인천교통공사",
+                    "url": "https://www.ictr.or.kr"
                   },
-                  "operatingHours": "05:30-23:50"
+                  "operatingHours": "05:30-23:50",
+                  "availableService": {
+                    "@type": "Service",
+                    "name": "지하철 시간표 서비스",
+                    "description": "실시간 지하철 시간표 및 도착 정보 제공"
+                  }
                 },
                 {
                   "@type": "BusRoute",
@@ -347,7 +389,12 @@ export default function SubwayPage() {
                     "telephone": "032-885-6900"
                   },
                   "operatingHours": "송도 05:00-23:30, 강남 06:10-24:30",
-                  "frequency": "평일 6-20분, 주말 15-30분 간격"
+                  "frequency": "평일 6-20분, 주말 15-30분 간격",
+                  "availableService": {
+                    "@type": "Service",
+                    "name": "실시간 버스 도착 정보",
+                    "description": "M6405 광역급행버스 실시간 위치 및 도착 예정 시간 제공"
+                  }
                 }
               ],
               "breadcrumb": {
@@ -366,11 +413,25 @@ export default function SubwayPage() {
                     "item": "https://songdo-life-site.vercel.app/subway"
                   }
                 ]
+              },
+              "potentialAction": {
+                "@type": "SearchAction",
+                "target": "https://songdo-life-site.vercel.app/subway?station={search_term_string}",
+                "query-input": "required name=search_term_string"
               }
             })
           }}
         />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }} />
+        
+        {/* 프리로드 중요 리소스 */}
+        <link rel="preload" href="/android-chrome-192x192.png" as="image" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        
+        {/* 대체 언어 및 지역 버전 */}
+        <link rel="alternate" hrefLang="ko-KR" href="https://songdo-life-site.vercel.app/subway" />
+        <link rel="canonical" href="https://songdo-life-site.vercel.app/subway" />
       </Head>
 
       <div className="min-h-screen bg-gray-50">
@@ -404,7 +465,7 @@ export default function SubwayPage() {
         </div>
 
         {/* 헤더 */}
-        <div className="bg-gradient-to-r from-green-600 to-green-800 text-white py-6 sm:py-8">
+        <header className="bg-gradient-to-r from-green-600 to-green-800 text-white py-6 sm:py-8">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4">🚌 송도 교통정보</h1>
@@ -413,17 +474,20 @@ export default function SubwayPage() {
               </p>
             </div>
           </div>
-        </div>
+        </header>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
           {/* 역 선택 */}
-          <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6 mb-6 sm:mb-8">
-            <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">📍 역 선택</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+          <section className="bg-white rounded-xl shadow-sm border p-4 sm:p-6 mb-6 sm:mb-8" aria-labelledby="station-selection">
+            <h2 id="station-selection" className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">📍 역 선택</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4" role="radiogroup" aria-labelledby="station-selection">
               {stations.map((station) => (
                 <button
                   key={station.name}
                   onClick={() => setSelectedStation(station.name)}
+                  role="radio"
+                  aria-checked={selectedStation === station.name}
+                  aria-describedby={`station-${station.name.replace(/\s+/g, '-')}-desc`}
                   className={`p-4 sm:p-4 rounded-xl border-2 transition-all touch-manipulation min-h-[72px] ${
                     selectedStation === station.name
                       ? 'border-green-600 bg-green-50 text-green-800 shadow-md'
@@ -431,50 +495,64 @@ export default function SubwayPage() {
                   }`}
                 >
                   <div className="text-base sm:text-lg font-semibold">{station.name}</div>
-                  <div className="text-xs sm:text-sm text-gray-600 mt-1">{station.code}</div>
+                  <div id={`station-${station.name.replace(/\s+/g, '-')}-desc`} className="text-xs sm:text-sm text-gray-600 mt-1">{station.code}</div>
                 </button>
               ))}
             </div>
-          </div>
+          </section>
 
           {/* 지하철 시간표 정보 */}
-          <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6 mb-6 sm:mb-8">
+          <section className="bg-white rounded-xl shadow-sm border p-4 sm:p-6 mb-6 sm:mb-8" aria-labelledby="subway-schedule">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3 sm:gap-4">
-              <h2 className="text-lg sm:text-xl font-bold text-gray-900">🚄 지하철 시간표</h2>
+              <h2 id="subway-schedule" className="text-lg sm:text-xl font-bold text-gray-900">🚄 지하철 시간표</h2>
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 w-full sm:w-auto">
                 {lastUpdate && (
-                  <span className="text-xs sm:text-sm text-gray-600 order-2 sm:order-1">
+                  <span className="text-xs sm:text-sm text-gray-600 order-2 sm:order-1" aria-live="polite">
                     <span className="hidden sm:inline">마지막 업데이트: </span>
                     <span className="sm:hidden">업데이트: </span>
-                    {lastUpdate}
+                    <time dateTime={new Date().toISOString()}>{lastUpdate}</time>
                   </span>
                 )}
                 <button
                   onClick={() => fetchTrainSchedule(selectedStation)}
                   disabled={loading}
+                  aria-describedby="refresh-button-desc"
                   className="px-4 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 transition-colors text-sm font-medium touch-manipulation min-h-[44px] w-full sm:w-auto order-1 sm:order-2"
                 >
-                  {loading ? '업데이트 중...' : '🚇 시간표 새로고침'}
+                  {loading ? (
+                    <>
+                      <span className="sr-only">시간표 업데이트 중</span>
+                      <span aria-hidden="true">업데이트 중...</span>
+                    </>
+                  ) : (
+                    '🚇 시간표 새로고침'
+                  )}
                 </button>
+                <div id="refresh-button-desc" className="sr-only">
+                  지하철 시간표 정보를 새로고침합니다
+                </div>
               </div>
             </div>
 
-            <div className="text-center text-xl sm:text-2xl font-bold text-green-800 mb-4 sm:mb-6 py-2 bg-green-50 rounded-lg">
+            <div className="text-center text-xl sm:text-2xl font-bold text-green-800 mb-4 sm:mb-6 py-2 bg-green-50 rounded-lg" role="status" aria-live="polite">
               {selectedStation}
             </div>
 
             {loading ? (
-              <div className="text-center py-8">
-                <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
-                <p className="mt-2 text-gray-600">시간표 정보 로딩 중...</p>
+              <div className="text-center py-8" role="status" aria-live="polite">
+                <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-green-600" aria-hidden="true"></div>
+                <p className="mt-2 text-gray-600">
+                  <span className="sr-only">시간표 정보를 로딩하고 있습니다</span>
+                  <span aria-hidden="true">시간표 정보 로딩 중...</span>
+                </p>
               </div>
             ) : (
-              <>
+              <div role="region" aria-labelledby="subway-schedule" aria-live="polite">
                 {/* 운행 상태에 따른 표시 */}
                 {nextTrainInfo.serviceStatus === 'not_started' && (
-                  <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6 rounded-lg">
+                  <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6 rounded-lg" role="alert">
                     <div className="flex items-center">
-                      <div className="flex-shrink-0">
+                      <div className="flex-shrink-0" aria-hidden="true">
                         <span className="text-2xl">🌅</span>
                       </div>
                       <div className="ml-3">
@@ -488,9 +566,9 @@ export default function SubwayPage() {
                 )}
 
                 {nextTrainInfo.serviceStatus === 'ended' && (
-                  <div className="bg-red-50 border-l-4 border-red-400 p-4 mb-6 rounded-lg">
+                  <div className="bg-red-50 border-l-4 border-red-400 p-4 mb-6 rounded-lg" role="alert">
                     <div className="flex items-center">
-                      <div className="flex-shrink-0">
+                      <div className="flex-shrink-0" aria-hidden="true">
                         <span className="text-2xl">🚫</span>
                       </div>
                       <div className="ml-3">
@@ -634,15 +712,15 @@ export default function SubwayPage() {
                     <p className="text-yellow-700 font-medium">⚠️ 시간표는 실제 운행과 다를 수 있습니다</p>
                   </div>
                 </div>
-              </>
+              </div>
             )}
-          </div>
+          </section>
 
           {/* 광역버스 실시간 정보 */}
-          <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6 mb-6 sm:mb-8">
+          <section className="bg-white rounded-xl shadow-sm border p-4 sm:p-6 mb-6 sm:mb-8" aria-labelledby="bus-schedule">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3 sm:gap-4">
               <div className="flex items-center gap-2 flex-wrap">
-                <h2 className="text-lg sm:text-xl font-bold text-gray-900">🚌 M6405 광역급행버스</h2>
+                <h2 id="bus-schedule" className="text-lg sm:text-xl font-bold text-gray-900">🚌 M6405 광역급행버스</h2>
                 {isRealBusAPI && (
                   <span className="inline-block bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full">
                     ✅ 실시간
@@ -656,20 +734,31 @@ export default function SubwayPage() {
               </div>
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 w-full sm:w-auto">
                 {busLastUpdate && (
-                  <span className="text-xs sm:text-sm text-gray-600 order-2 sm:order-1">
+                  <span className="text-xs sm:text-sm text-gray-600 order-2 sm:order-1" aria-live="polite">
                     <span className="hidden sm:inline">마지막 업데이트: </span>
                     <span className="sm:hidden">업데이트: </span>
-                    {busLastUpdate}
+                    <time dateTime={new Date().toISOString()}>{busLastUpdate}</time>
                   </span>
                 )}
                 {!BUS_FEATURE_DISABLED && (
                   <button
                     onClick={() => fetchBusInfo()}
                     disabled={busLoading}
+                    aria-describedby="bus-refresh-button-desc"
                     className="px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors text-sm font-medium touch-manipulation min-h-[44px] w-full sm:w-auto order-1 sm:order-2"
                   >
-                    🚌 버스 새로고침
+                    {busLoading ? (
+                      <>
+                        <span className="sr-only">버스 정보 업데이트 중</span>
+                        <span aria-hidden="true">버스 새로고침 중...</span>
+                      </>
+                    ) : (
+                      '🚌 버스 새로고침'
+                    )}
                   </button>
+                  <div id="bus-refresh-button-desc" className="sr-only">
+                    광역버스 정보를 새로고침합니다
+                  </div>
                 )}
               </div>
             </div>
@@ -678,9 +767,9 @@ export default function SubwayPage() {
 
             {/* 운행종료 알림 */}
             {busServiceEnded && (
-              <div className="bg-red-50 border-l-4 border-red-400 p-4 mb-6 rounded-lg">
+              <div className="bg-red-50 border-l-4 border-red-400 p-4 mb-6 rounded-lg" role="alert">
                 <div className="flex items-center">
-                  <div className="flex-shrink-0">
+                  <div className="flex-shrink-0" aria-hidden="true">
                     <span className="text-2xl">🚫</span>
                   </div>
                   <div className="ml-3">
@@ -696,7 +785,7 @@ export default function SubwayPage() {
             )}
 
             {BUS_FEATURE_DISABLED ? (
-              <div className="text-center py-6 text-gray-500 text-sm sm:text-base leading-relaxed">
+              <div className="text-center py-6 text-gray-500 text-sm sm:text-base leading-relaxed" role="alert">
                 <p>M6405 광역버스 <span className="font-semibold">실시간 위치 정보</span>는&nbsp;
                   <span className="font-semibold text-red-600">API 변경 예정</span>입니다.</p>
                 <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-gray-400">
@@ -705,9 +794,12 @@ export default function SubwayPage() {
                 </p>
               </div>
             ) : busLoading ? (
-              <div className="text-gray-500">버스 위치 정보를 불러오는 중...</div>
+              <div className="text-gray-500" role="alert">
+                <span className="sr-only">버스 위치 정보를 불러오고 있습니다</span>
+                <span aria-hidden="true">버스 위치 정보를 불러오는 중...</span>
+              </div>
             ) : busInfo.length > 0 ? (
-              <>
+              <div role="region" aria-labelledby="bus-schedule" aria-live="polite">
                 {/* 강남행 / 인천행 2컬럼 레이아웃 */}
                 {(() => {
                   const toGangnam = busInfo.filter(b => b.towards === '강남행');
@@ -789,9 +881,9 @@ export default function SubwayPage() {
                     </div>
                   );
                 })()}
-              </>
+              </div>
             ) : (
-              <div className="text-center py-8">
+              <div className="text-center py-8" role="alert">
                 <div className="text-gray-500 mb-4">
                   <span className="text-4xl">🚫</span>
                 </div>
@@ -810,24 +902,24 @@ export default function SubwayPage() {
                 </button>
               </div>
             )}
-              </div>
+          </section>
 
           {/* 주변 명소만 표시 */}
           {selectedStationInfo && (
-            <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6">
-                <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">📍 주변 명소 및 시설</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-3">
-                  {selectedStationInfo.nearbyPlaces.map((place, index) => (
-                    <div key={index} className="p-2.5 sm:p-3 bg-yellow-50 rounded-lg text-center">
-                      <div className="text-xs sm:text-sm font-medium text-gray-900">{place}</div>
-                    </div>
-                  ))}
+            <section className="bg-white rounded-xl shadow-sm border p-4 sm:p-6">
+              <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">📍 주변 명소 및 시설</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-3">
+                {selectedStationInfo.nearbyPlaces.map((place, index) => (
+                  <div key={index} className="p-2.5 sm:p-3 bg-yellow-50 rounded-lg text-center">
+                    <div className="text-xs sm:text-sm font-medium text-gray-900">{place}</div>
+                  </div>
+                ))}
               </div>
-            </div>
+            </section>
           )}
 
           {/* 교통수단 종합 정보 */}
-          <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6 mt-6 sm:mt-8">
+          <section className="bg-white rounded-xl shadow-sm border p-4 sm:p-6 mt-6 sm:mt-8">
             <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">🗺️ 송도 교통정보</h3>
             
             {/* 지하철 정보 */}
@@ -897,10 +989,10 @@ export default function SubwayPage() {
                 </div>
               </div>
             </div>
-          </div>
+          </section>
 
           {/* 안내사항 */}
-          <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-3 sm:p-4 mt-6 sm:mt-8">
+          <section className="bg-yellow-50 border border-yellow-200 rounded-xl p-3 sm:p-4 mt-6 sm:mt-8">
             <div className="flex">
               <div className="flex-shrink-0">
                 <span className="text-yellow-400 text-lg">⚠️</span>
@@ -919,8 +1011,8 @@ export default function SubwayPage() {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+          </section>
+        </main>
         
         {/* Footer */}
         <footer className="bg-gray-800 text-white py-8 sm:py-12 mt-8 sm:mt-12">
@@ -989,8 +1081,7 @@ export default function SubwayPage() {
                 </div>
               </div>
             </div>
-          </div>
-        </footer>
+          </footer>
       </div>
     </>
   );

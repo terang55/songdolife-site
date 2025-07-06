@@ -185,7 +185,7 @@ export async function GET(request: NextRequest) {
         source: "중앙일보",
         date: "2025-06-26T05:55:00",
         url: "https://n.news.naver.com/mnews/article/025/0003450871",
-        keyword: "논현동",
+        keyword: "송도동",
         content_length: 1573
       },
       {
@@ -194,7 +194,7 @@ export async function GET(request: NextRequest) {
         source: "MBN",
         date: "2025-06-13T14:06:00",
         url: "https://n.news.naver.com/mnews/article/057/0001891292",
-        keyword: "논현동 맛집",
+        keyword: "송도동 맛집",
         content_length: 1294
       },
       {
@@ -203,7 +203,7 @@ export async function GET(request: NextRequest) {
         source: "조선비즈",
         date: "2025-06-24T16:04:00",
         url: "https://n.news.naver.com/mnews/article/366/0001087513",
-        keyword: "논현동 부동산",
+        keyword: "송도동 부동산",
         content_length: 1117
       }
     ];

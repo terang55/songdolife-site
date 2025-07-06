@@ -1,5 +1,5 @@
 """
-논현동 정보 데이터 분석기
+송도동 정보 데이터 분석기
 수집된 뉴스, 카페 글 등의 데이터를 분석하고 인사이트를 제공
 """
 
@@ -158,7 +158,7 @@ class NonhyeonDataAnalyzer:
     def extract_keywords_from_titles(self, titles):
         """제목에서 키워드 추출"""
         try:
-            # 논현동 관련 키워드들
+            # 송도동 관련 키워드들
             interest_keywords = [
                 "맛집", "카페", "육아", "어린이집", "유치원", "학원",
                 "부동산", "아파트", "전세", "매매", "분양",
@@ -289,7 +289,7 @@ class NonhyeonDataAnalyzer:
             if 'total_articles' in news_analysis:
                 total_news = news_analysis['total_articles']
                 if total_news > 0:
-                    insights.append(f"📰 최근 논현동 관련 뉴스가 {total_news}건 보도되었습니다.")
+                    insights.append(f"📰 최근 송도동 관련 뉴스가 {total_news}건 보도되었습니다.")
                     
                     top_keyword = list(news_analysis.get('keyword_distribution', {}).keys())
                     if top_keyword:
@@ -299,7 +299,7 @@ class NonhyeonDataAnalyzer:
             if 'total_posts' in cafe_analysis:
                 total_posts = cafe_analysis['total_posts']
                 if total_posts > 0:
-                    insights.append(f"💬 최근 논현동 관련 카페 글이 {total_posts}건 작성되었습니다.")
+                    insights.append(f"💬 최근 송도동 관련 카페 글이 {total_posts}건 작성되었습니다.")
                     
                     active_cafes = list(cafe_analysis.get('active_cafes', {}).keys())
                     if active_cafes:
@@ -321,7 +321,7 @@ def main():
     """메인 실행 함수"""
     analyzer = NonhyeonDataAnalyzer()
     
-    print("📊 논현동 정보 데이터 분석기")
+    print("📊 송도동 정보 데이터 분석기")
     print("=" * 50)
     
     while True:

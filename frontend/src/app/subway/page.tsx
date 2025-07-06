@@ -40,40 +40,25 @@ interface StationInfo {
 
 const stations: StationInfo[] = [
   {
-    name: '호구포역',
+    name: '센트럴파크역',
     code: 'K258',
-    exits: ['1번 출구: 청능대로, 호구포길 사거리', '2번 출구: 논현2동 주민센터, 논현포대-논현포대근린공원, 인천동방중·초등학교'],
+    exits: ['1번 출구: 센트럴파크, 트리플스트리트', '2번 출구: 송도 더샵 아파트, 현대프리미엄아울렛'],
     facilities: ['엘리베이터', '에스컬레이터', '장애인화장실', '수유실'],
-    nearbyPlaces: ['논현포대', '논현포대근린공원', '인천동방중학교', '인천동방초등학교', '논현2동 주민센터', '호구포길 사거리']
+    nearbyPlaces: ['센트럴파크', '트리플스트리트', '송도 더샵', '현대프리미엄아울렛', '송도국제도시']
   },
   {
-    name: '인천논현역',
+    name: '송도역',
     code: 'K259',
-    exits: [
-      '1번 출구: 고잔중학교, 논현고잔동주민센터, 원동초등학교, 에코메트로 5단지·12단지 아파트, 힐스테이트아파트',
-      '2번 출구: 남동문화예술회관, 소래도서관, 소래휴먼시아1단지, 송천고등·초등학교',
-      '3번 출구: 꿈에그린 6단지, 논현2동주민센터, 동방중·초등학교, 호구포근린공원, 휴먼시아5단지 아파트',
-      '4번 출구: 남동고등학교, 냇마을신영지웰아파트, 논현고등학교, 뜨란채 8단지, 신일해피트리 7단지, 온현1동주민센터, 은봉초등학교'
-    ],
+    exits: ['1번 출구: 송도국제도시, 연세대 국제캠퍼스', '2번 출구: 송도 트리플스트리트, 센트럴파크'],
     facilities: ['엘리베이터', '에스컬레이터', '장애인화장실', '수유실', '무인민원발급기'],
-    nearbyPlaces: ['남동문화예술회관', '소래도서관', '에코메트로 아파트단지', '논현고등학교', '남동고등학교', '고잔중학교', '논현고잔동주민센터', '논현2동주민센터', '온현1동주민센터', '호구포근린공원']
-  },
-  {
-    name: '소래포구역',
-    code: 'K260',
-    exits: [
-      '1번 출구: 고잔중학교, 논현고잔동주민센터, 에코메트로 5단지·12단지 아파트, 원동초등학교, 힐스테이트아파트',
-      '2번 출구: 냇마을신영지웰아파트, 논현고등·중·초등학교, 논현웰카운티, 논현주공뜨란채11단지, 뜨란채 8단지, 소래초·장도초교'
-    ],
-    facilities: ['엘리베이터', '에스컬레이터', '장애인화장실', '수유실', '관광안내소'],
-    nearbyPlaces: ['소래포구', '소래수산시장', '고잔중학교', '논현고등학교', '논현중학교', '논현초등학교', '소래초등학교', '장도초등학교', '논현고잔동주민센터', '에코메트로 아파트단지']
+    nearbyPlaces: ['송도국제도시', '연세대 국제캠퍼스', '트리플스트리트', '센트럴파크']
   }
 ];
 
 const BUS_FEATURE_DISABLED = false; // 광역버스 실시간 정보 기능 활성화 (M6410 G-BIS API)
 
 export default function SubwayPage() {
-  const [selectedStation, setSelectedStation] = useState('인천논현역');
+  const [selectedStation, setSelectedStation] = useState('센트럴파크역');
   const [trainInfo, setTrainInfo] = useState<TrainInfo[]>([]);
   const [busInfo, setBusInfo] = useState<BusArrival[]>([]);
   const [loading, setLoading] = useState(false);
@@ -196,25 +181,25 @@ export default function SubwayPage() {
   return (
     <>
       <Head>
-        <title>인천논현동 교통정보 - 지하철·버스 실시간 도착정보 | 인천논현라이프</title>
-        <meta name="description" content="인천논현동 수인분당선 지하철과 M6410 광역버스의 실시간 도착 정보를 한눈에 확인하세요. 호구포역, 인천논현역, 소래포구역과 주변 버스정류장 정보를 제공합니다." />
-        <meta name="keywords" content="인천논현동 교통, 수인분당선, 호구포역, 인천논현역, 소래포구역, M6410, 광역버스, 실시간 도착정보, 인천논현동 버스, 인천논현동 지하철, 대중교통, 남동구 논현동 교통, 인천시 남동구 논현동" />
+        <title>송도 교통정보 - 지하철·버스 실시간 도착정보 | 송도라이프</title>
+        <meta name="description" content="송도국제도시 인천1호선 지하철과 주요 버스의 실시간 도착 정보를 한눈에 확인하세요. 센트럴파크역, 송도역과 주변 버스정류장 정보를 제공합니다." />
+        <meta name="keywords" content="송도 교통, 인천1호선, 센트럴파크역, 송도역, 광역버스, 실시간 도착정보, 송도 버스, 송도 지하철, 대중교통, 연수구 송도동 교통, 인천시 연수구 송도동" />
         
         {/* Open Graph for Social Media */}
-        <meta property="og:title" content="인천논현동 교통정보 - 지하철·버스 실시간 도착정보" />
-        <meta property="og:description" content="인천논현동 수인분당선 지하철과 M6410 광역버스의 실시간 도착 정보를 한눈에 확인하세요." />
+        <meta property="og:title" content="송도 교통정보 - 지하철·버스 실시간 도착정보" />
+        <meta property="og:description" content="송도국제도시 인천1호선 지하철과 주요 버스의 실시간 도착 정보를 한눈에 확인하세요." />
         <meta property="og:url" content="https://nonhyeon-info-site.vercel.app/subway" />
         <meta property="og:type" content="website" />
         <meta property="og:image" content="https://nonhyeon-info-site.vercel.app/og-image.jpg" />
         
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="논현동 교통정보 - 지하철·버스 실시간 도착정보" />
-        <meta name="twitter:description" content="논현동 수인분당선 지하철과 M6410 광역버스의 실시간 도착 정보를 한눈에 확인하세요." />
+        <meta name="twitter:title" content="송도 교통정보 - 지하철·버스 실시간 도착정보" />
+        <meta name="twitter:description" content="송도국제도시 인천1호선 지하철과 주요 버스의 실시간 도착 정보를 한눈에 확인하세요." />
         
         {/* 지역 정보 메타 태그 */}
         <meta name="geo.region" content="KR-28" />
-        <meta name="geo.placename" content="인천광역시 남동구" />
+        <meta name="geo.placename" content="인천광역시 연수구" />
         <meta name="geo.position" content="37.3894;126.7317" />
         
         {/* 구조화된 데이터 - 교통정보 */}
@@ -224,21 +209,21 @@ export default function SubwayPage() {
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebPage",
-              "name": "인천논현동 교통정보",
-              "description": "인천논현동 수인분당선 지하철과 M6410 광역버스의 실시간 도착 정보",
+              "name": "송도 교통정보",
+              "description": "송도국제도시 인천1호선 지하철과 주요 버스의 실시간 도착 정보",
               "url": "https://nonhyeon-info-site.vercel.app/subway",
               "mainEntity": [
                 {
                   "@type": "TrainStation",
-                  "name": "호구포역",
+                  "name": "센트럴파크역",
                   "identifier": "K258",
-                  "alternateName": ["호구포", "Hogupo"],
+                  "alternateName": ["센트럴파크", "Central Park"],
                   "address": {
                     "@type": "PostalAddress",
                     "addressCountry": "KR",
                     "addressRegion": "인천광역시",
-                    "addressLocality": "남동구",
-                    "streetAddress": "논현동"
+                    "addressLocality": "연수구",
+                    "streetAddress": "송도동"
                   },
                   "geo": {
                     "@type": "GeoCoordinates",
@@ -254,15 +239,15 @@ export default function SubwayPage() {
                 },
                 {
                   "@type": "TrainStation",
-                  "name": "인천논현역",
+                  "name": "송도역",
                   "identifier": "K259",
-                  "alternateName": ["인천논현", "Incheon Nonhyeon"],
+                  "alternateName": ["송도", "Songdo"],
                   "address": {
                     "@type": "PostalAddress",
                     "addressCountry": "KR",
                     "addressRegion": "인천광역시",
-                    "addressLocality": "남동구",
-                    "streetAddress": "논현동"
+                    "addressLocality": "연수구",
+                    "streetAddress": "송도동"
                   },
                   "geo": {
                     "@type": "GeoCoordinates",
@@ -276,36 +261,11 @@ export default function SubwayPage() {
                     {"@type": "LocationFeatureSpecification", "name": "수유실"},
                     {"@type": "LocationFeatureSpecification", "name": "무인민원발급기"}
                   ]
-                },
-                {
-                  "@type": "TrainStation",
-                  "name": "소래포구역",
-                  "identifier": "K260",
-                  "alternateName": ["소래포구", "Soraepogu"],
-                  "address": {
-                    "@type": "PostalAddress",
-                    "addressCountry": "KR",
-                    "addressRegion": "인천광역시",
-                    "addressLocality": "남동구",
-                    "streetAddress": "논현동"
-                  },
-                  "geo": {
-                    "@type": "GeoCoordinates",
-                    "latitude": 37.4067,
-                    "longitude": 126.7194
-                  },
-                  "amenityFeature": [
-                    {"@type": "LocationFeatureSpecification", "name": "엘리베이터"},
-                    {"@type": "LocationFeatureSpecification", "name": "에스컬레이터"},
-                    {"@type": "LocationFeatureSpecification", "name": "장애인화장실"},
-                    {"@type": "LocationFeatureSpecification", "name": "수유실"},
-                    {"@type": "LocationFeatureSpecification", "name": "관광안내소"}
-                  ]
                 }
               ],
               "provider": {
                 "@type": "Organization",
-                "name": "인천논현라이프",
+                "name": "송도라이프",
                 "url": "https://nonhyeon-info-site.vercel.app"
               },
               "dateModified": new Date().toISOString(),
@@ -350,7 +310,7 @@ export default function SubwayPage() {
         <div className="bg-gradient-to-r from-green-600 to-green-800 text-white py-6 sm:py-8">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4">🚌 인천논현동 교통정보</h1>
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4">🚌 송도 교통정보</h1>
               <p className="text-sm sm:text-base lg:text-lg text-green-100 max-w-2xl mx-auto leading-relaxed">
                 지하철 · 버스 실시간 도착 정보와 역 안내
               </p>
@@ -480,8 +440,8 @@ export default function SubwayPage() {
                                   </span>
                                   <span className="text-blue-600 font-medium text-sm sm:text-base">↗️ {train.destination}</span>
                                 </div>
-                              </div>
-                              
+                      </div>
+                      
                               <div className="space-y-1.5 sm:space-y-2 mb-3">
                                 <div className="text-xs sm:text-sm text-gray-600">
                                   🚇 현재 위치: {train.currentLocation}
@@ -543,19 +503,19 @@ export default function SubwayPage() {
                               <div className="space-y-1.5 sm:space-y-2 mb-3">
                                 <div className="text-xs sm:text-sm text-gray-600">
                                   🚇 현재 위치: {train.currentLocation}
-                                </div>
+                        </div>
                                 {train.stationsLeft && (
                                   <div className="flex items-center gap-1">
                                     <span className="text-orange-500">📍</span>
                                     <span className="text-xs sm:text-sm font-medium text-orange-600">{train.stationsLeft}</span>
-                                  </div>
+                        </div>
                                 )}
-                              </div>
-                              
-                              <div className="flex justify-between items-center">
+                      </div>
+                      
+                      <div className="flex justify-between items-center">
                                 <span className="text-lg sm:text-xl font-bold text-red-600">
-                                  {train.arrivalTime}
-                                </span>
+                          {train.arrivalTime}
+                        </span>
                                 {(() => {
                                   const rem = train.remainingMinutes ?? getRemainingMinutes(train.arrivalTime);
                                   return rem !== null && rem !== undefined ? (
@@ -563,12 +523,12 @@ export default function SubwayPage() {
                                   ) : null;
                                 })()}
                                 <span className={`px-2.5 sm:px-3 py-1 rounded-full text-xs font-medium ${
-                                  train.status === '도착' ? 'bg-green-100 text-green-800' :
-                                  train.status === '진입' ? 'bg-yellow-100 text-yellow-800' :
+                          train.status === '도착' ? 'bg-green-100 text-green-800' :
+                          train.status === '진입' ? 'bg-yellow-100 text-yellow-800' :
                                   'bg-red-100 text-red-800'
-                                }`}>
-                                  {train.status}
-                                </span>
+                        }`}>
+                          {train.status}
+                        </span>
                               </div>
                             </div>
                           ))}
@@ -742,48 +702,47 @@ export default function SubwayPage() {
                 </button>
               </div>
             )}
-          </div>
+              </div>
 
           {/* 주변 명소만 표시 */}
           {selectedStationInfo && (
             <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6">
-              <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">📍 주변 명소 및 시설</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-3">
-                {selectedStationInfo.nearbyPlaces.map((place, index) => (
-                  <div key={index} className="p-2.5 sm:p-3 bg-yellow-50 rounded-lg text-center">
-                    <div className="text-xs sm:text-sm font-medium text-gray-900">{place}</div>
-                  </div>
-                ))}
+                <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">📍 주변 명소 및 시설</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-3">
+                  {selectedStationInfo.nearbyPlaces.map((place, index) => (
+                    <div key={index} className="p-2.5 sm:p-3 bg-yellow-50 rounded-lg text-center">
+                      <div className="text-xs sm:text-sm font-medium text-gray-900">{place}</div>
+                    </div>
+                  ))}
               </div>
             </div>
           )}
 
           {/* 교통수단 종합 정보 */}
           <div className="bg-white rounded-xl shadow-sm border p-4 sm:p-6 mt-6 sm:mt-8">
-            <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">🗺️ 논현동 교통정보</h3>
+            <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">🗺️ 송도 교통정보</h3>
             
             {/* 지하철 정보 */}
             <div className="bg-gray-50 p-3 sm:p-4 rounded-lg mb-4">
-              <h4 className="text-sm font-bold text-gray-800 mb-2">🚇 수인분당선</h4>
+              <h4 className="text-sm font-bold text-gray-800 mb-2">🚇 인천1호선</h4>
               <div className="space-y-2 sm:space-y-3">
                 <div className="text-xs sm:text-sm text-gray-600 leading-relaxed">
                   <strong className="text-gray-800">운행 구간:</strong> 인천역 ↔ 청량리역
                 </div>
                 <div className="text-xs sm:text-sm text-gray-600 leading-relaxed">
                   <strong className="text-gray-800">운행 시간:</strong> 첫차 약 05:00 ~ 막차 약 24:00 (역별로 다름)
-                </div>
+              </div>
                 <div className="text-xs sm:text-sm text-gray-600 leading-relaxed">
                   <strong className="text-gray-800">배차 간격:</strong> 평일 6-8분 / 주말 8-12분
-                </div>
+              </div>
                 <div className="text-xs sm:text-sm text-gray-600 leading-relaxed mb-3 sm:mb-4">
                   <strong className="text-gray-800">주요 경유역:</strong> 인천, 송도, 수원, 분당, 왕십리, 청량리
-                </div>
+              </div>
               
                 <div className="flex flex-wrap gap-1.5 sm:gap-2 text-xs">
-                  <span className="px-2 py-1 bg-green-100 text-green-800 rounded">논현동 구간</span>
-                  <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded">호구포역</span>
-                  <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded">인천논현역</span>
-                  <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded">소래포구역</span>
+                <span className="px-2 py-1 bg-green-100 text-green-800 rounded">송도 구간</span>
+                <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded">센트럴파크역</span>
+                  <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded">송도역</span>
                 </div>
               </div>
             </div>
@@ -793,7 +752,7 @@ export default function SubwayPage() {
               <h4 className="text-sm font-bold text-gray-800 mb-2">🚌 광역버스</h4>
               <div className="space-y-2 sm:space-y-3">
                 <div className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-                  <strong className="text-gray-800">M6410:</strong> 논현동 → 인천 → 서울 (강남역, 서울역 방면)
+                  <strong className="text-gray-800">M6410:</strong> 송도동 → 인천 → 서울 (강남역, 서울역 방면)
                 </div>
                 <div className="text-xs sm:text-sm text-gray-600 leading-relaxed">
                   <strong className="text-gray-800">운행 시간:</strong> 첫차 약 05:00 ~ 막차 약 24:00
@@ -843,12 +802,12 @@ export default function SubwayPage() {
                 <div className="flex items-center space-x-2 sm:space-x-3 mb-3 sm:mb-4">
                   <span className="text-2xl sm:text-3xl">🏙️</span>
                   <div>
-                    <div className="text-lg sm:text-xl font-bold">인천논현라이프</div>
-                    <div className="text-sm text-gray-400">인천 남동구 논현동 지역 정보</div>
+                    <div className="text-lg sm:text-xl font-bold">송도라이프</div>
+                    <div className="text-sm text-gray-400">송도동 지역 정보</div>
                   </div>
                 </div>
                 <p className="text-sm text-gray-300 text-center md:text-left max-w-sm">
-                  논현동 주민들을 위한 실시간 지역 정보를 제공합니다. 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요.
+                  송도동 주민들을 위한 실시간 지역 정보를 제공합니다. 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요.
                 </p>
               </div>
 
@@ -856,11 +815,8 @@ export default function SubwayPage() {
               <div className="text-center md:text-left">
                 <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">주요 지역</h3>
                 <ul className="space-y-1 sm:space-y-2 text-sm text-gray-300">
-                  <li>📍 논현동</li>
-                  <li>🚇 에코메트로</li>
-                  <li>🦐 소래포구</li>
-                  <li>⚓ 호구포</li>
-                  <li>🏗️ 논현지구</li>
+                  <li>📍 송도국제도시</li>
+                  <li>🌳 센트럴파크</li>
                 </ul>
               </div>
 
@@ -885,7 +841,7 @@ export default function SubwayPage() {
             <div className="border-t border-gray-700 pt-6 sm:pt-8">
               <div className="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
                 <div className="text-xs sm:text-sm text-gray-400">
-                  © 2025 인천논현라이프. All rights reserved.
+                  © 2025 송도라이프. All rights reserved.
                 </div>
                 <div className="flex items-center space-x-4 text-xs sm:text-sm">
                   <Link 

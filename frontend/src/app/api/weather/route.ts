@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 
-// 인천 남동구 논현동 행정동 중심 좌표
-const NONHYEON_LAT = 37.3988;
-const NONHYEON_LON = 126.7359;
+// 인천 연수구 송도동 행정동 중심 좌표
+const SONGDO_LAT = 37.3988;
+const SONGDO_LON = 126.7359;
 
 // OpenWeather API 키 (환경변수에서만 가져오기)
 const API_KEY = process.env.OPENWEATHER_API_KEY;
@@ -64,7 +64,7 @@ interface WeatherData {
 
 export async function GET() {
   try {
-    console.log('🌤️ 논현동 날씨 정보 요청');
+    console.log('🌤️ 송도동 날씨 정보 요청');
     
     // 모든 환경변수 확인 (디버깅용)
     console.log('🔍 전체 환경변수 디버깅:', {
@@ -88,13 +88,13 @@ export async function GET() {
     }
 
     // 현재 날씨 정보 가져오기
-    const currentWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${NONHYEON_LAT}&lon=${NONHYEON_LON}&appid=${API_KEY}&units=metric&lang=kr`;
+    const currentWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${SONGDO_LAT}&lon=${SONGDO_LON}&appid=${API_KEY}&units=metric&lang=kr`;
     
     // 5일 예보 정보 가져오기
-    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${NONHYEON_LAT}&lon=${NONHYEON_LON}&appid=${API_KEY}&units=metric&lang=kr`;
+    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${SONGDO_LAT}&lon=${SONGDO_LON}&appid=${API_KEY}&units=metric&lang=kr`;
 
     // 미세먼지 정보 가져오기
-    const airPollutionUrl = `https://api.openweathermap.org/data/2.5/air_pollution?lat=${NONHYEON_LAT}&lon=${NONHYEON_LON}&appid=${API_KEY}`;
+    const airPollutionUrl = `https://api.openweathermap.org/data/2.5/air_pollution?lat=${SONGDO_LAT}&lon=${SONGDO_LON}&appid=${API_KEY}`;
 
     // 미세먼지 상태 판단 함수
     const getAirQualityStatus = (pm10: number, pm25: number) => {
@@ -280,7 +280,7 @@ export async function GET() {
     return NextResponse.json({
       success: true,
       data: weatherData,
-      location: '인천 남동구 논현동',
+      location: '인천 연수구 송도동',
       timestamp: new Date().toISOString()
     });
 
@@ -356,7 +356,7 @@ export async function GET() {
           }
         ]
       },
-      location: '인천 남동구 논현동',
+      location: '인천 연수구 송도동',
       timestamp: new Date().toISOString()
     }, { status: 200 }); // 개발용이므로 200 상태 코드 유지
   }

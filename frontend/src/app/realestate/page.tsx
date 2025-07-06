@@ -8,34 +8,34 @@ import Footer from '../components/Footer';
 import { generateBreadcrumbSchema } from '@/lib/seo';
 
 export const metadata: Metadata = {
-  title: '인천논현동 부동산 실거래가 | 에코메트로·논현센트럴뷰 아파트 시세 | 인천논현라이프',
-  description: '인천시 남동구 논현동 아파트(에코메트로·논현센트럴뷰 등) 최근 3개월 실거래가, 평당가, 거래건수 통계를 실시간으로 확인하세요. 매매·전세·월세 가격 비교 및 시장 동향 분석.',
+  title: '송도 부동산 실거래가 | 더샵·센트럴파크 아파트 시세 | 송도라이프',
+  description: '송도 주요 단지 실거래가, 평당가, 거래 통계를 실시간 제공. 매매·전세·월세 가격 비교 및 시장 동향 분석.',
   keywords: [
-    '인천논현동 부동산', '인천논현동 아파트', '인천논현동 실거래가', '에코메트로', '논현센트럴뷰', 
-    '인천논현 아파트 매매', '평당가', '부동산 가격', '국토부 실거래', '남동구 부동산',
-    '아파트 시세', '매매 가격', '전세 가격', '월세 정보', '부동산 시장', '논현지구 아파트',
-    '인천 부동산', '아파트 매매', '주택 가격', '부동산 투자', '인천논현동 시세',
-    '남동구 논현동 부동산', '인천시 남동구 논현동', '남동구 논현동 아파트'
+    '송도 부동산', '송도 아파트', '송도 실거래가', '더샵', '센트럴파크', 
+    '송도 아파트 매매', '평당가', '부동산 가격', '국토부 실거래', '연수구 부동산',
+    '아파트 시세', '매매 가격', '전세 가격', '월세 정보', '부동산 시장', '송도지구 아파트',
+    '인천 부동산', '아파트 매매', '주택 가격', '부동산 투자', '송도동 시세',
+    '연수구 송도동 부동산', '인천시 연수구 송도동', '연수구 송도동 아파트'
   ],
   openGraph: {
-    title: '인천논현동 부동산 실거래가 | 에코메트로·논현센트럴뷰 아파트 시세',
-    description: '인천논현동 주요 단지 실거래가, 평당가, 거래 통계를 실시간 제공. 매매·전세·월세 가격 비교 및 시장 동향 분석.',
+    title: '송도 부동산 실거래가 | 더샵·센트럴파크 아파트 시세',
+    description: '송도 주요 단지 실거래가, 평당가, 거래 통계를 실시간 제공. 매매·전세·월세 가격 비교 및 시장 동향 분석.',
     url: `${BASE_URL}/realestate`,
     type: 'website',
-    siteName: '인천논현라이프',
+    siteName: '송도라이프',
     images: [
       {
         url: `${BASE_URL}/og-image.jpg`,
         width: 1200,
         height: 630,
-        alt: '논현동 부동산 실거래가 정보 - 인천논현라이프'
+        alt: '송도 부동산 실거래가 정보 - 송도라이프'
       }
     ]
   },
   twitter: {
     card: 'summary_large_image',
-    title: '인천논현동 부동산 실거래가 | 에코메트로·논현센트럴뷰 아파트 시세',
-    description: '인천논현동 주요 단지 실거래가, 평당가, 거래 통계를 실시간 제공.',
+    title: '송도 부동산 실거래가 | 더샵·센트럴파크 아파트 시세',
+    description: '송도 주요 단지 실거래가, 평당가, 거래 통계를 실시간 제공.',
     images: [`${BASE_URL}/og-image.jpg`]
   },
   alternates: { canonical: `${BASE_URL}/realestate` },
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
   },
   other: {
     'geo.region': 'KR-28',
-    'geo.placename': '인천광역시 남동구 논현동',
+    'geo.placename': '인천광역시 연수구 송도동',
     'geo.position': '37.3894;126.7317',
     'ICBM': '37.3894, 126.7317',
   },
@@ -62,11 +62,11 @@ export default function RealEstatePage() {
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'Dataset',
-    name: '인천논현동 아파트 실거래가',
+    name: '송도 아파트 실거래가',
     description: '국토교통부 실거래가 공개시스템 기반 최신 3개월 데이터',
     url: `${BASE_URL}/realestate`,
-    keywords: ['논현동 실거래가','에코메트로','논현센트럴뷰'],
-    creator: { '@type': 'Organization', name: '인천논현라이프' },
+    keywords: ['송도 실거래가','더샵','센트럴파크'],
+    creator: { '@type': 'Organization', name: '송도라이프' },
     license: 'https://www.law.go.kr'
   };
 
@@ -90,7 +90,7 @@ export default function RealEstatePage() {
               <Link href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
                 <span className="text-2xl">🏙️</span>
                 <div>
-                  <div className="text-xl font-bold text-gray-900">인천논현라이프</div>
+                  <div className="text-xl font-bold text-gray-900">송도라이프</div>
                   <div className="text-sm text-gray-500">부동산 정보</div>
                 </div>
               </Link>
@@ -142,10 +142,10 @@ export default function RealEstatePage() {
         {/* 페이지 제목 */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            🏢 인천논현동 부동산 실거래가
+            🏢 송도 부동산 실거래가
           </h1>
           <p className="text-gray-600">
-            인천시 남동구 논현동 아파트 실거래가 정보를 실시간으로 확인하세요.
+            송도 아파트 실거래가 정보를 실시간으로 확인하세요.
           </p>
         </div>
 
@@ -204,8 +204,8 @@ export default function RealEstatePage() {
                       <span className="text-xs bg-red-200 text-red-700 px-2 py-1 rounded">운행중</span>
                     </div>
                     <div className="text-xs text-gray-700 space-y-1">
-                      <div>• 논현동(사리울중학교) → 강남역·양재역</div>
-                      <div>• 소요시간: 약 1시간</div>
+                      <div>• 송도동(사리울중학교) → 강남역·양재역</div>
+                      <div>• 송도동(송도역) → 서울 강남권 직행</div>
                     </div>
                   </div>
                   <div className="p-2 bg-red-100 rounded">
@@ -214,7 +214,7 @@ export default function RealEstatePage() {
                       <span className="text-xs bg-red-200 text-red-700 px-2 py-1 rounded">운행중</span>
                     </div>
                     <div className="text-xs text-gray-700 space-y-1">
-                      <div>• 논현동(소래포구역) → 서울 강남권 직행</div>
+                      <div>• 송도동(센트럴파크역) → 서울 강남권 직행</div>
                       <div>• 역삼역까지 직행 운행</div>
                       <div>• 기존 M6410 수요 분산 효과</div>
                     </div>
@@ -236,7 +236,7 @@ export default function RealEstatePage() {
                   <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">2028년</span>
                 </div>
                 <div className="text-xs text-gray-600 space-y-1">
-                  <div>• 인천논현역 정차 추진 중!</div>
+                  <div>• 송도역 정차 추진 중!</div>
                   <div>• 판교 40분, 광명KTX 15분</div>
                   <div>• 판교테크노밸리 직행</div>
                 </div>
@@ -282,7 +282,7 @@ export default function RealEstatePage() {
             {/* 교통 허브 전망 */}
             <div className="mt-4 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border">
               <h4 className="font-semibold text-gray-800 mb-2 flex items-center">
-                🌟 논현동 교통 허브 전망
+                🌟 송도 교통 허브 전망
               </h4>
               <div className="text-sm text-gray-700 space-y-1">
                 <div>• <strong>현재:</strong> 수인분당선 1개 노선</div>

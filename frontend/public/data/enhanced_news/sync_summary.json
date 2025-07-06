@@ -1,24 +1,21 @@
 {
-  "sync_time": "2025-07-06T10:47:15.946840",
+  "sync_time": "2025-07-06T12:42:59.274271",
   "total_files": 1,
-  "total_keywords": 10,
+  "total_keywords": 7,
   "keywords": [
-    "소래포구",
-    "에코메트로",
-    "인천 남동구 논현동",
-    "인천 논현고잔동",
-    "인천 논현지구",
-    "인천논현",
-    "인천논현 맛집",
-    "인천논현 아파트",
-    "인천논현 카페",
-    "호구포"
+    "송도 맛집",
+    "송도국제도시",
+    "송도국제도시 맛집",
+    "송도국제도시 아파트",
+    "송도국제도시 카페",
+    "인천 송도",
+    "인천 연수구 송도동"
   ],
   "file_types": [
     "all_platforms"
   ],
   "files": {
-    "all_platforms": "all_platforms_enhanced_news_20250706_104708.json"
+    "all_platforms": "all_platforms_enhanced_news_20250706_124252.json"
   },
   "sync_type": "latest_only"
 }

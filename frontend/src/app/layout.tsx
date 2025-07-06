@@ -15,23 +15,23 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "인천논현라이프 | 인천 남동구 논현동 생활정보 플랫폼",
-    template: "%s | 인천논현라이프"
+    default: "송도라이프 | 인천 연수구 송도동 생활정보 플랫폼",
+    template: "%s | 송도라이프"
   },
-  description: "논현동 주민을 위한 실시간 뉴스·지하철·부동산 등 생활정보 플랫폼",
+  description: "송도국제도시 주민을 위한 실시간 뉴스·지하철·부동산 등 생활정보 플랫폼",
   keywords: [
-    "논현동", "인천 논현동", "남동구 논현동", "논현지구", "에코메트로",
-    "논현동 맛집", "논현동 카페", "논현동 부동산", "논현동 육아",
-    "논현동 병원", "논현동 약국", "논현동 의료", "논현동 내과", "논현동 소아과",
-    "논현동 치과", "논현동 응급실", "논현동 야간진료", "인천논현역 병원",
-    "수인분당선", "인천논현역", "호구포역", "소래포구역", "지하철 시간표",
-    "논현동 지하철", "수인선", "지하철 실시간", "전철 도착시간", "지하철역 정보",
-    "소래포구", "호구포", "논현동 정보", "논현동 뉴스", "논현동 생활정보",
-    "인천 남동구", "논현동 아파트", "논현동 교통", "논현동 학원"
+    "송도동", "인천 송도동", "남동구 송도동", "송도지구", "에코메트로",
+    "송도동 맛집", "송도동 카페", "송도동 부동산", "송도동 육아",
+    "송도동 병원", "송도동 약국", "송도동 의료", "송도동 내과", "송도동 소아과",
+    "송도동 치과", "송도동 응급실", "송도동 야간진료", "인천송도역 병원",
+    "수인분당선", "인천송도역", "호구포역", "소래포구역", "지하철 시간표",
+    "송도동 지하철", "수인선", "지하철 실시간", "전철 도착시간", "지하철역 정보",
+    "소래포구", "호구포", "송도동 정보", "송도동 뉴스", "송도동 생활정보",
+    "인천 남동구", "송도동 아파트", "송도동 교통", "송도동 학원"
   ],
-  authors: [{ name: "인천논현라이프", url: BASE_URL }],
-  creator: "인천논현라이프",
-  publisher: "인천논현라이프",
+  authors: [{ name: "송도라이프", url: BASE_URL }],
+  creator: "송도라이프",
+  publisher: "송도라이프",
   robots: {
     index: true,
     follow: true,
@@ -47,22 +47,22 @@ export const metadata: Metadata = {
     type: "website",
     locale: "ko_KR",
     url: BASE_URL,
-    siteName: "인천논현라이프",
-    title: "인천논현라이프 | 인천 남동구 논현동 생활정보 플랫폼",
-    description: "논현동 주민을 위한 실시간 뉴스·지하철·부동산 등 생활정보 플랫폼",
+    siteName: "송도라이프",
+    title: "송도라이프 | 인천 연수구 송도동 생활정보 플랫폼",
+    description: "송도국제도시 주민을 위한 실시간 뉴스·지하철·부동산 등 생활정보 플랫폼",
     images: [
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "인천논현라이프 - 인천 남동구 논현동 생활정보 플랫폼",
+        alt: "송도라이프 - 인천 연수구 송도동 생활정보 플랫폼",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "인천논현라이프 | 인천 남동구 논현동 생활정보 플랫폼",
-    description: "인천 남동구 논현동 주민들을 위한 종합 정보 플랫폼. 실시간 뉴스, 수인분당선 지하철 정보, 병원/약국 정보, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요.",
+    title: "송도라이프 | 인천 연수구 송도동 생활정보 플랫폼",
+    description: "인천 남동구 송도동 주민들을 위한 종합 정보 플랫폼. 실시간 뉴스, 수인분당선 지하철 정보, 병원/약국 정보, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요.",
     images: ["/og-image.jpg"],
     creator: "@nonhyeon_info",
   },
@@ -90,7 +90,7 @@ export default function RootLayout({
         <meta name="application-name" content="논현라이프" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="논현라이프" />
+        <meta name="apple-mobile-web-app-title" content="송도라이프" />
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="msapplication-config" content="/browserconfig.xml" />
@@ -125,41 +125,41 @@ export default function RootLayout({
         <meta name="msapplication-TileColor" content="#2563eb" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="인천논현라이프" />
+        <meta name="apple-mobile-web-app-title" content="송도라이프" />
         
         {/* 네이버 SEO 최적화 메타 태그 */}
         <meta name="naver-site-verification" content="6f6f6592110192cd2491d3c5bf4133592c100558" />
         
         {/* Google AdSense 인증 */}
         <meta name="google-adsense-account" content="ca-pub-2592538242403472" />
-        <meta name="description" content="논현동 주민을 위한 실시간 뉴스·지하철·부동산 등 생활정보 플랫폼" />
-        <meta name="keywords" content="논현동,인천논현동,남동구논현동,논현지구,에코메트로,논현동맛집,논현동카페,논현동부동산,논현동육아,논현동병원,논현동약국,논현동의료,수인분당선,인천논현역,호구포역,소래포구역,지하철시간표,소래포구,호구포" />
-        <meta name="author" content="인천논현라이프" />
-        <meta name="publisher" content="인천논현라이프" />
-        <meta name="copyright" content="인천논현라이프" />
+        <meta name="description" content="송도국제도시 주민을 위한 실시간 뉴스·지하철·부동산 등 생활정보 플랫폼" />
+        <meta name="keywords" content="송도국제도시,수인분당선,인천송도역,호구포역,소래포구역,지하철시간표,소래포구,호구포" />
+        <meta name="author" content="송도라이프" />
+        <meta name="publisher" content="송도라이프" />
+        <meta name="copyright" content="송도라이프" />
         <meta name="robots" content="index,follow" />
         <meta name="revisit-after" content="1 days" />
         <meta name="content-language" content="ko" />
         
         {/* Open Graph for Naver */}
         <meta property="og:locale" content="ko_KR" />
-        <meta property="og:site_name" content="인천논현라이프" />
+        <meta property="og:site_name" content="송도라이프" />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="인천논현라이프 | 인천 남동구 논현동 생활정보 플랫폼" />
-        <meta property="og:description" content="논현동 주민을 위한 실시간 뉴스·지하철·부동산 등 생활정보 플랫폼" />
+        <meta property="og:title" content="송도라이프 | 인천 연수구 송도동 생활정보 플랫폼" />
+        <meta property="og:description" content="송도국제도시 주민을 위한 실시간 뉴스·지하철·부동산 등 생활정보 플랫폼" />
         <meta property="og:url" content={BASE_URL} />
         <meta property="og:image" content={`${BASE_URL}/og-image.jpg`} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="인천논현라이프 - 인천 남동구 논현동 생활정보 플랫폼" />
+        <meta property="og:image:alt" content="송도라이프 - 인천 연수구 송도동 생활정보 플랫폼" />
         
         {/* 지역 정보 메타 태그 */}
         <meta name="geo.region" content="KR-28" />
-        <meta name="geo.placename" content="인천광역시 남동구 논현동" />
+        <meta name="geo.placename" content="인천광역시 연수구 송도동" />
         <meta name="geo.position" content="37.3894;126.7317" />
         <meta name="ICBM" content="37.3894, 126.7317" />
         
-        {/* 파비콘 - 논현동 건물 스타일 */}
+        {/* 파비콘 - 송도동 건물 스타일 */}
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
@@ -168,11 +168,11 @@ export default function RootLayout({
         <link rel="manifest" href="/site.webmanifest" />
         
         {/* RSS 피드 */}
-        <link rel="alternate" type="application/rss+xml" title="인천논현라이프 - 전체" href="/api/rss" />
-        <link rel="alternate" type="application/rss+xml" title="인천논현라이프 - 뉴스" href="/api/rss?category=뉴스" />
-        <link rel="alternate" type="application/rss+xml" title="인천논현라이프 - 블로그" href="/api/rss?category=블로그" />
-        <link rel="alternate" type="application/rss+xml" title="인천논현라이프 - 유튜브" href="/api/rss?category=유튜브" />
-        <link rel="alternate" type="application/rss+xml" title="인천논현라이프 - 의료정보" href="/api/rss?category=의료" />
+        <link rel="alternate" type="application/rss+xml" title="송도라이프 - 전체" href="/api/rss" />
+        <link rel="alternate" type="application/rss+xml" title="송도라이프 - 뉴스" href="/api/rss?category=뉴스" />
+        <link rel="alternate" type="application/rss+xml" title="송도라이프 - 블로그" href="/api/rss?category=블로그" />
+        <link rel="alternate" type="application/rss+xml" title="송도라이프 - 유튜브" href="/api/rss?category=유튜브" />
+        <link rel="alternate" type="application/rss+xml" title="송도라이프 - 의료정보" href="/api/rss?category=의료" />
         
         {/* 구조화된 데이터 - 지역 비즈니스 */}
         <script
@@ -181,15 +181,15 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "LocalBusiness",
-              "name": "인천논현라이프",
-              "description": "인천 남동구 논현동 주민들을 위한 종합 정보 플랫폼",
+              "name": "송도라이프",
+              "description": "인천 연수구 송도동 주민들을 위한 종합 정보 플랫폼",
               "url": BASE_URL,
               "address": {
                 "@type": "PostalAddress",
                 "addressCountry": "KR",
                 "addressRegion": "인천광역시",
                 "addressLocality": "남동구",
-                "streetAddress": "논현동"
+                "streetAddress": "송도동"
               },
               "geo": {
                 "@type": "GeoCoordinates",
@@ -198,12 +198,12 @@ export default function RootLayout({
               },
               "areaServed": {
                 "@type": "Place",
-                "name": "인천광역시 남동구 논현동"
+                "name": "인천광역시 남동구 송도동"
               },
               "knowsAbout": [
-                "논현동 맛집", "논현동 카페", "논현동 부동산", 
-                "논현동 육아", "논현동 병원", "논현동 약국", "논현동 의료",
-                "수인분당선", "지하철 정보", "호구포역", "인천논현역", "소래포구역",
+                "송도동 맛집", "송도동 카페", "송도동 부동산", 
+                "송도동 육아", "송도동 병원", "송도동 약국", "송도동 의료",
+                "수인분당선", "지하철 정보", "호구포역", "인천송도역", "소래포구역",
                 "에코메트로", "소래포구", "호구포"
               ]
             })
@@ -217,9 +217,9 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebSite",
-              "name": "인천논현라이프",
+              "name": "송도라이프",
               "url": BASE_URL,
-              "description": "인천 남동구 논현동 지역 정보 종합 플랫폼",
+              "description": "인천 연수구 송도동 지역 정보 종합 플랫폼",
               "inLanguage": "ko-KR",
               "potentialAction": {
                 "@type": "SearchAction",
@@ -231,7 +231,7 @@ export default function RootLayout({
               },
               "about": {
                 "@type": "Place",
-                "name": "인천광역시 남동구 논현동",
+                "name": "인천광역시 연수구 송도동",
                 "geo": {
                   "@type": "GeoCoordinates",
                   "latitude": 37.3894,
@@ -249,26 +249,26 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Organization",
-              "name": "인천논현라이프",
+              "name": "송도라이프",
               "url": BASE_URL,
               "logo": `${BASE_URL}/og-image.jpg`,
-              "description": "인천 남동구 논현동 주민들을 위한 종합 정보 플랫폼",
+              "description": "인천 연수구 송도동 주민들을 위한 종합 정보 플랫폼",
               "address": {
                 "@type": "PostalAddress",
                 "addressCountry": "KR",
                 "addressRegion": "인천광역시",
                 "addressLocality": "남동구",
-                "streetAddress": "논현동"
+                "streetAddress": "송도동"
               },
               "areaServed": {
                 "@type": "Place",
-                "name": "인천광역시 남동구 논현동"
+                "name": "인천광역시 남동구 송도동"
               },
               "knowsAbout": [
-                "논현동 지역정보", "논현동 맛집", "논현동 카페", 
-                "논현동 부동산", "논현동 육아", "논현동 병원", "논현동 약국", 
-                "논현동 의료", "수인분당선", "지하철 정보", "호구포역", "인천논현역", "소래포구역",
-                "에코메트로", "소래포구", "호구포", "논현지구"
+                "송도동 지역정보", "송도동 맛집", "송도동 카페", 
+                "송도동 부동산", "송도동 육아", "송도동 병원", "송도동 약국", 
+                "송도동 의료", "수인분당선", "지하철 정보", "호구포역", "인천송도역", "소래포구역",
+                "에코메트로", "소래포구", "호구포", "송도지구"
               ],
               "sameAs": [
                 BASE_URL
@@ -284,7 +284,7 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "NewsMediaOrganization",
-              "name": "인천논현라이프",
+              "name": "송도라이프",
               "url": BASE_URL,
               "logo": {
                 "@type": "ImageObject",
@@ -292,17 +292,17 @@ export default function RootLayout({
                 "width": 1200,
                 "height": 630
               },
-              "description": "인천 남동구 논현동 지역 뉴스 및 정보 제공",
+              "description": "인천 연수구 송도동 지역 뉴스 및 정보 제공",
               "publishingPrinciples": BASE_URL,
               "areaServed": {
                 "@type": "Place",
-                "name": "인천광역시 남동구 논현동"
+                "name": "인천광역시 남동구 송도동"
               },
               "audience": {
                 "@type": "Audience",
                 "geographicArea": {
                   "@type": "Place",
-                  "name": "인천광역시 남동구 논현동"
+                  "name": "인천광역시 남동구 송도동"
                 }
               }
             })
@@ -316,37 +316,37 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "MedicalWebPage",
-              "name": "인천논현라이프 병원/약국 정보",
+              "name": "송도라이프 병원/약국 정보",
               "url": BASE_URL,
-              "description": "인천 남동구 논현동 주변 병원 및 약국 정보를 실시간으로 제공하는 의료 정보 서비스",
+              "description": "인천 연수구 송도동 주변 병원 및 약국 정보를 실시간으로 제공하는 의료 정보 서비스",
               "about": {
                 "@type": "MedicalCondition",
                 "name": "지역 의료 서비스"
               },
               "mainEntity": {
                 "@type": "ItemList",
-                "name": "인천논현라이프 의료기관 목록",
-                "description": "인천논현라이프 및 인근 지역의 병원, 약국 정보",
+                "name": "송도라이프 의료기관 목록",
+                "description": "송도라이프 및 인근 지역의 병원, 약국 정보",
                 "itemListElement": [
                   {
                     "@type": "MedicalOrganization",
-                    "name": "인천논현라이프 지역 병원",
+                    "name": "송도라이프 지역 병원",
                     "description": "내과, 외과, 소아과, 치과 등 다양한 진료과목"
                   },
                   {
                     "@type": "Pharmacy",
-                    "name": "인천논현라이프 지역 약국",
+                    "name": "송도라이프 지역 약국",
                     "description": "처방전 조제 및 일반의약품 판매"
                   }
                 ]
               },
               "provider": {
                 "@type": "Organization",
-                "name": "인천논현라이프"
+                "name": "송도라이프"
               },
               "areaServed": {
                 "@type": "Place",
-                "name": "인천광역시 남동구 논현동",
+                "name": "인천광역시 남동구 송도동",
                 "geo": {
                   "@type": "GeoCoordinates",
                   "latitude": 37.3894,
@@ -364,37 +364,21 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebPage",
-              "name": "인천논현라이프 지하철 정보",
+              "name": "송도라이프 지하철 정보",
               "url": `${BASE_URL}/subway`,
-              "description": "수인분당선 호구포역, 인천논현역, 소래포구역의 실시간 열차 도착 정보 및 역 정보",
+              "description": "인천1호선 센트럴파크역, 송도역의 실시간 열차 도착 정보 및 역 정보",
               "about": {
                 "@type": "PublicTransportHub",
-                "name": "수인분당선 논현동 구간"
+                "name": "수인분당선 송도동 구간"
               },
               "mainEntity": {
                 "@type": "ItemList",
-                "name": "인천논현라이프 지하철역 목록",
-                "description": "수인분당선 논현동 인근 지하철역 정보",
+                "name": "송도라이프 지하철역 목록",
+                "description": "수인분당선 송도동 인근 지하철역 정보",
                 "itemListElement": [
                   {
                     "@type": "TrainStation",
-                    "name": "호구포역",
-                    "identifier": "K258",
-                    "address": {
-                      "@type": "PostalAddress",
-                      "addressCountry": "KR",
-                      "addressRegion": "인천광역시",
-                      "addressLocality": "남동구"
-                    },
-                    "geo": {
-                      "@type": "GeoCoordinates",
-                      "latitude": 37.3814,
-                      "longitude": 126.7286
-                    }
-                  },
-                  {
-                    "@type": "TrainStation",
-                    "name": "인천논현역",
+                    "name": "송도역",
                     "identifier": "K259",
                     "address": {
                       "@type": "PostalAddress",
@@ -407,32 +391,16 @@ export default function RootLayout({
                       "latitude": 37.3990,
                       "longitude": 126.7240
                     }
-                  },
-                  {
-                    "@type": "TrainStation",
-                    "name": "소래포구역",
-                    "identifier": "K260",
-                    "address": {
-                      "@type": "PostalAddress",
-                      "addressCountry": "KR",
-                      "addressRegion": "인천광역시",
-                      "addressLocality": "남동구"
-                    },
-                    "geo": {
-                      "@type": "GeoCoordinates",
-                      "latitude": 37.4067,
-                      "longitude": 126.7194
-                    }
                   }
                 ]
               },
               "provider": {
                 "@type": "Organization",
-                "name": "인천논현라이프"
+                "name": "송도라이프"
               },
               "areaServed": {
                 "@type": "Place",
-                "name": "인천광역시 남동구 논현동",
+                "name": "인천광역시 남동구 송도동",
                 "geo": {
                   "@type": "GeoCoordinates",
                   "latitude": 37.3894,
@@ -473,15 +441,15 @@ export default function RootLayout({
               "mainEntity": [
                 {
                   "@type": "Question",
-                  "name": "논현동 지하철 정보는 얼마나 자주 업데이트되나요?",
+                  "name": "송도동 지하철 정보는 얼마나 자주 업데이트되나요?",
                   "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "호구포역, 인천논현역, 소래포구역의 실시간 도착 정보를 1분 간격으로 갱신합니다."
+                    "text": "호구포역, 인천송도역, 소래포구역의 실시간 도착 정보를 1분 간격으로 갱신합니다."
                   }
                 },
                 {
                   "@type": "Question",
-                  "name": "논현동 맛집·카페 추천 데이터는 어디서 수집하나요?",
+                  "name": "송도동 맛집·카페 추천 데이터는 어디서 수집하나요?",
                   "acceptedAnswer": {
                     "@type": "Answer",
                     "text": "네이버 플레이스와 카카오맵 리뷰 데이터를 기반으로 매일 인기 지수를 분석해 선정합니다."

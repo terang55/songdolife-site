@@ -288,8 +288,8 @@ export default function HomePage() {
     const structuredData = {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
-      "name": "인천논현라이프 - 지역 뉴스 및 정보",
-      "description": "인천 남동구 논현동의 최신 뉴스, 블로그, 유튜브 정보를 한눈에 확인하세요.",
+      "name": "송도라이프 - 지역 뉴스 및 정보",
+      "description": "송도국제도시의 최신 뉴스, 블로그, 유튜브 정보를 한눈에 확인하세요.",
       "url": "https://your-domain.com",
       "mainEntity": {
       "@type": "ItemList",
@@ -317,22 +317,21 @@ export default function HomePage() {
   return (
     <>
         <SEOHead
-          title="인천논현라이프 | 인천논현동 생활정보 플랫폼"
-          description="인천시 남동구 논현동 주민을 위한 실시간 뉴스, 지하철 정보, 부동산 정보, 의료 정보를 한눈에 확인하세요."
+          title="송도라이프 | 송도동 생활정보 플랫폼"
+          description="송도국제도시 주민을 위한 실시간 뉴스, 지하철 정보, 부동산 정보, 의료 정보를 한눈에 확인하세요."
           keywords={[
-            '인천논현동', '인천 논현동', '인천시 남동구 논현동', '남동구 논현동', '논현지구', '에코메트로',
-            '수인분당선', '인천논현역', '호구포역', '소래포구역',
-            '인천논현동 뉴스', '인천논현동 맛집', '인천논현동 부동산', '인천논현동 병원'
+            '송도동', '송도국제도시', '연수구 송도동', '센트럴파크', '더샵',
+            '트리플스트리트', '수인분당선', '센트럴파크역', '송도역'
           ]}
           structuredData={generateNewsStructuredData()}
         />
         <Head>
-        <title>인천논현라이프 - 인천시 남동구 논현동 생활정보 플랫폼</title>
-        <meta name="description" content="인천시 남동구 논현동의 최신 뉴스, 맛집, 카페, 부동산, 육아 정보를 실시간으로 확인하세요. 논현지구, 에코메트로, 소래포구 주변 정보도 함께 제공합니다." />
-        <meta name="keywords" content="인천논현동, 인천시 남동구 논현동, 남동구 논현동, 논현지구, 에코메트로, 소래포구, 호구포, 지역정보, 뉴스, 맛집, 카페, 부동산, 육아" />
+        <title>송도라이프 - 인천 연수구 송도동 생활정보 플랫폼</title>
+        <meta name="description" content="송도국제도시 주민들을 위한 실시간 지역 정보를 제공합니다. 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요." />
+        <meta name="keywords" content="송도동, 송도국제도시, 연수구 송도동, 센트럴파크, 더샵, 트리플스트리트, 지역정보, 뉴스, 맛집, 카페, 부동산, 육아" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta property="og:title" content="인천논현라이프 - 인천시 남동구 논현동 생활정보 플랫폼" />
-        <meta property="og:description" content="인천논현동 주민들을 위한 실시간 지역 정보를 제공합니다. 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요." />
+        <meta property="og:title" content="송도라이프 - 인천 연수구 송도동 생활정보 플랫폼" />
+        <meta property="og:description" content="송도국제도시 주민들을 위한 실시간 지역 정보를 제공합니다. 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요." />
         <meta property="og:url" content="https://your-domain.com" />
         <meta property="og:type" content="website" />
         <meta property="og:image" content="https://your-domain.com/og-image.jpg" />
@@ -348,8 +347,8 @@ export default function HomePage() {
             <div className="flex items-center space-x-2 sm:space-x-3">
               <span className="text-2xl sm:text-3xl">🏙️</span>
               <div>
-                <h1 className="text-lg sm:text-2xl font-bold text-gray-900">🏠 인천논현라이프</h1>
-                <p className="text-xs sm:text-sm text-gray-500">논현동에서의 매일매일</p>
+                <h1 className="text-lg sm:text-2xl font-bold text-gray-900">🏠 송도라이프</h1>
+                <p className="text-xs sm:text-sm text-gray-500">송도에서의 매일매일</p>
               </div>
             </div>
             <div className="hidden sm:flex items-center space-x-2 text-sm text-gray-600">
@@ -387,21 +386,10 @@ export default function HomePage() {
                 <span className="text-lg">🚇</span>
                 <span className="text-sm font-medium">실시간 교통</span>
               </a>
-              {/* 네이버카페 논총연 배너 */}
-              <a
-                href="https://cafe.naver.com/17nongogaero"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center space-x-2 px-4 py-2.5 bg-[#03C75A] text-white rounded-lg hover:bg-[#02b152] transition-colors min-h-[44px] w-full sm:w-auto justify-center font-semibold"
-                aria-label="네이버카페 논총연 바로가기"
-              >
-                <svg width="20" height="20" fill="currentColor" className="mr-2" viewBox="0 0 24 24"><path d="M3 3h18v18H3V3zm8.5 13.5v-4.5l3.5 4.5h2V7.5h-2v4.5l-3.5-4.5h-2v9h2z"/></svg>
-                <span className="text-sm font-medium">네이버카페 논총연</span>
-              </a>
             </div>
             <div className="text-xs sm:text-sm text-gray-600 text-center">
-              <span className="block sm:hidden">부동산 실거래가 · 지하철 실시간 정보</span>
-              <span className="hidden sm:block">논현동 실거래가 · 호구포역 · 인천논현역 · 소래포구역 실시간 정보</span>
+              <span className="block sm:hidden">송도 아파트 실거래가. 송도교통 실시간 정보</span>
+              <span className="hidden sm:block">송도 아파트 실거래가. 송도교통 실시간 정보</span>
             </div>
           </div>
         </div>
@@ -414,7 +402,7 @@ export default function HomePage() {
           <div className="flex justify-between items-start mb-8">
             {/* 제목과 설명 */}
             <div className="flex-1 text-center">
-              <h2 className="text-2xl sm:text-4xl font-bold mb-2 sm:mb-4">논현동 생활을 더 편리하게</h2>
+              <h2 className="text-2xl sm:text-4xl font-bold mb-2 sm:mb-4">송도 생활을 더 편리하게</h2>
               <p className="text-sm sm:text-xl text-blue-100">
                 우리 동네 소식, 부동산 정보, 맛집, 육아, 교통, 병원 정보까지 한번에
               </p>
@@ -629,12 +617,12 @@ export default function HomePage() {
               <div className="flex items-center space-x-2 sm:space-x-3 mb-3 sm:mb-4">
                 <span className="text-2xl sm:text-3xl">🏙️</span>
                 <div>
-                  <div className="text-lg sm:text-xl font-bold">인천논현라이프</div>
-                  <div className="text-sm text-gray-400">인천시 남동구 논현동 지역 정보</div>
+                  <div className="text-lg sm:text-xl font-bold">송도라이프</div>
+                  <div className="text-sm text-gray-400">송도국제도시 주민들을 위한 실시간 지역 정보를 제공합니다. 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요.</div>
                 </div>
               </div>
               <p className="text-sm text-gray-300 text-center md:text-left max-w-sm">
-                인천논현동 주민들을 위한 실시간 지역 정보를 제공합니다. 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요.
+                송도국제도시 주민들을 위한 실시간 지역 정보를 제공합니다. 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요.
               </p>
             </div>
 
@@ -642,11 +630,9 @@ export default function HomePage() {
             <div className="text-center md:text-left">
               <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">주요 지역</h3>
               <ul className="space-y-1 sm:space-y-2 text-sm text-gray-300">
-                <li>📍 인천논현동</li>
-                <li>🚇 에코메트로</li>
-                <li>🦐 소래포구</li>
-                <li>⚓ 호구포</li>
-                <li>🏗️ 논현지구</li>
+                <li>📍 송도국제도시</li>
+                <li>🚇 센트럴파크</li>
+
               </ul>
             </div>
 
@@ -671,7 +657,7 @@ export default function HomePage() {
           <div className="border-t border-gray-700 pt-6 sm:pt-8">
             <div className="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
               <div className="text-xs sm:text-sm text-gray-400">
-                © 2025 인천논현라이프. 모든 권리 보유.
+                © 2025 송도라이프. 모든 권리 보유.
               </div>
               <div className="flex items-center space-x-4 text-xs sm:text-sm">
                 <a 

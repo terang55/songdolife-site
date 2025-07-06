@@ -201,7 +201,7 @@ async function fetchHiraHospitalList(): Promise<HiraHospitalItem[]> {
       ServiceKey: svcKey,
       sidoCd: '220000',      // 인천광역시 코드
       sgguCd: '220006',      // 인천 남동구
-      emdongNm: '논현동',    // 행정동(논현동)으로 범위 제한
+      emdongNm: '송도동',    // 행정동(송도동)으로 범위 제한
       numOfRows: '100',
       pageNo: String(page)
     });
@@ -491,11 +491,11 @@ export async function GET(request: NextRequest) {
       };
 
       for (const item of hiraHospitals) {
-        // 논현동/논현지구 필터링 (주소 또는 행정동명)
-        const isInNonhyeon = (item.emdongNm && item.emdongNm.includes('논현')) ||
-                             item.addr?.includes('논현동') ||
-                             item.addr?.includes('논현지구');
-        if (!isInNonhyeon) continue;
+        // 송도동/센트럴파크 필터링 (주소 또는 행정동명)
+        const isInSongdo = (item.emdongNm && item.emdongNm.includes('송도동')) ||
+                             item.addr?.includes('송도동') ||
+                             item.addr?.includes('센트럴파크');
+        if (!isInSongdo) continue;
 
         let lat = parseFloat(item.YPos ?? '');
         let lon = parseFloat(item.XPos ?? '');
@@ -592,9 +592,9 @@ export async function GET(request: NextRequest) {
           lon = fixed.lon;
         }
 
-        // 논현동/논현지구 여부
-        const isInNonhyeon = item.dutyAddr?.includes('논현동') || item.dutyAddr?.includes('논현지구');
-        if (!isInNonhyeon) continue;
+        // 송도동 여부
+        const isInSongdo = item.dutyAddr?.includes('송도동');
+        if (!isInSongdo) continue;
 
         // 좌표가 없거나 반경 밖이면 Kakao 지오코딩으로 보정
         if (isNaN(lat) || isNaN(lon)) {
@@ -678,10 +678,10 @@ function getDummyMedicalData(type: string): MedicalInfo[] {
   const hospitals: MedicalInfo[] = [
     {
       id: 'dummy_1',
-      name: '논현종합병원',
+      name: '송도종합병원',
       category: '의료,건강 > 병원 > 종합병원',
-      address: '인천 남동구 논현동 680-1',
-      roadAddress: '인천 남동구 논현로 123',
+      address: '인천 연수구 송도동 680-1',
+      roadAddress: '인천 연수구 송도로 123',
       phone: '032-123-4567',
       distance: 500,
       x: '126.7327',
@@ -695,8 +695,8 @@ function getDummyMedicalData(type: string): MedicalInfo[] {
       id: 'dummy_2',
       name: '미래내과의원',
       category: '의료,건강 > 병원 > 내과',
-      address: '인천 남동구 논현동 834-5',
-      roadAddress: '인천 남동구 논현로 89',
+      address: '인천 연수구 송도동 834-5',
+      roadAddress: '인천 연수구 송도로 89',
       phone: '032-234-5678',
       distance: 800,
       x: '126.7337',
@@ -708,10 +708,10 @@ function getDummyMedicalData(type: string): MedicalInfo[] {
     },
     {
       id: 'dummy_3',
-      name: '논현정형외과',
+      name: '송도정형외과',
       category: '의료,건강 > 병원 > 정형외과',
-      address: '인천 남동구 논현동 512-3',
-      roadAddress: '인천 남동구 논현로 156',
+      address: '인천 연수구 송도동 512-3',
+      roadAddress: '인천 연수구 송도로 156',
       phone: '032-345-6789',
       distance: 1200,
       x: '126.7347',
@@ -726,10 +726,10 @@ function getDummyMedicalData(type: string): MedicalInfo[] {
   const pharmacies: MedicalInfo[] = [
     {
       id: 'dummy_4',
-      name: '논현온누리약국',
+      name: '송도온누리약국',
       category: '의료,건강 > 약국',
-      address: '인천 남동구 논현동 791-2',
-      roadAddress: '인천 남동구 논현로 67',
+      address: '인천 연수구 송도동 791-2',
+      roadAddress: '인천 연수구 송도로 67',
       phone: '032-456-7890',
       distance: 300,
       x: '126.7317',
@@ -742,8 +742,8 @@ function getDummyMedicalData(type: string): MedicalInfo[] {
       id: 'dummy_5',
       name: '24시간 미래약국',
       category: '의료,건강 > 약국',
-      address: '인천 남동구 논현동 623-1',
-      roadAddress: '인천 남동구 논현로 234',
+      address: '인천 연수구 송도동 623-1',
+      roadAddress: '인천 연수구 송도로 234',
       phone: '032-567-8901',
       distance: 900,
       x: '126.7357',

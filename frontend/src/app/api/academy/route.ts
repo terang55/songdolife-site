@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 // 이 API는 실시간으로 NEIS 학원·교습소 정보를 호출한 뒤
-// 도로명주소(FA_RDNMA, FA_RDNDA)에 '논현동' 키워드가 포함된 항목만 필터링하여 반환합니다.
+// 도로명주소(FA_RDNMA, FA_RDNDA)에 '송도동' 키워드가 포함된 항목만 필터링하여 반환합니다.
 // 환경변수에 ACADEMY_API_KEY 가 설정돼 있어야 합니다.
 
 export const dynamic = 'force-dynamic'; // 호출마다 fresh
@@ -22,7 +22,7 @@ interface NEISResponse {
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
-  const dongKeyword = searchParams.get('dong') || '논현동';
+  const dongKeyword = searchParams.get('dong') || '송도동';
   const keywordRegex = new RegExp(dongKeyword, 'i');
 
   const apiKey = process.env.ACADEMY_API_KEY || 'be1e77cd70ae4203b94e26667165c55d';

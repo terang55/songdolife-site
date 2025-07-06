@@ -132,7 +132,7 @@ export default function RealEstateWidget() {
     <div className="bg-white rounded-lg shadow-md p-6">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-bold text-gray-800 flex items-center">
-          🏠 논현동 아파트 실거래가
+          🏠 송도동 아파트 실거래가
         </h2>
         <span className="text-xs text-gray-500">{data.statistics.period}</span>
       </div>

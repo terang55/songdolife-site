@@ -221,10 +221,10 @@ const MedicalWidget: React.FC<MedicalWidgetProps> = ({ initialType = 'all' }) =>
           <div className="text-center py-12">
             <div className="text-6xl mb-4">🏥</div>
             <h3 className="text-lg font-medium text-gray-900 mb-2">
-              {selectedType === 'pharmacy' ? '논현동 주변 약국 정보' : selectedType === 'hospital' ? '논현동 주변 병원 정보' : '논현동 주변 병원/약국 정보'}
+              {selectedType === 'pharmacy' ? '송도동 주변 약국 정보' : selectedType === 'hospital' ? '송도동 주변 병원 정보' : '송도동 주변 병원/약국 정보'}
             </h3>
             <p className="text-gray-600 mb-6 max-w-md mx-auto text-sm sm:text-base leading-relaxed">
-              논현동의 모든 의료기관 정보를 확인하세요.
+              송도동의 모든 의료기관 정보를 확인하세요.
               공공데이터(보건복지부) + 위치기반 거리정보로 최신 상태를 제공합니다.
             </p>
             <button
@@ -245,7 +245,7 @@ const MedicalWidget: React.FC<MedicalWidgetProps> = ({ initialType = 'all' }) =>
         <div>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg sm:text-xl font-bold text-gray-800 flex items-center">
-              {selectedType === 'pharmacy' ? '💊 논현동 약국 정보' : selectedType === 'hospital' ? '🏥 논현동 병원 정보' : '🏥 논현동 병원/약국 정보'}
+              {selectedType === 'pharmacy' ? '💊 송도동 약국 정보' : selectedType === 'hospital' ? '🏥 송도동 병원 정보' : '🏥 송도동 병원/약국 정보'}
             </h2>
             <button
               onClick={fetchMedicalData}
@@ -538,7 +538,7 @@ const MedicalWidget: React.FC<MedicalWidgetProps> = ({ initialType = 'all' }) =>
 
       <div className="mt-6 pt-4 border-t border-gray-200 text-center">
         <div className="text-xs sm:text-sm text-gray-500 space-y-1">
-          <div className="font-medium">📍 논현동의 의료기관 정보</div>
+          <div className="font-medium">📍 송도동의 의료기관 정보</div>
           <div className="text-gray-400">보건복지부 공공데이터 • 거리순 정렬</div>
         </div>
       </div>

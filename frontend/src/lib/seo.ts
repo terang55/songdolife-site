@@ -1,33 +1,33 @@
 import { Metadata } from 'next';
 import { BASE_URL } from './siteConfig';
 
-// 인천논현동 관련 핵심 키워드 (서울 논현동과 구분)
+// 인천송도국제도시 관련 핵심 키워드 (서울 송도동과 구분)
 export const CORE_KEYWORDS = [
-  '인천논현동', '인천 논현동', '인천시 남동구 논현동', '남동구 논현동', '논현지구', '에코메트로',
-  '인천논현역', '호구포역', '소래포구역', '수인분당선',
-  '인천논현동 맛집', '인천논현동 카페', '인천논현동 부동산', '인천논현동 병원', '인천논현동 약국',
-  '인천논현동 육아', '인천논현동 학원', '인천논현동 아파트', '소래포구', '호구포',
-  '남동구 논현동 맛집', '남동구 논현동 부동산', '인천시 논현동'
+  '송도', '송도동', '송도국제도시', '인천 송도동', '인천 송도국제도시', '연수구 송도동',
+  '송도역', '국제업무지구역', '센트럴파크역', '인천대입구역',
+  '송도 맛집', '송도 카페', '송도 부동산', '송도 병원', '송도 약국',
+  '송도 육아', '송도 학원', '송도 아파트', '송도 더샵', '송도 트리플스트리트',
+  '연수구 송도동 맛집', '연수구 송도동 부동산', '인천시 송도동'
 ];
 
-// 지역별 키워드 맵핑 (서울 논현동과 구분)
+// 지역별 키워드 맵핑 (서울 송도동과 구분)
 export const LOCATION_KEYWORDS = {
-  인천논현동: ['인천논현동', '인천 논현동', '인천시 남동구 논현동', '남동구 논현동', '논현지구'],
-  에코메트로: ['에코메트로', '에코메트로 아파트', '인천논현 에코메트로'],
-  소래포구: ['소래포구', '소래포구역', '소래포구 맛집'],
-  호구포: ['호구포', '호구포역', '호구포 맛집'],
-  인천논현역: ['인천논현역', '논현역', '수인분당선 논현역']
+  송도: ['송도', '송도동', '송도국제도시', '인천 송도동', '연수구 송도동'],
+  더샵: ['더샵', '송도 더샵', '송도 더샵 아파트'],
+  센트럴파크: ['센트럴파크', '센트럴파크역', '송도 센트럴파크'],
+  국제업무지구: ['국제업무지구', '국제업무지구역', '송도 국제업무지구'],
+  송도역: ['송도역', '논현역', '수인분당선 논현역']
 };
 
-// 카테고리별 키워드 (서울 논현동과 구분)
+// 카테고리별 키워드 (서울 송도동과 구분)
 export const CATEGORY_KEYWORDS = {
-  뉴스: ['인천논현동 뉴스', '인천논현동 소식', '남동구 뉴스', '인천시 남동구 논현동 뉴스'],
-  맛집: ['인천논현동 맛집', '인천논현동 맛집 추천', '논현지구 맛집', '에코메트로 맛집', '남동구 논현동 맛집'],
-  카페: ['인천논현동 카페', '인천논현동 카페 추천', '인천논현역 카페', '소래포구 카페', '남동구 논현동 카페'],
-  부동산: ['인천논현동 부동산', '인천논현동 아파트', '논현지구 아파트', '에코메트로 매매', '남동구 논현동 부동산'],
-  의료: ['인천논현동 병원', '인천논현동 약국', '인천논현동 의료', '인천논현역 병원', '남동구 논현동 병원'],
-  지하철: ['수인분당선', '인천논현역', '호구포역', '소래포구역', '지하철 시간표'],
-  육아: ['인천논현동 육아', '인천논현동 어린이집', '인천논현동 학원', '인천논현동 초등학교', '남동구 논현동 육아']
+  뉴스: ['송도 뉴스', '송도 소식', '연수구 뉴스', '인천시 연수구 송도 뉴스'],
+  맛집: ['송도 맛집', '송도 맛집 추천', '송도동 맛집', '더샵 맛집', '연수구 송도동 맛집'],
+  카페: ['송도 카페', '송도 카페 추천', '송도국제도시 카페', '센트럴파크 카페', '연수구 송도동 카페'],
+  부동산: ['송도 부동산', '송도 아파트', '송도국제도시 아파트', '더샵 매매', '연수구 송도동 부동산'],
+  의료: ['송도 병원', '송도 약국', '송도 의료', '송도국제도시 병원', '연수구 송도동 병원'],
+  지하철: ['인천1호선', '송도역', '국제업무지구역', '센트럴파크역', '지하철 시간표'],
+  육아: ['송도 육아', '송도 어린이집', '송도 학원', '송도 초등학교', '연수구 송도동 육아']
 };
 
 // SEO 메타데이터 생성 함수
@@ -66,11 +66,11 @@ export function generateSEOMetadata(params: {
   // 중복 제거
   const uniqueKeywords = [...new Set(dynamicKeywords)];
 
-  // 기본 제목과 설명 (서울 논현동과 구분)
-  const defaultTitle = '인천논현라이프 | 인천시 남동구 논현동 생활정보 플랫폼';
-  const defaultDescription = '인천논현동 주민을 위한 실시간 뉴스·지하철·부동산·의료 정보 플랫폼. 에코메트로, 소래포구, 호구포 지역 맛집·카페·병원·약국 정보를 한눈에 확인하세요.';
+  // 기본 제목과 설명 (서울 송도동과 구분)
+  const defaultTitle = '송도라이프 | 인천시 연수구 송도동 생활정보 플랫폼';
+  const defaultDescription = '송도국제도시 주민을 위한 실시간 뉴스·지하철·부동산·의료 정보 플랫폼. 더샵, 센트럴파크, 트리플스트리트, 현대프리미엄아울렛 등 송도 지역 맛집·카페·병원·약국 정보를 한눈에 확인하세요.';
 
-  const finalTitle = title ? `${title} | 인천논현라이프` : defaultTitle;
+  const finalTitle = title ? `${title} | 송도라이프` : defaultTitle;
   const finalDescription = description || defaultDescription;
   const currentUrl = `${BASE_URL}${path}`;
 
@@ -78,9 +78,9 @@ export function generateSEOMetadata(params: {
     title: finalTitle,
     description: finalDescription,
     keywords: uniqueKeywords,
-    authors: [{ name: '인천논현라이프', url: BASE_URL }],
-    creator: '인천논현라이프',
-    publisher: '인천논현라이프',
+    authors: [{ name: '송도라이프', url: BASE_URL }],
+    creator: '송도라이프',
+    publisher: '송도라이프',
     robots: {
       index: true,
       follow: true,
@@ -96,7 +96,7 @@ export function generateSEOMetadata(params: {
       type: 'website',
       locale: 'ko_KR',
       url: currentUrl,
-      siteName: '인천논현라이프',
+      siteName: '송도라이프',
       title: finalTitle,
       description: finalDescription,
       images: [
@@ -104,7 +104,7 @@ export function generateSEOMetadata(params: {
           url: `${BASE_URL}/og-image.jpg`,
           width: 1200,
           height: 630,
-          alt: `${finalTitle} - 인천 남동구 논현동 생활정보`,
+          alt: `${finalTitle} - 인천 연수구 송도동 생활정보`,
         },
       ],
     },
@@ -121,7 +121,7 @@ export function generateSEOMetadata(params: {
     other: {
       'last-modified': lastModified.toISOString(),
       'geo.region': 'KR-28',
-      'geo.placename': '인천광역시 남동구 논현동',
+      'geo.placename': '인천광역시 연수구 송도동',
       'geo.position': '37.3894;126.7317',
       'ICBM': '37.3894, 126.7317',
     },
@@ -149,8 +149,8 @@ export function generateLocalBusinessSchema(name: string, description: string) {
       '@type': 'PostalAddress',
       addressCountry: 'KR',
       addressRegion: '인천광역시',
-      addressLocality: '남동구',
-      streetAddress: '논현동'
+      addressLocality: '연수구',
+      streetAddress: '송도동'
     },
     geo: {
       '@type': 'GeoCoordinates',
@@ -159,7 +159,7 @@ export function generateLocalBusinessSchema(name: string, description: string) {
     },
     areaServed: {
       '@type': 'Place',
-      name: '인천광역시 남동구 논현동'
+      name: '인천광역시 연수구 송도동'
     }
   });
 }
@@ -180,11 +180,11 @@ export function generateArticleSchema(article: {
     dateModified: article.dateModified || article.datePublished,
     author: {
       '@type': 'Organization',
-      name: article.author || '인천논현라이프'
+      name: article.author || '송도라이프'
     },
     publisher: {
       '@type': 'Organization',
-      name: '인천논현라이프',
+      name: '송도라이프',
       logo: {
         '@type': 'ImageObject',
         url: `${BASE_URL}/android-chrome-512x512.png`
@@ -226,7 +226,7 @@ export function generateTrainStationSchema(station: {
       '@type': 'PostalAddress',
       addressCountry: 'KR',
       addressRegion: '인천광역시',
-      addressLocality: '남동구'
+      addressLocality: '연수구'
     },
     geo: {
       '@type': 'GeoCoordinates',

@@ -392,7 +392,7 @@ def main():
         else:
             print("사용법: python sync_to_frontend.py [--sync|--sync-all|--status]")
     else:
-        print("논현동 정보 허브 - 데이터 동기화 도구")
+        print("송도동 정보 허브 - 데이터 동기화 도구")
         print("=" * 40)
         print("1. 최신 데이터 동기화 실행")
         print("2. 전체 데이터 동기화 실행")

@@ -85,9 +85,9 @@ export async function GET() {
     const rssXml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/">
   <channel>
-    <title>인천논현라이프 - 인천논현동 최신 소식</title>
+    <title>인천논현라이프 - 송도국제도시 최신 소식</title>
     <link>${BASE_URL}</link>
-    <description>인천시 남동구 논현동 지역의 최신 뉴스, 블로그, 유튜브 콘텐츠를 실시간으로 제공합니다.</description>
+    <description>인천 연수구 송도동 지역의 최신 뉴스, 블로그, 유튜브 콘텐츠를 실시간으로 제공합니다.</description>
     <language>ko-KR</language>
     <copyright>© 2025 인천논현라이프. All rights reserved.</copyright>
     <managingEditor>info@nonhyeon.life (인천논현라이프)</managingEditor>
@@ -95,7 +95,7 @@ export async function GET() {
     <pubDate>${new Date().toUTCString()}</pubDate>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     <category>지역정보</category>
-    <category>논현동</category>
+    <category>송도동</category>
     <category>인천</category>
     <category>남동구</category>
     <ttl>60</ttl>
@@ -130,9 +130,9 @@ export async function GET() {
     const errorRss = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
-         <title>인천논현라이프 - 인천논현동 최신 소식</title>
+         <title>인천논현라이프 - 송도국제도시 최신 소식</title>
      <link>${BASE_URL}</link>
-     <description>인천시 남동구 논현동 지역의 최신 뉴스, 블로그, 유튜브 콘텐츠를 실시간으로 제공합니다.</description>
+     <description>인천시 연수구 송도동 지역의 최신 뉴스, 블로그, 유튜브 콘텐츠를 실시간으로 제공합니다.</description>
     <language>ko-KR</language>
     <pubDate>${new Date().toUTCString()}</pubDate>
     <item>

@@ -11,7 +11,7 @@ import config
 def main():
     """플랫폼별 키워드 크롤링 실행"""
     print("=" * 60)
-    print("🎯 논현동 정보 허브 - 플랫폼별 키워드 크롤러")
+    print("🎯 송도라이프 정보 허브 - 플랫폼별 키워드 크롤러")
     print("=" * 60)
     print(f"시작 시간: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print()

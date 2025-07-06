@@ -33,7 +33,7 @@ export default function AcademyPage() {
       setError(null);
       const params = new URLSearchParams();
       if (realm) params.append('realm', realm);
-      // dong 파라미터는 기본 논현동이므로 생략
+      // dong 파라미터는 기본 송도동이므로 생략
       const res = await fetch(`/api/academy${params.size ? '?' + params.toString() : ''}`);
       const json: ApiResponse = await res.json();
       if (json.success) {
@@ -74,8 +74,8 @@ export default function AcademyPage() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Head>
-        <title>논현동 학원 정보 | 인천논현라이프</title>
-        <meta name="description" content="인천시 남동구 논현동 학원·교습소 정보를 과목별로 검색해 보세요." />
+        <title>송도동 학원 정보 | 송도라이프</title>
+        <meta name="description" content="인천시 연수구 송도동 학원·교습소 정보를 과목별로 검색해 보세요." />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }} />
       </Head>
 
@@ -92,7 +92,7 @@ export default function AcademyPage() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h1 className="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">🎓 논현동 학원 정보</h1>
+        <h1 className="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">🎓 송도동 학원 정보</h1>
 
         {/* 검색 & 필터 */}
         <div className="flex flex-col sm:flex-row gap-3 mb-6">

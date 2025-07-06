@@ -56,7 +56,7 @@ function formatPrice(price: number): string {
 
 export async function GET(): Promise<NextResponse> {
   try {
-    console.log('🏠 인천 남동구 논현동 아파트 실거래가 최근 3개월 조회 시작');
+    console.log('🏠 인천 연수구 송도동 아파트 실거래가 최근 3개월 조회 시작');
     const deals: ProcessedDeal[] = [];
     const parser = new XMLParser({ ignoreAttributes: false, trimValues: true });
     const now = new Date();
@@ -112,7 +112,7 @@ export async function GET(): Promise<NextResponse> {
                 const dealDate = formatDealDate(year, month, day);
                 const pricePerPyeong = calculatePricePerPyeong(price, area);
 
-                if (dong === '논현동') {
+                if (dong === '송도동') {
                   deals.push({
                     apartment_name: apartment,
                     area: `${area}㎡`,
@@ -188,7 +188,7 @@ export async function GET(): Promise<NextResponse> {
         avg_price_numeric: avgNumeric,
       };
     }).sort((a, b) => b.avg_price_numeric - a.avg_price_numeric);
-    console.log(`✅ 논현동 실거래가 최근 3개월 수집 완료: ${totalDeals}건`);
+    console.log(`✅ 송도동 실거래가 최근 3개월 수집 완료: ${totalDeals}건`);
     return NextResponse.json({
       success: true,
       data: {
@@ -202,7 +202,7 @@ export async function GET(): Promise<NextResponse> {
         },
         apartment_stats: apartmentStatsArray
       },
-      location: '인천 남동구 논현동',
+      location: '인천 연수구 송도동',
       timestamp: new Date().toISOString()
     });
   } catch (error) {

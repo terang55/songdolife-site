@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: '이용약관',
-  description: '인천논현라이프의 이용약관입니다.',
+  description: '송도라이프의 이용약관입니다.',
   robots: {
     index: true,
     follow: true,
@@ -18,13 +18,13 @@ export default function TermsPage() {
           
           <div className="prose max-w-none">
             <p className="text-gray-600 mb-6">
-              인천논현라이프(이하 &ldquo;회사&rdquo;)가 제공하는 인터넷 관련 서비스(이하 &ldquo;서비스&rdquo;)를 이용함에 있어 이용자의 권리·의무 및 책임사항을 규정함을 목적으로 합니다.
+              송도라이프(이하 &ldquo;회사&rdquo;)가 제공하는 인터넷 관련 서비스(이하 &ldquo;서비스&rdquo;)를 이용함에 있어 이용자의 권리·의무 및 책임사항을 규정함을 목적으로 합니다.
             </p>
 
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-gray-800 mb-4">제1조 (목적)</h2>
               <p className="text-gray-600">
-                이 약관은 인천논현라이프(이하 &ldquo;회사&rdquo;)가 제공하는 인터넷 관련 서비스(이하 &ldquo;서비스&rdquo;)를 이용함에 있어 이용자의 권리·의무 및 책임사항을 규정함을 목적으로 합니다.
+                이 약관은 송도라이프(이하 &ldquo;회사&rdquo;)가 제공하는 인터넷 관련 서비스(이하 &ldquo;서비스&rdquo;)를 이용함에 있어 이용자의 권리·의무 및 책임사항을 규정함을 목적으로 합니다.
               </p>
             </section>
 
@@ -32,7 +32,7 @@ export default function TermsPage() {
               <h2 className="text-2xl font-semibold text-gray-800 mb-4">제2조 (정의)</h2>
               <p className="text-gray-600 mb-4">이 약관에서 사용하는 용어의 정의는 다음과 같습니다.</p>
               <ul className="list-disc list-inside text-gray-600 space-y-2">
-                <li>&ldquo;서비스&rdquo;란 회사가 제공하는 논현동 지역 정보 플랫폼을 의미합니다.</li>
+                <li>&ldquo;서비스&rdquo;란 회사가 제공하는 송도국제도시 지역 정보 플랫폼을 의미합니다.</li>
                 <li>&ldquo;이용자&rdquo;란 회사의 서비스에 접속하여 이 약관에 따라 회사가 제공하는 서비스를 받는 회원 및 비회원을 말합니다.</li>
                 <li>&ldquo;회원&rdquo;이란 회사에 개인정보를 제공하여 회원등록을 한 자로서, 회사의 정보를 지속적으로 제공받으며, 회사가 제공하는 서비스를 계속적으로 이용할 수 있는 자를 말합니다.</li>
                 <li>&ldquo;비회원&rdquo;이란 회원에 가입하지 않고 회사가 제공하는 서비스를 이용하는 자를 말합니다.</li>
@@ -53,7 +53,7 @@ export default function TermsPage() {
               <ul className="list-disc list-inside text-gray-600 space-y-2">
                 <li>회사는 다음과 같은 업무를 수행합니다.
                   <ul className="list-disc list-inside ml-6 mt-2 space-y-1">
-                    <li>논현동 지역 정보 제공</li>
+                    <li>송도국제도시 지역 정보 제공</li>
                     <li>뉴스, 블로그, 유튜브 콘텐츠 큐레이션</li>
                     <li>맛집, 카페, 부동산, 육아 정보 제공</li>
                     <li>기타 회사가 정하는 업무</li>
@@ -123,7 +123,7 @@ export default function TermsPage() {
               <p className="text-gray-600">
                 이용약관에 대한 문의사항이 있으시면 아래로 연락해 주세요.<br />
                 이메일: rainbowcr55@gmail.com<br />
-                담당부서: 인천논현라이프 운영팀
+                담당부서: 송도라이프 운영팀
               </p>
             </div>
           </div>

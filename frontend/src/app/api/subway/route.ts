@@ -17,7 +17,7 @@ interface TrainInfo {
 // 역명 매핑: UI에서 보여주는 이름 → API 요청용 이름
 const stationNameMapping: { [key: string]: string } = {
   '호구포역': '호구포',
-  '인천논현역': '인천논현',
+  '송도역': '송도',
   '소래포구역': '소래포구'
 };
 

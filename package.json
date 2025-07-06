@@ -2,7 +2,7 @@
   "name": "nonhyeon-info-site",
   "version": "0.1.0",
   "private": true,
-  "description": "인천 남동구 논현동 지역 정보 허브",
+  "description": "인천 연수구 송도국제도시 정보 허브",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",

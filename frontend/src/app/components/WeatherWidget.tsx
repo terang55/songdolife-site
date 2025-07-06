@@ -118,7 +118,7 @@ export default function WeatherWidget() {
       <div className="bg-gray-100 rounded-lg p-3 border border-gray-200">
         <div className="text-center">
           <span className="text-xl">🌤️</span>
-          <h3 className="text-sm font-semibold text-gray-700 mt-1">논현동 날씨</h3>
+          <h3 className="text-sm font-semibold text-gray-700 mt-1">송도동 날씨</h3>
           <p className="text-gray-500 text-xs mt-1">로딩 중...</p>
         </div>
       </div>
@@ -130,7 +130,7 @@ export default function WeatherWidget() {
       <div className="grid grid-cols-3 gap-2 items-center">
         {/* 현재 날씨 (왼쪽) */}
         <div className="text-center">
-          <div className="text-xs text-blue-100">📍 논현동</div>
+          <div className="text-xs text-blue-100">📍 송도동</div>
           <div className="text-xl font-bold">{weather.current.temp}°C</div>
           <div className="text-xs text-blue-100">
             체감 {weather.current.feels_like}° · 습도 {weather.current.humidity}%

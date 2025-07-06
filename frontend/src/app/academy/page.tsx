@@ -72,27 +72,27 @@ export default function AcademyPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Head>
         <title>논현동 학원 정보 | 인천논현라이프</title>
         <meta name="description" content="인천시 남동구 논현동 학원·교습소 정보를 과목별로 검색해 보세요." />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }} />
       </Head>
 
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-          <Link href="/" className="text-lg font-bold">🏙️ 인천논현라이프</Link>
+          <Link href="/" className="text-lg font-bold text-gray-900 dark:text-gray-100">🏙️ 인천논현라이프</Link>
           <nav className="space-x-4 text-sm">
-            <Link href="/" className="hover:text-blue-600">홈</Link>
-            <Link href="/realestate" className="hover:text-blue-600">부동산</Link>
-            <Link href="/subway" className="hover:text-blue-600">교통</Link>
-            <span className="text-blue-600 font-semibold">학원</span>
+            <Link href="/" className="hover:text-blue-600 dark:hover:text-blue-400 text-gray-700 dark:text-gray-200">홈</Link>
+            <Link href="/realestate" className="hover:text-blue-600 dark:hover:text-blue-400 text-gray-700 dark:text-gray-200">부동산</Link>
+            <Link href="/subway" className="hover:text-blue-600 dark:hover:text-blue-400 text-gray-700 dark:text-gray-200">교통</Link>
+            <span className="text-blue-600 dark:text-blue-400 font-semibold">학원</span>
           </nav>
         </div>
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h1 className="text-2xl font-bold mb-6">🎓 논현동 학원 정보</h1>
+        <h1 className="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">🎓 논현동 학원 정보</h1>
 
         {/* 검색 & 필터 */}
         <div className="flex flex-col sm:flex-row gap-3 mb-6">
@@ -101,13 +101,13 @@ export default function AcademyPage() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="학원명 검색"
-            className="flex-1 border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
+            className="flex-1 border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-700 placeholder-gray-400 dark:placeholder-gray-500"
           />
 
           <select
             value={realm}
             onChange={(e) => setRealm(e.target.value)}
-            className="w-full sm:w-48 border rounded-lg px-2 py-2 text-sm"
+            className="w-full sm:w-48 border rounded-lg px-2 py-2 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-700"
           >
             <option value="">전체 분야</option>
             {realmOptions.map((r) => (
@@ -117,26 +117,26 @@ export default function AcademyPage() {
 
           <button
             onClick={fetchData}
-            className="w-full sm:w-auto bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700"
+            className="w-full sm:w-auto bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
           >
             검색
           </button>
         </div>
 
         {/* 목록 */}
-        {loading && <p className="text-gray-600">로딩 중...</p>}
-        {error && <p className="text-red-600">{error}</p>}
+        {loading && <p className="text-gray-600 dark:text-gray-300">로딩 중...</p>}
+        {error && <p className="text-red-600 dark:text-red-400">{error}</p>}
         {!loading && academies.length === 0 && !error && (
-          <p className="text-gray-600">해당 조건의 학원이 없습니다.</p>
+          <p className="text-gray-600 dark:text-gray-300">해당 조건의 학원이 없습니다.</p>
         )}
 
         <ul className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
           {academies.map((a) => (
-            <li key={a.ACA_NM} className="bg-white border rounded-lg p-4 shadow-sm">
-              <h2 className="font-semibold text-gray-900 mb-1">{a.ACA_NM}</h2>
-              <p className="text-xs text-gray-500 mb-1">{a.REALM_SC_NM} · {a.LE_CRSE_NM}</p>
-              <p className="text-sm text-gray-700 mb-1">{a.FA_RDNMA} {a.FA_RDNDA}</p>
-              {a.FA_TELNO && <p className="text-sm text-gray-700">☎ {a.FA_TELNO}</p>}
+            <li key={a.ACA_NM} className="bg-white dark:bg-gray-800 border rounded-lg p-4 shadow-sm border-gray-200 dark:border-gray-700">
+              <h2 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">{a.ACA_NM}</h2>
+              <p className="text-xs text-gray-500 dark:text-gray-300 mb-1">{a.REALM_SC_NM} · {a.LE_CRSE_NM}</p>
+              <p className="text-sm text-gray-700 dark:text-gray-200 mb-1">{a.FA_RDNMA} {a.FA_RDNDA}</p>
+              {a.FA_TELNO && <p className="text-sm text-gray-700 dark:text-gray-200">☎ {a.FA_TELNO}</p>}
             </li>
           ))}
         </ul>

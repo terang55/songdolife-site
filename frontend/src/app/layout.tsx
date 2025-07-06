@@ -87,7 +87,7 @@ export default function RootLayout({
     <html lang="ko">
       <head>
         {/* PWA 메타 태그 */}
-        <meta name="application-name" content="논현라이프" />
+        <meta name="application-name" content="송도라이프" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="송도라이프" />

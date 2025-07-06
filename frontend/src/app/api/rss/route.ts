@@ -85,11 +85,11 @@ export async function GET() {
     const rssXml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/">
   <channel>
-    <title>인천논현라이프 - 송도국제도시 최신 소식</title>
+    <title>송도라이프 - 송도국제도시 최신 소식</title>
     <link>${BASE_URL}</link>
-    <description>인천 연수구 송도동 지역의 최신 뉴스, 블로그, 유튜브 콘텐츠를 실시간으로 제공합니다.</description>
+    <description>인천시 연수구 송도동 지역의 최신 뉴스, 블로그, 유튜브 콘텐츠를 실시간으로 제공합니다.</description>
     <language>ko-KR</language>
-    <copyright>© 2025 인천논현라이프. All rights reserved.</copyright>
+    <copyright>© 2025 송도라이프. All rights reserved.</copyright>
     <managingEditor>info@songdo.life (송도라이프)</managingEditor>
     <webMaster>info@songdo.life (송도라이프)</webMaster>
     <pubDate>${new Date().toUTCString()}</pubDate>
@@ -101,7 +101,7 @@ export async function GET() {
     <ttl>60</ttl>
     <image>
       <url>${BASE_URL}/android-chrome-192x192.png</url>
-      <title>인천논현라이프</title>
+      <title>송도라이프</title>
       <link>${BASE_URL}</link>
       <width>192</width>
       <height>192</height>
@@ -130,13 +130,13 @@ export async function GET() {
     const errorRss = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
-         <title>인천논현라이프 - 송도국제도시 최신 소식</title>
+         <title>송도라이프 - 송도국제도시 최신 소식</title>
      <link>${BASE_URL}</link>
      <description>인천시 연수구 송도동 지역의 최신 뉴스, 블로그, 유튜브 콘텐츠를 실시간으로 제공합니다.</description>
     <language>ko-KR</language>
     <pubDate>${new Date().toUTCString()}</pubDate>
     <item>
-      <title>인천논현라이프 서비스 점검 중</title>
+      <title>송도라이프 서비스 점검 중</title>
       <link>${BASE_URL}</link>
       <description>현재 RSS 피드 서비스 점검 중입니다. 잠시 후 다시 시도해주세요.</description>
       <pubDate>${new Date().toUTCString()}</pubDate>

@@ -81,7 +81,7 @@ export default function AcademyPage() {
 
       <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-          <Link href="/" className="text-lg font-bold text-gray-900 dark:text-gray-100">🏙️ 인천논현라이프</Link>
+          <Link href="/" className="text-lg font-bold text-gray-900 dark:text-gray-100">🏙️ 송도라이프</Link>
           <nav className="space-x-4 text-sm">
             <Link href="/" className="hover:text-blue-600 dark:hover:text-blue-400 text-gray-700 dark:text-gray-200">홈</Link>
             <Link href="/realestate" className="hover:text-blue-600 dark:hover:text-blue-400 text-gray-700 dark:text-gray-200">부동산</Link>

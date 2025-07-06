@@ -58,7 +58,7 @@ export default function OfflinePage() {
 
         <div className="mt-8 text-sm text-gray-500">
           <p>
-            논현라이프는 PWA(Progressive Web App) 기술을 사용하여<br />
+            송도라이프는 PWA(Progressive Web App) 기술을 사용하여<br />
             오프라인에서도 일부 기능을 제공합니다.
           </p>
         </div>

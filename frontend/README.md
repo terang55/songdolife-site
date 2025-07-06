@@ -69,7 +69,7 @@ OPENWEATHER_API_KEY=your_openweather_api_key_here
 npm run dev
 
 # API 테스트
-curl "http://localhost:3000/api/subway?station=인천논현"
+curl "http://localhost:3000/api/subway?station=송도"
 ```
 
 ### 7. 에러 처리

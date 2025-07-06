@@ -187,7 +187,7 @@ self.addEventListener('push', (event) => {
   };
 
   event.waitUntil(
-    self.registration.showNotification('인천논현라이프', options)
+    self.registration.showNotification('송도라이프', options)
   );
 });
 

@@ -40,7 +40,7 @@ export default function PWAUpdateNotification() {
               새 버전 업데이트
             </h3>
             <p className="text-xs text-gray-600 mb-3">
-              논현라이프의 새로운 버전이 준비되었습니다. 업데이트하시겠습니까?
+              송도라이프의 새로운 버전이 준비되었습니다. 업데이트하시겠습니까?
             </p>
             <div className="flex items-center space-x-2">
               <button

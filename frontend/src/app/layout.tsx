@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
@@ -12,6 +12,14 @@ const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: "#2563eb",
+  colorScheme: "light",
+};
 
 export const metadata: Metadata = {
   title: {
@@ -43,13 +51,6 @@ export const metadata: Metadata = {
   applicationName: "송도라이프",
   generator: "Next.js",
   referrer: "origin-when-cross-origin",
-  colorScheme: "light",
-  themeColor: "#2563eb",
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 5,
-  },
   robots: {
     index: true,
     follow: true,

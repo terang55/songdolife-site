@@ -44,12 +44,42 @@ interface BusArrival {
 
 // ------------------ 설정 ------------------
 
-// GBIS v2 엔드포인트 (경기도 공공데이터포털)
+// ⚠️ 중요: M6405는 인천광역시 운행 노선입니다
+// 현재: 경기도 G-BIS API 사용 중 (임시)
+// 필요: 인천광역시 버스정보시스템 API로 변경 필요
+
+// 경기도 G-BIS v2 엔드포인트 (임시 사용)
 const GBIS_BASE = 'https://apis.data.go.kr/6410000';
 // 임시 하드코딩 (검증용)
 const SERVICE_KEY = 'aTgFhrZehAYOxHq4Z3z1iSYeysHfG9Tu43JQhF26U3mdGzr0H8%2BjR9MzrwPoqr8yOegDO5OO56GmvXzS7rwkdw%3D%3D';
-const ROUTE_NAME = 'M6410';
-const ROUTE_ID = '216000044'; // 고정된 노선 ID
+
+// M6405 노선 정보 (인천 → 서울)
+const ROUTE_NAME = 'M6405';
+const ROUTE_ID = '165000215'; // 경기도 기준 임시 ID
+
+// M6405 주요 정류소 정보 (실제 데이터 기반)
+const MAJOR_STATIONS = {
+  SONGDO_STATIONS: [
+    { seq: 1, name: '팰가운티', id: '38353' },
+    { seq: 2, name: '센트럴파크역', id: '38397' },
+    { seq: 3, name: '송도자이하퍼텐시', id: '38468' },
+    { seq: 4, name: '송도더샵퍼스트월드(동문)', id: '38013' },
+    { seq: 5, name: '풍림2.3차아파트', id: '38350' },
+    { seq: 6, name: '한진아파트', id: '38016' },
+    { seq: 7, name: '연세대송도캠퍼스입구', id: '38489' }
+  ],
+  GANGNAM_STATIONS: [
+    { seq: 21, name: '고대역', id: '31013' },
+    { seq: 22, name: '강남역서초현대타워앞', id: '31016' }
+  ],
+  TOTAL_STATIONS: 45,
+  DIRECTION_SPLIT: 22 // 1-22: 강남행, 23-45: 인천행
+};
+
+// TODO: 인천광역시 버스정보시스템 API로 변경 필요
+// - 인천 API 엔드포인트: https://apis.data.go.kr/1613000/BusRouteInfoInqireService
+// - M6405 실제 노선 ID 확인 필요
+// - 인천 API 키 발급 필요
 
 // 송도동 주요 정류소 상수는 현재 사용되지 않아 제거 → 송도동에 맞추어 업데이트 예정
 
@@ -254,7 +284,7 @@ async function buildArrivalObjects(): Promise<BusArrival[]> {
         directionText = `좌석 ${loc.remainSeatCnt}석`;
       }
 
-      const towards: '강남행' | '인천행' = currentSeq <= 26 ? '강남행' : '인천행';
+      const towards: '강남행' | '인천행' = currentSeq <= MAJOR_STATIONS.DIRECTION_SPLIT ? '강남행' : '인천행';
 
       return {
         routeId: ROUTE_NAME,
@@ -279,11 +309,34 @@ async function buildArrivalObjects(): Promise<BusArrival[]> {
 export async function GET() {
   const data = await buildArrivalObjects();
   const now = new Date();
+  
+  // API 상태 정보
+  const apiStatus = {
+    current: '경기도 G-BIS API (임시)',
+    required: '인천광역시 버스정보시스템 API',
+    route: 'M6405 (인천 → 서울)',
+    warning: 'M6405는 인천 운행 노선이므로 API 변경 필요'
+  };
+  
   return NextResponse.json({
     success: true,
     data,
-    note: data.length ? '실시간(G-BIS)' : '데이터 없음',
+    note: data.length ? '실시간(G-BIS 임시)' : '데이터 없음',
     lastUpdate: now.toISOString(),
     dataSource: data.length ? 'gbis_api' : 'none',
+    apiStatus,
+    metadata: {
+      routeId: ROUTE_ID,
+      routeName: ROUTE_NAME,
+      provider: '경기도 공공데이터포털 (임시)',
+      needsUpdate: true,
+      targetProvider: '인천광역시 버스정보시스템',
+      stationInfo: {
+        totalStations: MAJOR_STATIONS.TOTAL_STATIONS,
+        directionSplit: MAJOR_STATIONS.DIRECTION_SPLIT,
+        songdoStations: MAJOR_STATIONS.SONGDO_STATIONS.length,
+        gangnamStations: MAJOR_STATIONS.GANGNAM_STATIONS.length
+      }
+    }
   });
 } 

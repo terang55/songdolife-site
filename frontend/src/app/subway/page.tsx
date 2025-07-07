@@ -146,12 +146,11 @@ export default function SubwayPage() {
     }
   }, [selectedStation]);
 
-  // 역 변경 또는 주기적 새로고침
+  // 지하철 시간표 조회
   useEffect(() => {
+    // 역 변경 시에만 호출 (자동 갱신 제거)
     fetchSchedule();
-    const t = setInterval(fetchSchedule, 5 * 60 * 1000); // 5분마다 새로고침
-    return () => clearInterval(t);
-  }, [fetchSchedule]);
+  }, [selectedStation, fetchSchedule]);
 
   // 다음 열차 정보 계산 (실제 시간표 사용)
   const getNextTrains = useCallback((direction: '상행' | '하행') => {
@@ -255,12 +254,9 @@ export default function SubwayPage() {
     }
   }, []);
 
-  // 버스 정보 업데이트
+  // 버스 정보 로딩 (초기 로딩만)
   useEffect(() => {
-    fetchBusInfo();
-    const interval = setInterval(fetchBusInfo, 30000); // 30초마다 업데이트
-
-    return () => clearInterval(interval);
+    fetchBusInfo(); // 페이지 로드 시 한 번만 호출
   }, [fetchBusInfo]);
 
   const selectedStationInfo = stations.find(s => s.name === selectedStation);
@@ -364,8 +360,17 @@ export default function SubwayPage() {
             <h2 className="text-xl font-bold text-gray-800 flex items-center">
               🚇 지하철 시간표
             </h2>
-            <div className="text-sm text-gray-500">
-              마지막 업데이트: {scheduleLastUpdate || '업데이트 중...'}
+            <div className="flex items-center space-x-3">
+              <div className="text-sm text-gray-500">
+                마지막 업데이트: {scheduleLastUpdate || '업데이트 중...'}
+              </div>
+              <button
+                onClick={() => fetchSchedule()}
+                disabled={scheduleLoading}
+                className="px-3 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                {scheduleLoading ? '🔄 새로고침 중...' : '🔄 새로고침'}
+              </button>
             </div>
           </div>
           

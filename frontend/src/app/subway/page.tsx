@@ -25,11 +25,53 @@ interface BusArrival {
 
 const stations = [
   {
+    name: '캠퍼스타운역',
+    code: 'I131',
+    line: '인천1호선',
+    coordinates: { lat: 37.3738, lon: 126.6612 },
+    nearbyPlaces: ['연세대학교 송도캠퍼스', '한국뉴욕주립대학교', '송도국제캠퍼스']
+  },
+  {
+    name: '테크노파크역',
+    code: 'I134',
+    line: '인천1호선',
+    coordinates: { lat: 37.3822, lon: 126.6563 },
+    nearbyPlaces: ['인천테크노파크', '현대프리미엄아울렛 송도점', '송도국제업무단지']
+  },
+  {
+    name: 'BIT존역',
+    code: 'I133',
+    line: '인천1호선',
+    coordinates: { lat: 37.3795, lon: 126.6598 },
+    nearbyPlaces: ['송도컨벤시아', '잭니클라우스골프클럽', '송도국제업무단지']
+  },
+  {
     name: '인천대입구역',
     code: 'I136',
     line: '인천1호선',
     coordinates: { lat: 37.3726, lon: 126.6589 },
     nearbyPlaces: ['인천대학교', '송도컨벤시아', '연세대학교 국제캠퍼스', '송도국제도시']
+  },
+  {
+    name: '센트럴파크역',
+    code: 'I137',
+    line: '인천1호선',
+    coordinates: { lat: 37.3945, lon: 126.6521 },
+    nearbyPlaces: ['송도센트럴파크', '트라이볼', 'G타워', '송도컨벤시아']
+  },
+  {
+    name: '국제업무지구역',
+    code: 'I138',
+    line: '인천1호선',
+    coordinates: { lat: 37.3999, lon: 126.6302 },
+    nearbyPlaces: ['포스코타워-송도', '송도국제업무단지', '송도컨벤시아', 'Northeast Asia Trade Tower']
+  },
+  {
+    name: '송도달빛축제공원역',
+    code: 'I139',
+    line: '인천1호선',
+    coordinates: { lat: 37.4012, lon: 126.6186 },
+    nearbyPlaces: ['송도달빛축제공원', '송도센트럴파크', '송도국제업무단지', '송도해수욕장']
   }
 ];
 
@@ -196,28 +238,96 @@ export default function SubwayPage() {
   const [busLastUpdate, setBusLastUpdate] = useState<string>('');
   const [busServiceEnded, setBusServiceEnded] = useState(false);
   const [isRealBusAPI, setIsRealBusAPI] = useState(false);
+  const [scheduleUp, setScheduleUp] = useState<string[]>([]);
+  const [scheduleDown, setScheduleDown] = useState<string[]>([]);
+  const [scheduleLoading, setScheduleLoading] = useState(false);
+  const [scheduleLastUpdate, setScheduleLastUpdate] = useState<string>('');
 
-  // 다음 열차 정보 계산
-  const getNextTrains = useCallback((direction: string) => {
+  // 📅 평일/휴일 구분 (토·일 = holiday)
+  const getDayType = () => {
+    const d = new Date().getDay();
+    return d === 0 || d === 6 ? 'holiday' : 'weekday';
+  };
+
+  // 지하철 시간표 불러오기
+  const fetchSchedule = useCallback(async () => {
+    setScheduleLoading(true);
+    console.log('🚇 시간표 API 호출 시작:', selectedStation);
+    try {
+      const dayType = getDayType();
+      console.log('📅 요일 타입:', dayType);
+      
+      const upRes = await fetch(
+        `/api/subway/schedule?station=${encodeURIComponent(selectedStation)}&dayType=${dayType}&direction=up`
+      );
+      const downRes = await fetch(
+        `/api/subway/schedule?station=${encodeURIComponent(selectedStation)}&dayType=${dayType}&direction=down`
+      );
+
+      console.log('🔵 상행 API 응답 상태:', upRes.status);
+      console.log('🔴 하행 API 응답 상태:', downRes.status);
+
+      const upData = await upRes.json();
+      const downData = await downRes.json();
+
+      console.log('🔵 상행 API 데이터:', upData);
+      console.log('🔴 하행 API 데이터:', downData);
+
+      if (upData.success && downData.success) {
+        setScheduleUp(upData.schedule || []);
+        setScheduleDown(downData.schedule || []);
+        console.log('✅ 시간표 설정 완료:', {
+          upCount: upData.schedule?.length || 0,
+          downCount: downData.schedule?.length || 0
+        });
+      } else {
+        console.error('❌ API 응답 실패:', { upData, downData });
+        setScheduleUp([]);
+        setScheduleDown([]);
+      }
+      
+      setScheduleLastUpdate(new Date().toLocaleTimeString('ko-KR'));
+    } catch (error) {
+      console.error('❌ 시간표 불러오기 실패:', error);
+      setScheduleUp([]);
+      setScheduleDown([]);
+    } finally {
+      setScheduleLoading(false);
+    }
+  }, [selectedStation]);
+
+  // 역 변경 또는 주기적 새로고침
+  useEffect(() => {
+    fetchSchedule();
+    const t = setInterval(fetchSchedule, 5 * 60 * 1000); // 5분마다 새로고침
+    return () => clearInterval(t);
+  }, [fetchSchedule]);
+
+  // 다음 열차 정보 계산 (실제 시간표 사용)
+  const getNextTrains = useCallback((direction: '상행' | '하행') => {
+    const list = direction === '상행' ? scheduleUp : scheduleDown;
+    if (!list || list.length === 0) return [];
+
     const now = new Date();
-    const currentTime = now.getHours() * 60 + now.getMinutes();
-    
-    const trains = SAMPLE_SCHEDULE
-      .filter(train => train.direction === direction)
-      .map(train => {
-        const [hours, minutes] = train.time.split(':').map(Number);
-        const trainTime = hours * 60 + minutes;
-        const timeDiff = trainTime - currentTime;
-        
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+    return list
+      .map((timeStr: string) => {
+        const [h, m] = timeStr.split(':').map((v: string) => parseInt(v, 10));
+        const minutes = h * 60 + m;
+        let diff = minutes - currentMinutes;
+        if (diff < 0) diff += 24 * 60; // 다음날 첫차 대비
         return {
-          ...train,
-          minutesFromNow: timeDiff >= 0 ? timeDiff : timeDiff + 24 * 60
-        };
+          time: `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`,
+          destination: direction === '상행' ? '검단호수공원' : '송도달빛축제공원',
+          direction,
+          trainType: '일반',
+          minutesFromNow: diff
+        } as unknown as TrainSchedule & { minutesFromNow: number };
       })
-      .sort((a, b) => a.minutesFromNow - b.minutesFromNow);
-    
-    return trains.slice(0, 8); // 더 많은 시간표 표시 (8개)
-  }, []);
+      .sort((a, b) => (a as any).minutesFromNow - (b as any).minutesFromNow)
+      .slice(0, 8);
+  }, [scheduleUp, scheduleDown]);
 
   // 남은 시간 포맷팅
   const formatTimeRemaining = (minutes: number): string => {
@@ -364,6 +474,40 @@ export default function SubwayPage() {
           </div>
         </section>
 
+        {/* 선택된 역 정보 */}
+        {selectedStationInfo && (
+          <section className="bg-white rounded-xl shadow-sm border p-4 sm:p-6 mb-6 sm:mb-8">
+            <div className="flex items-center mb-4">
+              <h2 className="text-lg sm:text-xl font-bold text-gray-900">📍 {selectedStationInfo.name} 정보</h2>
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <span className="text-blue-600 font-semibold text-sm">역코드:</span>
+                  <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">{selectedStationInfo.code}</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-blue-600 font-semibold text-sm">노선:</span>
+                  <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">{selectedStationInfo.line}</span>
+                </div>
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-gray-700 mb-2">🎯 주변 주요 장소</h3>
+                <div className="flex flex-wrap gap-2">
+                  {selectedStationInfo.nearbyPlaces.map((place, index) => (
+                    <span 
+                      key={index}
+                      className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm"
+                    >
+                      {place}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* 지하철 시간표 */}
         <div className="bg-white rounded-lg shadow-lg p-6">
           <div className="flex items-center justify-between mb-4">
@@ -371,84 +515,111 @@ export default function SubwayPage() {
               🚇 지하철 시간표
             </h2>
             <div className="text-sm text-gray-500">
-              마지막 업데이트: 오전 {new Date().toLocaleTimeString('ko-KR', { 
-                hour: '2-digit', 
-                minute: '2-digit', 
-                second: '2-digit' 
-              })}
+              마지막 업데이트: {scheduleLastUpdate || '업데이트 중...'}
             </div>
           </div>
           
           <div className="text-center mb-4">
-            <h3 className="text-lg font-semibold text-blue-600">인천대입구역</h3>
+            <h3 className="text-lg font-semibold text-blue-600">{selectedStation}</h3>
           </div>
 
-          {/* 방향 선택 버튼 제거 */}
+          {/* 로딩 상태 표시 */}
+          {scheduleLoading && (
+            <div className="text-center py-8">
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+              <p className="mt-2 text-gray-600">시간표 불러오는 중...</p>
+            </div>
+          )}
+
+          {/* 디버깅 정보 표시 */}
+          {!scheduleLoading && (
+            <div className="mb-4 p-3 bg-gray-100 rounded-lg text-xs">
+              <div>🔍 디버깅 정보:</div>
+              <div>• 상행 시간표: {scheduleUp.length}개 ({scheduleUp.slice(0, 3).join(', ')}...)</div>
+              <div>• 하행 시간표: {scheduleDown.length}개 ({scheduleDown.slice(0, 3).join(', ')}...)</div>
+              <div>• 현재 요일: {getDayType()}</div>
+              <div>• 로딩 상태: {scheduleLoading ? '로딩중' : '완료'}</div>
+            </div>
+          )}
 
           {/* 시간표 목록 - 상행/하행 모두 표시 */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* 상행 시간표 */}
-            <div>
-              <div className="flex items-center justify-center bg-blue-50 py-3 rounded-lg border-2 border-blue-200 mb-4">
-                <span className="text-blue-700 font-bold text-lg">🔵 상행 (검단호수공원 방향)</span>
-              </div>
-              <div className="space-y-2">
-                {getNextTrains('상행').map((train, index) => (
-                  <div
-                    key={`${train.time}-상행`}
-                    className={`flex items-center justify-between p-3 rounded-lg border ${
-                      index === 0
-                        ? 'bg-blue-50 border-blue-200'
-                        : 'bg-gray-50 border-gray-200'
-                    }`}
-                  >
-                    <div className="flex items-center space-x-3">
-                      <span className="text-lg font-bold text-blue-600">
-                        {train.time}
-                      </span>
-                      <span className="text-gray-600">→ {train.destination}</span>
+          {!scheduleLoading && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* 상행 시간표 */}
+              <div>
+                <div className="flex items-center justify-center bg-blue-50 py-3 rounded-lg border-2 border-blue-200 mb-4">
+                  <span className="text-blue-700 font-bold text-lg">🔵 상행 (검단호수공원 방향)</span>
+                </div>
+                <div className="space-y-2">
+                  {getNextTrains('상행').length === 0 ? (
+                    <div className="text-center py-4 text-gray-500">
+                      시간표 정보를 불러올 수 없습니다
                     </div>
-                    <span className={`text-sm font-semibold ${
-                      index === 0 ? 'text-blue-600' : 'text-gray-500'
-                    }`}>
-                      {formatTimeRemaining(train.minutesFromNow)}
-                    </span>
-                  </div>
-                ))}
+                  ) : (
+                    getNextTrains('상행').map((train, index) => (
+                      <div
+                        key={`${train.time}-상행`}
+                        className={`flex items-center justify-between p-3 rounded-lg border ${
+                          index === 0
+                            ? 'bg-blue-50 border-blue-200'
+                            : 'bg-gray-50 border-gray-200'
+                        }`}
+                      >
+                        <div className="flex items-center space-x-3">
+                          <span className="text-lg font-bold text-blue-600">
+                            {train.time}
+                          </span>
+                          <span className="text-gray-600">→ {train.destination}</span>
+                        </div>
+                        <span className={`text-sm font-semibold ${
+                          index === 0 ? 'text-blue-600' : 'text-gray-500'
+                        }`}>
+                          {formatTimeRemaining((train as any).minutesFromNow)}
+                        </span>
+                      </div>
+                    ))
+                  )}
+                </div>
               </div>
-            </div>
 
-            {/* 하행 시간표 */}
-            <div>
-              <div className="flex items-center justify-center bg-red-50 py-3 rounded-lg border-2 border-red-200 mb-4">
-                <span className="text-red-700 font-bold text-lg">🔴 하행 (송도달빛축제공원 방향)</span>
-              </div>
-              <div className="space-y-2">
-                {getNextTrains('하행').map((train, index) => (
-                  <div
-                    key={`${train.time}-하행`}
-                    className={`flex items-center justify-between p-3 rounded-lg border ${
-                      index === 0
-                        ? 'bg-red-50 border-red-200'
-                        : 'bg-gray-50 border-gray-200'
-                    }`}
-                  >
-                    <div className="flex items-center space-x-3">
-                      <span className="text-lg font-bold text-red-600">
-                        {train.time}
-                      </span>
-                      <span className="text-gray-600">→ {train.destination}</span>
+              {/* 하행 시간표 */}
+              <div>
+                <div className="flex items-center justify-center bg-red-50 py-3 rounded-lg border-2 border-red-200 mb-4">
+                  <span className="text-red-700 font-bold text-lg">🔴 하행 (송도달빛축제공원 방향)</span>
+                </div>
+                <div className="space-y-2">
+                  {getNextTrains('하행').length === 0 ? (
+                    <div className="text-center py-4 text-gray-500">
+                      시간표 정보를 불러올 수 없습니다
                     </div>
-                    <span className={`text-sm font-semibold ${
-                      index === 0 ? 'text-red-600' : 'text-gray-500'
-                    }`}>
-                      {formatTimeRemaining(train.minutesFromNow)}
-                    </span>
-                  </div>
-                ))}
+                  ) : (
+                    getNextTrains('하행').map((train, index) => (
+                      <div
+                        key={`${train.time}-하행`}
+                        className={`flex items-center justify-between p-3 rounded-lg border ${
+                          index === 0
+                            ? 'bg-red-50 border-red-200'
+                            : 'bg-gray-50 border-gray-200'
+                        }`}
+                      >
+                        <div className="flex items-center space-x-3">
+                          <span className="text-lg font-bold text-red-600">
+                            {train.time}
+                          </span>
+                          <span className="text-gray-600">→ {train.destination}</span>
+                        </div>
+                        <span className={`text-sm font-semibold ${
+                          index === 0 ? 'text-red-600' : 'text-gray-500'
+                        }`}>
+                          {formatTimeRemaining((train as any).minutesFromNow)}
+                        </span>
+                      </div>
+                    ))
+                  )}
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* 버스 정보 */}

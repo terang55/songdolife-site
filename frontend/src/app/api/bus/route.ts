@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
 // 인천광역시 버스위치정보 조회서비스 API
-const API_KEY = '9Mxh1dG6%2BY6x%2F%2F7%2F%2BttLSvD4MG0i8Vl%2F3rR7jTy6ELZrk%2FBcLw0nKzaLMl4WbW9ZG5FzrXfFNJKZdStZv%2F%2F%2F%3D%3D';
+const API_KEY = 'aTgFhrZehAYOxHq4Z3z1iSYeysHfG9Tu43JQhF26U3mdGzr0H8%2BjR9MzrwPoqr8yOegDO5OO56GmvXzS7rwkdw%3D%3D';
 
 // ------------------ 타입 정의 ------------------
 interface IncheonBusLocation {

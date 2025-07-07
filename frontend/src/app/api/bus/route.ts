@@ -1,306 +1,235 @@
-import { NextResponse } from 'next/server';
-import stationsData from './Station.json';
+import { NextRequest, NextResponse } from 'next/server';
 
-// -------------------- 타입 정의 --------------------
+// ------------------ 인천광역시 버스위치정보 조회서비스 API ------------------
+const INCHEON_BASE = 'https://apis.data.go.kr/6280000/busLocationService';
 
-interface StationInfo {
-  HIST_ID: string;
-  ROUTE_ID: string;
-  STATION_ID: string;
-  ROUTE_NM: string;
-  STATION_NM: string;
-}
+// ✅ 실제 API 키 설정 (URL 인코딩된 버전 - 브라우저에서 확인됨)
+const SERVICE_KEY = 'aTgFhrZehAYOxHq4Z3z1iSYeysHfG9Tu43JQhF26U3mdGzr0H8%2BjR9MzrwPoqr8yOegDO5OO56GmvXzS7rwkdw%3D%3D';
 
-interface GBISLocationItem {
-  stationId: string;
-  stationName: string;
-  stationSeq: string; // 정류소 순번 (1부터)
-  remainSeatCnt: string; // 남은좌석
-  plateNo: string;
-  lowPlateYn: string; // 저상버스 여부 (Y/N)
-  upFirstTime?: string; // 시작시간
-  upLastTime?: string;
-  downFirstTime?: string;
-  downLastTime?: string;
-  sectionSpeed?: string; // 구간속도
-  fullSectDist?: string; // 전체구간거리 (km)
-  fullSectTime?: string; // 전체구간소요시간 (min)
-  nextStationId?: string;
-  nextStationName?: string;
-  crowded?: string; // 혼잡도
-  lowPlate?: string; // 저상버스 여부 (Y/N)
+console.log('🔑 API 키 설정 완료 ✅ (브라우저 확인된 버전)');
+
+// ------------------ 타입 정의 ------------------
+interface IncheonBusLocation {
+  ROUTEID: string;          // 노선 ID
+  BUSID: string;            // 차량 고유 식별자
+  BUS_NUM_PLATE: string;    // 차량 번호판
+  LOW_TP_CD: string;        // 저상버스 여부 (0:일반, 1:저상)
+  DIRCD: string;            // 진행방향코드 (0:상행, 1:하행, 2:순환)
+  PATHSEQ: string;          // 현재 위치 노드 순번
+  LATEST_STOPSEQ: string;   // 현재 위치 정류소 순번
+  LATEST_STOP_ID: string;   // 현재 위치 정류소 ID
+  LATEST_STOP_NAME: string; // 현재 위치정류소 명
+  REMAIND_SEAT: string;     // 차량 내 빈자리 (255:사용안함)
+  CONGESTION: string;       // 혼잡도 (1:여유, 2:보통, 3:혼잡, 255:사용안함)
+  LASTBUSYN: string;        // 막차코드 (0:일반, 1:막차)
 }
 
 interface BusArrival {
-  routeId: string; // 'M6410'
+  routeId: string;
   stationName: string;
-  direction: string; // 다음 정류장 안내 문구
-  remainingStops: number; // 현재 정류장 순번 (1~)
+  direction: string;
+  remainingStops: number;
   lowFloor: boolean;
-  congestion: string; // GBIS는 혼잡도 미제공 → '-'
-  towards: '강남행' | '인천행'; // 진행 방향
+  congestion: string;
+  towards: string;
   updatedAt: string;
 }
 
-// ------------------ 설정 ------------------
-
-// ⚠️ 중요: M6405는 인천광역시 운행 노선입니다
-// 현재: 경기도 G-BIS API 사용 중 (임시)
-// 필요: 인천광역시 버스정보시스템 API로 변경 필요
-
-// 경기도 G-BIS v2 엔드포인트 (임시 사용)
-const GBIS_BASE = 'https://apis.data.go.kr/6410000';
-// 임시 하드코딩 (검증용)
-const SERVICE_KEY = 'aTgFhrZehAYOxHq4Z3z1iSYeysHfG9Tu43JQhF26U3mdGzr0H8%2BjR9MzrwPoqr8yOegDO5OO56GmvXzS7rwkdw%3D%3D';
-
-// M6405 노선 정보 (인천 → 서울)
-const ROUTE_NAME = 'M6405';
-const ROUTE_ID = '165000215'; // 경기도 기준 임시 ID
-
-// M6405 주요 정류소 정보 (실제 데이터 기반)
-const MAJOR_STATIONS = {
-  SONGDO_STATIONS: [
-    { seq: 1, name: '팰가운티', id: '38353' },
-    { seq: 2, name: '센트럴파크역', id: '38397' },
-    { seq: 3, name: '송도자이하퍼텐시', id: '38468' },
-    { seq: 4, name: '송도더샵퍼스트월드(동문)', id: '38013' },
-    { seq: 5, name: '풍림2.3차아파트', id: '38350' },
-    { seq: 6, name: '한진아파트', id: '38016' },
-    { seq: 7, name: '연세대송도캠퍼스입구', id: '38489' }
-  ],
-  GANGNAM_STATIONS: [
-    { seq: 21, name: '고대역', id: '31013' },
-    { seq: 22, name: '강남역서초현대타워앞', id: '31016' }
-  ],
-  TOTAL_STATIONS: 45,
-  DIRECTION_SPLIT: 22 // 1-22: 강남행, 23-45: 인천행
-};
-
-// TODO: 인천광역시 버스정보시스템 API로 변경 필요
-// - 인천 API 엔드포인트: https://apis.data.go.kr/1613000/BusRouteInfoInqireService
-// - M6405 실제 노선 ID 확인 필요
-// - 인천 API 키 발급 필요
-
-// 송도동 주요 정류소 상수는 현재 사용되지 않아 제거 → 송도동에 맞추어 업데이트 예정
-
-// ------------------ 유틸 ------------------
-// safeText 함수는 현재 사용되지 않아 제거
-
-function parseList<T = Record<string, string>>(xml: string, tag: string): T[] {
-  const out: T[] = [];
-  const regex = new RegExp(`<${tag}>([\\s\\S]*?)<\\/${tag}>`, 'g');
-  let m;
-  while ((m = regex.exec(xml)) !== null) {
-    const raw = m[1];
-    const obj: Record<string, string> = {};
-    raw.replace(/<([^\/][^>]*)>([\s\S]*?)<\/\1>/g, (_s, k: string, v: string) => {
-      obj[k] = v.trim();
-      return '';
-    });
-    out.push(obj as unknown as T);
+// ------------------ 유틸리티 함수 ------------------
+function parseXMLResponse<T>(xmlText: string, itemName: string): T[] {
+  const regex = new RegExp(`<${itemName}>(.*?)</${itemName}>`, 'gs');
+  const items: T[] = [];
+  let match;
+  
+  while ((match = regex.exec(xmlText)) !== null) {
+    const itemXml = match[1];
+    const item = {} as T;
+    
+    // 각 필드 파싱
+    const fieldRegex = /<(\w+)>(.*?)<\/\1>/g;
+    let fieldMatch;
+    
+    while ((fieldMatch = fieldRegex.exec(itemXml)) !== null) {
+      const [, fieldName, fieldValue] = fieldMatch;
+      (item as any)[fieldName] = fieldValue.trim();
+    }
+    
+    items.push(item);
   }
-  return out;
+  
+  return items;
 }
 
-// ------------------ API ------------------
+// M6405 노선의 송도 주요 정류소 정보
+const SONGDO_STATIONS = [
+  { name: '센트럴파크역', stops: 2 },
+  { name: '연세대송도캠퍼스', stops: 6 },
+  { name: '송도컨벤시아', stops: 8 },
+  { name: '송도국제업무지구', stops: 12 },
+  { name: '송도달빛축제공원', stops: 15 }
+];
 
-// getRouteIdByName 함수는 현재 사용되지 않아 제거
-
-async function fetchLocations(routeId: string): Promise<GBISLocationItem[]> {
-  const url = `${GBIS_BASE}/buslocationservice/v2/getBusLocationListv2?serviceKey=${SERVICE_KEY}&routeId=${routeId}&format=xml`;
+// ------------------ API 호출 함수 ------------------
+async function fetchIncheonBusLocations(routeId: string): Promise<IncheonBusLocation[]> {
+  // 🔧 URL 수동 구성 (fetch에서 자동 인코딩 방지)
+  const baseUrl = 'https://apis.data.go.kr/6280000/busLocationService/getBusRouteLocation';
+  const params = `serviceKey=${SERVICE_KEY}&pageNo=1&numOfRows=50&routeid=${routeId}`;
+  const url = `${baseUrl}?${params}`;
   
   try {
-    const response = await fetch(url);
+    console.log('🚌 인천 버스 API 호출:', url.replace(SERVICE_KEY, 'API_KEY_HIDDEN'));
+    
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Accept': '*/*',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+      }
+    });
+    
     if (!response.ok) {
+      console.error('❌ 인천 API 응답 오류:', response.status, response.statusText);
       return [];
     }
     
     const xmlText = await response.text();
-    console.log('📄 전체 XML 응답:', xmlText);
-    const locations = parseList<GBISLocationItem>(xmlText, 'busLocationList');
-    console.log('🚌 첫 번째 위치 데이터 전체 필드:', JSON.stringify(locations[0], null, 2));
+    console.log('📄 인천 API 원본 XML:', xmlText.substring(0, 500) + '...');
+    
+    // 공공데이터포털 에러 응답 체크
+    if (xmlText.includes('SERVICE_KEY_IS_NOT_REGISTERED_ERROR')) {
+      console.error('🚨 API 키 에러: 공공데이터포털에서 인천 버스 API 활용신청 필요');
+      return [];
+    }
+    
+    if (xmlText.includes('<returnReasonCode>')) {
+      const errorMatch = xmlText.match(/<errMsg>(.*?)<\/errMsg>/);
+      const reasonMatch = xmlText.match(/<returnAuthMsg>(.*?)<\/returnAuthMsg>/);
+      const codeMatch = xmlText.match(/<returnReasonCode>(\d+)<\/returnReasonCode>/);
+      console.error('🚨 API 에러:', `[${codeMatch?.[1]}] ${reasonMatch?.[1]} - ${errorMatch?.[1]}`);
+      
+      // 🔍 추가 디버깅: 실제 요청 URL과 브라우저 URL 비교
+      console.error('🔍 디버깅 정보:');
+      console.error('- 브라우저 성공 URL: https://apis.data.go.kr/6280000/busLocationService/getBusRouteLocation?serviceKey=aTgFhrZehAYOxHq4Z3z1iSYeysHfG9Tu43JQhF26U3mdGzr0H8%2BjR9MzrwPoqr8yOegDO5OO56GmvXzS7rwkdw%3D%3D&numOfRows=10&pageNo=1&routeid=165000215');
+      console.error('- 현재 요청 URL:', url);
+      
+      return [];
+    }
+    
+    // 정상 응답에서 오류 응답 체크
+    if (xmlText.includes('<resultCode>')) {
+      const resultCodeMatch = xmlText.match(/<resultCode>(\d+)<\/resultCode>/);
+      const resultMsgMatch = xmlText.match(/<resultMsg>(.*?)<\/resultMsg>/);
+      
+      if (resultCodeMatch && resultCodeMatch[1] !== '0') {
+        console.error('❌ 인천 API 오류:', resultCodeMatch[1], resultMsgMatch?.[1]);
+        return [];
+      }
+    }
+    
+    const locations = parseXMLResponse<IncheonBusLocation>(xmlText, 'itemList');
+    console.log(`🚌 인천 API에서 ${locations.length}대 버스 정보 수신`);
+    
+    // 🔍 좌석/혼잡도 정보 디버깅
+    locations.forEach((loc, index) => {
+      console.log(`🪑 버스 ${index + 1} 상세정보:`, {
+        plateNo: loc.BUS_NUM_PLATE,
+        stationName: loc.LATEST_STOP_NAME,
+        remaindSeat: loc.REMAIND_SEAT,
+        congestion: loc.CONGESTION,
+        direction: loc.DIRCD === '0' ? '상행' : loc.DIRCD === '1' ? '하행' : '순환',
+        lowFloor: loc.LOW_TP_CD === '1'
+      });
+    });
+    
     return locations;
+    
   } catch (error) {
-    console.error('❌ 위치 조회 에러', error);
+    console.error('❌ 인천 버스 API 호출 실패:', error);
     return [];
   }
 }
 
-// fetchArrival 함수는 현재 사용되지 않아 제거
-
-// 노선 정류장 목록 캐시
-let routeStationsCache: Array<{ stationId: string; stationName: string; stationSeq: number }> = [];
-
-// 노선별 전체 정류장 목록 조회
-async function fetchRouteStations(routeId: string): Promise<Array<{ stationId: string; stationName: string; stationSeq: number }>> {
-  if (routeStationsCache.length > 0) {
-    console.log(`📋 노선 정류장 캐시 사용: ${routeStationsCache.length}개 정류장`);
-    return routeStationsCache;
+// M6405의 인천 API 노선 ID를 찾는 함수
+function getIncheonRouteId(routeId: string): string {
+  // M6405의 인천 시스템 내 실제 노선 ID (확인됨)
+  if (routeId === 'M6405') {
+    return '165000215'; // ✅ 실제 확인된 노선 ID
   }
+  return routeId;
+}
 
-  console.log(`🔍 노선 정류장 목록 조회 시작: ${routeId}`);
-  
+// ------------------ 메인 비즈니스 로직 ------------------
+async function buildArrivalObjects(): Promise<BusArrival[]> {
   try {
-    const url = `${GBIS_BASE}/busroutestation/v2/getBusRouteStationListv2?serviceKey=${SERVICE_KEY}&routeId=${routeId}&format=xml`;
-    console.log(`📡 노선 정류장 API 호출: ${url}`);
+    const incheonRouteId = getIncheonRouteId('M6405');
+    const locations = await fetchIncheonBusLocations(incheonRouteId);
     
-    const response = await fetch(url);
-    console.log(`📡 노선 정류장 API 응답 상태: ${response.status}`);
-    
-    if (!response.ok) {
-      console.log(`❌ API 응답 실패: ${response.status}`);
+    if (locations.length === 0) {
+      console.log('⚠️ 인천 API에서 버스 위치 정보 없음');
       return [];
     }
     
-    const xmlText = await response.text();
-    console.log(`📄 노선 정류장 XML 응답 (처음 800자): ${xmlText.substring(0, 800)}`);
-    
-    const stationList = parseList<GBISRouteStationItem>(xmlText, 'busRouteStationList');
-    console.log(`🔍 파싱된 정류장 수: ${stationList.length}`);
-    
-    if (stationList.length > 0) {
-      console.log(`🚏 첫 번째 정류장 데이터:`, JSON.stringify(stationList[0], null, 2));
-      
-      routeStationsCache = stationList.map(station => ({
-        stationId: station.stationId || '',
-        stationName: station.stationName || '',
-        stationSeq: Number(station.stationSeq) || 0
-      }));
-      
-      console.log(`✅ 노선 정류장 목록 로딩 완료: ${routeStationsCache.length}개`);
-      console.log(`🚏 처음 10개 정류장:`, routeStationsCache.slice(0, 10).map(s => `${s.stationSeq}. ${s.stationName}`));
-      
-      return routeStationsCache;
-    } else {
-      console.log(`⚠️ 정류장 목록이 비어있음`);
-    }
-    
-  } catch (error) {
-    console.error(`❌ 노선 정류장 조회 에러:`, error);
-  }
-  
-  console.log(`❌ 노선 정류장 목록 로딩 실패`);
-  return [];
-}
-
-// 노선 정류장 XML 아이템 타입
-interface GBISRouteStationItem {
-  stationId: string;
-  stationName: string;
-  stationSeq: string; // 문자열로 전달됨
-}
-
-// 정류장 상세 XML 아이템 타입
-interface GBISBusStationInfoItem {
-  stationName: string;
-}
-
-// 정류장 정보 조회 - GBIS busStationInfov2 API 사용
-async function getStationInfo(stationId: string): Promise<{ stationName: string }> {
-  console.log(`🔍 정류장 조회: ${stationId}`);
-  
-  // 1. 먼저 로컬 Station.json에서 찾아보기
-  const stations = stationsData as StationInfo[];
-  const foundStation = stations.find(station => station.STATION_ID === stationId);
-  
-  if (foundStation) {
-    console.log(`🚏 정류장 발견 (로컬): ${foundStation.STATION_NM}`);
-    return { stationName: foundStation.STATION_NM };
-  }
-  
-  // 2. GBIS busStationInfov2 API 호출
-  try {
-    const url = `${GBIS_BASE}/busstationservice/v2/busStationInfov2?serviceKey=${SERVICE_KEY}&stationId=${stationId}&format=xml`;
-    console.log(`📡 GBIS 정류장 정보 API 호출: ${url}`);
-    
-    const response = await fetch(url);
-    if (!response.ok) {
-      console.log(`❌ API 응답 실패: ${response.status}`);
-      return { stationName: `정류장${stationId.slice(-3)}` };
-    }
-    
-    const xmlText = await response.text();
-    console.log(`📄 정류장 XML 응답 (처음 300자): ${xmlText.substring(0, 300)}`);
-    
-    // busStationInfo 태그에서 정류장명 추출
-    const stationInfoList = parseList<GBISBusStationInfoItem>(xmlText, 'busStationInfo');
-    
-    if (stationInfoList.length > 0) {
-      const stationName = stationInfoList[0].stationName || `정류장${stationId.slice(-3)}`;
-      console.log(`🚏 정류장 발견 (API): ${stationName}`);
-      return { stationName };
-    }
-    
-  } catch (error) {
-    console.error(`❌ 정류장 조회 에러 (${stationId}):`, error);
-  }
-  
-  // 3. 모든 방법 실패시 기본값
-  console.log(`❌ 정류장 정보 없음: ${stationId}`);
-  return { stationName: `정류장${stationId.slice(-3)}` }; // 뒤 3자리만 표시
-}
-
-async function buildArrivalObjects(): Promise<BusArrival[]> {
-  try {
-    const routeId = ROUTE_ID;
-
-    // 노선 정류장 목록 먼저 로딩
-    const routeStations = await fetchRouteStations(routeId);
-    
-    // 실시간 위치
-    const locations = await fetchLocations(routeId);
-
-    // 위치 데이터를 BusArrival 형태로 변환 (정류장명 포함)
-    const arrivals: BusArrival[] = await Promise.all(locations.map(async (loc) => {
-      const crowdedLevel = Number(loc.crowded || '1');
-      let congestionText = '-';
-      if (crowdedLevel === 1) congestionText = '여유';
-      else if (crowdedLevel === 2) congestionText = '보통';  
-      else if (crowdedLevel === 3) congestionText = '혼잡';
-
-      // 정류장 정보 조회
-      const stationInfo = await getStationInfo(loc.stationId);
-      const stationNameResolved = stationInfo?.stationName || `정류장${loc.stationSeq}`;
-
-      // 다음 정류장 정보 계산
-      const currentSeq = Number(loc.stationSeq) || 0;
-      let directionText = `좌석 ${loc.remainSeatCnt}석`;
-      
-      if (routeStations.length > 0) {
-        const nextStations = routeStations.filter(s => s.stationSeq > currentSeq).slice(0, 2);
-        
-        if (nextStations.length > 0) {
-          const nextStation = nextStations[0];
-          const remainingCount = nextStation.stationSeq - currentSeq;
-          directionText = `다음: ${nextStation.stationName} (${remainingCount}개 정류장) • 좌석 ${loc.remainSeatCnt}석`;
+    const arrivals: BusArrival[] = locations.map((loc) => {
+      // 좌석 정보 처리
+      let seatInfo = '';
+      if (loc.REMAIND_SEAT && loc.REMAIND_SEAT !== '255') {
+        const seatCount = parseInt(loc.REMAIND_SEAT);
+        if (seatCount > 0) {
+          seatInfo = `좌석 ${seatCount}석`;
         } else {
-          // 종점에 가까운 경우
-          directionText = `종점 근처 • 좌석 ${loc.remainSeatCnt}석`;
+          seatInfo = '만석';
         }
       } else {
-        // 노선 정보 로딩 실패시 기본 표시
-        console.log(`⚠️ 노선 정보 없음 - 기본 표시 사용`);
-        
-        directionText = `좌석 ${loc.remainSeatCnt}석`;
+        seatInfo = '좌석정보없음';
       }
-
-      const towards: '강남행' | '인천행' = currentSeq <= MAJOR_STATIONS.DIRECTION_SPLIT ? '강남행' : '인천행';
-
+      
+      // 혼잡도 정보 처리
+      let congestionInfo = '';
+      if (loc.CONGESTION && loc.CONGESTION !== '255') {
+        switch (loc.CONGESTION) {
+          case '1': congestionInfo = '여유'; break;
+          case '2': congestionInfo = '보통'; break;
+          case '3': congestionInfo = '혼잡'; break;
+          default: congestionInfo = '-';
+        }
+      } else {
+        congestionInfo = '-';
+      }
+      
+      // 방향 정보
+      const towards = loc.DIRCD === '0' ? '강남행' : '인천행';
+      
+      // direction 필드에 좌석과 혼잡도 정보 결합
+      const direction = seatInfo + (congestionInfo !== '-' ? ` • ${congestionInfo}` : '');
+      
+      // 남은 정류소 수 계산 (임시값, 실제로는 정류소 순번 기반 계산)
+      const remainingStops = Math.max(1, parseInt(loc.LATEST_STOPSEQ) || 1);
+      
       return {
-        routeId: ROUTE_NAME,
-        stationName: `${stationNameResolved} (${loc.plateNo})`,
-        direction: directionText,
-        remainingStops: currentSeq,
-        lowFloor: (loc.lowPlate || '0') === '1',
-        congestion: congestionText,
+        routeId: 'M6405',
+        stationName: `${loc.LATEST_STOP_NAME} (${loc.BUS_NUM_PLATE})`,
+        direction,
+        remainingStops,
+        lowFloor: loc.LOW_TP_CD === '1',
+        congestion: congestionInfo,
         towards,
-        updatedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
       };
-    }));
-
+    });
+    
+    // 방향별로 정렬 (상행 먼저, 하행 나중)
+    arrivals.sort((a, b) => {
+      if (a.towards !== b.towards) {
+        return a.towards === '강남행' ? -1 : 1;
+      }
+      return a.remainingStops - b.remainingStops;
+    });
+    
+    console.log(`✅ ${arrivals.length}개 버스 도착 정보 생성 완료`);
     return arrivals;
-  } catch (err) {
-    console.error('GBIS fetch error', err);
+    
+  } catch (error) {
+    console.error('❌ buildArrivalObjects 오류:', error);
     return [];
   }
 }
@@ -310,33 +239,41 @@ export async function GET() {
   const data = await buildArrivalObjects();
   const now = new Date();
   
+  // 🔍 좌석 정보 디버깅용 추가 정보
+  const debugInfo = {
+    totalBuses: data.length,
+    busesWithSeats: data.filter(b => b.direction.includes('좌석') && !b.direction.includes('정보없음')).length,
+    busesWithoutSeats: data.filter(b => b.direction.includes('정보없음')).length,
+    seatData: data.map(bus => ({
+      routeId: bus.routeId,
+      plateNo: bus.stationName.match(/\(([^)]+)\)$/)?.[1] || 'Unknown',
+      direction: bus.direction,
+      towards: bus.towards,
+      remainingStops: bus.remainingStops,
+      seatInfo: bus.direction.match(/좌석\s*(\d+|정보없음|만석)/)?.[1] || 'Not Found',
+      congestion: bus.congestion
+    }))
+  };
+  
   // API 상태 정보
   const apiStatus = {
-    current: '경기도 G-BIS API (임시)',
-    required: '인천광역시 버스정보시스템 API',
-    route: 'M6405 (인천 → 서울)',
-    warning: 'M6405는 인천 운행 노선이므로 API 변경 필요'
+    current: '인천광역시 버스위치정보 조회서비스',
+    provider: '인천광역시',
+    endpoint: '/getBusRouteLocation',
+    features: ['실시간 위치', '좌석 정보', '혼잡도', '저상버스 여부'],
+    seatDataAvailable: data.some(b => b.direction.includes('좌석') && !b.direction.includes('정보없음')),
+    congestionDataAvailable: data.some(b => b.congestion !== '-'),
+    lastApiCall: now.toISOString(),
+    routeId: 'M6405 (인천 시스템 ID: 165000215)'
   };
   
   return NextResponse.json({
     success: true,
     data,
-    note: data.length ? '실시간(G-BIS 임시)' : '데이터 없음',
+    note: '실시간(인천 BIS)',
     lastUpdate: now.toISOString(),
-    dataSource: data.length ? 'gbis_api' : 'none',
+    dataSource: 'incheon_api',
     apiStatus,
-    metadata: {
-      routeId: ROUTE_ID,
-      routeName: ROUTE_NAME,
-      provider: '경기도 공공데이터포털 (임시)',
-      needsUpdate: true,
-      targetProvider: '인천광역시 버스정보시스템',
-      stationInfo: {
-        totalStations: MAJOR_STATIONS.TOTAL_STATIONS,
-        directionSplit: MAJOR_STATIONS.DIRECTION_SPLIT,
-        songdoStations: MAJOR_STATIONS.SONGDO_STATIONS.length,
-        gangnamStations: MAJOR_STATIONS.GANGNAM_STATIONS.length
-      }
-    }
+    debug: debugInfo
   });
 } 

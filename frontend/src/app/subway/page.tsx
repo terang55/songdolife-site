@@ -234,11 +234,29 @@ export default function SubwayPage() {
       const response = await fetch('/api/bus?routeId=M6405');
       const data = await response.json();
       
+      // 🔍 API 응답 디버깅 정보 출력
+      console.log('🚌 M6405 API 전체 응답:', data);
+      if (data.debug) {
+        console.log('🪑 좌석 정보 디버깅:', data.debug);
+        console.log('📊 좌석 데이터 상세:', data.debug.seatData);
+      }
+      
       if (data.success && data.data) {
         setBusInfo(data.data);
         setBusServiceEnded(false);
         setIsRealBusAPI(true);
+        
+        // 🔍 개별 버스의 좌석 정보 확인
+        data.data.forEach((bus: BusArrival, index: number) => {
+          console.log(`🚌 버스 ${index + 1} 좌석 정보:`, {
+            stationName: bus.stationName,
+            direction: bus.direction,
+            towards: bus.towards,
+            seatExtracted: bus.direction.match(/좌석\s*(\d+|정보없음|없음)석?/)?.[1] || 'Not Found'
+          });
+        });
       } else {
+        console.log('❌ API 응답 실패 - 샘플 데이터 사용:', data);
         // API 실패 시 샘플 데이터 사용
         const sampleData: BusArrival[] = [
           {
@@ -269,7 +287,7 @@ export default function SubwayPage() {
       
       setBusLastUpdate(new Date().toLocaleTimeString('ko-KR'));
     } catch (error) {
-      console.error('버스 정보 조회 실패:', error);
+      console.error('❌ 버스 정보 조회 실패:', error);
       setBusServiceEnded(true);
       setIsRealBusAPI(false);
     } finally {
@@ -488,46 +506,67 @@ export default function SubwayPage() {
                 const toGangnam = busInfo.filter(b => b.towards === '강남행');
                 const toIncheon = busInfo.filter(b => b.towards === '인천행');
 
-                const BusCard = ({ bus }: { bus: BusArrival }) => (
-                  <div className="bg-white rounded-xl shadow-md p-3 sm:p-4 border-l-4 border-red-500">
-                    <div className="flex justify-between items-start mb-3">
-                      <div className="flex items-center gap-2">
-                        <span className="bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-1 rounded-full">{bus.routeId}</span>
-                        {bus.lowFloor && (
-                          <span className="bg-green-100 text-green-800 text-xs font-semibold px-2 py-0.5 rounded">♿ 저상버스</span>
-                        )}
-                      </div>
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        bus.towards === '강남행' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'
-                      }`}>
-                        {bus.towards}
-                      </span>
-                    </div>
-                    
-                    <div className="mb-2">
-                      <span className="text-sm text-gray-700 font-medium">
-                        {bus.stationName.replace(/\s*\([^)]*\)$/, '')}
-                      </span>
-                    </div>
-                    
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm text-blue-700 font-semibold">{bus.direction}</span>
-                      <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
-                        {bus.remainingStops}번째 정류장
-                      </span>
-                    </div>
-                    
-                    <div className="flex gap-1 items-center mt-2">
-                      {bus.congestion !== '-' && (
-                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                          혼잡도: {bus.congestion}
+                const BusCard = ({ bus }: { bus: BusArrival }) => {
+                  // 좌석 정보 추출 (direction에서 좌석 정보 분리)
+                  const seatMatch = bus.direction.match(/좌석\s*(\d+|정보없음|없음)석?/);
+                  const seatInfo = seatMatch ? (seatMatch[1] === '정보없음' || seatMatch[1] === '없음' ? '정보없음' : `${seatMatch[1]}석`) : '정보없음';
+                  
+                  // direction에서 좌석 정보 제거한 나머지
+                  const directionWithoutSeat = bus.direction.replace(/\s*•\s*좌석\s*(\d+|정보없음|없음)석?/, '').replace(/좌석\s*(\d+|정보없음|없음)석?\s*•?\s*/, '');
+                  
+                  return (
+                    <div className="bg-white rounded-xl shadow-md p-3 sm:p-4 border-l-4 border-red-500">
+                      <div className="flex justify-between items-start mb-3">
+                        <div className="flex items-center gap-2">
+                          <span className="bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-1 rounded-full">{bus.routeId}</span>
+                          {bus.lowFloor && (
+                            <span className="bg-green-100 text-green-800 text-xs font-semibold px-2 py-0.5 rounded">♿ 저상버스</span>
+                          )}
+                        </div>
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          bus.towards === '강남행' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'
+                        }`}>
+                          {bus.towards}
                         </span>
+                      </div>
+                      
+                      <div className="mb-2">
+                        <span className="text-sm text-gray-700 font-medium">
+                          {bus.stationName.replace(/\s*\([^)]*\)$/, '')}
+                        </span>
+                      </div>
+                      
+                      {/* 좌석 정보를 별도로 강조 표시 */}
+                      <div className="mb-2 flex items-center gap-2">
+                        <span className={`px-2 py-1 rounded-full text-xs font-bold ${
+                          seatInfo === '정보없음' ? 'bg-gray-100 text-gray-600' : 'bg-orange-100 text-orange-800'
+                        }`}>
+                          🪑 {seatInfo}
+                        </span>
+                        <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                          {bus.remainingStops}번째 정류장
+                        </span>
+                      </div>
+                      
+                      {/* 다음 정류장 정보 */}
+                      {directionWithoutSeat && (
+                        <div className="mb-2">
+                          <span className="text-sm text-blue-700 font-medium">{directionWithoutSeat}</span>
+                        </div>
                       )}
-                      <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">운행중</span>
-                      {isRealBusAPI && <span className="px-2 py-1 rounded text-xs font-medium bg-emerald-100 text-emerald-800">실시간</span>}
+                      
+                      <div className="flex gap-1 items-center mt-2">
+                        {bus.congestion !== '-' && (
+                          <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            혼잡도: {bus.congestion}
+                          </span>
+                        )}
+                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">운행중</span>
+                        {isRealBusAPI && <span className="px-2 py-1 rounded text-xs font-medium bg-emerald-100 text-emerald-800">실시간</span>}
+                      </div>
                     </div>
-                  </div>
-                );
+                  );
+                };
 
                 return (
                   <>

@@ -223,35 +223,6 @@ async function buildArrivalObjects(): Promise<BusArrival[]> {
 // ------------------ Next.js Route ------------------
 export async function GET() {
   const data = await buildArrivalObjects();
-  const now = new Date();
-  
-  // 🔍 좌석 정보 디버깅용 추가 정보
-  const debugInfo = {
-    totalBuses: data.length,
-    busesWithSeats: data.filter(b => b.direction.includes('좌석') && !b.direction.includes('정보없음')).length,
-    busesWithoutSeats: data.filter(b => b.direction.includes('정보없음')).length,
-    seatData: data.map(bus => ({
-      routeId: bus.routeId,
-      plateNo: bus.stationName.match(/\(([^)]+)\)$/)?.[1] || 'Unknown',
-      direction: bus.direction,
-      towards: bus.towards,
-      remainingStops: bus.remainingStops,
-      seatInfo: bus.direction.match(/좌석\s*(\d+|정보없음|만석)/)?.[1] || 'Not Found',
-      congestion: bus.congestion
-    }))
-  };
-  
-  // API 상태 정보
-  const apiStatus = {
-    current: '인천광역시 버스위치정보 조회서비스',
-    provider: '인천광역시',
-    endpoint: '/getBusRouteLocation',
-    features: ['실시간 위치', '좌석 정보', '혼잡도', '저상버스 여부'],
-    seatDataAvailable: data.some(b => b.direction.includes('좌석') && !b.direction.includes('정보없음')),
-    congestionDataAvailable: data.some(b => b.congestion !== '-'),
-    lastApiCall: now.toISOString(),
-    routeId: 'M6405 (인천 시스템 ID: 165000215)'
-  };
   
   return NextResponse.json({
     success: true,

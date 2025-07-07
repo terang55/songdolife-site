@@ -71,38 +71,39 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // API 요청 처리 (Cache First with Network Fallback)
+  // API 요청 처리 (Network First with Cache Fallback)
   if (url.pathname.startsWith('/api/')) {
     event.respondWith(
       caches.open(DYNAMIC_CACHE)
         .then((cache) => {
-          return cache.match(request)
-            .then((cachedResponse) => {
-              if (cachedResponse) {
-                // 백그라운드에서 업데이트
-                fetch(request)
-                  .then((response) => {
-                    if (response.ok) {
-                      cache.put(request, response.clone());
-                    }
-                  })
-                  .catch(() => {
-                    // 네트워크 오류 무시
-                  });
-                
-                return cachedResponse;
+          // 🔄 Network First: 먼저 네트워크에서 최신 데이터 시도
+          return fetch(request)
+            .then((response) => {
+              if (response.ok) {
+                // 네트워크 성공 시 캐시 업데이트 후 반환
+                cache.put(request, response.clone());
+                console.log('🌐 API 최신 데이터 반환:', url.pathname);
+                return response;
               }
-              
-              // 캐시에 없으면 네트워크에서 가져오기
-              return fetch(request)
-                .then((response) => {
-                  if (response.ok) {
-                    cache.put(request, response.clone());
+              // 네트워크 응답이 실패하면 캐시에서 가져오기
+              return cache.match(request)
+                .then((cachedResponse) => {
+                  if (cachedResponse) {
+                    console.log('📦 API 캐시 데이터 반환:', url.pathname);
+                    return cachedResponse;
                   }
-                  return response;
-                })
-                .catch(() => {
-                  // 오프라인 시 기본 응답
+                  return response; // 캐시도 없으면 실패 응답 반환
+                });
+            })
+            .catch(() => {
+              // 네트워크 오류 시 캐시에서 가져오기
+              return cache.match(request)
+                .then((cachedResponse) => {
+                  if (cachedResponse) {
+                    console.log('📦 오프라인 - API 캐시 데이터 반환:', url.pathname);
+                    return cachedResponse;
+                  }
+                  // 캐시도 없으면 오프라인 응답
                   return new Response(
                     JSON.stringify({
                       success: false,

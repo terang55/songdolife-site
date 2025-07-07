@@ -255,11 +255,13 @@ export async function GET() {
   
   return NextResponse.json({
     success: true,
-    data,
-    note: '실시간(인천 BIS)',
-    lastUpdate: now.toISOString(),
-    dataSource: 'incheon_api',
-    apiStatus,
-    debug: debugInfo
+    data: data,
+    lastUpdate: new Date().toISOString(),
+    realAPI: data.length > 0
+  }, {
+    headers: {
+      'Cache-Control': 'public, max-age=60, s-maxage=60', // 실시간 정보라서 1분만 캐시
+      'CDN-Cache-Control': 'public, max-age=60'
+    }
   });
 } 

@@ -77,7 +77,7 @@ const nextConfig: NextConfig = {
       },
     ],
     formats: ['image/webp', 'image/avif'],
-    minimumCacheTTL: 31536000, // 1년
+    minimumCacheTTL: 604800, // 7일 (기존 1년에서 단축)
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     dangerouslyAllowSVG: true,
@@ -154,6 +154,51 @@ const nextConfig: NextConfig = {
           {
             key: 'Cache-Control',
             value: 'public, max-age=86400, s-maxage=86400',
+          },
+        ],
+      },
+      {
+        source: '/api/news',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=300, s-maxage=300', // 5분 캐시
+          },
+        ],
+      },
+      {
+        source: '/api/bus',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=60, s-maxage=60', // 1분 캐시 (실시간)
+          },
+        ],
+      },
+      {
+        source: '/api/subway/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=300, s-maxage=300', // 5분 캐시
+          },
+        ],
+      },
+      {
+        source: '/api/weather',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=600, s-maxage=600', // 10분 캐시
+          },
+        ],
+      },
+      {
+        source: '/api/medical',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=1800, s-maxage=1800', // 30분 캐시
           },
         ],
       },

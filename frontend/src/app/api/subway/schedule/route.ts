@@ -120,11 +120,15 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json({
     success: true,
-    station,
-    dayType,
-    direction,
-    count: times.length,
     schedule: times,
-    generatedAt: new Date().toISOString()
+    station: station,
+    direction,
+    dayType,
+    timestamp: new Date().toISOString()
+  }, {
+    headers: {
+      'Cache-Control': 'public, max-age=300, s-maxage=300', // 5분 캐시
+      'CDN-Cache-Control': 'public, max-age=300'
+    }
   });
 } 

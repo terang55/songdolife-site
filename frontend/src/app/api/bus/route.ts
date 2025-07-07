@@ -1,12 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
-// ------------------ 인천광역시 버스위치정보 조회서비스 API ------------------
-const INCHEON_BASE = 'https://apis.data.go.kr/6280000/busLocationService';
-
-// ✅ 실제 API 키 설정 (URL 인코딩된 버전 - 브라우저에서 확인됨)
-const SERVICE_KEY = 'aTgFhrZehAYOxHq4Z3z1iSYeysHfG9Tu43JQhF26U3mdGzr0H8%2BjR9MzrwPoqr8yOegDO5OO56GmvXzS7rwkdw%3D%3D';
-
-console.log('🔑 API 키 설정 완료 ✅ (브라우저 확인된 버전)');
+// 인천광역시 버스위치정보 조회서비스 API
+const API_KEY = '9Mxh1dG6%2BY6x%2F%2F7%2F%2BttLSvD4MG0i8Vl%2F3rR7jTy6ELZrk%2FBcLw0nKzaLMl4WbW9ZG5FzrXfFNJKZdStZv%2F%2F%2F%3D%3D';
 
 // ------------------ 타입 정의 ------------------
 interface IncheonBusLocation {
@@ -73,11 +68,11 @@ const SONGDO_STATIONS = [
 async function fetchIncheonBusLocations(routeId: string): Promise<IncheonBusLocation[]> {
   // 🔧 URL 수동 구성 (fetch에서 자동 인코딩 방지)
   const baseUrl = 'https://apis.data.go.kr/6280000/busLocationService/getBusRouteLocation';
-  const params = `serviceKey=${SERVICE_KEY}&pageNo=1&numOfRows=50&routeid=${routeId}`;
+  const params = `serviceKey=${API_KEY}&pageNo=1&numOfRows=50&routeid=${routeId}`;
   const url = `${baseUrl}?${params}`;
   
   try {
-    console.log('🚌 인천 버스 API 호출:', url.replace(SERVICE_KEY, 'API_KEY_HIDDEN'));
+    console.log('🚌 인천 버스 API 호출:', url.replace(API_KEY, 'API_KEY_HIDDEN'));
     
     const response = await fetch(url, {
       method: 'GET',
@@ -131,6 +126,17 @@ async function fetchIncheonBusLocations(routeId: string): Promise<IncheonBusLoca
     
     // 🔍 좌석/혼잡도 정보 디버깅
     locations.forEach((loc, index) => {
+      // �� 좌석 정보 추출 및 혼잡도 매핑
+      const remainSeats = parseInt(loc.REMAIND_SEAT || '0');
+      const congestionLevel = parseInt(loc.CONGESTION || '0');
+      
+      let seatInfo: string;
+      if (remainSeats > 0) {
+        seatInfo = `좌석 ${remainSeats}석`;
+      } else {
+        seatInfo = "좌석정보없음";
+      }
+
       console.log(`🪑 버스 ${index + 1} 상세정보:`, {
         plateNo: loc.BUS_NUM_PLATE,
         stationName: loc.LATEST_STOP_NAME,

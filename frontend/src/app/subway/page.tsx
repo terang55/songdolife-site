@@ -23,6 +23,12 @@ interface BusArrival {
   updatedAt: string;
 }
 
+interface TrainWithMinutes extends TrainSchedule {
+  minutesFromNow: number;
+}
+
+const BUS_FEATURE_DISABLED = false;
+
 const stations = [
   {
     name: '캠퍼스타운역',
@@ -74,162 +80,6 @@ const stations = [
     nearbyPlaces: ['송도달빛축제공원', '송도센트럴파크', '송도국제업무단지', '송도해수욕장']
   }
 ];
-
-const SAMPLE_SCHEDULE: TrainSchedule[] = [
-  // 상행 (검단호수공원 방향) - 더 많은 시간표
-  { time: "05:30", destination: "검단호수공원", direction: "상행", trainType: "일반", isFirst: true },
-  { time: "05:45", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "06:00", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "06:15", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "06:30", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "06:45", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "07:00", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "07:15", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "07:30", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "07:45", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "08:00", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "08:15", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "08:30", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "08:45", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "09:00", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "09:15", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "09:30", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "09:45", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "10:00", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "10:15", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "10:30", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "10:45", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "11:00", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "11:15", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "11:30", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "11:45", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "12:00", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "12:15", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "12:30", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "12:45", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "13:00", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "13:15", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "13:30", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "13:45", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "14:00", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "14:15", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "14:30", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "14:45", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "15:00", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "15:15", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "15:30", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "15:45", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "16:00", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "16:15", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "16:30", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "16:45", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "17:00", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "17:15", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "17:30", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "17:45", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "18:00", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "18:15", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "18:30", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "18:45", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "19:00", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "19:15", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "19:30", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "19:45", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "20:00", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "20:15", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "20:30", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "20:45", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "21:00", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "21:15", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "21:30", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "21:45", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "22:00", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "22:15", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "22:30", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "22:45", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "23:00", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "23:15", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "23:30", destination: "검단호수공원", direction: "상행", trainType: "일반" },
-  { time: "23:45", destination: "검단호수공원", direction: "상행", trainType: "일반", isLast: true },
-  
-  // 하행 (송도달빛축제공원 방향) - 더 많은 시간표
-  { time: "05:35", destination: "송도달빛축제공원", direction: "하행", trainType: "일반", isFirst: true },
-  { time: "05:50", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "06:05", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "06:20", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "06:35", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "06:50", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "07:05", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "07:20", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "07:35", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "07:50", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "08:05", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "08:20", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "08:35", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "08:50", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "09:05", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "09:20", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "09:35", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "09:50", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "10:05", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "10:20", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "10:35", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "10:50", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "11:05", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "11:20", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "11:35", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "11:50", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "12:05", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "12:20", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "12:35", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "12:50", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "13:05", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "13:20", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "13:35", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "13:50", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "14:05", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "14:20", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "14:35", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "14:50", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "15:05", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "15:20", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "15:35", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "15:50", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "16:05", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "16:20", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "16:35", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "16:50", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "17:05", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "17:20", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "17:35", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "17:50", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "18:05", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "18:20", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "18:35", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "18:50", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "19:05", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "19:20", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "19:35", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "19:50", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "20:05", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "20:20", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "20:35", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "20:50", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "21:05", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "21:20", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "21:35", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "21:50", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "22:05", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "22:20", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "22:35", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "22:50", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "23:05", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "23:20", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "23:35", destination: "송도달빛축제공원", direction: "하행", trainType: "일반" },
-  { time: "23:50", destination: "송도달빛축제공원", direction: "하행", trainType: "일반", isLast: true },
-];
-
-const BUS_FEATURE_DISABLED = false;
 
 export default function SubwayPage() {
   const [selectedStation, setSelectedStation] = useState('인천대입구역');
@@ -323,9 +173,9 @@ export default function SubwayPage() {
           direction,
           trainType: '일반',
           minutesFromNow: diff
-        } as unknown as TrainSchedule & { minutesFromNow: number };
+        } as TrainWithMinutes;
       })
-      .sort((a, b) => (a as any).minutesFromNow - (b as any).minutesFromNow)
+      .sort((a, b) => a.minutesFromNow - b.minutesFromNow)
       .slice(0, 8);
   }, [scheduleUp, scheduleDown]);
 
@@ -563,7 +413,7 @@ export default function SubwayPage() {
                         <span className={`text-sm font-semibold ${
                           index === 0 ? 'text-blue-600' : 'text-gray-500'
                         }`}>
-                          {formatTimeRemaining((train as any).minutesFromNow)}
+                          {formatTimeRemaining(train.minutesFromNow)}
                         </span>
                       </div>
                     ))
@@ -600,7 +450,7 @@ export default function SubwayPage() {
                         <span className={`text-sm font-semibold ${
                           index === 0 ? 'text-red-600' : 'text-gray-500'
                         }`}>
-                          {formatTimeRemaining((train as any).minutesFromNow)}
+                          {formatTimeRemaining(train.minutesFromNow)}
                         </span>
                       </div>
                     ))

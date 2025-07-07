@@ -531,17 +531,6 @@ export default function SubwayPage() {
             </div>
           )}
 
-          {/* 디버깅 정보 표시 */}
-          {!scheduleLoading && (
-            <div className="mb-4 p-3 bg-gray-100 rounded-lg text-xs">
-              <div>🔍 디버깅 정보:</div>
-              <div>• 상행 시간표: {scheduleUp.length}개 ({scheduleUp.slice(0, 3).join(', ')}...)</div>
-              <div>• 하행 시간표: {scheduleDown.length}개 ({scheduleDown.slice(0, 3).join(', ')}...)</div>
-              <div>• 현재 요일: {getDayType()}</div>
-              <div>• 로딩 상태: {scheduleLoading ? '로딩중' : '완료'}</div>
-            </div>
-          )}
-
           {/* 시간표 목록 - 상행/하행 모두 표시 */}
           {!scheduleLoading && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

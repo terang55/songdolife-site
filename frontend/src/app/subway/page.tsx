@@ -45,7 +45,7 @@ const stations = [
     nearbyPlaces: ['인천테크노파크', '현대프리미엄아울렛 송도점', '송도국제업무단지']
   },
   {
-    name: 'BIT존역',
+    name: '지식정보단지역',
     code: 'I133',
     line: '인천1호선',
     coordinates: { lat: 37.3795, lon: 126.6598 },

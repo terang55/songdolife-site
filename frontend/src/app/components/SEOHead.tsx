@@ -12,6 +12,12 @@ interface SEOHeadProps {
   category?: string;
 }
 
+// Google Analytics(GA4) 하드코딩
+const GA_ID = 'G-F2WTCGPWCK';
+// Google Search Console site verification 하드코딩
+const GOOGLE_VERIFICATION = 'boZhl5PMBpsnoWzLu-lTOSOGVvZhwawu6BTEkW3VduM';
+const NAVER_VERIFICATION = '44c10a4e77ecf6146e4b0fed17a986909b229a38';
+
 export default function SEOHead({
   title = "송도라이프 | 인천 연수구 송도국제도시 생활정보 플랫폼",
   description = "송도국제도시 주민을 위한 실시간 뉴스·지하철·부동산·병원·약국 정보 플랫폼. 센트럴파크, 인천1호선, 송도동 모든 생활정보를 한곳에서 확인하세요.",
@@ -85,7 +91,7 @@ export default function SEOHead({
       <meta name="ICBM" content="37.538603, 126.722675" />
       
       {/* 네이버 최적화 */}
-      <meta name="naver-site-verification" content="6f6f6592110192cd2491d3c5bf4133592c100558" />
+      <meta name="naver-site-verification" content={NAVER_VERIFICATION} />
       
       {/* 구조화된 데이터 */}
       {structuredData && (
@@ -96,6 +102,21 @@ export default function SEOHead({
           }}
         />
       )}
+
+      {/* Google Search Console site verification */}
+      <meta name="google-site-verification" content={GOOGLE_VERIFICATION} />
+      {/* Google Analytics(GA4) */}
+      <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></script>
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_ID}');
+          `,
+        }}
+      />
     </Head>
   );
 } 

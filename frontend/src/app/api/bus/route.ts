@@ -46,7 +46,7 @@ function parseXMLResponse<T>(xmlText: string, itemName: string): T[] {
     
     while ((fieldMatch = fieldRegex.exec(itemXml)) !== null) {
       const [, fieldName, fieldValue] = fieldMatch;
-      (item as any)[fieldName] = fieldValue.trim();
+      (item as Record<string, string>)[fieldName] = fieldValue.trim();
     }
     
     items.push(item);
@@ -54,15 +54,6 @@ function parseXMLResponse<T>(xmlText: string, itemName: string): T[] {
   
   return items;
 }
-
-// M6405 노선의 송도 주요 정류소 정보
-const SONGDO_STATIONS = [
-  { name: '센트럴파크역', stops: 2 },
-  { name: '연세대송도캠퍼스', stops: 6 },
-  { name: '송도컨벤시아', stops: 8 },
-  { name: '송도국제업무지구', stops: 12 },
-  { name: '송도달빛축제공원', stops: 15 }
-];
 
 // ------------------ API 호출 함수 ------------------
 async function fetchIncheonBusLocations(routeId: string): Promise<IncheonBusLocation[]> {
@@ -126,17 +117,6 @@ async function fetchIncheonBusLocations(routeId: string): Promise<IncheonBusLoca
     
     // 🔍 좌석/혼잡도 정보 디버깅
     locations.forEach((loc, index) => {
-      // �� 좌석 정보 추출 및 혼잡도 매핑
-      const remainSeats = parseInt(loc.REMAIND_SEAT || '0');
-      const congestionLevel = parseInt(loc.CONGESTION || '0');
-      
-      let seatInfo: string;
-      if (remainSeats > 0) {
-        seatInfo = `좌석 ${remainSeats}석`;
-      } else {
-        seatInfo = "좌석정보없음";
-      }
-
       console.log(`🪑 버스 ${index + 1} 상세정보:`, {
         plateNo: loc.BUS_NUM_PLATE,
         stationName: loc.LATEST_STOP_NAME,

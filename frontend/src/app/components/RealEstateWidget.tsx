@@ -62,7 +62,7 @@ export default function RealEstateWidget() {
   useEffect(() => {
     fetchRealEstateData();
     loadLastUpdateTime();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // localStorage에서 이전 데이터 가져오기
   const getPreviousData = (): Deal[] => {
@@ -309,7 +309,7 @@ export default function RealEstateWidget() {
           </div>
           {data.statistics.new_deals_count > 0 && (
             <p className="text-sm text-green-700 mt-1">
-              신규 거래만 보려면 위의 "신규만 보기" 버튼을 클릭하세요.
+              신규 거래만 보려면 위의 &ldquo;신규만 보기&rdquo; 버튼을 클릭하세요.
             </p>
           )}
         </div>

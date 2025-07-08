@@ -92,8 +92,16 @@ export default function HomePage() {
         params.append('category', selectedCategory);
       }
       params.append('limit', '100');
+      // 캐시 우회를 위한 타임스탬프 추가
+      params.append('_t', Date.now().toString());
 
-      const response = await fetch(`/api/news?${params.toString()}`);
+      const response = await fetch(`/api/news?${params.toString()}`, {
+        cache: 'no-store', // Next.js 캐시 무시
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache'
+        }
+      });
       const result: ApiResponse = await response.json();
 
       if (result.success) {
@@ -154,7 +162,13 @@ export default function HomePage() {
 
   const fetchSyncStatus = async () => {
     try {
-      const response = await fetch('/api/sync');
+      const response = await fetch(`/api/sync?_t=${Date.now()}`, {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache'
+        }
+      });
       const result = await response.json();
       
       if (result.success) {
@@ -167,7 +181,13 @@ export default function HomePage() {
 
   const fetchStats = async () => {
     try {
-      const response = await fetch('/api/stats');
+      const response = await fetch(`/api/stats?_t=${Date.now()}`, {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache'
+        }
+      });
       const result = await response.json();
       
       if (result.success) {
@@ -781,6 +801,118 @@ export default function HomePage() {
             </div>
           </div>
         )}
+
+        {/* FAQ 섹션 */}
+        <section className="mt-12 sm:mt-16 py-8 sm:py-12 bg-gray-50 rounded-2xl">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-8 sm:mb-12">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">
+                🤔 자주 묻는 질문
+              </h2>
+              <p className="text-base sm:text-lg text-gray-600">
+                송도라이프 서비스에 대해 궁금한 점들을 확인해보세요
+              </p>
+            </div>
+            
+            <div className="space-y-4 sm:space-y-6">
+              {/* FAQ 항목 1 */}
+              <details className="bg-white rounded-xl shadow-sm border overflow-hidden group">
+                <summary className="flex items-center justify-between p-4 sm:p-6 cursor-pointer hover:bg-gray-50 transition-colors">
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 pr-4">
+                    송도동 지하철 정보는 얼마나 자주 업데이트되나요?
+                  </h3>
+                  <span className="text-gray-400 group-open:rotate-180 transition-transform text-xl">▼</span>
+                </summary>
+                <div className="px-4 sm:px-6 pb-4 sm:pb-6 text-gray-700 border-t bg-gray-50">
+                  <p className="pt-4">
+                    센트럴파크역, 인천대입구역, 국제업무지구역의 실시간 도착 정보를 1분 간격으로 갱신합니다. 
+                    평일과 휴일 시간표도 매월 최신 데이터로 업데이트하여 정확한 교통 정보를 제공합니다.
+                  </p>
+                </div>
+              </details>
+
+              {/* FAQ 항목 2 */}
+              <details className="bg-white rounded-xl shadow-sm border overflow-hidden group">
+                <summary className="flex items-center justify-between p-4 sm:p-6 cursor-pointer hover:bg-gray-50 transition-colors">
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 pr-4">
+                    송도동 맛집·카페 추천 데이터는 어디서 수집하나요?
+                  </h3>
+                  <span className="text-gray-400 group-open:rotate-180 transition-transform text-xl">▼</span>
+                </summary>
+                <div className="px-4 sm:px-6 pb-4 sm:pb-6 text-gray-700 border-t bg-gray-50">
+                  <p className="pt-4">
+                    네이버 플레이스와 카카오맵 리뷰 데이터를 기반으로 매일 인기 지수를 분석해 선정합니다. 
+                    실제 방문 후기와 평점을 종합하여 송도 주민들에게 검증된 맛집과 카페 정보를 제공합니다.
+                  </p>
+                </div>
+              </details>
+
+              {/* FAQ 항목 3 */}
+              <details className="bg-white rounded-xl shadow-sm border overflow-hidden group">
+                <summary className="flex items-center justify-between p-4 sm:p-6 cursor-pointer hover:bg-gray-50 transition-colors">
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 pr-4">
+                    병원·약국 정보의 정확도는 어느 정도인가요?
+                  </h3>
+                  <span className="text-gray-400 group-open:rotate-180 transition-transform text-xl">▼</span>
+                </summary>
+                <div className="px-4 sm:px-6 pb-4 sm:pb-6 text-gray-700 border-t bg-gray-50">
+                  <p className="pt-4">
+                    보건복지부 공공데이터 포털에서 제공하는 최신 의료기관 정보를 매일 동기화하여 제공합니다. 
+                    응급실 운영현황, 진료시간, 연락처 등은 공식 데이터를 기반으로 하므로 신뢰할 수 있습니다.
+                  </p>
+                </div>
+              </details>
+
+              {/* FAQ 항목 4 */}
+              <details className="bg-white rounded-xl shadow-sm border overflow-hidden group">
+                <summary className="flex items-center justify-between p-4 sm:p-6 cursor-pointer hover:bg-gray-50 transition-colors">
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 pr-4">
+                    뉴스·블로그·유튜브 콘텐츠는 언제 수집되나요?
+                  </h3>
+                  <span className="text-gray-400 group-open:rotate-180 transition-transform text-xl">▼</span>
+                </summary>
+                <div className="px-4 sm:px-6 pb-4 sm:pb-6 text-gray-700 border-t bg-gray-50">
+                  <p className="pt-4">
+                    매일 자동으로 최신 콘텐츠를 수집하고 유사도 검사를 거쳐 중복을 제거한 후 반영합니다. 
+                    송도국제도시, 센트럴파크, 국제업무지구 관련 키워드로 맞춤형 정보만 선별하여 제공합니다.
+                  </p>
+                </div>
+              </details>
+
+              {/* FAQ 항목 5 */}
+              <details className="bg-white rounded-xl shadow-sm border overflow-hidden group">
+                <summary className="flex items-center justify-between p-4 sm:p-6 cursor-pointer hover:bg-gray-50 transition-colors">
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 pr-4">
+                    광고 문의는 어떻게 하나요?
+                  </h3>
+                  <span className="text-gray-400 group-open:rotate-180 transition-transform text-xl">▼</span>
+                </summary>
+                <div className="px-4 sm:px-6 pb-4 sm:pb-6 text-gray-700 border-t bg-gray-50">
+                  <p className="pt-4">
+                    하단 푸터의 '💼사이트 문의' 섹션에서 이메일(rainbowcr55@gmail.com)로 연락 주시면 
+                    24시간 이내 담당자가 광고 게재 방법과 요금에 대해 안내해드립니다.
+                  </p>
+                </div>
+              </details>
+
+              {/* FAQ 항목 6 */}
+              <details className="bg-white rounded-xl shadow-sm border overflow-hidden group">
+                <summary className="flex items-center justify-between p-4 sm:p-6 cursor-pointer hover:bg-gray-50 transition-colors">
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 pr-4">
+                    부동산 실거래가 정보는 얼마나 최신인가요?
+                  </h3>
+                  <span className="text-gray-400 group-open:rotate-180 transition-transform text-xl">▼</span>
+                </summary>
+                <div className="px-4 sm:px-6 pb-4 sm:pb-6 text-gray-700 border-t bg-gray-50">
+                  <p className="pt-4">
+                    국토교통부 실거래가 공개시스템의 데이터를 기반으로 매월 업데이트됩니다. 
+                    송도국제도시 내 아파트, 오피스텔, 상업시설의 최근 거래 현황을 확인할 수 있습니다.
+                  </p>
+                </div>
+              </details>
+            </div>
+          </div>
+        </section>
       </main>
 
       {/* Footer */}

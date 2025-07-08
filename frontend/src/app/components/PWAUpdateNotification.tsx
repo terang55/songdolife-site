@@ -6,66 +6,50 @@ import { usePWA } from '../hooks/usePWA';
 export default function PWAUpdateNotification() {
   const { hasUpdate, update } = usePWA();
   const [showNotification, setShowNotification] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
     if (hasUpdate) {
       setShowNotification(true);
-    }
-  }, [hasUpdate]);
+      setIsUpdating(true);
+      
+      // 3초 후 자동으로 업데이트 실행
+      const timer = setTimeout(async () => {
+        try {
+          await update();
+          console.log('✅ PWA 자동 업데이트 완료');
+        } catch (error) {
+          console.error('❌ PWA 자동 업데이트 실패:', error);
+        } finally {
+          setShowNotification(false);
+          setIsUpdating(false);
+        }
+      }, 3000);
 
-  const handleUpdate = async () => {
-    try {
-      await update();
-      setShowNotification(false);
-    } catch (error) {
-      console.error('업데이트 실패:', error);
+      return () => clearTimeout(timer);
     }
-  };
-
-  const handleDismiss = () => {
-    setShowNotification(false);
-  };
+  }, [hasUpdate, update]);
 
   if (!showNotification) return null;
 
   return (
     <div className="fixed top-4 left-4 right-4 z-50 max-w-sm mx-auto">
       <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-4">
-        <div className="flex items-start space-x-3">
+        <div className="flex items-center space-x-3">
           <div className="flex-shrink-0">
-            <span className="text-2xl">🔄</span>
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
           </div>
           <div className="flex-1 min-w-0">
             <h3 className="text-sm font-semibold text-gray-900 mb-1">
-              새 버전 업데이트
+              새 버전 업데이트 중...
             </h3>
-            <p className="text-xs text-gray-600 mb-3">
-              송도라이프의 새로운 버전이 준비되었습니다. 업데이트하시겠습니까?
+            <p className="text-xs text-gray-600">
+              송도라이프의 새로운 버전을 자동으로 적용하고 있습니다.
             </p>
-            <div className="flex items-center space-x-2">
-              <button
-                onClick={handleUpdate}
-                className="flex-1 px-3 py-1.5 text-xs font-medium text-white bg-blue-600 rounded hover:bg-blue-700 transition-colors"
-              >
-                지금 업데이트
-              </button>
-              <button
-                onClick={handleDismiss}
-                className="flex-1 px-3 py-1.5 text-xs font-medium text-gray-700 bg-gray-100 rounded hover:bg-gray-200 transition-colors"
-              >
-                나중에
-              </button>
+            <div className="mt-2 w-full bg-gray-200 rounded-full h-1">
+              <div className="bg-blue-600 h-1 rounded-full animate-pulse" style={{ width: '70%' }}></div>
             </div>
           </div>
-          <button
-            onClick={handleDismiss}
-            className="flex-shrink-0 text-gray-400 hover:text-gray-600"
-          >
-            <span className="sr-only">닫기</span>
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
         </div>
       </div>
     </div>

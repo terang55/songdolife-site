@@ -43,14 +43,19 @@ export function usePWA(): PWAStatus & PWAActions {
           
           console.log('✅ Service Worker 등록 성공:', reg);
 
-          // 업데이트 확인
+          // 업데이트 확인 및 자동 적용
           reg.addEventListener('updatefound', () => {
             const newWorker = reg.installing;
             if (newWorker) {
               newWorker.addEventListener('statechange', () => {
                 if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                  setHasUpdate(true);
-                  console.log('🔄 새 버전이 사용 가능합니다');
+                  console.log('🔄 새 버전이 감지되었습니다. 자동 업데이트를 시작합니다...');
+                  // 자동으로 업데이트 적용
+                  newWorker.postMessage({ type: 'SKIP_WAITING' });
+                }
+                if (newWorker.state === 'activated') {
+                  console.log('✅ 새 버전이 활성화되었습니다. 페이지를 새로고침합니다.');
+                  window.location.reload();
                 }
               });
             }
@@ -59,7 +64,8 @@ export function usePWA(): PWAStatus & PWAActions {
           // 활성화된 Service Worker 메시지 수신
           navigator.serviceWorker.addEventListener('message', (event) => {
             if (event.data?.type === 'SW_UPDATED') {
-              setHasUpdate(true);
+              console.log('🔄 Service Worker 업데이트 완료. 자동 새로고침합니다.');
+              window.location.reload();
             }
           });
 

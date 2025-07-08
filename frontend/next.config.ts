@@ -111,6 +111,10 @@ const nextConfig: NextConfig = {
             key: 'Permissions-Policy',
             value: 'camera=(), microphone=(), geolocation=(self)',
           },
+          {
+            key: 'Cache-Control',
+            value: 'no-cache, must-revalidate', // HTML 페이지는 항상 최신 버전
+          },
         ],
       },
       {
@@ -118,7 +122,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=0, must-revalidate',
+            value: 'no-cache, no-store, must-revalidate',
           },
           {
             key: 'Service-Worker-Allowed',
@@ -162,7 +166,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=300, s-maxage=300', // 5분 캐시
+            value: 'no-cache, must-revalidate', // 항상 최신 데이터
           },
         ],
       },
@@ -171,7 +175,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=60, s-maxage=60', // 1분 캐시 (실시간)
+            value: 'no-cache, must-revalidate', // 항상 최신 데이터 (실시간)
           },
         ],
       },
@@ -180,7 +184,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=300, s-maxage=300', // 5분 캐시
+            value: 'no-cache, must-revalidate', // 항상 최신 데이터
           },
         ],
       },
@@ -189,7 +193,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=600, s-maxage=600', // 10분 캐시
+            value: 'public, max-age=300, s-maxage=300', // 5분 캐시 (날씨는 자주 변하지 않음)
           },
         ],
       },

@@ -144,27 +144,18 @@ export default function RealEstateWidget() {
     }
   };
 
-  // 신규 거래 확인 함수
+  // 신규 거래 확인 함수 (서버 기준 24시간)
   const checkNewDeals = async () => {
     try {
       setLoading(true);
       setError(null);
-      
-      const previousDeals = getPreviousData();
-      if (previousDeals.length === 0) {
-        setError('비교할 이전 데이터가 없습니다. 먼저 "새로고침"을 해주세요.');
-        setLoading(false);
-        return;
-      }
 
       const response = await fetch('/api/realestate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          previous_deals: previousDeals
-        })
+        body: JSON.stringify({}) // 빈 객체 (서버에서 24시간 기준으로 비교)
       });
       
       const result: RealEstateResponse = await response.json();
@@ -271,7 +262,7 @@ export default function RealEstateWidget() {
           onClick={checkNewDeals}
           className="px-3 py-1.5 bg-green-500 text-white text-sm rounded hover:bg-green-600 transition-colors"
         >
-          🆕 신규 거래 확인
+          🆕 24시간 내 신규거래
         </button>
         {comparisonMode && data.new_deals && data.new_deals.length > 0 && (
           <button
@@ -302,8 +293,8 @@ export default function RealEstateWidget() {
               data.statistics.new_deals_count > 0 ? 'text-green-800' : 'text-blue-800'
             }`}>
               {data.statistics.new_deals_count > 0 
-                ? `${data.statistics.new_deals_count}건의 신규 거래가 발견되었습니다!`
-                : '신규 거래가 없습니다.'
+                ? `24시간 내 ${data.statistics.new_deals_count}건의 신규 거래가 발견되었습니다!`
+                : '24시간 내 신규 거래가 없습니다.'
               }
             </span>
           </div>
@@ -369,7 +360,7 @@ export default function RealEstateWidget() {
           {dealsToShow.length === 0 ? (
             <div className="text-center py-8 text-gray-500">
               <p className="text-sm">
-                {showNewDealsOnly ? '신규 거래가 없습니다.' : '거래 데이터가 없습니다.'}
+                {showNewDealsOnly ? '24시간 내 신규 거래가 없습니다.' : '거래 데이터가 없습니다.'}
               </p>
             </div>
           ) : (

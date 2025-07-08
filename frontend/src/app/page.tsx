@@ -879,21 +879,7 @@ export default function HomePage() {
                 </div>
               </details>
 
-              {/* FAQ 항목 5 */}
-              <details className="bg-white rounded-xl shadow-sm border overflow-hidden group">
-                <summary className="flex items-center justify-between p-4 sm:p-6 cursor-pointer hover:bg-gray-50 transition-colors">
-                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 pr-4">
-                    광고 문의는 어떻게 하나요?
-                  </h3>
-                  <span className="text-gray-400 group-open:rotate-180 transition-transform text-xl">▼</span>
-                </summary>
-                <div className="px-4 sm:px-6 pb-4 sm:pb-6 text-gray-700 border-t bg-gray-50">
-                  <p className="pt-4">
-                    하단 푸터의 '💼사이트 문의' 섹션에서 이메일(rainbowcr55@gmail.com)로 연락 주시면 
-                    24시간 이내 담당자가 광고 게재 방법과 요금에 대해 안내해드립니다.
-                  </p>
-                </div>
-              </details>
+
 
               {/* FAQ 항목 6 */}
               <details className="bg-white rounded-xl shadow-sm border overflow-hidden group">

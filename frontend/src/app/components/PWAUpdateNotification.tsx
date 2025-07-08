@@ -6,12 +6,10 @@ import { usePWA } from '../hooks/usePWA';
 export default function PWAUpdateNotification() {
   const { hasUpdate, update } = usePWA();
   const [showNotification, setShowNotification] = useState(false);
-  const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
     if (hasUpdate) {
       setShowNotification(true);
-      setIsUpdating(true);
       
       // 3초 후 자동으로 업데이트 실행
       const timer = setTimeout(async () => {
@@ -22,7 +20,6 @@ export default function PWAUpdateNotification() {
           console.error('❌ PWA 자동 업데이트 실패:', error);
         } finally {
           setShowNotification(false);
-          setIsUpdating(false);
         }
       }, 3000);
 

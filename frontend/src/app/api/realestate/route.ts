@@ -236,14 +236,20 @@ export async function GET(): Promise<NextResponse> {
   }
 }
 
+// 서버 기준 시점 관리 (24시간 전)
+function getComparisonBaseTime(): Date {
+  const now = new Date();
+  const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+  return yesterday;
+}
+
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
-    console.log('🏠 신규 거래 비교 모드 시작');
+    console.log('🏠 신규 거래 비교 모드 시작 (서버 기준)');
     
-    const body = await request.json();
-    const previousDeals: ProcessedDeal[] = body.previous_deals || [];
-    
-    console.log(`📊 이전 데이터: ${previousDeals.length}건`);
+    // 로컬 데이터 의존성 제거 - 서버에서 24시간 전 기준으로 비교
+    const baseTime = getComparisonBaseTime();
+    console.log(`📊 비교 기준 시점: ${baseTime.toISOString()}`);
 
     // 현재 데이터 수집 (GET과 동일한 로직)
     const deals: ProcessedDeal[] = [];
@@ -346,14 +352,13 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       arr.findIndex(d => d.apartment_name === deal.apartment_name && d.area === deal.area && d.floor === deal.floor && d.deal_date === deal.deal_date) === idx
     );
 
-    // 신규 거래 찾기 (이전 데이터에 없는 거래)
-    const previousDealIds = new Set(previousDeals.map(deal => deal.unique_id || generateDealId(deal)));
+    // 신규 거래 찾기 (24시간 전 이후 거래)
     const newDeals = uniqueDeals.filter(deal => {
-      const currentDealId = deal.unique_id || generateDealId(deal);
-      return !previousDealIds.has(currentDealId);
+      const dealDate = new Date(deal.deal_date);
+      return dealDate > baseTime;
     });
 
-    console.log(`🆕 신규 거래 발견: ${newDeals.length}건 (전체 ${uniqueDeals.length}건 중)`);
+    console.log(`🆕 24시간 내 신규 거래: ${newDeals.length}건 (전체 ${uniqueDeals.length}건 중)`);
 
     // 통계 계산
     const totalDeals = uniqueDeals.length;

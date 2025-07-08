@@ -243,7 +243,7 @@ function getComparisonBaseTime(): Date {
   return yesterday;
 }
 
-export async function POST(request: NextRequest): Promise<NextResponse> {
+export async function POST(_request: NextRequest): Promise<NextResponse> {
   try {
     console.log('🏠 신규 거래 비교 모드 시작 (서버 기준)');
     

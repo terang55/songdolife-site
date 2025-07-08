@@ -64,29 +64,7 @@ export default function RealEstateWidget() {
     loadLastUpdateTime();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // localStorage에서 이전 데이터 가져오기
-  const getPreviousData = (): Deal[] => {
-    if (typeof window === 'undefined') return [];
-    
-    try {
-      const saved = localStorage.getItem('songdo_realestate_data');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        // 24시간 이내 데이터만 사용
-        const savedTime = new Date(parsed.timestamp);
-        const now = new Date();
-        const timeDiff = now.getTime() - savedTime.getTime();
-        const hoursDiff = timeDiff / (1000 * 3600);
-        
-        if (hoursDiff <= 24) {
-          return parsed.deals || [];
-        }
-      }
-    } catch (error) {
-      console.error('이전 데이터 로드 오류:', error);
-    }
-    return [];
-  };
+
 
   // localStorage에 현재 데이터 저장
   const savePreviousData = (deals: Deal[]) => {

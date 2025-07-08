@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { XMLParser } from 'fast-xml-parser';
+import { NextRequest } from 'next/server';
 
 // 국토교통부 실거래가 API 설정
 const MOLIT_API_KEY = 'aTgFhrZehAYOxHq4Z3z1iSYeysHfG9Tu43JQhF26U3mdGzr0H8+jR9MzrwPoqr8yOegDO5OO56GmvXzS7rwkdw==';
@@ -17,6 +18,12 @@ interface ProcessedDeal {
   build_year: string;
   location: string;
   price_per_pyeong: string;
+  unique_id?: string; // 거래 고유 식별자 추가
+}
+
+// 거래 고유 식별자 생성 함수
+function generateDealId(deal: Omit<ProcessedDeal, 'unique_id'>): string {
+  return `${deal.apartment_name}_${deal.area}_${deal.floor}_${deal.deal_date}_${deal.price_numeric}`;
 }
 
 // 가격 문자열을 숫자로 변환 (쉼표 제거)
@@ -114,6 +121,18 @@ export async function GET(): Promise<NextResponse> {
 
                 // 송도동 필터 적용
                 if (dong === '송도동') {
+                  const uniqueId = generateDealId({
+                    apartment_name: apartment,
+                    area: `${area}㎡`,
+                    floor: `${floor}층`,
+                    price: formatPrice(price),
+                    price_numeric: price,
+                    deal_date: dealDate,
+                    build_year: buildYear,
+                    location: dong,
+                    price_per_pyeong: pricePerPyeong,
+                  });
+
                   deals.push({
                     apartment_name: apartment,
                     area: `${area}㎡`,
@@ -124,6 +143,7 @@ export async function GET(): Promise<NextResponse> {
                     build_year: buildYear,
                     location: dong,
                     price_per_pyeong: pricePerPyeong,
+                    unique_id: uniqueId,
                   });
                 }
               }
@@ -212,6 +232,196 @@ export async function GET(): Promise<NextResponse> {
       success: false,
       error: 'Internal Server Error',
       message: '실거래가 정보를 가져오는데 실패했습니다.'
+    }, { status: 500 });
+  }
+}
+
+export async function POST(request: NextRequest): Promise<NextResponse> {
+  try {
+    console.log('🏠 신규 거래 비교 모드 시작');
+    
+    const body = await request.json();
+    const previousDeals: ProcessedDeal[] = body.previous_deals || [];
+    
+    console.log(`📊 이전 데이터: ${previousDeals.length}건`);
+
+    // 현재 데이터 수집 (GET과 동일한 로직)
+    const deals: ProcessedDeal[] = [];
+    const parser = new XMLParser({ ignoreAttributes: false, trimValues: true });
+    const now = new Date();
+    
+    // 최근 3개월 yearMonth 리스트 생성
+    const yearMonths: string[] = [];
+    for (let i = 0; i < 3; i++) {
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      const y = d.getFullYear();
+      const m = (d.getMonth() + 1).toString().padStart(2, '0');
+      yearMonths.push(`${y}${m}`);
+    }
+
+    for (const yearMonth of yearMonths) {
+      console.log(`📅 ${yearMonth} 데이터 수집 중...`);
+      let pageNo = 1;
+      const numOfRows = 100;
+
+      while (true) {
+        const apiUrl = new URL(MOLIT_BASE_URL);
+        apiUrl.searchParams.append('serviceKey', MOLIT_API_KEY);
+        apiUrl.searchParams.append('LAWD_CD', AREA_CODE);
+        apiUrl.searchParams.append('DEAL_YMD', yearMonth);
+        apiUrl.searchParams.append('numOfRows', numOfRows.toString());
+        apiUrl.searchParams.append('pageNo', pageNo.toString());
+
+        try {
+          const response = await fetch(apiUrl.toString());
+          const xmlText = await response.text();
+          const parsed = parser.parse(xmlText);
+          const items = parsed?.response?.body?.items?.item;
+
+          if (!items) break;
+
+          const itemArray = Array.isArray(items) ? items : [items];
+
+          for (const item of itemArray) {
+            try {
+              const apartment = item.aptNm || '';
+              const area = item.excluUseAr || '';
+              const floor = item.floor || '';
+              const priceStr = item.dealAmount || '';
+              const year = item.dealYear || '';
+              const month = item.dealMonth || '';
+              const day = item.dealDay || '';
+              const buildYear = item.buildYear || '';
+              const dong = item.umdNm || '';
+
+              if (apartment && priceStr && dong === '송도동') {
+                const price = parsePrice(priceStr);
+                const dealDate = formatDealDate(year, month, day);
+                const pricePerPyeong = calculatePricePerPyeong(price, area);
+
+                const uniqueId = generateDealId({
+                  apartment_name: apartment,
+                  area: `${area}㎡`,
+                  floor: `${floor}층`,
+                  price: formatPrice(price),
+                  price_numeric: price,
+                  deal_date: dealDate,
+                  build_year: buildYear,
+                  location: dong,
+                  price_per_pyeong: pricePerPyeong,
+                });
+
+                deals.push({
+                  apartment_name: apartment,
+                  area: `${area}㎡`,
+                  floor: `${floor}층`,
+                  price: formatPrice(price),
+                  price_numeric: price,
+                  deal_date: dealDate,
+                  build_year: buildYear,
+                  location: dong,
+                  price_per_pyeong: pricePerPyeong,
+                  unique_id: uniqueId,
+                });
+              }
+            } catch (parseError) {
+              console.error('❌ 개별 데이터 파싱 오류:', parseError);
+            }
+          }
+
+          if (itemArray.length < numOfRows) break;
+          pageNo += 1;
+        } catch (pageError) {
+          console.error(`❌ ${yearMonth} ${pageNo}페이지 데이터 수집 실패:`, pageError);
+          break;
+        }
+      }
+    }
+
+    // 최신 거래일 순으로 정렬
+    deals.sort((a, b) => new Date(b.deal_date).getTime() - new Date(a.deal_date).getTime());
+    
+    // 중복 제거
+    const uniqueDeals = deals.filter((deal, idx, arr) =>
+      arr.findIndex(d => d.apartment_name === deal.apartment_name && d.area === deal.area && d.floor === deal.floor && d.deal_date === deal.deal_date) === idx
+    );
+
+    // 신규 거래 찾기 (이전 데이터에 없는 거래)
+    const previousDealIds = new Set(previousDeals.map(deal => deal.unique_id || generateDealId(deal)));
+    const newDeals = uniqueDeals.filter(deal => {
+      const currentDealId = deal.unique_id || generateDealId(deal);
+      return !previousDealIds.has(currentDealId);
+    });
+
+    console.log(`🆕 신규 거래 발견: ${newDeals.length}건 (전체 ${uniqueDeals.length}건 중)`);
+
+    // 통계 계산
+    const totalDeals = uniqueDeals.length;
+    const avgPrice = totalDeals > 0 ? Math.round(uniqueDeals.reduce((sum, deal) => sum + deal.price_numeric, 0) / totalDeals) : 0;
+    const maxPrice = totalDeals > 0 ? Math.max(...uniqueDeals.map(deal => deal.price_numeric)) : 0;
+    const minPrice = totalDeals > 0 ? Math.min(...uniqueDeals.map(deal => deal.price_numeric)) : 0;
+
+    // 아파트별 통계 계산
+    interface ApartmentStatMapEntry {
+      name: string;
+      count: number;
+      totalPrice: number;
+      deals: ProcessedDeal[];
+    }
+
+    const apartmentStatsMap: Record<string, ApartmentStatMapEntry> = {};
+
+    for (const deal of uniqueDeals) {
+      const key = deal.apartment_name;
+      if (!apartmentStatsMap[key]) {
+        apartmentStatsMap[key] = {
+          name: key,
+          count: 0,
+          totalPrice: 0,
+          deals: []
+        };
+      }
+      apartmentStatsMap[key].count += 1;
+      apartmentStatsMap[key].totalPrice += deal.price_numeric;
+      apartmentStatsMap[key].deals.push(deal);
+    }
+
+    const apartmentStatsArray = Object.values(apartmentStatsMap).map((entry) => {
+      const avgNumeric = Math.round(entry.totalPrice / entry.count);
+      return {
+        name: entry.name,
+        count: entry.count,
+        avg_price: formatPrice(avgNumeric),
+        avg_price_numeric: avgNumeric,
+      };
+    }).sort((a, b) => b.avg_price_numeric - a.avg_price_numeric);
+
+    return NextResponse.json({
+      success: true,
+      data: {
+        deals: uniqueDeals,
+        new_deals: newDeals, // 신규 거래만
+        statistics: {
+          total_deals: totalDeals,
+          new_deals_count: newDeals.length,
+          avg_price: formatPrice(avgPrice),
+          max_price: formatPrice(maxPrice),
+          min_price: formatPrice(minPrice),
+          period: `최근 3개월`
+        },
+        apartment_stats: apartmentStatsArray,
+        comparison_mode: true
+      },
+      location: '인천 연수구 송도동',
+      timestamp: new Date().toISOString()
+    });
+
+  } catch (error) {
+    console.error('❌ 신규 거래 비교 API 오류:', error);
+    return NextResponse.json({
+      success: false,
+      error: 'Internal Server Error',
+      message: '신규 거래 비교 중 오류가 발생했습니다.'
     }, { status: 500 });
   }
 } 

@@ -70,10 +70,11 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     let previousUniqueIds: Set<string> = new Set();
     
     if (checkNew) {
-      console.log('🔍 신규 거래 확인 모드');
-      previousDeals = await loadPreviousData();
+      console.log('🔍 신규 거래 확인 모드 (전일 vs 당일)');
+      const yesterdayDate = getYesterdayDateString();
+      previousDeals = await loadDataByDate(yesterdayDate);
       previousUniqueIds = new Set(previousDeals.map(deal => deal.unique_id).filter(id => id !== undefined) as string[]);
-      console.log(`📊 이전 데이터: ${previousDeals.length}건`);
+      console.log(`📊 어제(${yesterdayDate}) 데이터: ${previousDeals.length}건`);
     } else {
       console.log('🏠 인천 연수구 송도동 아파트 실거래가 최근 3개월 조회 시작');
     }
@@ -233,15 +234,16 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     console.log(`✅ 송도동 실거래가 최근 3개월 수집 완료: ${totalDeals}건`);
     
     if (checkNew) {
-      // 신규 거래 확인 모드 (이미 로드된 이전 데이터 사용)
+      // 신규 거래 확인 모드 (어제 vs 오늘)
+      const todayDate = getTodayDateString();
       const newDeals = uniqueDeals.filter(deal => 
         deal.unique_id && !previousUniqueIds.has(deal.unique_id)
       );
       
-      console.log(`🆕 신규 거래: ${newDeals.length}건 (전체 ${uniqueDeals.length}건 중)`);
+      console.log(`🆕 신규 거래 (${todayDate}): ${newDeals.length}건 (전체 ${uniqueDeals.length}건 중)`);
       
-      // 현재 데이터를 다음 비교를 위해 저장
-      await savePreviousData(uniqueDeals);
+      // 당일 데이터를 저장 (같은 날이면 항상 같은 데이터)
+      await saveDataByDate(uniqueDeals, todayDate);
       
       // 신규 거래를 컴포넌트 형식에 맞게 변환
       const transformedNewDeals = newDeals.map(deal => ({
@@ -292,6 +294,72 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       message: '실거래가 정보를 가져오는데 실패했습니다.'
     }, { status: 500 });
   }
+}
+
+// 서버 이전 데이터 파일 관리 - 날짜 기준으로 변경
+const getDataFilePath = (date: string) => `./public/data/realestate_${date}.json`;
+
+interface DailyDataFile {
+  deals: ProcessedDeal[];
+  timestamp: string;
+  total_count: number;
+  date: string; // 해당 데이터의 날짜
+}
+
+// 특정 날짜의 데이터 읽기
+async function loadDataByDate(date: string): Promise<ProcessedDeal[]> {
+  try {
+    const fs = await import('fs/promises');
+    const filePath = getDataFilePath(date);
+    const data = await fs.readFile(filePath, 'utf-8');
+    const parsed: DailyDataFile = JSON.parse(data);
+    console.log(`📖 ${date} 데이터 로드: ${parsed.total_count}건`);
+    return parsed.deals || [];
+  } catch (error) {
+    console.log(`📝 ${date} 데이터 파일이 없습니다.`);
+    return [];
+  }
+}
+
+// 특정 날짜에 데이터 저장
+async function saveDataByDate(deals: ProcessedDeal[], date: string): Promise<void> {
+  try {
+    const fs = await import('fs/promises');
+    const path = await import('path');
+    
+    const filePath = getDataFilePath(date);
+    const dir = path.dirname(filePath);
+    await fs.mkdir(dir, { recursive: true });
+    
+    const dataToSave: DailyDataFile = {
+      deals,
+      timestamp: new Date().toISOString(),
+      total_count: deals.length,
+      date
+    };
+    
+    await fs.writeFile(filePath, JSON.stringify(dataToSave, null, 2));
+    console.log(`💾 ${date} 데이터 저장: ${deals.length}건`);
+  } catch (error) {
+    console.error(`❌ ${date} 데이터 저장 실패:`, error);
+  }
+}
+
+// 오늘 날짜 문자열 가져오기 (YYYY-MM-DD)
+function getTodayDateString(): string {
+  const today = new Date();
+  return today.getFullYear() + '-' + 
+         String(today.getMonth() + 1).padStart(2, '0') + '-' + 
+         String(today.getDate()).padStart(2, '0');
+}
+
+// 어제 날짜 문자열 가져오기 (YYYY-MM-DD)
+function getYesterdayDateString(): string {
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  return yesterday.getFullYear() + '-' + 
+         String(yesterday.getMonth() + 1).padStart(2, '0') + '-' + 
+         String(yesterday.getDate()).padStart(2, '0');
 }
 
 // 서버 이전 데이터 파일 관리

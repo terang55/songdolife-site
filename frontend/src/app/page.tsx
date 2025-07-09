@@ -7,6 +7,7 @@ import Image from 'next/image';
 import Head from 'next/head';
 import WeatherWidget from './components/WeatherWidget';
 import MedicalWidget from './components/MedicalWidget';
+import { getNewsImageConfig, ImagePriority } from '@/lib/image-utils';
 
 interface NewsItem {
   title: string;
@@ -721,11 +722,10 @@ export default function HomePage() {
                 {item.type === 'youtube' && item.thumbnail && (
                   <div className="aspect-video bg-gray-100 rounded-t-lg overflow-hidden relative">
                     <Image 
-                      src={item.thumbnail} 
+                      {...getNewsImageConfig(item.thumbnail)}
                       alt={item.title}
                       fill
                       className="object-cover"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                   </div>
                 )}

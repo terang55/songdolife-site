@@ -143,9 +143,10 @@ export async function GET(request: NextRequest) {
           
           return NextResponse.json({
             success: true,
-            data: trains,
-            timestamp: new Date().toISOString(),
-            note: '실시간 데이터'
+            data: {
+              trains,
+              note: '실시간 데이터'
+            }
           });
         }
         
@@ -160,9 +161,10 @@ export async function GET(request: NextRequest) {
     
     return NextResponse.json({
       success: true,
-      data: dummyTrainData,
-      timestamp: new Date().toISOString(),
-      note: '테스트 데이터 - 현재는 지하철 정보가 없습니다'
+      data: {
+        trains: dummyTrainData,
+        note: '테스트 데이터 - 현재는 지하철 정보가 없습니다'
+      }
     });
 
   } catch (error) {
@@ -171,7 +173,8 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       success: false,
       error: '지하철 정보를 가져오는데 실패했습니다.',
-      details: error instanceof Error ? error.message : '알 수 없는 오류'
+      data: null,
+      timestamp: new Date().toISOString()
     }, { status: 500 });
   }
 } 

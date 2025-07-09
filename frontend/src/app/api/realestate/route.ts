@@ -66,8 +66,12 @@ function formatPrice(price: number): string {
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
-    const { searchParams } = new URL(request.url);
+    const searchParams = request.nextUrl.searchParams;
     const checkNew = searchParams.get('checkNew') === 'true';
+    const limitParam = searchParams.get('limit');
+    const limit = limitParam ? parseInt(limitParam) : null; // limit 파라미터 추가
+    
+    logger.info(`부동산 API 호출 시작 (신규체크: ${checkNew}, 제한: ${limit || '없음'})`);
     
     let previousDeals: ProcessedDeal[] = [];
     let previousUniqueIds: Set<string> = new Set();
@@ -266,24 +270,22 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         total_count: newDeals.length,
         is_new_deals: true,
         new_deals_count: newDeals.length,
-        statistics: {
+        stats: {
           avg_price: formatPrice(newAvgPrice),
           max_price: formatPrice(newMaxPrice),
           min_price: formatPrice(newMinPrice),
           avg_price_numeric: newAvgPrice,
           max_price_numeric: newMaxPrice,
-          min_price_numeric: newMinPrice
+          min_price_numeric: newMinPrice,
         },
-        all_data_stats: {
-          total_deals: totalDeals,
-          avg_price: formatPrice(avgPrice),
-          max_price: formatPrice(maxPrice),
-          min_price: formatPrice(minPrice)
-        }
+        previous_count: previousDeals.length,
+        timestamp: new Date().toISOString(),
       });
     } else {
-      // 전체 거래 조회 모드 - 컴포넌트 형식에 맞게 변환
-      const transformedDeals = uniqueDeals.map(deal => ({
+      // 전체 거래 조회 모드 - limit 파라미터 적용
+      const dealsToTransform = limit ? uniqueDeals.slice(0, limit) : uniqueDeals; // 50건 제한 제거
+      
+      const transformedDeals = dealsToTransform.map(deal => ({
         unique_id: deal.unique_id || '',
         법정동: deal.location,
         아파트: deal.apartment_name,
@@ -295,28 +297,34 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         deal_date: deal.deal_date
       }));
       
+      logger.info(`전체 거래 조회 완료: ${transformedDeals.length}건 반환 (전체 ${uniqueDeals.length}건 중)`);
+      
       return NextResponse.json({
         success: true,
         data: transformedDeals,
-        total_count: totalDeals,
+        total_count: uniqueDeals.length, // 전체 개수는 항상 실제 전체 수
+        returned_count: transformedDeals.length, // 실제 반환된 개수
         is_new_deals: false,
-        statistics: {
+        stats: {
           avg_price: formatPrice(avgPrice),
           max_price: formatPrice(maxPrice),
           min_price: formatPrice(minPrice),
           avg_price_numeric: avgPrice,
           max_price_numeric: maxPrice,
-          min_price_numeric: minPrice
+          min_price_numeric: minPrice,
         },
-        apartment_stats: apartmentStatsArray
+        apartment_stats: apartmentStatsArray,
+        timestamp: new Date().toISOString(),
       });
     }
   } catch (error) {
-    logger.error('실거래가 API 오류', error);
-    return NextResponse.json({
+    console.error('부동산 API 오류:', error);
+    return NextResponse.json({ 
       success: false,
-      error: 'Internal Server Error',
-      message: '실거래가 정보를 가져오는데 실패했습니다.'
+      error: '부동산 데이터를 가져오는 중 오류가 발생했습니다.',
+      data: [],
+      total_count: 0,
+      is_new_deals: false
     }, { status: 500 });
   }
 }

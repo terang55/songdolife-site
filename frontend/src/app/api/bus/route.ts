@@ -226,17 +226,39 @@ async function buildArrivalObjects(): Promise<BusArrival[]> {
 
 // ------------------ Next.js Route ------------------
 export async function GET() {
-  const data = await buildArrivalObjects();
-  
-  return NextResponse.json({
-    success: true,
-    data: data,
-    lastUpdate: new Date().toISOString(),
-    realAPI: data.length > 0
-  }, {
-    headers: {
-      'Cache-Control': 'public, max-age=60, s-maxage=60', // 실시간 정보라서 1분만 캐시
-      'CDN-Cache-Control': 'public, max-age=60'
+  try {
+    const arrivals = await buildArrivalObjects();
+    
+    if (arrivals.length === 0) {
+      logger.warn('버스 정보를 찾을 수 없음');
+      return NextResponse.json({
+        success: false,
+        message: '현재 버스 운행 정보를 가져올 수 없습니다. API 연결 상태를 확인하거나 잠시 후 다시 시도해주세요.',
+        data: [],
+        arrivals: [],
+        timestamp: new Date().toISOString(),
+      });
     }
-  });
+    
+    logger.info(`${arrivals.length}건의 버스 도착 정보 반환`);
+    
+    return NextResponse.json({
+      success: true,
+      message: '버스 도착 정보 조회 성공',
+      data: arrivals,
+      arrivals,
+      timestamp: new Date().toISOString(),
+    });
+    
+  } catch (error) {
+    logger.error('버스 API 전체 오류', error);
+    
+    return NextResponse.json({
+      success: false,
+      error: '버스 정보를 가져오는 중 오류가 발생했습니다.',
+      data: [],
+      arrivals: [],
+      timestamp: new Date().toISOString(),
+    }, { status: 500 });
+  }
 } 

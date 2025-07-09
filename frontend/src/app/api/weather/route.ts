@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { createWeatherLogger } from '@/lib/logger';
 
 const logger = createWeatherLogger();
@@ -250,27 +250,14 @@ export async function GET() {
         };
       });
 
-    // 날씨 데이터 구성
-    const weatherData: WeatherData = {
-      current: {
-        temp: Math.round(currentData.main.temp),
-        feels_like: Math.round(currentData.main.feels_like),
-        humidity: currentData.main.humidity,
-        weather: currentData.weather,
-        wind: {
-          speed: Math.round(currentData.wind.speed * 10) / 10 // 소수점 1자리
-        }
-      },
-      forecast: dailyForecast
-    };
-
-    // 미세먼지 데이터가 있으면 추가
+    // 미세먼지 데이터 처리
+    let airQuality;
     if (airPollutionData) {
       const pm10 = Math.round(airPollutionData.list[0].components.pm10);
       const pm25 = Math.round(airPollutionData.list[0].components.pm2_5);
       const airQualityStatus = getAirQualityStatus(pm10, pm25);
       
-      weatherData.current.air_quality = {
+      airQuality = {
         pm10,
         pm25,
         status: airQualityStatus.text,
@@ -278,89 +265,41 @@ export async function GET() {
       };
     }
 
+    // 날씨 데이터 구성
+    const weatherData: WeatherData = {
+      current: {
+        temp: Math.round(currentData.main.temp),
+        feels_like: Math.round(currentData.main.feels_like),
+        humidity: currentData.main.humidity,
+        weather: currentData.weather.map((w: any) => ({
+          main: w.main,
+          description: w.description,
+          icon: w.icon
+        })),
+        wind: {
+          speed: parseFloat((currentData.wind.speed * 3.6).toFixed(1)) // m/s를 km/h로 변환
+        },
+        air_quality: airQuality
+      },
+      forecast: dailyForecast
+    };
+
     logger.info('날씨 정보 조회 성공');
 
     return NextResponse.json({
       success: true,
       data: weatherData,
-      location: '인천 연수구 송도동',
-      timestamp: new Date().toISOString()
+      location: '인천 연수구 송도동'
     });
 
   } catch (error) {
-    logger.error('날씨 API 오류', error);
+    console.error('날씨 API 오류:', error);
     
-    // 오류 시 더미 데이터 반환 (개발용)
     return NextResponse.json({
       success: false,
-      error: '날씨 정보를 불러올 수 없습니다',
-      data: {
-        current: {
-          temp: 22,
-          feels_like: 25,
-          humidity: 65,
-          weather: [{
-            main: 'Clear',
-            description: '맑음',
-            icon: '01d'
-          }],
-          wind: {
-            speed: 2.1
-          },
-          air_quality: {
-            pm10: 25,
-            pm25: 12,
-            status: '좋음',
-            color: '#3B82F6'
-          }
-        },
-        forecast: [
-          {
-            date: new Date().toLocaleDateString('ko-KR', {
-              month: 'short',
-              day: 'numeric',
-              weekday: 'short'
-            }),
-            temp_max: 28,
-            temp_min: 22,
-            weather: {
-              main: 'Clear',
-              description: '맑음',
-              icon: '01d'
-            }
-          },
-          {
-            date: new Date(Date.now() + 24 * 60 * 60 * 1000).toLocaleDateString('ko-KR', {
-              month: 'short',
-              day: 'numeric',
-              weekday: 'short'
-            }),
-            temp_max: 26,
-            temp_min: 19,
-            weather: {
-              main: 'Clouds',
-              description: '구름많음',
-              icon: '03d'
-            }
-          },
-          {
-            date: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toLocaleDateString('ko-KR', {
-              month: 'short',
-              day: 'numeric',
-              weekday: 'short'
-            }),
-            temp_max: 24,
-            temp_min: 17,
-            weather: {
-              main: 'Rain',
-              description: '비',
-              icon: '10d'
-            }
-          }
-        ]
-      },
-      location: '인천 연수구 송도동',
-      timestamp: new Date().toISOString()
-    }, { status: 200 }); // 개발용이므로 200 상태 코드 유지
+      error: '날씨 정보를 가져올 수 없습니다.',
+      data: null,
+      location: '인천 연수구 송도동'
+    }, { status: 500 });
   }
 } 

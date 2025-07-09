@@ -365,8 +365,8 @@ export async function GET(request: NextRequest) {
       console.log('⚠️ 카카오 API 키 없음, 더미 데이터 제공');
       return NextResponse.json({
         success: true,
-        data: getDummyMedicalData(type),
-        timestamp: new Date().toISOString(),
+        medical: getDummyMedicalData(type),
+        total: getDummyMedicalData(type).length,
         note: '테스트 데이터 - 실제 서비스를 위해서는 카카오 API 키가 필요합니다'
       });
     }
@@ -670,16 +670,14 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      data: results, // 모든 결과 반환
+      medical: results,
       total: results.length,
-      timestamp: new Date().toISOString(),
-      params: {
-        type,
-        category: categoryParam,
-        emergency,
-        night,
+      search: {
+        query: type,
+        location: '인천대입구역',
         radius
-      }
+      },
+      timestamp: new Date().toISOString()
     });
 
   } catch (error) {
@@ -688,7 +686,9 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       success: false,
       error: '의료기관 정보를 가져오는데 실패했습니다.',
-      details: error instanceof Error ? error.message : '알 수 없는 오류'
+      medical: [],
+      total: 0,
+      timestamp: new Date().toISOString()
     }, { status: 500 });
   }
 }

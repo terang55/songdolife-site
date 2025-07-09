@@ -63,15 +63,10 @@ self.addEventListener('activate', (event) => {
         );
       }),
       // 모든 클라이언트에게 즉시 제어권 가져오기
-      self.clients.claim(),
-      // 모든 클라이언트에게 업데이트 알림
-      self.clients.matchAll().then((clients) => {
-        clients.forEach((client) => {
-          client.postMessage({ type: 'SW_UPDATED' });
-        });
-      })
+      self.clients.claim()
+      // 업데이트 알림 제거 - 자동 업데이트만 진행
     ]).then(() => {
-      console.log('✅ Service Worker 활성화 완료 - 모든 탭에 알림 전송');
+      console.log('✅ Service Worker 활성화 완료 - 자동 업데이트 모드');
     })
   );
 });

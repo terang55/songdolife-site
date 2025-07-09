@@ -30,13 +30,37 @@ interface ApartmentGroup {
   isExpanded: boolean;
 }
 
+interface PriceStats {
+  avgPrice: number;
+  maxPrice: number;
+  minPrice: number;
+  totalDeals: number;
+}
+
 export default function RealEstateWidget() {
   const [allDeals, setAllDeals] = useState<RealEstateData[]>([]);
+  const [filteredDeals, setFilteredDeals] = useState<RealEstateData[]>([]);
   const [newDeals, setNewDeals] = useState<RealEstateData[]>([]);
   const [apartmentGroups, setApartmentGroups] = useState<ApartmentGroup[]>([]);
+  const [filteredGroups, setFilteredGroups] = useState<ApartmentGroup[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [priceStats, setPriceStats] = useState<PriceStats | null>(null);
+  const [showAllDeals, setShowAllDeals] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
   const [newDealsLoading, setNewDealsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // 가격 통계 계산 함수
+  const calculatePriceStats = (deals: RealEstateData[]): PriceStats => {
+    const prices = deals.map(deal => parseInt(deal.거래금액.replace(/,/g, '')));
+    
+    return {
+      avgPrice: Math.round(prices.reduce((sum, price) => sum + price, 0) / prices.length),
+      maxPrice: Math.max(...prices),
+      minPrice: Math.min(...prices),
+      totalDeals: deals.length
+    };
+  };
 
   // 전체 실거래가 데이터 로드
   const fetchAllDeals = async () => {
@@ -52,6 +76,8 @@ export default function RealEstateWidget() {
       const result: ApiResponse = await response.json();
       if (result.success) {
         setAllDeals(result.data);
+        setFilteredDeals(result.data);
+        setPriceStats(calculatePriceStats(result.data));
         groupDealsByApartment(result.data);
       } else {
         setError('데이터를 불러오는데 실패했습니다');
@@ -112,17 +138,59 @@ export default function RealEstateWidget() {
     // 평균가 높은 순으로 정렬
     apartmentGroups.sort((a, b) => b.avgPrice - a.avgPrice);
     setApartmentGroups(apartmentGroups);
+    setFilteredGroups(apartmentGroups);
+  };
+
+  // 검색 필터링 함수
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+    
+    if (!term.trim()) {
+      setFilteredDeals(allDeals);
+      setFilteredGroups(apartmentGroups);
+      setPriceStats(calculatePriceStats(allDeals));
+      return;
+    }
+
+    const filtered = allDeals.filter(deal => 
+      deal.아파트.toLowerCase().includes(term.toLowerCase()) ||
+      deal.법정동.toLowerCase().includes(term.toLowerCase())
+    );
+    
+    const filteredGroupsData = apartmentGroups.filter(group =>
+      group.name.toLowerCase().includes(term.toLowerCase())
+    );
+
+    setFilteredDeals(filtered);
+    setFilteredGroups(filteredGroupsData);
+    
+    if (filtered.length > 0) {
+      setPriceStats(calculatePriceStats(filtered));
+    }
   };
 
   // 아파트 그룹 펼치기/접기
   const toggleApartmentExpand = (apartmentName: string) => {
-    setApartmentGroups(groups => 
+    setFilteredGroups(groups => 
       groups.map(group => 
         group.name === apartmentName 
           ? { ...group, isExpanded: !group.isExpanded }
           : group
       )
     );
+  };
+
+  // 전체보기 토글
+  const toggleShowAll = () => {
+    setShowAllDeals(!showAllDeals);
+  };
+
+  // 표시할 거래 데이터 결정 (검색 중이면 모든 결과, 아니면 20개 제한)
+  const getDisplayDeals = () => {
+    if (searchTerm) {
+      return filteredDeals; // 검색 중이면 모든 검색 결과 표시
+    }
+    return showAllDeals ? allDeals : allDeals.slice(0, 20);
   };
 
   // 컴포넌트 마운트 시 자동으로 데이터 로드
@@ -172,6 +240,8 @@ export default function RealEstateWidget() {
     </div>
   );
 
+  const displayDeals = getDisplayDeals();
+
   return (
     <div className="space-y-6">
       {/* 신규 거래 섹션 */}
@@ -215,147 +285,334 @@ export default function RealEstateWidget() {
         )}
       </div>
 
-      {/* 전체 실거래가 섹션 */}
+      {/* 검색 및 통계 섹션 */}
       <div className="bg-white rounded-lg shadow-sm border p-4">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-900">전체 실거래가</h3>
-          <button
-            onClick={fetchAllDeals}
-            disabled={loading}
-            className="text-sm px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50 transition-colors"
-          >
-            {loading ? '로딩중...' : '새로고침'}
-          </button>
-        </div>
-
-        {loading ? (
-          <div className="text-center py-8 text-gray-500">
-            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500 mx-auto mb-2"></div>
-            실거래가 데이터 로딩중...
-          </div>
-        ) : error ? (
-          <div className="text-center py-8 text-red-500">
-            <div className="text-2xl mb-2">⚠️</div>
-            <div className="text-sm">{error}</div>
-            <button
-              onClick={fetchAllDeals}
-              className="mt-2 text-xs px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
-            >
-              다시 시도
-            </button>
-          </div>
-        ) : allDeals.length > 0 ? (
-          <div className="space-y-3">
-            <div className="text-sm text-gray-600 mb-3">
-              📊 총 {allDeals.length}건의 거래 정보
+        <div className="space-y-4">
+          {/* 검색창 */}
+          <div className="flex items-center space-x-4">
+            <div className="flex-1">
+              <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-1">
+                🔍 단지명 검색
+              </label>
+              <input
+                type="text"
+                id="search"
+                value={searchTerm}
+                onChange={(e) => handleSearch(e.target.value)}
+                placeholder="단지명을 입력하세요 (예: 송도센트럴파크)"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              />
             </div>
-            
-            {/* 좌우 2단 레이아웃 */}
-            <div className="flex flex-col md:flex-row gap-4">
-              {/* 왼쪽: 전체 거래 목록 */}
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center justify-between mb-2">
-                  <h4 className="font-bold text-blue-700">최신 거래</h4>
-                  <span className="text-xs text-gray-500">{allDeals.length}건</span>
-                </div>
-                <div className="space-y-2 max-h-96 overflow-y-auto pr-2">
-                  {allDeals.map((deal, index) => (
-                    <div 
-                      key={`recent-${deal.unique_id}-${index}`} 
-                      className="border-l-4 border-blue-500 pl-3 py-2 bg-gray-50 rounded-r transition-colors hover:bg-gray-100"
-                    >
-                      <div className="flex justify-between items-start mb-1">
-                        <h5 className="font-semibold text-gray-800 text-sm">{deal.아파트}</h5>
-                        <span className="text-xs text-gray-500">{deal.거래년월}.{deal.거래일}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <div className="text-xs text-gray-600">
-                          <span>{deal.전용면적}㎡ • {deal.층}층</span>
-                        </div>
-                        <div className="text-right">
-                          <p className="font-bold text-blue-600 text-sm">{formatPrice(deal.거래금액)}</p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+            {searchTerm && (
+              <button
+                onClick={() => handleSearch('')}
+                className="text-sm px-3 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors"
+              >
+                초기화
+              </button>
+            )}
+          </div>
 
-              {/* 오른쪽: 아파트별 통계 */}
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center justify-between mb-2">
-                  <h4 className="font-bold text-green-700">아파트별 통계</h4>
-                  <span className="text-xs text-gray-500">{apartmentGroups.length}개 단지</span>
-                </div>
-                                 <div className="space-y-2 max-h-96 overflow-y-auto pr-2">
-                  {apartmentGroups.map((group) => (
-                    <div 
-                      key={group.name} 
-                      className="border border-gray-200 rounded-lg overflow-hidden"
-                    >
+          {/* 가격 통계 */}
+          {priceStats && (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="bg-blue-50 rounded-lg p-3 text-center">
+                <div className="text-lg font-bold text-blue-600">{formatAvgPrice(priceStats.avgPrice)}</div>
+                <div className="text-sm text-blue-700">평균가</div>
+              </div>
+              <div className="bg-red-50 rounded-lg p-3 text-center">
+                <div className="text-lg font-bold text-red-600">{formatAvgPrice(priceStats.maxPrice)}</div>
+                <div className="text-sm text-red-700">최고가</div>
+              </div>
+              <div className="bg-green-50 rounded-lg p-3 text-center">
+                <div className="text-lg font-bold text-green-600">{formatAvgPrice(priceStats.minPrice)}</div>
+                <div className="text-sm text-green-700">최저가</div>
+              </div>
+              <div className="bg-gray-50 rounded-lg p-3 text-center">
+                <div className="text-lg font-bold text-gray-600">{priceStats.totalDeals}건</div>
+                <div className="text-sm text-gray-700">총 거래</div>
+              </div>
+            </div>
+          )}
+          
+          {/* 검색 결과 표시 */}
+          {searchTerm && (
+            <div className="text-sm text-gray-600">
+              <span className="font-medium text-blue-600">"{searchTerm}"</span> 검색 결과: 
+              <span className="font-semibold ml-1">{filteredDeals.length}건</span>
+            </div>
+          )}
+
+          {/* 검색 결과 목록 */}
+          {searchTerm && filteredDeals.length > 0 && (
+            <div className="mt-4">
+              <h4 className="text-lg font-semibold text-gray-900 mb-3">
+                "{searchTerm}" 검색 결과
+              </h4>
+              
+              {/* 좌우 2단 레이아웃 */}
+              <div className="flex flex-col md:flex-row gap-4">
+                {/* 왼쪽: 검색된 거래 목록 */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between mb-2">
+                    <h5 className="font-bold text-blue-700">거래 목록</h5>
+                    <span className="text-xs text-gray-500">{filteredDeals.length}건</span>
+                  </div>
+                  <div className="space-y-2 max-h-96 overflow-y-auto pr-2">
+                    {filteredDeals.map((deal, index) => (
                       <div 
-                        className="p-2.5 hover:bg-gray-50 transition-colors cursor-pointer"
-                        onClick={() => toggleApartmentExpand(group.name)}
+                        key={`search-${deal.unique_id}-${index}`} 
+                        className="border-l-4 border-green-500 pl-3 py-2 bg-gray-50 rounded-r transition-colors hover:bg-gray-100"
                       >
-                        <div className="flex justify-between items-center mb-1.5">
-                          <div className="flex items-center space-x-2">
-                            <h5 className="font-semibold text-gray-800 text-sm">{group.name}</h5>
-                            <span className={`text-xs transition-transform ${group.isExpanded ? 'rotate-90' : ''}`}>
-                              ▶️
-                            </span>
-                          </div>
-                          <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">
-                            {group.count}건
-                          </span>
+                        <div className="flex justify-between items-start mb-1">
+                          <h6 className="font-semibold text-gray-800 text-sm">{deal.아파트}</h6>
+                          <span className="text-xs text-gray-500">{deal.거래년월}.{deal.거래일}</span>
                         </div>
                         <div className="flex justify-between items-center">
-                          <span className="text-xs text-gray-600">평균 거래가</span>
-                          <span className="font-bold text-blue-600 text-sm">{formatAvgPrice(group.avgPrice)}</span>
+                          <div className="text-xs text-gray-600">
+                            <span>{deal.전용면적}㎡ • {deal.층}층</span>
+                          </div>
+                          <div className="text-right">
+                            <p className="font-bold text-green-600 text-sm">{formatPrice(deal.거래금액)}</p>
+                          </div>
                         </div>
                       </div>
-                      
-                      {/* 확장된 거래 내역 */}
-                      {group.isExpanded && (
-                        <div className="border-t bg-gray-50 p-2.5">
-                          <h6 className="text-xs font-semibold text-gray-700 mb-2">
-                            {group.name} 거래 내역 ({group.deals.length}건)
-                          </h6>
-                          <div className="space-y-1 max-h-60 overflow-y-auto">
-                            {group.deals.map((deal, dealIndex) => (
-                              <div key={`${group.name}-detail-${deal.unique_id}-${dealIndex}`} className="bg-white p-2 rounded border text-xs">
-                                <div className="flex justify-between items-start mb-1">
-                                  <div className="flex-1">
-                                    <div className="font-medium text-gray-800">
-                                      {deal.전용면적}㎡ • {deal.층}층
+                    ))}
+                  </div>
+                </div>
+
+                {/* 오른쪽: 검색된 아파트별 통계 */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between mb-2">
+                    <h5 className="font-bold text-green-700">단지별 통계</h5>
+                    <span className="text-xs text-gray-500">{filteredGroups.length}개 단지</span>
+                  </div>
+                  <div className="space-y-2 max-h-96 overflow-y-auto pr-2">
+                    {filteredGroups.map((group) => (
+                      <div 
+                        key={`search-group-${group.name}`} 
+                        className="border border-gray-200 rounded-lg overflow-hidden"
+                      >
+                        <div 
+                          className="p-2.5 hover:bg-gray-50 transition-colors cursor-pointer"
+                          onClick={() => toggleApartmentExpand(group.name)}
+                        >
+                          <div className="flex justify-between items-center mb-1.5">
+                            <div className="flex items-center space-x-2">
+                              <h6 className="font-semibold text-gray-800 text-sm">{group.name}</h6>
+                              <span className={`text-xs transition-transform ${group.isExpanded ? 'rotate-90' : ''}`}>
+                                ▶️
+                              </span>
+                            </div>
+                            <span className="text-xs bg-green-100 text-green-600 px-2 py-1 rounded">
+                              {group.count}건
+                            </span>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-xs text-gray-600">평균 거래가</span>
+                            <span className="font-bold text-green-600 text-sm">{formatAvgPrice(group.avgPrice)}</span>
+                          </div>
+                        </div>
+                        
+                        {/* 확장된 거래 내역 */}
+                        {group.isExpanded && (
+                          <div className="border-t bg-gray-50 p-2.5">
+                            <h6 className="text-xs font-semibold text-gray-700 mb-2">
+                              {group.name} 거래 내역 ({group.deals.length}건)
+                            </h6>
+                            <div className="space-y-1 max-h-60 overflow-y-auto">
+                              {group.deals.map((deal, dealIndex) => (
+                                <div key={`search-${group.name}-detail-${deal.unique_id}-${dealIndex}`} className="bg-white p-2 rounded border text-xs">
+                                  <div className="flex justify-between items-start mb-1">
+                                    <div className="flex-1">
+                                      <div className="font-medium text-gray-800">
+                                        {deal.전용면적}㎡ • {deal.층}층
+                                      </div>
+                                      <div className="text-gray-500">
+                                        {deal.거래년월}.{deal.거래일}
+                                      </div>
                                     </div>
-                                    <div className="text-gray-500">
-                                      {deal.거래년월}.{deal.거래일}
-                                    </div>
-                                  </div>
-                                  <div className="text-right ml-2">
-                                    <div className="font-bold text-blue-600">
-                                      {formatPrice(deal.거래금액)}
+                                    <div className="text-right ml-2">
+                                      <div className="font-bold text-green-600">
+                                        {formatPrice(deal.거래금액)}
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
-                              </div>
-                            ))}
+                              ))}
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </div>
-                  ))}
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ) : (
-          <div className="text-center py-8 text-gray-500">
-            <div className="text-2xl mb-2">📊</div>
-            <div className="text-sm">거래 데이터가 없습니다</div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-} 
+          )}
+
+          {/* 검색 결과 없음 */}
+          {searchTerm && filteredDeals.length === 0 && (
+            <div className="text-center py-8 text-gray-500">
+              <div className="text-2xl mb-2">🔍</div>
+              <div className="text-sm">검색 결과가 없습니다</div>
+              <div className="text-xs text-gray-400 mt-1">다른 검색어를 시도해보세요</div>
+            </div>
+                     )}
+         </div>
+       </div>
+
+       {/* 전체 실거래가 섹션 */}
+       <div className="bg-white rounded-lg shadow-sm border p-4">
+         <div className="flex items-center justify-between mb-4">
+           <h3 className="text-lg font-semibold text-gray-900">전체 실거래가</h3>
+           <div className="flex items-center space-x-2">
+             {!searchTerm && allDeals.length > 20 && (
+               <button
+                 onClick={toggleShowAll}
+                 className="text-sm px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+               >
+                 {showAllDeals ? `최근 20개만` : `전체보기 (${allDeals.length}건)`}
+               </button>
+             )}
+             <button
+               onClick={fetchAllDeals}
+               disabled={loading}
+               className="text-sm px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50 transition-colors"
+             >
+               {loading ? '로딩중...' : '새로고침'}
+             </button>
+           </div>
+         </div>
+
+         {loading ? (
+           <div className="text-center py-8 text-gray-500">
+             <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500 mx-auto mb-2"></div>
+             실거래가 데이터 로딩중...
+           </div>
+         ) : error ? (
+           <div className="text-center py-8 text-red-500">
+             <div className="text-2xl mb-2">⚠️</div>
+             <div className="text-sm">{error}</div>
+             <button
+               onClick={fetchAllDeals}
+               className="mt-2 text-xs px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+             >
+               다시 시도
+             </button>
+           </div>
+         ) : displayDeals.length > 0 ? (
+           <div className="space-y-3">
+             <div className="text-sm text-gray-600 mb-3">
+               📊 {searchTerm ? `검색 결과 ${displayDeals.length}건` : showAllDeals ? `전체 ${allDeals.length}건` : `최근 ${displayDeals.length}건`}
+             </div>
+             
+             {/* 좌우 2단 레이아웃 */}
+             <div className="flex flex-col md:flex-row gap-4">
+               {/* 왼쪽: 전체 거래 목록 */}
+               <div className="flex-1 min-w-0">
+                 <div className="flex items-center justify-between mb-2">
+                   <h4 className="font-bold text-blue-700">최신 거래</h4>
+                   <span className="text-xs text-gray-500">{displayDeals.length}건</span>
+                 </div>
+                 <div className="space-y-2 max-h-96 overflow-y-auto pr-2">
+                   {displayDeals.map((deal, index) => (
+                     <div 
+                       key={`recent-${deal.unique_id}-${index}`} 
+                       className="border-l-4 border-blue-500 pl-3 py-2 bg-gray-50 rounded-r transition-colors hover:bg-gray-100"
+                     >
+                       <div className="flex justify-between items-start mb-1">
+                         <h5 className="font-semibold text-gray-800 text-sm">{deal.아파트}</h5>
+                         <span className="text-xs text-gray-500">{deal.거래년월}.{deal.거래일}</span>
+                       </div>
+                       <div className="flex justify-between items-center">
+                         <div className="text-xs text-gray-600">
+                           <span>{deal.전용면적}㎡ • {deal.층}층</span>
+                         </div>
+                         <div className="text-right">
+                           <p className="font-bold text-blue-600 text-sm">{formatPrice(deal.거래금액)}</p>
+                         </div>
+                       </div>
+                     </div>
+                   ))}
+                 </div>
+               </div>
+
+               {/* 오른쪽: 아파트별 통계 */}
+               <div className="flex-1 min-w-0">
+                 <div className="flex items-center justify-between mb-2">
+                   <h4 className="font-bold text-green-700">아파트별 통계</h4>
+                   <span className="text-xs text-gray-500">{apartmentGroups.length}개 단지</span>
+                 </div>
+                 <div className="space-y-2 max-h-96 overflow-y-auto pr-2">
+                   {apartmentGroups.map((group) => (
+                     <div 
+                       key={group.name} 
+                       className="border border-gray-200 rounded-lg overflow-hidden"
+                     >
+                       <div 
+                         className="p-2.5 hover:bg-gray-50 transition-colors cursor-pointer"
+                         onClick={() => toggleApartmentExpand(group.name)}
+                       >
+                         <div className="flex justify-between items-center mb-1.5">
+                           <div className="flex items-center space-x-2">
+                             <h5 className="font-semibold text-gray-800 text-sm">{group.name}</h5>
+                             <span className={`text-xs transition-transform ${group.isExpanded ? 'rotate-90' : ''}`}>
+                               ▶️
+                             </span>
+                           </div>
+                           <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">
+                             {group.count}건
+                           </span>
+                         </div>
+                         <div className="flex justify-between items-center">
+                           <span className="text-xs text-gray-600">평균 거래가</span>
+                           <span className="font-bold text-blue-600 text-sm">{formatAvgPrice(group.avgPrice)}</span>
+                         </div>
+                       </div>
+                       
+                       {/* 확장된 거래 내역 */}
+                       {group.isExpanded && (
+                         <div className="border-t bg-gray-50 p-2.5">
+                           <h6 className="text-xs font-semibold text-gray-700 mb-2">
+                             {group.name} 거래 내역 ({group.deals.length}건)
+                           </h6>
+                           <div className="space-y-1 max-h-60 overflow-y-auto">
+                             {group.deals.map((deal, dealIndex) => (
+                               <div key={`${group.name}-detail-${deal.unique_id}-${dealIndex}`} className="bg-white p-2 rounded border text-xs">
+                                 <div className="flex justify-between items-start mb-1">
+                                   <div className="flex-1">
+                                     <div className="font-medium text-gray-800">
+                                       {deal.전용면적}㎡ • {deal.층}층
+                                     </div>
+                                     <div className="text-gray-500">
+                                       {deal.거래년월}.{deal.거래일}
+                                     </div>
+                                   </div>
+                                   <div className="text-right ml-2">
+                                     <div className="font-bold text-blue-600">
+                                       {formatPrice(deal.거래금액)}
+                                     </div>
+                                   </div>
+                                 </div>
+                               </div>
+                             ))}
+                           </div>
+                         </div>
+                       )}
+                     </div>
+                   ))}
+                 </div>
+               </div>
+             </div>
+           </div>
+         ) : (
+           <div className="text-center py-8 text-gray-500">
+             <div className="text-2xl mb-2">📊</div>
+             <div className="text-sm">거래 데이터가 없습니다</div>
+           </div>
+         )}
+       </div>
+     </div>
+   );
+ } 

@@ -61,13 +61,7 @@ export function usePWA(): PWAStatus & PWAActions {
             }
           });
 
-          // 활성화된 Service Worker 메시지 수신
-          navigator.serviceWorker.addEventListener('message', (event) => {
-            if (event.data?.type === 'SW_UPDATED') {
-              console.log('🔄 Service Worker 업데이트 완료. 자동 새로고침합니다.');
-              window.location.reload();
-            }
-          });
+          // Service Worker 메시지 수신 제거 - 업데이트 알림 없이 자동 처리
 
         } catch (error) {
           console.error('❌ Service Worker 등록 실패:', error);

@@ -1,4 +1,7 @@
 import { NextResponse } from 'next/server';
+import { createBusLogger } from '@/lib/logger';
+
+const logger = createBusLogger();
 
 // 인천광역시 버스위치정보 조회서비스 API
 const API_KEY = 'aTgFhrZehAYOxHq4Z3z1iSYeysHfG9Tu43JQhF26U3mdGzr0H8%2BjR9MzrwPoqr8yOegDO5OO56GmvXzS7rwkdw%3D%3D';
@@ -63,7 +66,7 @@ async function fetchIncheonBusLocations(routeId: string): Promise<IncheonBusLoca
   const url = `${baseUrl}?${params}`;
   
   try {
-    console.log('🚌 인천 버스 API 호출:', url.replace(API_KEY, 'API_KEY_HIDDEN'));
+    logger.debug('인천 버스 API 호출', url.replace(API_KEY, 'API_KEY_HIDDEN'));
     
     const response = await fetch(url, {
       method: 'GET',
@@ -74,16 +77,16 @@ async function fetchIncheonBusLocations(routeId: string): Promise<IncheonBusLoca
     });
     
     if (!response.ok) {
-      console.error('❌ 인천 API 응답 오류:', response.status, response.statusText);
+      logger.error('인천 API 응답 오류', `${response.status} ${response.statusText}`);
       return [];
     }
     
     const xmlText = await response.text();
-    console.log('📄 인천 API 원본 XML:', xmlText.substring(0, 500) + '...');
+    logger.debug('인천 API 원본 XML', xmlText.substring(0, 500) + '...');
     
     // 공공데이터포털 에러 응답 체크
     if (xmlText.includes('SERVICE_KEY_IS_NOT_REGISTERED_ERROR')) {
-      console.error('🚨 API 키 에러: 공공데이터포털에서 인천 버스 API 활용신청 필요');
+      logger.error('API 키 에러: 공공데이터포털에서 인천 버스 API 활용신청 필요');
       return [];
     }
     
@@ -91,12 +94,13 @@ async function fetchIncheonBusLocations(routeId: string): Promise<IncheonBusLoca
       const errorMatch = xmlText.match(/<errMsg>(.*?)<\/errMsg>/);
       const reasonMatch = xmlText.match(/<returnAuthMsg>(.*?)<\/returnAuthMsg>/);
       const codeMatch = xmlText.match(/<returnReasonCode>(\d+)<\/returnReasonCode>/);
-      console.error('🚨 API 에러:', `[${codeMatch?.[1]}] ${reasonMatch?.[1]} - ${errorMatch?.[1]}`);
+      logger.error('API 에러', `[${codeMatch?.[1]}] ${reasonMatch?.[1]} - ${errorMatch?.[1]}`);
       
-      // 🔍 추가 디버깅: 실제 요청 URL과 브라우저 URL 비교
-      console.error('🔍 디버깅 정보:');
-      console.error('- 브라우저 성공 URL: https://apis.data.go.kr/6280000/busLocationService/getBusRouteLocation?serviceKey=aTgFhrZehAYOxHq4Z3z1iSYeysHfG9Tu43JQhF26U3mdGzr0H8%2BjR9MzrwPoqr8yOegDO5OO56GmvXzS7rwkdw%3D%3D&numOfRows=10&pageNo=1&routeid=165000215');
-      console.error('- 현재 요청 URL:', url);
+      // 추가 디버깅: 실제 요청 URL과 브라우저 URL 비교
+      logger.debug('디버깅 정보', {
+        브라우저_성공_URL: 'https://apis.data.go.kr/6280000/busLocationService/getBusRouteLocation?serviceKey=aTgFhrZehAYOxHq4Z3z1iSYeysHfG9Tu43JQhF26U3mdGzr0H8%2BjR9MzrwPoqr8yOegDO5OO56GmvXzS7rwkdw%3D%3D&numOfRows=10&pageNo=1&routeid=165000215',
+        현재_요청_URL: url
+      });
       
       return [];
     }
@@ -107,17 +111,17 @@ async function fetchIncheonBusLocations(routeId: string): Promise<IncheonBusLoca
       const resultMsgMatch = xmlText.match(/<resultMsg>(.*?)<\/resultMsg>/);
       
       if (resultCodeMatch && resultCodeMatch[1] !== '0') {
-        console.error('❌ 인천 API 오류:', resultCodeMatch[1], resultMsgMatch?.[1]);
+        logger.error('인천 API 오류', `${resultCodeMatch[1]} ${resultMsgMatch?.[1]}`);
         return [];
       }
     }
     
     const locations = parseXMLResponse<IncheonBusLocation>(xmlText, 'itemList');
-    console.log(`🚌 인천 API에서 ${locations.length}대 버스 정보 수신`);
+    logger.info(`인천 API에서 ${locations.length}대 버스 정보 수신`);
     
-    // 🔍 좌석/혼잡도 정보 디버깅
+    // 좌석/혼잡도 정보 디버깅
     locations.forEach((loc, index) => {
-      console.log(`🪑 버스 ${index + 1} 상세정보:`, {
+      logger.debug(`버스 ${index + 1} 상세정보`, {
         plateNo: loc.BUS_NUM_PLATE,
         stationName: loc.LATEST_STOP_NAME,
         remaindSeat: loc.REMAIND_SEAT,
@@ -130,7 +134,7 @@ async function fetchIncheonBusLocations(routeId: string): Promise<IncheonBusLoca
     return locations;
     
   } catch (error) {
-    console.error('❌ 인천 버스 API 호출 실패:', error);
+    logger.error('인천 버스 API 호출 실패', error);
     return [];
   }
 }
@@ -151,7 +155,7 @@ async function buildArrivalObjects(): Promise<BusArrival[]> {
     const locations = await fetchIncheonBusLocations(incheonRouteId);
     
     if (locations.length === 0) {
-      console.log('⚠️ 인천 API에서 버스 위치 정보 없음');
+      logger.warn('인천 API에서 버스 위치 정보 없음');
       return [];
     }
     
@@ -211,11 +215,11 @@ async function buildArrivalObjects(): Promise<BusArrival[]> {
       return a.remainingStops - b.remainingStops;
     });
     
-    console.log(`✅ ${arrivals.length}개 버스 도착 정보 생성 완료`);
+    logger.info(`${arrivals.length}개 버스 도착 정보 생성 완료`);
     return arrivals;
     
   } catch (error) {
-    console.error('❌ buildArrivalObjects 오류:', error);
+    logger.error('buildArrivalObjects 오류', error);
     return [];
   }
 }

@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { readFileSync, readdirSync } from 'fs';
 import { join } from 'path';
+import { createNewsLogger } from '@/lib/logger';
+
+const logger = createNewsLogger();
 
 interface NewsItem {
   title: string;
@@ -48,7 +51,7 @@ export async function GET(request: NextRequest) {
           allNews = allNews.concat(processedData);
         }
       } catch (error) {
-        console.error(`Error reading file ${file}:`, error);
+        logger.error(`파일 읽기 실패 ${file}`, error);
       }
     });
 
@@ -181,7 +184,7 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error in news API:', error);
+    logger.error('뉴스 API 오류', error);
     
     // 오류 시 더미 데이터 반환
     const mockData: NewsItem[] = [

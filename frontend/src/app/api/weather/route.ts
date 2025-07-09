@@ -1,4 +1,7 @@
 import { NextResponse } from 'next/server';
+import { createWeatherLogger } from '@/lib/logger';
+
+const logger = createWeatherLogger();
 
 // 인천 연수구 송도동 행정동 중심 좌표
 const SONGDO_LAT = 37.538603;
@@ -7,8 +10,8 @@ const SONGDO_LON = 126.722675;
 // OpenWeather API 키 (환경변수에서만 가져오기)
 const API_KEY = process.env.OPENWEATHER_API_KEY;
 
-// 환경 변수 로드 확인 (개발용)
-console.log('🔧 환경 변수 확인:', {
+// 환경 변수 로드 확인 (개발환경에서만)
+logger.debug('환경 변수 확인', {
   hasApiKey: !!process.env.OPENWEATHER_API_KEY,
   keyLength: process.env.OPENWEATHER_API_KEY?.length || 0,
   usingFallback: !process.env.OPENWEATHER_API_KEY,
@@ -64,10 +67,10 @@ interface WeatherData {
 
 export async function GET() {
   try {
-    console.log('🌤️ 송도동 날씨 정보 요청');
+    logger.info('송도동 날씨 정보 요청');
     
-    // 모든 환경변수 확인 (디버깅용)
-    console.log('🔍 전체 환경변수 디버깅:', {
+    // 모든 환경변수 확인 (개발환경에서만)
+    logger.debug('전체 환경변수 디버깅', {
       nodeEnv: process.env.NODE_ENV,
       hasOpenWeather: !!process.env.OPENWEATHER_API_KEY,
       openWeatherLength: process.env.OPENWEATHER_API_KEY?.length || 0,
@@ -78,8 +81,8 @@ export async function GET() {
 
     // API 키 확인
     if (!API_KEY) {
-      console.error('❌ OpenWeather API 키가 설정되지 않았습니다');
-      console.error('🔍 디버깅 정보:', {
+      logger.error('OpenWeather API 키가 설정되지 않았습니다');
+      logger.debug('API 키 디버깅 정보', {
         API_KEY_value: API_KEY,
         env_value: process.env.OPENWEATHER_API_KEY,
         typeof_env: typeof process.env.OPENWEATHER_API_KEY
@@ -116,7 +119,7 @@ export async function GET() {
       return statusMap[finalStatus as keyof typeof statusMap];
     };
 
-    console.log('🔗 API 요청 URL:', {
+    logger.debug('API 요청 URL', {
       current: currentWeatherUrl.replace(API_KEY!, 'API_KEY_HIDDEN'),
       forecast: forecastUrl.replace(API_KEY!, 'API_KEY_HIDDEN'),
       airPollution: airPollutionUrl.replace(API_KEY!, 'API_KEY_HIDDEN')
@@ -128,7 +131,7 @@ export async function GET() {
       fetch(airPollutionUrl)
     ]);
 
-    console.log('📡 API 응답 상태:', {
+    logger.debug('API 응답 상태', {
       current: currentResponse.status,
       forecast: forecastResponse.status,
       airPollution: airPollutionResponse.status,
@@ -142,7 +145,7 @@ export async function GET() {
       const currentError = !currentResponse.ok ? await currentResponse.text() : null;
       const forecastError = !forecastResponse.ok ? await forecastResponse.text() : null;
       
-      console.error('❌ 필수 API 응답 에러:', {
+      logger.error('필수 API 응답 에러', {
         currentStatus: currentResponse.status,
         forecastStatus: forecastResponse.status,
         currentError,
@@ -160,19 +163,19 @@ export async function GET() {
     if (airPollutionResponse.ok) {
       try {
         airPollutionData = await airPollutionResponse.json();
-        console.log('✅ 미세먼지 API 성공');
+        logger.debug('미세먼지 API 성공');
       } catch (error) {
-        console.error('❌ 미세먼지 데이터 파싱 실패:', error);
+        logger.error('미세먼지 데이터 파싱 실패', error);
       }
     } else {
       const airPollutionError = await airPollutionResponse.text();
-      console.error('❌ 미세먼지 API 실패:', {
+      logger.warn('미세먼지 API 실패', {
         status: airPollutionResponse.status,
         error: airPollutionError
       });
     }
 
-    console.log('🌡️ 현재 날씨 원본 데이터:', {
+    logger.debug('현재 날씨 원본 데이터', {
       온도: currentData.main.temp,
       체감온도: currentData.main.feels_like,
       습도: currentData.main.humidity,
@@ -180,16 +183,16 @@ export async function GET() {
     });
     
     if (airPollutionData) {
-      console.log('🌡️ 미세먼지 원본 데이터:', {
+      logger.debug('미세먼지 원본 데이터', {
         PM10: airPollutionData.list[0].components.pm10,
         PM25: airPollutionData.list[0].components.pm2_5,
         전체데이터: airPollutionData.list[0]
       });
     } else {
-      console.log('⚠️ 미세먼지 데이터 없음 - 기본값 사용');
+      logger.debug('미세먼지 데이터 없음 - 기본값 사용');
     }
     
-    console.log('📅 예보 데이터 첫 5개 항목:', 
+    logger.debug('예보 데이터 첫 5개 항목', 
       forecastData.list.slice(0, 5).map((item: ForecastItem) => ({
         시간: new Date(item.dt * 1000).toLocaleString('ko-KR'),
         온도: item.main.temp,
@@ -228,7 +231,7 @@ export async function GET() {
         const maxTemp = Math.round(Math.max(...day.temps));
         const minTemp = Math.round(Math.min(...day.temps));
         
-        console.log(`📊 ${day.date} 온도 분석:`, {
+        logger.debug(`${day.date} 온도 분석`, {
           원본온도들: day.temps,
           최고온도: maxTemp,
           최저온도: minTemp,
@@ -275,7 +278,7 @@ export async function GET() {
       };
     }
 
-    console.log('✅ 날씨 정보 조회 성공');
+    logger.info('날씨 정보 조회 성공');
 
     return NextResponse.json({
       success: true,
@@ -285,7 +288,7 @@ export async function GET() {
     });
 
   } catch (error) {
-    console.error('❌ 날씨 API 오류:', error);
+    logger.error('날씨 API 오류', error);
     
     // 오류 시 더미 데이터 반환 (개발용)
     return NextResponse.json({

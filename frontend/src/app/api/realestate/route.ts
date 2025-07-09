@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { XMLParser } from 'fast-xml-parser';
 import { NextRequest } from 'next/server';
+import { createRealEstateLogger } from '@/lib/logger';
+
+const logger = createRealEstateLogger();
 
 // 국토교통부 실거래가 API 설정
 const MOLIT_API_KEY = 'aTgFhrZehAYOxHq4Z3z1iSYeysHfG9Tu43JQhF26U3mdGzr0H8+jR9MzrwPoqr8yOegDO5OO56GmvXzS7rwkdw==';
@@ -70,13 +73,13 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     let previousUniqueIds: Set<string> = new Set();
     
     if (checkNew) {
-      console.log('🔍 신규 거래 확인 모드 (전일 vs 당일)');
+      logger.info('신규 거래 확인 모드 (전일 vs 당일)');
       const yesterdayDate = getYesterdayDateString();
       previousDeals = await loadDataByDate(yesterdayDate);
       previousUniqueIds = new Set(previousDeals.map(deal => deal.unique_id).filter(id => id !== undefined) as string[]);
-      console.log(`📊 어제(${yesterdayDate}) 데이터: ${previousDeals.length}건`);
+      logger.debug(`어제(${yesterdayDate}) 데이터: ${previousDeals.length}건`);
     } else {
-      console.log('🏠 인천 연수구 송도동 아파트 실거래가 최근 3개월 조회 시작');
+      logger.info('인천 연수구 송도동 아파트 실거래가 최근 3개월 조회 시작');
     }
     
     const deals: ProcessedDeal[] = [];
@@ -91,7 +94,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       yearMonths.push(`${y}${m}`);
     }
     for (const yearMonth of yearMonths) {
-      console.log(`📅 ${yearMonth} 데이터 수집 중...`);
+      logger.debug(`${yearMonth} 데이터 수집 중`);
       // 페이지네이션 처리: 100건(1페이지) 초과 시 다음 페이지 반복 호출
       let pageNo = 1;
       const numOfRows = 100;
@@ -163,7 +166,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
                 }
               }
             } catch (parseError) {
-              console.error('❌ 개별 데이터 파싱 오류:', parseError);
+              logger.error('개별 데이터 파싱 오류', parseError);
             }
           }
 
@@ -174,7 +177,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
           pageNo += 1;
         } catch (pageError) {
-          console.error(`❌ ${yearMonth} ${pageNo}페이지 데이터 수집 실패:`, pageError);
+          logger.error(`${yearMonth} ${pageNo}페이지 데이터 수집 실패`, pageError);
           break; // 에러 발생 시 루프 탈출
         }
       }
@@ -309,7 +312,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       });
     }
   } catch (error) {
-    console.error('❌ 실거래가 API 오류:', error);
+    logger.error('실거래가 API 오류', error);
     return NextResponse.json({
       success: false,
       error: 'Internal Server Error',
@@ -335,10 +338,10 @@ async function loadDataByDate(date: string): Promise<ProcessedDeal[]> {
     const filePath = getDataFilePath(date);
     const data = await fs.readFile(filePath, 'utf-8');
     const parsed: DailyDataFile = JSON.parse(data);
-    console.log(`📖 ${date} 데이터 로드: ${parsed.total_count}건`);
+    logger.debug(`${date} 데이터 로드: ${parsed.total_count}건`);
     return parsed.deals || [];
   } catch {
-    console.log(`📝 ${date} 데이터 파일이 없습니다.`);
+    logger.debug(`${date} 데이터 파일이 없습니다`);
     return [];
   }
 }
@@ -361,9 +364,9 @@ async function saveDataByDate(deals: ProcessedDeal[], date: string): Promise<voi
     };
     
     await fs.writeFile(filePath, JSON.stringify(dataToSave, null, 2));
-    console.log(`💾 ${date} 데이터 저장: ${deals.length}건`);
+    logger.debug(`${date} 데이터 저장: ${deals.length}건`);
   } catch (error) {
-    console.error(`❌ ${date} 데이터 저장 실패:`, error);
+    logger.error(`${date} 데이터 저장 실패`, error);
   }
 }
 
@@ -399,10 +402,10 @@ async function loadPreviousData(): Promise<ProcessedDeal[]> {
     const fs = await import('fs/promises');
     const data = await fs.readFile(PREVIOUS_DATA_PATH, 'utf-8');
     const parsed: PreviousDataFile = JSON.parse(data);
-    console.log(`📖 이전 데이터 로드: ${parsed.total_count}건 (${parsed.timestamp})`);
+    logger.debug(`이전 데이터 로드: ${parsed.total_count}건 (${parsed.timestamp})`);
     return parsed.deals || [];
   } catch {
-    console.log('📝 이전 데이터 파일이 없어서 새로 생성합니다.');
+    logger.debug('이전 데이터 파일이 없어서 새로 생성합니다');
     return [];
   }
 }
@@ -424,21 +427,21 @@ async function savePreviousData(deals: ProcessedDeal[]): Promise<void> {
     };
     
     await fs.writeFile(PREVIOUS_DATA_PATH, JSON.stringify(dataToSave, null, 2));
-    console.log(`💾 현재 데이터 저장: ${deals.length}건`);
+    logger.debug(`현재 데이터 저장: ${deals.length}건`);
   } catch (error) {
-    console.error('❌ 데이터 저장 실패:', error);
+    logger.error('데이터 저장 실패', error);
   }
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function POST(_request: NextRequest): Promise<NextResponse> {
   try {
-    console.log('🏠 신규 거래 비교 모드 시작 (서버 파일 기준)');
+    logger.info('신규 거래 비교 모드 시작 (서버 파일 기준)');
     
     // 1. 이전 데이터 로드
     const previousDeals = await loadPreviousData();
     const previousUniqueIds = new Set(previousDeals.map(deal => deal.unique_id));
-    console.log(`📊 이전 데이터: ${previousDeals.length}건`);
+    logger.debug(`이전 데이터: ${previousDeals.length}건`);
 
     // 2. 현재 데이터 수집 (GET과 동일한 로직)
     const deals: ProcessedDeal[] = [];
@@ -455,7 +458,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
     }
 
     for (const yearMonth of yearMonths) {
-      console.log(`📅 ${yearMonth} 데이터 수집 중...`);
+      logger.debug(`${yearMonth} 데이터 수집 중`);
       let pageNo = 1;
       const numOfRows = 100;
 
@@ -520,14 +523,14 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
                 });
               }
             } catch (parseError) {
-              console.error('❌ 개별 데이터 파싱 오류:', parseError);
+              logger.error('개별 데이터 파싱 오류', parseError);
             }
           }
 
           if (itemArray.length < numOfRows) break;
           pageNo += 1;
         } catch (pageError) {
-          console.error(`❌ ${yearMonth} ${pageNo}페이지 데이터 수집 실패:`, pageError);
+          logger.error(`${yearMonth} ${pageNo}페이지 데이터 수집 실패`, pageError);
           break;
         }
       }
@@ -546,7 +549,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
       !previousUniqueIds.has(deal.unique_id)
     );
 
-    console.log(`🆕 시스템 신규 추가 거래: ${newDeals.length}건 (전체 ${uniqueDeals.length}건 중)`);
+    logger.info(`시스템 신규 추가 거래: ${newDeals.length}건 (전체 ${uniqueDeals.length}건 중)`);
     
     // 4. 현재 데이터를 다음 비교를 위해 저장
     await savePreviousData(uniqueDeals);
@@ -613,7 +616,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
     });
 
   } catch (err) {
-    console.error('❌ 신규 거래 비교 API 오류:', err);
+    logger.error('신규 거래 비교 API 오류', err);
     return NextResponse.json({
       success: false,
       error: 'Internal Server Error',

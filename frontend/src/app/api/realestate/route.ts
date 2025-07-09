@@ -61,9 +61,23 @@ function formatPrice(price: number): string {
   }
 }
 
-export async function GET(): Promise<NextResponse> {
+export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
-    console.log('🏠 인천 연수구 송도동 아파트 실거래가 최근 3개월 조회 시작');
+    const { searchParams } = new URL(request.url);
+    const checkNew = searchParams.get('checkNew') === 'true';
+    
+    let previousDeals: ProcessedDeal[] = [];
+    let previousUniqueIds: Set<string> = new Set();
+    
+    if (checkNew) {
+      console.log('🔍 신규 거래 확인 모드');
+      previousDeals = await loadPreviousData();
+      previousUniqueIds = new Set(previousDeals.map(deal => deal.unique_id).filter(id => id !== undefined) as string[]);
+      console.log(`📊 이전 데이터: ${previousDeals.length}건`);
+    } else {
+      console.log('🏠 인천 연수구 송도동 아파트 실거래가 최근 3개월 조회 시작');
+    }
+    
     const deals: ProcessedDeal[] = [];
     const parser = new XMLParser({ ignoreAttributes: false, trimValues: true });
     const now = new Date();
@@ -210,22 +224,59 @@ export async function GET(): Promise<NextResponse> {
       };
     }).sort((a, b) => b.avg_price_numeric - a.avg_price_numeric);
     console.log(`✅ 송도동 실거래가 최근 3개월 수집 완료: ${totalDeals}건`);
-    return NextResponse.json({
-      success: true,
-      data: {
-        deals: uniqueDeals, // 모든 거래 반환 (중복 제거된)
-        statistics: {
-          total_deals: totalDeals,
-          avg_price: formatPrice(avgPrice),
-          max_price: formatPrice(maxPrice),
-          min_price: formatPrice(minPrice),
-          period: `최근 3개월`
-        },
-        apartment_stats: apartmentStatsArray
-      },
-      location: '인천 연수구 송도동',
-      timestamp: new Date().toISOString()
-    });
+    
+    if (checkNew) {
+      // 신규 거래 확인 모드 (이미 로드된 이전 데이터 사용)
+      const newDeals = uniqueDeals.filter(deal => 
+        deal.unique_id && !previousUniqueIds.has(deal.unique_id)
+      );
+      
+      console.log(`🆕 신규 거래: ${newDeals.length}건 (전체 ${uniqueDeals.length}건 중)`);
+      
+      // 현재 데이터를 다음 비교를 위해 저장
+      await savePreviousData(uniqueDeals);
+      
+      // 신규 거래를 컴포넌트 형식에 맞게 변환
+      const transformedNewDeals = newDeals.map(deal => ({
+        unique_id: deal.unique_id || '',
+        법정동: deal.location,
+        아파트: deal.apartment_name,
+        전용면적: deal.area.replace('㎡', ''),
+        거래금액: deal.price_numeric.toString(),
+        거래년월: deal.deal_date.substring(0, 7).replace('-', ''),
+        거래일: deal.deal_date.substring(8, 10),
+        층: deal.floor.replace('층', ''),
+        deal_date: deal.deal_date
+      }));
+      
+      return NextResponse.json({
+        success: true,
+        data: transformedNewDeals,
+        total_count: newDeals.length,
+        is_new_deals: true,
+        new_deals_count: newDeals.length
+      });
+    } else {
+      // 전체 거래 조회 모드 - 컴포넌트 형식에 맞게 변환
+      const transformedDeals = uniqueDeals.map(deal => ({
+        unique_id: deal.unique_id || '',
+        법정동: deal.location,
+        아파트: deal.apartment_name,
+        전용면적: deal.area.replace('㎡', ''),
+        거래금액: deal.price_numeric.toString(),
+        거래년월: deal.deal_date.substring(0, 7).replace('-', ''),
+        거래일: deal.deal_date.substring(8, 10),
+        층: deal.floor.replace('층', ''),
+        deal_date: deal.deal_date
+      }));
+      
+      return NextResponse.json({
+        success: true,
+        data: transformedDeals,
+        total_count: totalDeals,
+        is_new_deals: false
+      });
+    }
   } catch (error) {
     console.error('❌ 실거래가 API 오류:', error);
     return NextResponse.json({
@@ -236,23 +287,63 @@ export async function GET(): Promise<NextResponse> {
   }
 }
 
-// 서버 기준 시점 관리 (24시간 전)
-function getComparisonBaseTime(): Date {
-  const now = new Date();
-  const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-  return yesterday;
+// 서버 이전 데이터 파일 관리
+const PREVIOUS_DATA_PATH = './public/data/realestate_previous.json';
+
+interface PreviousDataFile {
+  deals: ProcessedDeal[];
+  timestamp: string;
+  total_count: number;
+}
+
+// 이전 데이터 읽기
+async function loadPreviousData(): Promise<ProcessedDeal[]> {
+  try {
+    const fs = await import('fs/promises');
+    const data = await fs.readFile(PREVIOUS_DATA_PATH, 'utf-8');
+    const parsed: PreviousDataFile = JSON.parse(data);
+    console.log(`📖 이전 데이터 로드: ${parsed.total_count}건 (${parsed.timestamp})`);
+    return parsed.deals || [];
+  } catch (error) {
+    console.log('📝 이전 데이터 파일이 없어서 새로 생성합니다.');
+    return [];
+  }
+}
+
+// 현재 데이터 저장
+async function savePreviousData(deals: ProcessedDeal[]): Promise<void> {
+  try {
+    const fs = await import('fs/promises');
+    const path = await import('path');
+    
+    // 디렉토리 생성
+    const dir = path.dirname(PREVIOUS_DATA_PATH);
+    await fs.mkdir(dir, { recursive: true });
+    
+    const dataToSave: PreviousDataFile = {
+      deals,
+      timestamp: new Date().toISOString(),
+      total_count: deals.length
+    };
+    
+    await fs.writeFile(PREVIOUS_DATA_PATH, JSON.stringify(dataToSave, null, 2));
+    console.log(`💾 현재 데이터 저장: ${deals.length}건`);
+  } catch (error) {
+    console.error('❌ 데이터 저장 실패:', error);
+  }
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function POST(_request: NextRequest): Promise<NextResponse> {
   try {
-    console.log('🏠 신규 거래 비교 모드 시작 (서버 기준)');
+    console.log('🏠 신규 거래 비교 모드 시작 (서버 파일 기준)');
     
-    // 로컬 데이터 의존성 제거 - 서버에서 24시간 전 기준으로 비교
-    const baseTime = getComparisonBaseTime();
-    console.log(`📊 비교 기준 시점: ${baseTime.toISOString()}`);
+    // 1. 이전 데이터 로드
+    const previousDeals = await loadPreviousData();
+    const previousUniqueIds = new Set(previousDeals.map(deal => deal.unique_id));
+    console.log(`📊 이전 데이터: ${previousDeals.length}건`);
 
-    // 현재 데이터 수집 (GET과 동일한 로직)
+    // 2. 현재 데이터 수집 (GET과 동일한 로직)
     const deals: ProcessedDeal[] = [];
     const parser = new XMLParser({ ignoreAttributes: false, trimValues: true });
     const now = new Date();
@@ -353,13 +444,15 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
       arr.findIndex(d => d.apartment_name === deal.apartment_name && d.area === deal.area && d.floor === deal.floor && d.deal_date === deal.deal_date) === idx
     );
 
-    // 신규 거래 찾기 (24시간 전 이후 거래)
-    const newDeals = uniqueDeals.filter(deal => {
-      const dealDate = new Date(deal.deal_date);
-      return dealDate > baseTime;
-    });
+    // 3. 신규 거래 찾기 (이전 데이터에 없는 unique_id)
+    const newDeals = uniqueDeals.filter(deal => 
+      !previousUniqueIds.has(deal.unique_id)
+    );
 
-    console.log(`🆕 24시간 내 신규 거래: ${newDeals.length}건 (전체 ${uniqueDeals.length}건 중)`);
+    console.log(`🆕 시스템 신규 추가 거래: ${newDeals.length}건 (전체 ${uniqueDeals.length}건 중)`);
+    
+    // 4. 현재 데이터를 다음 비교를 위해 저장
+    await savePreviousData(uniqueDeals);
 
     // 통계 계산
     const totalDeals = uniqueDeals.length;

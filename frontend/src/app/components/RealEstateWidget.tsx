@@ -338,7 +338,7 @@ export default function RealEstateWidget() {
           {/* 검색 결과 표시 */}
           {searchTerm && (
             <div className="text-sm text-gray-600">
-              <span className="font-medium text-blue-600">"{searchTerm}"</span> 검색 결과: 
+              <span className="font-medium text-blue-600">&quot;{searchTerm}&quot;</span> 검색 결과: 
               <span className="font-semibold ml-1">{filteredDeals.length}건</span>
             </div>
           )}
@@ -347,7 +347,7 @@ export default function RealEstateWidget() {
           {searchTerm && filteredDeals.length > 0 && (
             <div className="mt-4">
               <h4 className="text-lg font-semibold text-gray-900 mb-3">
-                "{searchTerm}" 검색 결과
+                &quot;{searchTerm}&quot; 검색 결과
               </h4>
               
               {/* 좌우 2단 레이아웃 */}

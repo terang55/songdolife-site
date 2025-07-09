@@ -186,17 +186,12 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       arr.findIndex(d => d.apartment_name === deal.apartment_name && d.area === deal.area && d.floor === deal.floor && d.deal_date === deal.deal_date) === idx
     );
     // 통계 계산
-    // 통계 계산 (사용하지 않지만 일관성을 위해 유지)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const totalDeals = uniqueDeals.length;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars  
     const avgPrice = totalDeals > 0 ? Math.round(uniqueDeals.reduce((sum, deal) => sum + deal.price_numeric, 0) / totalDeals) : 0;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const maxPrice = totalDeals > 0 ? Math.max(...uniqueDeals.map(deal => deal.price_numeric)) : 0;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const minPrice = totalDeals > 0 ? Math.min(...uniqueDeals.map(deal => deal.price_numeric)) : 0;
 
-    // 아파트별 통계 계산 (사용하지 않지만 일관성을 위해 유지)
+    // 아파트별 통계 계산
     interface ApartmentStatMapEntry {
       name: string;
       count: number;
@@ -221,7 +216,6 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       apartmentStatsMap[key].deals.push(deal);
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const apartmentStatsArray = Object.values(apartmentStatsMap).map((entry) => {
       const avgNumeric = Math.round(entry.totalPrice / entry.count);
       return {
@@ -315,7 +309,7 @@ async function loadDataByDate(date: string): Promise<ProcessedDeal[]> {
     const parsed: DailyDataFile = JSON.parse(data);
     console.log(`📖 ${date} 데이터 로드: ${parsed.total_count}건`);
     return parsed.deals || [];
-  } catch (error) {
+  } catch {
     console.log(`📝 ${date} 데이터 파일이 없습니다.`);
     return [];
   }
@@ -379,7 +373,7 @@ async function loadPreviousData(): Promise<ProcessedDeal[]> {
     const parsed: PreviousDataFile = JSON.parse(data);
     console.log(`📖 이전 데이터 로드: ${parsed.total_count}건 (${parsed.timestamp})`);
     return parsed.deals || [];
-  } catch (error) {
+  } catch {
     console.log('📝 이전 데이터 파일이 없어서 새로 생성합니다.');
     return [];
   }
@@ -530,17 +524,12 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
     await savePreviousData(uniqueDeals);
 
     // 통계 계산
-    // 통계 계산 (사용하지 않지만 일관성을 위해 유지)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const totalDeals = uniqueDeals.length;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars  
     const avgPrice = totalDeals > 0 ? Math.round(uniqueDeals.reduce((sum, deal) => sum + deal.price_numeric, 0) / totalDeals) : 0;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const maxPrice = totalDeals > 0 ? Math.max(...uniqueDeals.map(deal => deal.price_numeric)) : 0;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const minPrice = totalDeals > 0 ? Math.min(...uniqueDeals.map(deal => deal.price_numeric)) : 0;
 
-    // 아파트별 통계 계산 (사용하지 않지만 일관성을 위해 유지)
+    // 아파트별 통계 계산
     interface ApartmentStatMapEntry {
       name: string;
       count: number;
@@ -565,7 +554,6 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
       apartmentStatsMap[key].deals.push(deal);
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const apartmentStatsArray = Object.values(apartmentStatsMap).map((entry) => {
       const avgNumeric = Math.round(entry.totalPrice / entry.count);
       return {

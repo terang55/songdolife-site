@@ -6,6 +6,8 @@ import type { Metadata } from 'next';
 import { BASE_URL } from '@/lib/siteConfig';
 import Footer from '../components/Footer';
 import { generateBreadcrumbSchema } from '@/lib/seo';
+import Breadcrumb, { getRealEstateBreadcrumb } from '../components/Breadcrumb';
+import RelatedLinks, { getRealEstateRelatedLinks } from '../components/RelatedLinks';
 
 export const metadata: Metadata = {
   title: '송도 부동산 실거래가 | 더샵·센트럴파크 아파트 시세 | 송도라이프',
@@ -139,6 +141,9 @@ export default function RealEstatePage() {
 
       {/* 메인 콘텐츠 */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* 브레드크럼 네비게이션 */}
+        <Breadcrumb items={getRealEstateBreadcrumb()} />
+
         {/* 페이지 제목 */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
@@ -290,6 +295,9 @@ export default function RealEstatePage() {
             <li>• 데이터는 주기적으로 업데이트됩니다.</li>
           </ul>
         </div>
+
+        {/* 관련 링크 섹션 */}
+        <RelatedLinks links={getRealEstateRelatedLinks()} />
       </main>
 
       {/* 공통 푸터 */}

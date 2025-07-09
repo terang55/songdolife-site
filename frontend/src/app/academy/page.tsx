@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { generateBreadcrumbSchema } from '@/lib/seo';
 import Link from 'next/link';
+import Breadcrumb, { getAcademyBreadcrumb } from '../components/Breadcrumb';
+import RelatedLinks, { getAcademyRelatedLinks } from '../components/RelatedLinks';
 
 interface AcademyItem {
   ACA_NM: string;          // 학원명
@@ -64,6 +66,30 @@ export default function AcademyPage() {
     { name: '교육·학원', path: '/academy' }
   ]);
 
+  // 학원 페이지 구조화된 데이터
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: '송도동 학원 정보',
+    description: '인천 연수구 송도동 지역 학원 및 교습소 정보 검색 서비스',
+    provider: {
+      '@type': 'Organization',
+      name: '송도라이프',
+      url: 'https://songdo.life'
+    },
+    areaServed: {
+      '@type': 'Place',
+      name: '인천광역시 연수구 송도동',
+      geo: {
+        '@type': 'GeoCoordinates',
+        latitude: 37.538603,
+        longitude: 126.722675
+      }
+    },
+    category: '교육서비스',
+    keywords: ['송도동 학원', '송도 교육', '송도 학원 검색', '연수구 학원', '송도 학습']
+  };
+
   const realmOptions = [
     '입시.검정 및 보습',
     '예능(대)',
@@ -77,6 +103,7 @@ export default function AcademyPage() {
         <title>송도동 학원 정보 | 송도라이프</title>
         <meta name="description" content="인천시 연수구 송도동 학원·교습소 정보를 과목별로 검색해 보세요." />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       </Head>
 
       <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
@@ -92,6 +119,9 @@ export default function AcademyPage() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* 브레드크럼 네비게이션 */}
+        <Breadcrumb items={getAcademyBreadcrumb()} />
+
         <h1 className="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">🎓 송도동 학원 정보</h1>
 
         {/* 검색 & 필터 */}
@@ -140,6 +170,9 @@ export default function AcademyPage() {
             </li>
           ))}
         </ul>
+
+        {/* 관련 링크 섹션 */}
+        <RelatedLinks links={getAcademyRelatedLinks()} />
       </main>
     </div>
   );

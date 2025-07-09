@@ -142,4 +142,124 @@ export const getNewsImageConfig = (thumbnail?: string) => {
   return getImageConfig(ImagePriority.NORMAL, thumbnail, '뉴스 썸네일', {
     blurDataURL: THUMBNAIL_BLUR_DATA_URL
   });
+};
+
+/**
+ * 뉴스 아이템 타입 정의 (alt 텍스트 생성용)
+ */
+interface NewsItemForAlt {
+  title: string;
+  type?: string;
+  source?: string;
+  channel?: string;
+  views?: string;
+  keyword?: string;
+}
+
+/**
+ * 콘텐츠 타입별 한국어 라벨 반환
+ */
+const getTypeLabel = (type?: string): string => {
+  switch (type) {
+    case 'youtube': return '유튜브';
+    case 'blog': return '블로그';
+    case 'news': return '뉴스';
+    default: return '콘텐츠';
+  }
+};
+
+/**
+ * SEO 최적화된 alt 텍스트 생성
+ * 지역 키워드 + 카테고리 + 제목 + 브랜딩 조합
+ */
+export const generateSEOAltText = (item: NewsItemForAlt): string => {
+  const location = "송도국제도시";
+  const category = getTypeLabel(item.type);
+  const source = item.type === 'youtube' ? item.channel : item.source;
+  const brandName = "송도라이프";
+  
+  let altText = `${location} ${category}: ${item.title}`;
+  
+  if (source) {
+    altText += ` - ${source}`;
+  }
+  
+  altText += ` | ${brandName}`;
+  
+  // alt 텍스트 길이 제한 (검색엔진 최적화)
+  if (altText.length > 125) {
+    altText = altText.substring(0, 120) + '... | ' + brandName;
+  }
+  
+  return altText;
+};
+
+/**
+ * 접근성 고려 alt 텍스트 생성
+ * 스크린 리더 사용자를 위한 상세한 설명
+ */
+export const generateAccessibleAltText = (item: NewsItemForAlt): string => {
+  let description = item.title;
+  
+  if (item.type === 'youtube') {
+    description += ` - ${item.channel || '유튜브'} 채널의 동영상`;
+    if (item.views) {
+      description += `, 조회수 ${item.views}`;
+    }
+  } else if (item.type === 'blog') {
+    description += ` - ${item.source || '블로그'} 포스트`;
+  } else if (item.type === 'news') {
+    description += ` - ${item.source || '뉴스'} 기사`;
+  }
+  
+  description += ' | 송도국제도시 정보';
+  
+  return description;
+};
+
+/**
+ * 통합 alt 텍스트 생성 (SEO + 접근성 균형)
+ * 기본적으로 SEO 최적화를 우선하되, 접근성도 고려
+ */
+export const generateOptimizedAltText = (item: NewsItemForAlt, prioritizeAccessibility = false): string => {
+  if (prioritizeAccessibility) {
+    return generateAccessibleAltText(item);
+  }
+  return generateSEOAltText(item);
+};
+
+/**
+ * 기본 이미지별 최적화된 alt 텍스트
+ */
+export const getDefaultImageAltText = (type: 'og' | 'logo' | 'favicon' | 'thumbnail' = 'og'): string => {
+  const brandName = "송도라이프";
+  const location = "송도국제도시";
+  
+  switch (type) {
+    case 'og':
+      return `${location} 생활정보 플랫폼 - 부동산, 맛집, 교통, 육아 정보 | ${brandName}`;
+    case 'logo':
+      return `${brandName} 로고 - ${location} 지역정보 허브`;
+    case 'favicon':
+      return `${brandName} 파비콘`;
+    case 'thumbnail':
+      return `${location} 관련 썸네일 이미지 | ${brandName}`;
+    default:
+      return `${location} 관련 이미지 | ${brandName}`;
+  }
+};
+
+/**
+ * 향상된 뉴스 이미지 설정 (SEO 최적화된 alt 포함)
+ */
+export const getNewsImageConfigWithSEO = (item: NewsItemForAlt, thumbnail?: string) => {
+  const optimizedAlt = generateOptimizedAltText(item);
+  
+  if (!thumbnail) {
+    return getImageConfig(ImagePriority.LOW, '/og-image.jpg', getDefaultImageAltText('og'));
+  }
+
+  return getImageConfig(ImagePriority.NORMAL, thumbnail, optimizedAlt, {
+    blurDataURL: THUMBNAIL_BLUR_DATA_URL
+  });
 }; 

@@ -1,6 +1,7 @@
 'use client';
 
 import Head from 'next/head';
+import { getDefaultImageAltText } from '@/lib/image-utils';
 
 interface SEOHeadProps {
   title?: string;
@@ -69,7 +70,7 @@ export default function SEOHead({
       <meta property="og:image" content={ogImage} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
-      <meta property="og:image:alt" content="송도라이프 - 송도국제도시 생활정보 플랫폼" />
+      <meta property="og:image:alt" content={getDefaultImageAltText('og')} />
       <meta property="og:locale" content="ko_KR" />
       <meta property="og:site_name" content="송도라이프" />
       

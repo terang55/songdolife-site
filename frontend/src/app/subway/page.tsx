@@ -2,6 +2,9 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import Head from 'next/head';
+import Breadcrumb, { getSubwayBreadcrumb } from '../components/Breadcrumb';
+import RelatedLinks, { getSubwayRelatedLinks } from '../components/RelatedLinks';
 
 interface TrainSchedule {
   time: string;
@@ -187,6 +190,80 @@ export default function SubwayPage() {
     return `${hours}시간 ${remainingMinutes}분 후`;
   };
 
+  // 현재 선택된 역 정보
+  const selectedStationInfo = stations.find(s => s.name === selectedStation);
+
+  // 구조화된 데이터 생성
+  const generateStructuredData = () => {
+    if (!selectedStationInfo) return {};
+    
+    return {
+      "@context": "https://schema.org",
+      "@type": "TrainStation",
+      "name": selectedStationInfo.name,
+      "identifier": selectedStationInfo.code,
+      "url": `https://songdo.life/subway?station=${encodeURIComponent(selectedStation)}`,
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "KR",
+        "addressRegion": "인천광역시",
+        "addressLocality": "연수구",
+        "streetAddress": "송도동"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": selectedStationInfo.coordinates.lat,
+        "longitude": selectedStationInfo.coordinates.lon
+      },
+      "operatedBy": {
+        "@type": "Organization",
+        "name": "인천교통공사",
+        "url": "https://www.ictr.or.kr"
+      },
+      "parentOrganization": {
+        "@type": "Organization", 
+        "name": "송도라이프",
+        "url": "https://songdo.life"
+      },
+      "amenityFeature": [
+        {
+          "@type": "LocationFeatureSpecification",
+          "name": "실시간 도착정보",
+          "value": true
+        },
+        {
+          "@type": "LocationFeatureSpecification", 
+          "name": "시간표 제공",
+          "value": true
+        }
+      ]
+    };
+  };
+
+  // 메타 제목과 설명 생성
+  const getMetaTitle = () => {
+    return `${selectedStation} 실시간 시간표 | 인천1호선 지하철 정보 | 송도라이프`;
+  };
+
+  const getMetaDescription = () => {
+    const stationInfo = selectedStationInfo ? ` ${selectedStationInfo.nearbyPlaces.slice(0, 2).join(', ')} 인근` : '';
+    return `${selectedStation} 실시간 도착정보와 시간표를 확인하세요.${stationInfo}의 인천1호선 지하철 운행정보, 첫차·막차 시간, 배차간격 정보를 실시간으로 제공합니다.`;
+  };
+
+  const getMetaKeywords = () => {
+    const baseKeywords = [
+      '인천1호선', '인천지하철', '지하철 시간표', '실시간 도착정보', '송도 지하철',
+      '인천대입구역', '센트럴파크역', '국제업무지구역', '지하철 운행정보', '송도 교통',
+      '인천 지하철 시간표', '지하철 첫차', '지하철 막차', '배차간격', '송도국제도시 교통'
+    ];
+    
+    if (selectedStationInfo) {
+      baseKeywords.push(selectedStation, selectedStationInfo.code, ...selectedStationInfo.nearbyPlaces);
+    }
+    
+    return baseKeywords.join(', ');
+  };
+
   const fetchBusInfo = useCallback(async () => {
     setBusLoading(true);
     try {
@@ -259,10 +336,25 @@ export default function SubwayPage() {
     fetchBusInfo(); // 페이지 로드 시 한 번만 호출
   }, [fetchBusInfo]);
 
-  const selectedStationInfo = stations.find(s => s.name === selectedStation);
-
   return (
     <div className="min-h-screen bg-gray-50">
+      <Head>
+        <title>{getMetaTitle()}</title>
+        <meta name="description" content={getMetaDescription()} />
+        <meta name="keywords" content={getMetaKeywords()} />
+        <meta property="og:title" content={getMetaTitle()} />
+        <meta property="og:description" content={getMetaDescription()} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={`https://songdo.life/subway?station=${encodeURIComponent(selectedStation)}`} />
+        <meta property="og:site_name" content="송도라이프" />
+        <meta property="og:locale" content="ko_KR" />
+        <meta property="og:image" content="https://songdo.life/og-image.jpg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={getMetaTitle()} />
+        <meta name="twitter:description" content={getMetaDescription()} />
+        <meta name="twitter:image" content="https://songdo.life/og-image.jpg" />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(generateStructuredData()) }} />
+      </Head>
       {/* 네비게이션 바 */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -299,6 +391,9 @@ export default function SubwayPage() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+        {/* 브레드크럼 네비게이션 */}
+        <Breadcrumb items={getSubwayBreadcrumb()} />
+
         {/* 역 선택 */}
         <section className="bg-white rounded-xl shadow-sm border p-4 sm:p-6 mb-6 sm:mb-8">
           <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">📍 역 선택</h2>
@@ -581,9 +676,9 @@ export default function SubwayPage() {
                       </div>
                     </div>
                   );
-                };
+  };
 
-                return (
+  return (
                   <>
                     <div>
                       <div className="flex items-center justify-center bg-blue-50 py-2.5 sm:py-3 rounded-lg border-2 border-blue-200 mb-3">
@@ -671,6 +766,9 @@ export default function SubwayPage() {
             </div>
           </div>
         </section>
+
+        {/* 관련 링크 섹션 */}
+        <RelatedLinks links={getSubwayRelatedLinks()} />
       </main>
     </div>
   );

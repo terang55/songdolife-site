@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { BASE_URL } from '@/lib/siteConfig';
+import { getDefaultImageAltText } from '@/lib/image-utils';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 import NetworkStatus from './components/NetworkStatus';
 import BottomNavigation from './components/BottomNavigation';
@@ -75,7 +76,7 @@ export const metadata: Metadata = {
         url: `${BASE_URL}/og-image.jpg`,
         width: 1200,
         height: 630,
-        alt: "송도라이프 - 인천 연수구 송도국제도시 생활정보 플랫폼",
+        alt: getDefaultImageAltText('og'),
         type: "image/jpeg",
       },
     ],
@@ -191,7 +192,7 @@ export default function RootLayout({
         <meta property="og:image" content={`${BASE_URL}/og-image.jpg`} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="송도라이프 - 인천 연수구 송도국제도시 생활정보 플랫폼" />
+        <meta property="og:image:alt" content={getDefaultImageAltText('og')} />
         
         {/* 지역 정보 메타 태그 */}
         <meta name="geo.region" content="KR-28" />
@@ -524,7 +525,7 @@ export default function RootLayout({
                   "name": "부동산 실거래가 정보는 얼마나 최신인가요?",
                   "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "국토교통부 실거래가 공개시스템의 데이터를 기반으로 매월 업데이트됩니다. 송도국제도시 내 아파트, 오피스텔, 상업시설의 최근 거래 현황을 확인할 수 있습니다."
+                    "text": "국토교통부 실거래가 공개시스템의 데이터를 기반으로 매일 업데이트됩니다. 송도국제도시 내 아파트, 오피스텔, 상업시설의 최근 거래 현황을 확인할 수 있습니다."
                   }
                 }
               ]

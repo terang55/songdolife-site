@@ -129,7 +129,7 @@ export default function RealEstateWidget() {
   useEffect(() => {
     fetchAllDeals();
     fetchNewDeals();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const formatPrice = (price: string) => {
     const numPrice = parseInt(price.replace(/,/g, ''));
@@ -287,8 +287,8 @@ export default function RealEstateWidget() {
                   <h4 className="font-bold text-green-700">아파트별 통계</h4>
                   <span className="text-xs text-gray-500">{apartmentGroups.length}개 단지</span>
                 </div>
-                <div className="space-y-2 max-h-96 overflow-y-auto pr-2">
-                  {apartmentGroups.map((group, index) => (
+                                 <div className="space-y-2 max-h-96 overflow-y-auto pr-2">
+                  {apartmentGroups.map((group) => (
                     <div 
                       key={group.name} 
                       className="border border-gray-200 rounded-lg overflow-hidden"

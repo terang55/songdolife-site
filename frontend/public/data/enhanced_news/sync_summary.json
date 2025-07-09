@@ -1,20 +1,25 @@
 {
-  "sync_time": "2025-07-09T22:07:46.896970",
+  "sync_time": "2025-07-09T22:22:03.579239",
   "total_files": 1,
-  "total_keywords": 6,
+  "total_keywords": 11,
   "keywords": [
     "송도국제도시",
     "송도국제도시 맛집",
     "송도국제도시 아파트",
     "송도국제도시 카페",
     "인천 송도",
+    "인천 송도 맛집",
+    "인천 송도 아파트",
+    "인천 송도 추천",
+    "인천 송도 카페",
+    "인천 송도 학원",
     "인천 연수구 송도동"
   ],
   "file_types": [
     "all_platforms"
   ],
   "files": {
-    "all_platforms": "all_platforms_enhanced_news_20250709_220740.json"
+    "all_platforms": "all_platforms_enhanced_news_20250709_222156.json"
   },
   "sync_type": "latest_only"
 }

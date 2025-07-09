@@ -465,7 +465,7 @@ export default function RealEstateWidget() {
        {/* 전체 실거래가 섹션 */}
        <div className="bg-white rounded-lg shadow-sm border p-4">
          <div className="flex items-center justify-between mb-4">
-           <h3 className="text-lg font-semibold text-gray-900">전체 실거래가</h3>
+           <h3 className="text-lg font-semibold text-gray-900">전체 실거래가 (최근 3개월)</h3>
            <div className="flex items-center space-x-2">
              {!searchTerm && allDeals.length > 20 && (
                <button

@@ -252,12 +252,31 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         deal_date: deal.deal_date
       }));
       
+      // 신규 거래에 대한 통계 계산
+      const newAvgPrice = newDeals.length > 0 ? Math.round(newDeals.reduce((sum, deal) => sum + deal.price_numeric, 0) / newDeals.length) : 0;
+      const newMaxPrice = newDeals.length > 0 ? Math.max(...newDeals.map(deal => deal.price_numeric)) : 0;
+      const newMinPrice = newDeals.length > 0 ? Math.min(...newDeals.map(deal => deal.price_numeric)) : 0;
+
       return NextResponse.json({
         success: true,
         data: transformedNewDeals,
         total_count: newDeals.length,
         is_new_deals: true,
-        new_deals_count: newDeals.length
+        new_deals_count: newDeals.length,
+        statistics: {
+          avg_price: formatPrice(newAvgPrice),
+          max_price: formatPrice(newMaxPrice),
+          min_price: formatPrice(newMinPrice),
+          avg_price_numeric: newAvgPrice,
+          max_price_numeric: newMaxPrice,
+          min_price_numeric: newMinPrice
+        },
+        all_data_stats: {
+          total_deals: totalDeals,
+          avg_price: formatPrice(avgPrice),
+          max_price: formatPrice(maxPrice),
+          min_price: formatPrice(minPrice)
+        }
       });
     } else {
       // 전체 거래 조회 모드 - 컴포넌트 형식에 맞게 변환
@@ -277,7 +296,16 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         success: true,
         data: transformedDeals,
         total_count: totalDeals,
-        is_new_deals: false
+        is_new_deals: false,
+        statistics: {
+          avg_price: formatPrice(avgPrice),
+          max_price: formatPrice(maxPrice),
+          min_price: formatPrice(minPrice),
+          avg_price_numeric: avgPrice,
+          max_price_numeric: maxPrice,
+          min_price_numeric: minPrice
+        },
+        apartment_stats: apartmentStatsArray
       });
     }
   } catch (error) {

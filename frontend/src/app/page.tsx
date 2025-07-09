@@ -7,7 +7,7 @@ import Image from 'next/image';
 import Head from 'next/head';
 import WeatherWidget from './components/WeatherWidget';
 import MedicalWidget from './components/MedicalWidget';
-import { getNewsImageConfig, ImagePriority } from '@/lib/image-utils';
+import { getNewsImageConfig } from '@/lib/image-utils';
 
 interface NewsItem {
   title: string;

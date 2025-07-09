@@ -1,7 +1,13 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { createWeatherLogger } from '@/lib/logger';
 
 const logger = createWeatherLogger();
+
+interface WeatherInfo {
+  main: string;
+  description: string;
+  icon: string;
+}
 
 // 인천 연수구 송도동 행정동 중심 좌표
 const SONGDO_LAT = 37.538603;
@@ -271,7 +277,7 @@ export async function GET() {
         temp: Math.round(currentData.main.temp),
         feels_like: Math.round(currentData.main.feels_like),
         humidity: currentData.main.humidity,
-        weather: currentData.weather.map((w: any) => ({
+        weather: currentData.weather.map((w: WeatherInfo) => ({
           main: w.main,
           description: w.description,
           icon: w.icon

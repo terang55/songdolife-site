@@ -348,8 +348,6 @@ export async function GET(request: NextRequest) {
     const centerLat = userLatParam ? parseFloat(userLatParam) : SONGDO_LAT;
     const centerLon = userLonParam ? parseFloat(userLonParam) : SONGDO_LON;
 
-    let medicalPlaces: MedicalInfo[] = [];
-
     // 디버깅: API 키 확인
     console.log('🔑 HIRA API 키 존재:', !!HIRA_API_KEY);
     console.log('🔑 Kakao API 키 존재:', !!KAKAO_API_KEY);

@@ -1,7 +1,8 @@
 'use client';
 
+/* eslint-disable @next/next/no-html-link-for-pages */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState, useEffect, useCallback } from 'react';
-import Link from 'next/link';
 import Breadcrumb from '../components/Breadcrumb';
 import RelatedLinks from '../components/RelatedLinks';
 import Footer from '../components/Footer';

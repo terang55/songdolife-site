@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import type { Metadata } from 'next';
 import Footer from '../components/Footer';
 import RealEstateWidget from '../components/RealEstateWidget';
@@ -64,9 +65,9 @@ export default function RealEstatePage() {
               <div className="flex items-center space-x-2 sm:space-x-3">
                 <span className="text-2xl sm:text-3xl">🏙️</span>
                 <div>
-                  <a href="/" className="text-lg sm:text-2xl font-bold text-gray-900 hover:text-blue-600 transition-colors">
+                  <Link href="/" className="text-lg sm:text-2xl font-bold text-gray-900 hover:text-blue-600 transition-colors">
                     🏠 송도라이프
-                  </a>
+                  </Link>
                   <p className="text-xs sm:text-sm text-gray-500">송도에서의 매일매일</p>
                 </div>
               </div>
@@ -85,20 +86,20 @@ export default function RealEstatePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col sm:flex-row items-center justify-center py-3 sm:py-4 gap-2 sm:gap-6">
               <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto">
-                <a 
+                <Link 
                   href="/" 
                   className="flex items-center space-x-2 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors min-h-[44px] w-full sm:w-auto justify-center"
                 >
                   <span className="text-lg">🏠</span>
                   <span className="text-sm font-medium">홈으로</span>
-                </a>
-                <a 
+                </Link>
+                <Link 
                   href="/subway" 
                   className="flex items-center space-x-2 px-4 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors min-h-[44px] w-full sm:w-auto justify-center"
                 >
                   <span className="text-lg">🚇</span>
                   <span className="text-sm font-medium">실시간 교통</span>
-                </a>
+                </Link>
               </div>
               <div className="text-xs sm:text-sm text-gray-600 text-center">
                 <span className="block sm:hidden">송도 아파트 실거래가 정보</span>

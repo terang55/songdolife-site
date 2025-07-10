@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { BreadcrumbItem } from '@/lib/breadcrumb-utils';
+import { BASE_URL } from '@/lib/siteConfig';
 
 interface BreadcrumbProps {
   items: BreadcrumbItem[];
@@ -17,7 +18,7 @@ export default function Breadcrumb({ items }: BreadcrumbProps) {
       "@type": "ListItem",
       "position": index + 1,
       "name": item.label,
-      "item": `https://songdolife.info${item.href}`
+      "item": `${BASE_URL}${item.href}`
     }))
   };
 

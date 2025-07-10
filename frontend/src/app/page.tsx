@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import { BASE_URL } from '@/lib/siteConfig';
 // 필요한 아이콘만 import (현재 사용 중인 아이콘 없음)
 import Image from 'next/image';
 import WeatherWidget from './components/WeatherWidget';
@@ -169,7 +170,7 @@ const generateNewsStructuredData = (news: NewsItem[]): Record<string, unknown> |
   const articles = news.slice(0, 10).map(item => {
     const safeContent = item.content ?? item.title ?? '';
     const description = safeContent.length > 200 ? safeContent.substring(0, 200) + '...' : safeContent;
-    const image = item.thumbnail || item.url?.includes('youtube.com') ? `https://img.youtube.com/vi/${extractYouTubeId(item.url)}/hqdefault.jpg` : 'https://songdolife.info/og-image.jpg';
+    const image = item.thumbnail || item.url?.includes('youtube.com') ? `https://img.youtube.com/vi/${extractYouTubeId(item.url)}/hqdefault.jpg` : `${BASE_URL}/og-image.jpg`;
     return {
       "@type": "NewsArticle",
       "headline": item.title,
@@ -186,7 +187,7 @@ const generateNewsStructuredData = (news: NewsItem[]): Record<string, unknown> |
         "name": "송도라이프",
         "logo": {
           "@type": "ImageObject",
-          "url": "https://songdolife.info/og-image.jpg"
+          "url": `${BASE_URL}/og-image.jpg`
         }
       },
       "image": image,
@@ -221,10 +222,10 @@ const generateWebsiteStructuredData = () => {
     "name": "송도라이프",
     "alternateName": "송도국제도시 생활정보 플랫폼",
     "description": "인천 연수구 송도국제도시 주민들을 위한 종합 정보 플랫폼",
-    "url": "https://songdolife.info",
+    "url": BASE_URL,
     "potentialAction": {
       "@type": "SearchAction",
-      "target": "https://songdolife.info/?q={search_term_string}",
+      "target": `${BASE_URL}/?q={search_term_string}`,
       "query-input": "required name=search_term_string"
     }
   };
@@ -232,13 +233,13 @@ const generateWebsiteStructuredData = () => {
 
 const generateBreadcrumbStructuredData = (selectedCategory: string) => {
   const breadcrumbs = [
-    { name: "홈", url: "https://songdolife.info" }
+    { name: "홈", url: BASE_URL }
   ];
 
   if (selectedCategory !== '전체') {
     breadcrumbs.push({
       name: selectedCategory,
-      url: `https://songdolife.info/?category=${selectedCategory}`
+      url: `${BASE_URL}/?category=${selectedCategory}`
     });
   }
 
@@ -410,7 +411,7 @@ export default function HomePage() {
     // Open Graph 태그
     updateMetaTag('og:title', title, true);
     updateMetaTag('og:description', description, true);
-    updateMetaTag('og:url', selectedCategory === '전체' ? 'https://songdo.life' : `https://songdo.life/?category=${encodeURIComponent(selectedCategory)}`, true);
+    updateMetaTag('og:url', selectedCategory === '전체' ? BASE_URL : `${BASE_URL}/?category=${encodeURIComponent(selectedCategory)}`, true);
 
     // 구조화된 데이터 업데이트
     const updateStructuredData = (id: string, data: Record<string, unknown>) => {

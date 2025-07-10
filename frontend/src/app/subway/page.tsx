@@ -1,5 +1,6 @@
 'use client';
 
+import { BASE_URL } from '@/lib/siteConfig';
 /* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState, useEffect, useCallback } from 'react';

@@ -8,6 +8,7 @@ import RelatedLinks from '../components/RelatedLinks';
 import { getRealEstateBreadcrumb } from '@/lib/breadcrumb-utils';
 import { getRealEstateRelatedLinks } from '@/lib/related-links-utils';
 import Script from 'next/script';
+import { BASE_URL } from '@/lib/siteConfig';
 
 export const metadata: Metadata = {
   title: '송도 부동산 실거래가 | 송도라이프',
@@ -16,11 +17,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: '송도 부동산 실거래가 | 송도라이프',
     description: '송도국제도시 아파트 실거래가를 실시간으로 확인하세요',
-    url: 'https://songdolife.info/realestate',
+    url: `${BASE_URL}/realestate`,
     siteName: '송도라이프',
     images: [
       {
-        url: 'https://songdolife.info/og-image.jpg',
+        url: `${BASE_URL}/og-image.jpg`,
         width: 1200,
         height: 630,
         alt: '송도라이프 - 송도 부동산 정보'
@@ -33,7 +34,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: '송도 부동산 실거래가 | 송도라이프',
     description: '송도국제도시 아파트 실거래가를 실시간으로 확인하세요',
-    images: ['https://songdolife.info/og-image.jpg']
+    images: [`${BASE_URL}/og-image.jpg`]
   }
 };
 

@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import Head from 'next/head';
 import { generateBreadcrumbSchema } from '@/lib/seo';
 import Link from 'next/link';
 import Breadcrumb from '../components/Breadcrumb';
 import RelatedLinks from '../components/RelatedLinks';
 import { getAcademyBreadcrumb } from '@/lib/breadcrumb-utils';
 import { getAcademyRelatedLinks } from '@/lib/related-links-utils';
+import { BASE_URL } from '@/lib/siteConfig';
 
 interface AcademyItem {
   ACA_NM: string;          // 학원명
@@ -92,7 +92,7 @@ export default function AcademyPage() {
             "provider": {
               "@type": "Organization",
               "name": "송도라이프",
-              "url": "https://songdolife.info"
+              "url": BASE_URL
             },
             "areaServed": {
               "@type": "Place",
@@ -151,10 +151,6 @@ export default function AcademyPage() {
       />
 
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-        <Head>
-          <title>송도동 학원 정보 | 송도라이프</title>
-          <meta name="description" content="인천시 연수구 송도동 학원·교습소 정보를 과목별로 검색해 보세요." />
-        </Head>
 
         <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">

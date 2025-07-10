@@ -110,40 +110,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  // 추가 SEO 키워드 페이지들 (해시태그 형태)
-  const seoKeywordPages = [
-    // 지역 관련
-    { keyword: '송도국제도시', priority: 0.8 },
-    { keyword: '센트럴파크', priority: 0.7 },
-    { keyword: '송도-맛집', priority: 0.7 },
-    { keyword: '송도-카페', priority: 0.7 },
-    { keyword: '송도-부동산', priority: 0.7 },
-    { keyword: '송도-육아', priority: 0.6 },
-    { keyword: '더샵', priority: 0.6 },
-    { keyword: '트리플스트리트', priority: 0.6 },
-    
-    // 의료 관련
-    { keyword: '송도-병원', priority: 0.7 },
-    { keyword: '송도-약국', priority: 0.7 },
-    { keyword: '송도-내과', priority: 0.6 },
-    { keyword: '송도-소아과', priority: 0.6 },
-    { keyword: '송도-치과', priority: 0.6 },
-    { keyword: '송도-응급실', priority: 0.6 },
-    
-    // 교통 관련
-    { keyword: '인천1호선', priority: 0.7 },
-    { keyword: '인천대입구역', priority: 0.7 },
-    { keyword: '센트럴파크역', priority: 0.6 },
-    { keyword: '국제업무지구역', priority: 0.6 },
-  ];
+  // 🔧 해시(fragment) 기반 URL과 /api 경로는 SEO 상 불필요하여 제거
+  // 키워드 해시 페이지 대신 핵심 페이지(route 목록)만 반환
 
-  // SEO 키워드 페이지들을 사이트맵에 추가
-  const keywordRoutes = seoKeywordPages.map(({ keyword, priority }) => ({
-    url: `${baseUrl}/#${keyword}`,
-    lastModified: now,
-    changeFrequency: 'daily' as const,
-    priority: priority,
-  }));
-
-  return [...routes, ...keywordRoutes];
+  return routes;
 } 

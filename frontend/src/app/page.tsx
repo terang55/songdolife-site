@@ -694,6 +694,7 @@ export default function HomePage() {
                 {/* 유튜브 썸네일 */}
                 {item.type === 'youtube' && item.thumbnail && (
                   <div className="aspect-video bg-gray-100 rounded-t-lg overflow-hidden relative">
+                    {/* eslint-disable-next-line jsx-a11y/alt-text */}
                     <Image 
                       {...getNewsImageConfigWithSEO(item, item.thumbnail)}
                       fill

@@ -2,9 +2,11 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import Head from 'next/head';
-import Breadcrumb, { getSubwayBreadcrumb } from '../components/Breadcrumb';
-import RelatedLinks, { getSubwayRelatedLinks } from '../components/RelatedLinks';
+import Breadcrumb from '../components/Breadcrumb';
+import RelatedLinks from '../components/RelatedLinks';
+import Footer from '../components/Footer';
+import { getSubwayBreadcrumb } from '@/lib/breadcrumb-utils';
+import { getSubwayRelatedLinks } from '@/lib/related-links-utils';
 
 interface TrainSchedule {
   time: string;
@@ -154,6 +156,34 @@ export default function SubwayPage() {
     // 역 변경 시에만 호출 (자동 갱신 제거)
     fetchSchedule();
   }, [selectedStation, fetchSchedule]);
+
+  // 메타 태그 동적 관리
+  useEffect(() => {
+    const title = `${selectedStation} 지하철 시간표 | 송도라이프`;
+    const description = `${selectedStation}의 실시간 지하철 시간표와 교통 정보를 확인하세요. 송도국제도시 인천1호선 운행 정보를 제공합니다.`;
+    
+    document.title = title;
+    
+    const updateMetaTag = (name: string, content: string, property = false) => {
+      const selector = property ? `meta[property="${name}"]` : `meta[name="${name}"]`;
+      let tag = document.querySelector(selector);
+      if (!tag) {
+        tag = document.createElement('meta');
+        if (property) {
+          tag.setAttribute('property', name);
+        } else {
+          tag.setAttribute('name', name);
+        }
+        document.head.appendChild(tag);
+      }
+      tag.setAttribute('content', content);
+    };
+
+    updateMetaTag('description', description);
+    updateMetaTag('keywords', `송도 지하철, ${selectedStation}, 인천1호선, 송도교통, 지하철 시간표, 실시간 교통`);
+    updateMetaTag('og:title', title, true);
+    updateMetaTag('og:description', description, true);
+  }, [selectedStation]);
 
   // 다음 열차 정보 계산 (실제 시간표 사용)
   const getNextTrains = useCallback((direction: '상행' | '하행') => {
@@ -336,346 +366,358 @@ export default function SubwayPage() {
     fetchBusInfo(); // 페이지 로드 시 한 번만 호출
   }, [fetchBusInfo]);
 
+  // 브레드크럼 및 관련 링크 데이터
+  const breadcrumbItems = getSubwayBreadcrumb();
+  const relatedLinks = getSubwayRelatedLinks();
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Head>
-        <title>{getMetaTitle()}</title>
-        <meta name="description" content={getMetaDescription()} />
-        <meta name="keywords" content={getMetaKeywords()} />
-        <meta property="og:title" content={getMetaTitle()} />
-        <meta property="og:description" content={getMetaDescription()} />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={`https://songdo.life/subway?station=${encodeURIComponent(selectedStation)}`} />
-        <meta property="og:site_name" content="송도라이프" />
-        <meta property="og:locale" content="ko_KR" />
-        <meta property="og:image" content="https://songdo.life/og-image.jpg" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={getMetaTitle()} />
-        <meta name="twitter:description" content={getMetaDescription()} />
-        <meta name="twitter:image" content="https://songdo.life/og-image.jpg" />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(generateStructuredData()) }} />
-      </Head>
-      {/* 네비게이션 바 */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between py-3 sm:py-4 min-h-[60px]">
-            <div className="flex items-center space-x-2 sm:space-x-4">
-              <Link href="/" className="flex items-center text-green-600 hover:text-green-800 transition-colors">
-                <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                </svg>
-                <span className="text-sm sm:text-base">홈</span>
-              </Link>
-              <span className="text-gray-300 hidden sm:inline">|</span>
-              <Link href="/realestate" className="flex items-center text-blue-600 hover:text-blue-800 transition-colors">
-                <span className="text-lg mr-1">🏢</span>
-                <span className="text-sm sm:text-base">부동산</span>
-              </Link>
-              <span className="text-gray-300 hidden sm:inline">|</span>
-              <span className="text-gray-700 font-medium text-sm sm:text-base">🚌 교통정보</span>
+    <>
+      {/* 구조화된 데이터 */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(generateStructuredData())
+        }}
+      />
+
+      <div className="min-h-screen bg-gray-50">
+        {/* Header */}
+        <header className="bg-white shadow-sm sticky top-0 z-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between h-14 sm:h-16">
+              <div className="flex items-center space-x-2 sm:space-x-3">
+                <span className="text-2xl sm:text-3xl">🏙️</span>
+                <div>
+                  <a href="/" className="text-lg sm:text-2xl font-bold text-gray-900 hover:text-blue-600 transition-colors">
+                    🏠 송도라이프
+                  </a>
+                  <p className="text-xs sm:text-sm text-gray-500">송도에서의 매일매일</p>
+                </div>
+              </div>
+              <div className="hidden sm:flex items-center space-x-2 text-sm text-gray-600">
+                <div className="flex items-center space-x-1">
+                  <span className="text-base">🚇</span>
+                  <span className="text-xs">실시간 교통정보</span>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+        </header>
 
-      {/* 헤더 */}
-      <header className="bg-gradient-to-r from-green-600 to-green-800 text-white py-6 sm:py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4">🚌 송도 교통정보</h1>
-            <p className="text-sm sm:text-base lg:text-lg text-green-100 max-w-2xl mx-auto leading-relaxed">
-              지하철 시간표 · M6405 광역급행버스 실시간 정보
-            </p>
-          </div>
-        </div>
-      </header>
-
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
-        {/* 브레드크럼 네비게이션 */}
-        <Breadcrumb items={getSubwayBreadcrumb()} />
-
-        {/* 역 선택 */}
-        <section className="bg-white rounded-xl shadow-sm border p-4 sm:p-6 mb-6 sm:mb-8">
-          <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">📍 역 선택</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-            {stations.map((station) => (
-              <button
-                key={station.name}
-                onClick={() => setSelectedStation(station.name)}
-                className={`p-4 rounded-xl border-2 transition-all min-h-[72px] ${
-                  selectedStation === station.name
-                    ? 'border-green-600 bg-green-50 text-green-800 shadow-md'
-                    : 'border-gray-200 hover:border-green-300 hover:bg-green-50'
-                }`}
-              >
-                <div className="text-base sm:text-lg font-semibold">{station.name}</div>
-                <div className="text-xs sm:text-sm text-gray-600 mt-1">{station.code}</div>
-              </button>
-            ))}
+        {/* 네비게이션 바 */}
+        <section className="bg-white shadow-sm border-b">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col sm:flex-row items-center justify-center py-3 sm:py-4 gap-2 sm:gap-6">
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto">
+                <a 
+                  href="/" 
+                  className="flex items-center space-x-2 px-4 py-2.5 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors min-h-[44px] w-full sm:w-auto justify-center"
+                >
+                  <span className="text-lg">🏠</span>
+                  <span className="text-sm font-medium">홈으로</span>
+                </a>
+                <a 
+                  href="/realestate" 
+                  className="flex items-center space-x-2 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors min-h-[44px] w-full sm:w-auto justify-center"
+                >
+                  <span className="text-lg">🏢</span>
+                  <span className="text-sm font-medium">부동산 정보</span>
+                </a>
+              </div>
+              <div className="text-xs sm:text-sm text-gray-600 text-center">
+                <span className="block sm:hidden">인천1호선 실시간 도착정보</span>
+                <span className="hidden sm:block">인천1호선 실시간 도착정보. 센트럴파크역, 인천대입구역, 국제업무지구역</span>
+              </div>
+            </div>
           </div>
         </section>
 
-        {/* 선택된 역 정보 */}
-        {selectedStationInfo && (
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {/* 브레드크럼 네비게이션 */}
+          <Breadcrumb items={breadcrumbItems} />
+
+          {/* 역 선택 */}
           <section className="bg-white rounded-xl shadow-sm border p-4 sm:p-6 mb-6 sm:mb-8">
-            <div className="flex items-center mb-4">
-              <h2 className="text-lg sm:text-xl font-bold text-gray-900">📍 {selectedStationInfo.name} 정보</h2>
-            </div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <span className="text-blue-600 font-semibold text-sm">역코드:</span>
-                  <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">{selectedStationInfo.code}</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="text-blue-600 font-semibold text-sm">노선:</span>
-                  <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">{selectedStationInfo.line}</span>
-                </div>
-              </div>
-              <div>
-                <h3 className="text-sm font-semibold text-gray-700 mb-2">🎯 주변 주요 장소</h3>
-                <div className="flex flex-wrap gap-2">
-                  {selectedStationInfo.nearbyPlaces.map((place, index) => (
-                    <span 
-                      key={index}
-                      className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm"
-                    >
-                      {place}
-                    </span>
-                  ))}
-                </div>
-              </div>
+            <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">📍 역 선택</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+              {stations.map((station) => (
+                <button
+                  key={station.name}
+                  onClick={() => setSelectedStation(station.name)}
+                  className={`p-4 rounded-xl border-2 transition-all min-h-[72px] ${
+                    selectedStation === station.name
+                      ? 'border-green-600 bg-green-50 text-green-800 shadow-md'
+                      : 'border-gray-200 hover:border-green-300 hover:bg-green-50'
+                  }`}
+                >
+                  <div className="text-base sm:text-lg font-semibold">{station.name}</div>
+                  <div className="text-xs sm:text-sm text-gray-600 mt-1">{station.code}</div>
+                </button>
+              ))}
             </div>
           </section>
-        )}
 
-        {/* 지하철 시간표 */}
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-gray-800 flex items-center">
-              🚇 지하철 시간표
-            </h2>
-            <div className="flex items-center space-x-3">
-              <div className="text-sm text-gray-500">
-                마지막 업데이트: {scheduleLastUpdate || '업데이트 중...'}
+          {/* 선택된 역 정보 */}
+          {selectedStationInfo && (
+            <section className="bg-white rounded-xl shadow-sm border p-4 sm:p-6 mb-6 sm:mb-8">
+              <div className="flex items-center mb-4">
+                <h2 className="text-lg sm:text-xl font-bold text-gray-900">📍 {selectedStationInfo.name} 정보</h2>
               </div>
-              <button
-                onClick={() => fetchSchedule()}
-                disabled={scheduleLoading}
-                className="px-3 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                {scheduleLoading ? '🔄 새로고침 중...' : '🔄 새로고침'}
-              </button>
-            </div>
-          </div>
-          
-          <div className="text-center mb-4">
-            <h3 className="text-lg font-semibold text-blue-600">{selectedStation}</h3>
-          </div>
-
-          {/* 로딩 상태 표시 */}
-          {scheduleLoading && (
-            <div className="text-center py-8">
-              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-              <p className="mt-2 text-gray-600">시간표 불러오는 중...</p>
-            </div>
-          )}
-
-          {/* 시간표 목록 - 상행/하행 모두 표시 */}
-          {!scheduleLoading && (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* 상행 시간표 */}
-              <div>
-                <div className="flex items-center justify-center bg-blue-50 py-3 rounded-lg border-2 border-blue-200 mb-4">
-                  <span className="text-blue-700 font-bold text-lg">🔵 상행 (검단호수공원 방향)</span>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3">
+                    <span className="text-blue-600 font-semibold text-sm">역코드:</span>
+                    <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">{selectedStationInfo.code}</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-blue-600 font-semibold text-sm">노선:</span>
+                    <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">{selectedStationInfo.line}</span>
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  {getNextTrains('상행').length === 0 ? (
-                    <div className="text-center py-4 text-gray-500">
-                      시간표 정보를 불러올 수 없습니다
-                    </div>
-                  ) : (
-                    getNextTrains('상행').map((train, index) => (
-                      <div
-                        key={`${train.time}-상행`}
-                        className={`flex items-center justify-between p-3 rounded-lg border ${
-                          index === 0
-                            ? 'bg-blue-50 border-blue-200'
-                            : 'bg-gray-50 border-gray-200'
-                        }`}
+                <div>
+                  <h3 className="text-sm font-semibold text-gray-700 mb-2">🎯 주변 주요 장소</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedStationInfo.nearbyPlaces.map((place, index) => (
+                      <span 
+                        key={index}
+                        className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm"
                       >
-                        <div className="flex items-center space-x-3">
-                          <span className="text-lg font-bold text-blue-600">
-                            {train.time}
-                          </span>
-                          <span className="text-gray-600">→ {train.destination}</span>
-                        </div>
-                        <span className={`text-sm font-semibold ${
-                          index === 0 ? 'text-blue-600' : 'text-gray-500'
-                        }`}>
-                          {formatTimeRemaining(train.minutesFromNow)}
-                        </span>
-                      </div>
-                    ))
-                  )}
-                </div>
-              </div>
-
-              {/* 하행 시간표 */}
-              <div>
-                <div className="flex items-center justify-center bg-red-50 py-3 rounded-lg border-2 border-red-200 mb-4">
-                  <span className="text-red-700 font-bold text-lg">🔴 하행 (송도달빛축제공원 방향)</span>
-                </div>
-                <div className="space-y-2">
-                  {getNextTrains('하행').length === 0 ? (
-                    <div className="text-center py-4 text-gray-500">
-                      시간표 정보를 불러올 수 없습니다
-                    </div>
-                  ) : (
-                    getNextTrains('하행').map((train, index) => (
-                      <div
-                        key={`${train.time}-하행`}
-                        className={`flex items-center justify-between p-3 rounded-lg border ${
-                          index === 0
-                            ? 'bg-red-50 border-red-200'
-                            : 'bg-gray-50 border-gray-200'
-                        }`}
-                      >
-                        <div className="flex items-center space-x-3">
-                          <span className="text-lg font-bold text-red-600">
-                            {train.time}
-                          </span>
-                          <span className="text-gray-600">→ {train.destination}</span>
-                        </div>
-                        <span className={`text-sm font-semibold ${
-                          index === 0 ? 'text-red-600' : 'text-gray-500'
-                        }`}>
-                          {formatTimeRemaining(train.minutesFromNow)}
-                        </span>
-                      </div>
-                    ))
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* 버스 정보 */}
-        <section className="bg-white rounded-xl shadow-sm border p-4 sm:p-6 mb-6 sm:mb-8">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3 sm:gap-0">
-            <h2 className="text-lg sm:text-xl font-bold text-gray-900">🚌 M6405 광역급행버스</h2>
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 w-full sm:w-auto">
-              {busLastUpdate && (
-                <span className="text-xs sm:text-sm text-gray-500 order-2 sm:order-1">
-                  마지막 업데이트: <time>{busLastUpdate}</time>
-                </span>
-              )}
-              {!BUS_FEATURE_DISABLED && (
-                <button
-                  onClick={() => fetchBusInfo()}
-                  disabled={busLoading}
-                  className="px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors text-sm font-medium min-h-[44px] w-full sm:w-auto order-1 sm:order-2"
-                >
-                  {busLoading ? '버스 새로고침 중...' : '🚌 버스 새로고침'}
-                </button>
-              )}
-            </div>
-          </div>
-
-          {busServiceEnded && (
-            <div className="bg-red-50 border-l-4 border-red-400 p-4 mb-6 rounded-lg">
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <span className="text-2xl">🚫</span>
-                </div>
-                <div className="ml-3">
-                  <h3 className="text-sm font-medium text-red-800">버스 운행 종료</h3>
-                  <div className="mt-2 text-sm text-red-700">
-                    <p>현재 운행하지 않는 시간입니다. 운행시간은 오전 5시부터 자정까지입니다.</p>
+                        {place}
+                      </span>
+                    ))}
                   </div>
                 </div>
               </div>
-            </div>
+            </section>
           )}
 
-          {BUS_FEATURE_DISABLED ? (
-            <div className="text-center py-6 text-gray-500 text-sm sm:text-base leading-relaxed">
-              <p>M6405 광역버스 <span className="font-semibold">실시간 위치 정보</span>는&nbsp;
-                <span className="font-semibold text-red-600">API 변경 예정</span>입니다.</p>
-              <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-gray-400">
-                ※ 현재 <strong>경기도 G-BIS API</strong>를 사용 중이지만, M6405는 인천 운행 노선이므로<br />
-                <strong>인천광역시 버스정보시스템 API</strong>로 변경이 필요합니다.
-              </p>
+          {/* 지하철 시간표 */}
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold text-gray-800 flex items-center">
+                🚇 지하철 시간표
+              </h2>
+              <div className="flex items-center space-x-3">
+                <div className="text-sm text-gray-500">
+                  마지막 업데이트: {scheduleLastUpdate || '업데이트 중...'}
+                </div>
+                <button
+                  onClick={() => fetchSchedule()}
+                  disabled={scheduleLoading}
+                  className="px-3 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  {scheduleLoading ? '🔄 새로고침 중...' : '🔄 새로고침'}
+                </button>
+              </div>
             </div>
-          ) : busLoading ? (
-            <div className="text-gray-500">버스 위치 정보를 불러오는 중...</div>
-          ) : busInfo.length > 0 ? (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-              {(() => {
-                const toGangnam = busInfo.filter(b => b.towards === '강남행');
-                const toIncheon = busInfo.filter(b => b.towards === '인천행');
+            
+            <div className="text-center mb-4">
+              <h3 className="text-lg font-semibold text-blue-600">{selectedStation}</h3>
+            </div>
 
-                const BusCard = ({ bus }: { bus: BusArrival }) => {
-                  // 좌석 정보 추출 (direction에서 좌석 정보 분리)
-                  const seatMatch = bus.direction.match(/좌석\s*(\d+|정보없음|없음)석?/);
-                  const seatInfo = seatMatch ? (seatMatch[1] === '정보없음' || seatMatch[1] === '없음' ? '정보없음' : `${seatMatch[1]}석`) : '정보없음';
-                  
-                  // direction에서 좌석 정보 제거한 나머지
-                  const directionWithoutSeat = bus.direction.replace(/\s*•\s*좌석\s*(\d+|정보없음|없음)석?/, '').replace(/좌석\s*(\d+|정보없음|없음)석?\s*•?\s*/, '');
-                  
-                  return (
-                    <div className="bg-white rounded-xl shadow-md p-3 sm:p-4 border-l-4 border-red-500">
-                      <div className="flex justify-between items-start mb-3">
-                        <div className="flex items-center gap-2">
-                          <span className="bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-1 rounded-full">{bus.routeId}</span>
-                          {bus.lowFloor && (
-                            <span className="bg-green-100 text-green-800 text-xs font-semibold px-2 py-0.5 rounded">♿ 저상버스</span>
-                          )}
-                        </div>
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          bus.towards === '강남행' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'
-                        }`}>
-                          {bus.towards}
-                        </span>
+            {/* 로딩 상태 표시 */}
+            {scheduleLoading && (
+              <div className="text-center py-8">
+                <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                <p className="mt-2 text-gray-600">시간표 불러오는 중...</p>
+              </div>
+            )}
+
+            {/* 시간표 목록 - 상행/하행 모두 표시 */}
+            {!scheduleLoading && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* 상행 시간표 */}
+                <div>
+                  <div className="flex items-center justify-center bg-blue-50 py-3 rounded-lg border-2 border-blue-200 mb-4">
+                    <span className="text-blue-700 font-bold text-lg">🔵 상행 (검단호수공원 방향)</span>
+                  </div>
+                  <div className="space-y-2">
+                    {getNextTrains('상행').length === 0 ? (
+                      <div className="text-center py-4 text-gray-500">
+                        시간표 정보를 불러올 수 없습니다
                       </div>
-                      
-                      <div className="mb-2">
-                        <span className="text-sm text-gray-700 font-medium">
-                          {bus.stationName.replace(/\s*\([^)]*\)$/, '')}
-                        </span>
-                      </div>
-                      
-                      {/* 좌석 정보를 별도로 강조 표시 */}
-                      <div className="mb-2 flex items-center gap-2">
-                        <span className={`px-2 py-1 rounded-full text-xs font-bold ${
-                          seatInfo === '정보없음' ? 'bg-gray-100 text-gray-600' : 'bg-orange-100 text-orange-800'
-                        }`}>
-                          🪑 {seatInfo}
-                        </span>
-                        <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
-                          {bus.remainingStops}번째 정류장
-                        </span>
-                      </div>
-                      
-                      {/* 다음 정류장 정보 */}
-                      {directionWithoutSeat && (
-                        <div className="mb-2">
-                          <span className="text-sm text-blue-700 font-medium">{directionWithoutSeat}</span>
-                        </div>
-                      )}
-                      
-                      <div className="flex gap-1 items-center mt-2">
-                        {bus.congestion !== '-' && (
-                          <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                            혼잡도: {bus.congestion}
+                    ) : (
+                      getNextTrains('상행').map((train, index) => (
+                        <div
+                          key={`${train.time}-상행`}
+                          className={`flex items-center justify-between p-3 rounded-lg border ${
+                            index === 0
+                              ? 'bg-blue-50 border-blue-200'
+                              : 'bg-gray-50 border-gray-200'
+                          }`}
+                        >
+                          <div className="flex items-center space-x-3">
+                            <span className="text-lg font-bold text-blue-600">
+                              {train.time}
+                            </span>
+                            <span className="text-gray-600">→ {train.destination}</span>
+                          </div>
+                          <span className={`text-sm font-semibold ${
+                            index === 0 ? 'text-blue-600' : 'text-gray-500'
+                          }`}>
+                            {formatTimeRemaining(train.minutesFromNow)}
                           </span>
-                        )}
-                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">운행중</span>
-                        {isRealBusAPI && <span className="px-2 py-1 rounded text-xs font-medium bg-emerald-100 text-emerald-800">실시간</span>}
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+
+                {/* 하행 시간표 */}
+                <div>
+                  <div className="flex items-center justify-center bg-red-50 py-3 rounded-lg border-2 border-red-200 mb-4">
+                    <span className="text-red-700 font-bold text-lg">🔴 하행 (송도달빛축제공원 방향)</span>
+                  </div>
+                  <div className="space-y-2">
+                    {getNextTrains('하행').length === 0 ? (
+                      <div className="text-center py-4 text-gray-500">
+                        시간표 정보를 불러올 수 없습니다
                       </div>
+                    ) : (
+                      getNextTrains('하행').map((train, index) => (
+                        <div
+                          key={`${train.time}-하행`}
+                          className={`flex items-center justify-between p-3 rounded-lg border ${
+                            index === 0
+                              ? 'bg-red-50 border-red-200'
+                              : 'bg-gray-50 border-gray-200'
+                          }`}
+                        >
+                          <div className="flex items-center space-x-3">
+                            <span className="text-lg font-bold text-red-600">
+                              {train.time}
+                            </span>
+                            <span className="text-gray-600">→ {train.destination}</span>
+                          </div>
+                          <span className={`text-sm font-semibold ${
+                            index === 0 ? 'text-red-600' : 'text-gray-500'
+                          }`}>
+                            {formatTimeRemaining(train.minutesFromNow)}
+                          </span>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* 버스 정보 */}
+          <section className="bg-white rounded-xl shadow-sm border p-4 sm:p-6 mb-6 sm:mb-8">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3 sm:gap-0">
+              <h2 className="text-lg sm:text-xl font-bold text-gray-900">🚌 M6405 광역급행버스</h2>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 w-full sm:w-auto">
+                {busLastUpdate && (
+                  <span className="text-xs sm:text-sm text-gray-500 order-2 sm:order-1">
+                    마지막 업데이트: <time>{busLastUpdate}</time>
+                  </span>
+                )}
+                {!BUS_FEATURE_DISABLED && (
+                  <button
+                    onClick={() => fetchBusInfo()}
+                    disabled={busLoading}
+                    className="px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors text-sm font-medium min-h-[44px] w-full sm:w-auto order-1 sm:order-2"
+                  >
+                    {busLoading ? '버스 새로고침 중...' : '🚌 버스 새로고침'}
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {busServiceEnded && (
+              <div className="bg-red-50 border-l-4 border-red-400 p-4 mb-6 rounded-lg">
+                <div className="flex items-center">
+                  <div className="flex-shrink-0">
+                    <span className="text-2xl">🚫</span>
+                  </div>
+                  <div className="ml-3">
+                    <h3 className="text-sm font-medium text-red-800">버스 운행 종료</h3>
+                    <div className="mt-2 text-sm text-red-700">
+                      <p>현재 운행하지 않는 시간입니다. 운행시간은 오전 5시부터 자정까지입니다.</p>
                     </div>
-                  );
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {BUS_FEATURE_DISABLED ? (
+              <div className="text-center py-6 text-gray-500 text-sm sm:text-base leading-relaxed">
+                <p>M6405 광역버스 <span className="font-semibold">실시간 위치 정보</span>는&nbsp;
+                  <span className="font-semibold text-red-600">API 변경 예정</span>입니다.</p>
+                <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-gray-400">
+                  ※ 현재 <strong>경기도 G-BIS API</strong>를 사용 중이지만, M6405는 인천 운행 노선이므로<br />
+                  <strong>인천광역시 버스정보시스템 API</strong>로 변경이 필요합니다.
+                </p>
+              </div>
+            ) : busLoading ? (
+              <div className="text-gray-500">버스 위치 정보를 불러오는 중...</div>
+            ) : busInfo.length > 0 ? (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                {(() => {
+                  const toGangnam = busInfo.filter(b => b.towards === '강남행');
+                  const toIncheon = busInfo.filter(b => b.towards === '인천행');
+
+                  const BusCard = ({ bus }: { bus: BusArrival }) => {
+                    // 좌석 정보 추출 (direction에서 좌석 정보 분리)
+                    const seatMatch = bus.direction.match(/좌석\s*(\d+|정보없음|없음)석?/);
+                    const seatInfo = seatMatch ? (seatMatch[1] === '정보없음' || seatMatch[1] === '없음' ? '정보없음' : `${seatMatch[1]}석`) : '정보없음';
+                    
+                    // direction에서 좌석 정보 제거한 나머지
+                    const directionWithoutSeat = bus.direction.replace(/\s*•\s*좌석\s*(\d+|정보없음|없음)석?/, '').replace(/좌석\s*(\d+|정보없음|없음)석?\s*•?\s*/, '');
+                    
+                    return (
+                      <div className="bg-white rounded-xl shadow-md p-3 sm:p-4 border-l-4 border-red-500">
+                        <div className="flex justify-between items-start mb-3">
+                          <div className="flex items-center gap-2">
+                            <span className="bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-1 rounded-full">{bus.routeId}</span>
+                            {bus.lowFloor && (
+                              <span className="bg-green-100 text-green-800 text-xs font-semibold px-2 py-0.5 rounded">♿ 저상버스</span>
+                            )}
+                          </div>
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                            bus.towards === '강남행' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'
+                          }`}>
+                            {bus.towards}
+                          </span>
+                        </div>
+                        
+                        <div className="mb-2">
+                          <span className="text-sm text-gray-700 font-medium">
+                            {bus.stationName.replace(/\s*\([^)]*\)$/, '')}
+                          </span>
+                        </div>
+                        
+                        {/* 좌석 정보를 별도로 강조 표시 */}
+                        <div className="mb-2 flex items-center gap-2">
+                          <span className={`px-2 py-1 rounded-full text-xs font-bold ${
+                            seatInfo === '정보없음' ? 'bg-gray-100 text-gray-600' : 'bg-orange-100 text-orange-800'
+                          }`}>
+                            🪑 {seatInfo}
+                          </span>
+                          <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                            {bus.remainingStops}번째 정류장
+                          </span>
+                        </div>
+                        
+                        {/* 다음 정류장 정보 */}
+                        {directionWithoutSeat && (
+                          <div className="mb-2">
+                            <span className="text-sm text-blue-700 font-medium">{directionWithoutSeat}</span>
+                          </div>
+                        )}
+                        
+                        <div className="flex gap-1 items-center mt-2">
+                          {bus.congestion !== '-' && (
+                            <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                              혼잡도: {bus.congestion}
+                            </span>
+                          )}
+                          <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">운행중</span>
+                          {isRealBusAPI && <span className="px-2 py-1 rounded text-xs font-medium bg-emerald-100 text-emerald-800">실시간</span>}
+                        </div>
+                      </div>
+                    );
   };
 
   return (
@@ -768,8 +810,11 @@ export default function SubwayPage() {
         </section>
 
         {/* 관련 링크 섹션 */}
-        <RelatedLinks links={getSubwayRelatedLinks()} />
+        <RelatedLinks links={relatedLinks} />
       </main>
     </div>
+    
+    <Footer />
+    </>
   );
 } 

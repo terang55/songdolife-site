@@ -48,6 +48,7 @@ export default function RealEstateWidget() {
   const [showAllDeals, setShowAllDeals] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
   const [newDealsLoading, setNewDealsLoading] = useState(true);
+  const [expandNewDeals, setExpandNewDeals] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // 가격 통계 계산 함수
@@ -270,11 +271,21 @@ export default function RealEstateWidget() {
             <div className="text-sm text-red-600 font-medium mb-3">
               📍 새로 등록된 거래 {newDeals.length}건
             </div>
-            <div className="grid gap-3 max-h-80 overflow-y-auto">
+            <div className={`grid gap-3 ${expandNewDeals ? '' : 'max-h-80 overflow-y-auto'}`}>
               {newDeals.map((deal, index) => (
                 <DealCard key={`new-${deal.unique_id}-${index}`} deal={deal} />
               ))}
             </div>
+            {newDeals.length > 3 && (
+              <div className="text-center mt-3">
+                <button
+                  onClick={() => setExpandNewDeals(!expandNewDeals)}
+                  className="text-sm px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+                >
+                  {expandNewDeals ? '접기' : '더보기'}
+                </button>
+              </div>
+            )}
           </div>
         ) : (
           <div className="text-center py-8 text-gray-500">

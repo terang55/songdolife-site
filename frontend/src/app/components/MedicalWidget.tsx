@@ -28,17 +28,19 @@ interface MedicalInfo {
 
 interface MedicalApiResponse {
   success: boolean;
-  data: MedicalInfo[];
-  total: number;
-  timestamp: string;
-  params: {
-    type: string;
+  data?: MedicalInfo[]; // optional
+  medical?: MedicalInfo[]; // fallback
+  total?: number;
+  timestamp?: string;
+  params?: {
+    type?: string;
     category?: string;
     emergency?: boolean;
     night?: boolean;
-    radius: number;
+    radius?: number;
   };
   note?: string;
+  error?: string;
 }
 
 interface MedicalWidgetProps {
@@ -50,7 +52,7 @@ interface MedicalWidgetProps {
 
 const MedicalWidget: React.FC<MedicalWidgetProps> = ({ initialType = 'all' }) => {
   const [medicalData, setMedicalData] = useState<MedicalInfo[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true); // 초기에는 로딩 상태로 시작
   const [selectedType, setSelectedType] = useState<'all' | 'hospital' | 'pharmacy'>(initialType);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [emergencyOnly, setEmergencyOnly] = useState(false);
@@ -58,8 +60,6 @@ const MedicalWidget: React.FC<MedicalWidgetProps> = ({ initialType = 'all' }) =>
   const [satOpenOnly, setSatOpenOnly] = useState(false);
   const [sunOpenOnly, setSunOpenOnly] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  // 최초 로드 시 바로 데이터를 가져오기 위해 true로 설정
-  const [isDataLoaded, setIsDataLoaded] = useState(true);
   // 사용자 위치 상태 추가
   const [userLocation, setUserLocation] = useState<{ lat: number; lon: number } | null>(null);
   const [locationError, setLocationError] = useState<string | null>(null);
@@ -115,9 +115,11 @@ const MedicalWidget: React.FC<MedicalWidgetProps> = ({ initialType = 'all' }) =>
       const response = await fetch(`/api/medical?${params.toString()}`);
       const result: MedicalApiResponse = await response.json();
 
-      if (result.success) {
-        let filtered = result.data;
+      const apiData = result.data ?? result.medical;
 
+      if (result.success && apiData) {
+        let filtered = apiData;
+        
         // 약국 전용 필터: 토/일 영업
         if (selectedType === 'pharmacy') {
           if (satOpenOnly) {
@@ -127,11 +129,10 @@ const MedicalWidget: React.FC<MedicalWidgetProps> = ({ initialType = 'all' }) =>
             filtered = filtered.filter(p => p.weekendHours?.sun);
           }
         }
-
+        
         setMedicalData(filtered);
-        setIsDataLoaded(true);
       } else {
-        setError('의료기관 정보를 불러오는데 실패했습니다.');
+        setError(`의료기관 정보를 불러오는데 실패했습니다. ${result.error || ''}`);
       }
     } catch (error) {
       console.error('의료기관 API 오류:', error);
@@ -142,10 +143,13 @@ const MedicalWidget: React.FC<MedicalWidgetProps> = ({ initialType = 'all' }) =>
   }, [selectedType, selectedCategory, emergencyOnly, nightOnly, satOpenOnly, sunOpenOnly, userLocation]);
 
   useEffect(() => {
-    if (isDataLoaded) {
-      fetchMedicalData();
-    }
-  }, [isDataLoaded, fetchMedicalData]);
+    fetchMedicalData();
+  }, [fetchMedicalData]);
+
+  // 컴포넌트 마운트 시 자동 로딩
+  useEffect(() => {
+    // 아무 동작 없음 (버튼 클릭 시에만 위치 요청)
+  }, []);
 
   const getTypeIcon = (type: 'hospital' | 'pharmacy') => {
     return type === 'hospital' ? '🏥' : '💊';
@@ -215,31 +219,27 @@ const MedicalWidget: React.FC<MedicalWidgetProps> = ({ initialType = 'all' }) =>
           </button>
         )}
       </div>
-      {!isDataLoaded && !loading ? (
-        /* --- 초기 안내/로딩 전 --- */
-        <>
-          <div className="text-center py-12">
-            <div className="text-6xl mb-4">🏥</div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
-              {selectedType === 'pharmacy' ? '송도동 주변 약국 정보' : selectedType === 'hospital' ? '송도동 주변 병원 정보' : '송도동 주변 병원/약국 정보'}
-            </h3>
-            <p className="text-gray-600 mb-6 max-w-md mx-auto text-sm sm:text-base leading-relaxed">
-              송도동의 모든 의료기관 정보를 확인하세요.
-              공공데이터(보건복지부) + 위치기반 거리정보로 최신 상태를 제공합니다.
-            </p>
-            <button
-              onClick={fetchMedicalData}
-              className="px-8 py-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-colors font-medium flex items-center gap-2 mx-auto text-sm sm:text-base min-h-[44px]"
-            >
-              <span>🔍</span>
-              {selectedType === 'pharmacy' ? '약국 정보 보기' : selectedType === 'hospital' ? '병원 정보 보기' : '병원/약국 정보 보기'}
-            </button>
-            <div className="mt-4 text-xs sm:text-sm text-gray-500 space-y-1">
-              <div>💡 실시간 정보 • 전화연결 • 지도보기</div>
-              <div>진료과목 필터링 • 응급실/야간진료 검색</div>
-            </div>
-          </div>
-        </>
+
+      {/* 로딩 중일 때 */}
+      {loading ? (
+        <div className="text-center py-12">
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-gray-600 text-sm sm:text-base">
+            {selectedType === 'pharmacy' ? '약국 정보를 불러오는 중...' : selectedType === 'hospital' ? '병원 정보를 불러오는 중...' : '병원/약국 정보를 불러오는 중...'}
+          </p>
+        </div>
+      ) : error ? (
+        /* 에러 상태 */
+        <div className="text-center py-12">
+          <div className="text-4xl mb-4">⚠️</div>
+          <p className="text-red-600 mb-4 text-sm sm:text-base">{error}</p>
+          <button
+            onClick={fetchMedicalData}
+            className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 active:bg-blue-700 font-medium min-h-[44px]"
+          >
+            다시 시도
+          </button>
+        </div>
       ) : (
         /* --- 실제 데이터/필터/리스트 --- */
         <div>
@@ -390,7 +390,7 @@ const MedicalWidget: React.FC<MedicalWidgetProps> = ({ initialType = 'all' }) =>
             </div>
           ) : (
             <div className="space-y-4">
-              {medicalData.length === 0 ? (
+              {(!medicalData || medicalData.length === 0) ? (
                 <div className="text-center py-12">
                   <div className="text-5xl mb-4">🔍</div>
                   <h3 className="text-base sm:text-lg font-medium text-gray-800 mb-2">
@@ -402,41 +402,40 @@ const MedicalWidget: React.FC<MedicalWidgetProps> = ({ initialType = 'all' }) =>
                 </div>
               ) : (
                 <>
-                  <div className="flex items-center justify-between mb-4 bg-gray-50 rounded-lg p-3">
-                    <div className="text-sm sm:text-base font-medium text-gray-700">
-                      💡 총 <span className="text-blue-600 font-bold">{medicalData.length}</span>개 의료기관 발견
-                    </div>
-                    <div className="text-xs text-gray-500">
-                      거리순 정렬
-                    </div>
+                  <div className="text-sm text-gray-500 mb-4 flex items-center justify-between">
+                    <span>총 {medicalData?.length || 0}개의 의료기관</span>
+                    {userLocation && (
+                      <span className="text-xs">📍 내 위치 기준 거리순</span>
+                    )}
                   </div>
-                  {medicalData.map((place) => (
+                  
+                  {(medicalData || []).map((medical) => (
                     <div
-                      key={place.id}
+                      key={medical.id}
                       className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow bg-white"
                     >
                       {/* 헤더 정보 */}
                       <div className="flex items-start gap-3 mb-3">
-                        <span className="text-xl sm:text-2xl">{getTypeIcon(place.type)}</span>
+                        <span className="text-xl sm:text-2xl">{getTypeIcon(medical.type)}</span>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
                             <h3 className="font-semibold text-base sm:text-lg text-gray-800 truncate">
-                              {place.name}
+                              {medical.name}
                             </h3>
                             <span className="text-xs sm:text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded-full whitespace-nowrap">
-                              {getDistanceText(place.distance)}
+                              {getDistanceText(medical.distance)}
                             </span>
                           </div>
                           
                           {/* 특수 태그 */}
-                          {(place.hasEmergency || place.hasNightCare) && (
+                          {(medical.hasEmergency || medical.hasNightCare) && (
                             <div className="flex items-center gap-2 mb-2">
-                              {place.hasEmergency && (
+                              {medical.hasEmergency && (
                                 <span className="text-xs font-medium text-red-600 bg-red-50 px-2 py-1 rounded-full">
                                   🚨 응급실
                                 </span>
                               )}
-                              {place.hasNightCare && (
+                              {medical.hasNightCare && (
                                 <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded-full">
                                   🌙 야간진료
                                 </span>
@@ -451,29 +450,29 @@ const MedicalWidget: React.FC<MedicalWidgetProps> = ({ initialType = 'all' }) =>
                         <div className="flex items-start gap-2 text-sm text-gray-600">
                           <span className="text-base mt-0.5">📍</span>
                           <span className="flex-1 leading-relaxed">
-                            {place.roadAddress || place.address}
+                            {medical.roadAddress || medical.address}
                           </span>
                         </div>
                         
-                        {place.phone && (
+                        {medical.phone && (
                           <div className="flex items-center gap-2 text-sm">
                             <span className="text-base">📞</span>
                             <a 
-                              href={`tel:${place.phone}`}
+                              href={`tel:${medical.phone}`}
                               className="text-blue-600 hover:text-blue-800 font-medium"
                             >
-                              {place.phone}
+                              {medical.phone}
                             </a>
                           </div>
                         )}
                       </div>
 
                       {/* 진료과목 배지 */}
-                      {getSpecialtyBadges(place.specialties)}
+                      {getSpecialtyBadges(medical.specialties)}
 
                       {/* 진료/영업 시간 */}
                       {(() => {
-                        if (place.is24Hours) {
+                        if (medical.is24Hours) {
                           return (
                             <div className="mt-3 text-sm text-gray-600 flex items-start gap-2">
                               <span className="text-base">⏰</span>
@@ -483,10 +482,10 @@ const MedicalWidget: React.FC<MedicalWidgetProps> = ({ initialType = 'all' }) =>
                         }
 
                         const parts: string[] = [];
-                        if (place.weekdayHours) parts.push(`평일 ${place.weekdayHours}`);
-                        if (place.weekendHours?.sat) parts.push(`토 ${place.weekendHours.sat}`);
-                        if (place.weekendHours?.sun) parts.push(`일 ${place.weekendHours.sun}`);
-                        if (place.holidayHours) parts.push(`공휴일 ${place.holidayHours}`);
+                        if (medical.weekdayHours) parts.push(`평일 ${medical.weekdayHours}`);
+                        if (medical.weekendHours?.sat) parts.push(`토 ${medical.weekendHours.sat}`);
+                        if (medical.weekendHours?.sun) parts.push(`일 ${medical.weekendHours.sun}`);
+                        if (medical.holidayHours) parts.push(`공휴일 ${medical.holidayHours}`);
 
                         if (parts.length === 0) return null;
 
@@ -500,25 +499,25 @@ const MedicalWidget: React.FC<MedicalWidgetProps> = ({ initialType = 'all' }) =>
 
                       {/* 액션 버튼들 */}
                       <div className="flex gap-2 mt-3 pt-3 border-t border-gray-100">
-                        {place.phone && (
+                        {medical.phone && (
                           <a
-                            href={`tel:${place.phone}`}
+                            href={`tel:${medical.phone}`}
                             className="flex-1 px-4 py-2 text-sm font-medium bg-blue-500 text-white rounded-lg hover:bg-blue-600 active:bg-blue-700 text-center transition-colors min-h-[36px] flex items-center justify-center"
                           >
                             📞 전화걸기
                           </a>
                         )}
                         <a
-                          href={`https://map.kakao.com/link/map/${place.name},${place.y},${place.x}`}
+                          href={`https://map.kakao.com/link/map/${medical.name},${medical.y},${medical.x}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="flex-1 px-4 py-2 text-sm font-medium bg-green-500 text-white rounded-lg hover:bg-green-600 active:bg-green-700 text-center transition-colors min-h-[36px] flex items-center justify-center"
                         >
                           🗺️ 지도보기
                         </a>
-                        {place.url && (
+                        {medical.url && (
                           <a
-                            href={place.url}
+                            href={medical.url}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="px-4 py-2 text-sm font-medium bg-gray-500 text-white rounded-lg hover:bg-gray-600 active:bg-gray-700 text-center transition-colors min-h-[36px] flex items-center justify-center"

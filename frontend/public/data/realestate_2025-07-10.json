@@ -397,6 +397,18 @@
       "unique_id": "송도더샵센트럴시티_59.99㎡_15층_2025-06-28_63000"
     },
     {
+      "apartment_name": "송도자이하버뷰1단지",
+      "area": "95.393㎡",
+      "floor": "4층",
+      "price": "8억 500만원",
+      "price_numeric": 80500,
+      "deal_date": "2025-06-27",
+      "build_year": 2011,
+      "location": "송도동",
+      "price_per_pyeong": "2,785만원",
+      "unique_id": "송도자이하버뷰1단지_95.393㎡_4층_2025-06-27_80500"
+    },
+    {
       "apartment_name": "랜드마크시티센트럴더샵",
       "area": "84.9999㎡",
       "floor": "6층",
@@ -949,6 +961,18 @@
       "unique_id": "송도캐슬&해모로_123.307㎡_7층_2025-06-24_78000"
     },
     {
+      "apartment_name": "송도더샵센트럴시티",
+      "area": "72.99㎡",
+      "floor": "14층",
+      "price": "6억원",
+      "price_numeric": 60000,
+      "deal_date": "2025-06-23",
+      "build_year": 2018,
+      "location": "송도동",
+      "price_per_pyeong": "2,713만원",
+      "unique_id": "송도더샵센트럴시티_72.99㎡_14층_2025-06-23_60000"
+    },
+    {
       "apartment_name": "e편한세상송도",
       "area": "70.5618㎡",
       "floor": "6층",
@@ -1189,6 +1213,18 @@
       "unique_id": "글로벌캠퍼스푸르지오_115.98㎡_5층_2025-06-21_89500"
     },
     {
+      "apartment_name": "베르디움더퍼스트",
+      "area": "84.9572㎡",
+      "floor": "19층",
+      "price": "7억 2,000만원",
+      "price_numeric": 72000,
+      "deal_date": "2025-06-21",
+      "build_year": 2017,
+      "location": "송도동",
+      "price_per_pyeong": "2,797만원",
+      "unique_id": "베르디움더퍼스트_84.9572㎡_19층_2025-06-21_72000"
+    },
+    {
       "apartment_name": "송도더샵퍼스트파크F15BL",
       "area": "68.72㎡",
       "floor": "38층",
@@ -1247,6 +1283,18 @@
       "location": "송도동",
       "price_per_pyeong": "2,462만원",
       "unique_id": "랜드마크시티센트럴더샵_95.8548㎡_31층_2025-06-21_71500"
+    },
+    {
+      "apartment_name": "송도더샵마스터뷰21BL",
+      "area": "125.51㎡",
+      "floor": "7층",
+      "price": "10억 9,000만원",
+      "price_numeric": 109000,
+      "deal_date": "2025-06-21",
+      "build_year": 2015,
+      "location": "송도동",
+      "price_per_pyeong": "2,866만원",
+      "unique_id": "송도더샵마스터뷰21BL_125.51㎡_7층_2025-06-21_109000"
     },
     {
       "apartment_name": "송도더샵그린워크3차(17-1블럭)",
@@ -1643,6 +1691,18 @@
       "location": "송도동",
       "price_per_pyeong": "3,177만원",
       "unique_id": "송도더샵센트럴시티_84.97㎡_10층_2025-06-20_81800"
+    },
+    {
+      "apartment_name": "더샵그린워크1차",
+      "area": "101.9294㎡",
+      "floor": "15층",
+      "price": "9억 2,000만원",
+      "price_numeric": 92000,
+      "deal_date": "2025-06-20",
+      "build_year": 2014,
+      "location": "송도동",
+      "price_per_pyeong": "2,979만원",
+      "unique_id": "더샵그린워크1차_101.9294㎡_15층_2025-06-20_92000"
     },
     {
       "apartment_name": "송도오션파크베르디움",
@@ -2353,6 +2413,18 @@
       "unique_id": "송도풍림아이원3단지_84.94㎡_14층_2025-06-17_59900"
     },
     {
+      "apartment_name": "송도더샵마스터뷰21BL",
+      "area": "125.51㎡",
+      "floor": "22층",
+      "price": "12억 2,500만원",
+      "price_numeric": 122500,
+      "deal_date": "2025-06-16",
+      "build_year": 2015,
+      "location": "송도동",
+      "price_per_pyeong": "3,221만원",
+      "unique_id": "송도더샵마스터뷰21BL_125.51㎡_22층_2025-06-16_122500"
+    },
+    {
       "apartment_name": "더샵센트럴파크1",
       "area": "106.9262㎡",
       "floor": "34층",
@@ -2399,18 +2471,6 @@
       "location": "송도동",
       "price_per_pyeong": "2,543만원",
       "unique_id": "랜드마크시티센트럴더샵_84.9999㎡_46층_2025-06-16_65500"
-    },
-    {
-      "apartment_name": "송도더샵마스터뷰21BL",
-      "area": "125.51㎡",
-      "floor": "22층",
-      "price": "12억 2,500만원",
-      "price_numeric": 122500,
-      "deal_date": "2025-06-16",
-      "build_year": 2015,
-      "location": "송도동",
-      "price_per_pyeong": "3,221만원",
-      "unique_id": "송도더샵마스터뷰21BL_125.51㎡_22층_2025-06-16_122500"
     },
     {
       "apartment_name": "송도더샵마스터뷰22BL",
@@ -6673,6 +6733,18 @@
       "unique_id": "송도풍림아이원1단지_84.7167㎡_21층_2025-05-17_64500"
     },
     {
+      "apartment_name": "송도에듀포레푸르지오",
+      "area": "59.941㎡",
+      "floor": "36층",
+      "price": "5억 9,500만원",
+      "price_numeric": 59500,
+      "deal_date": "2025-05-16",
+      "build_year": 2016,
+      "location": "송도동",
+      "price_per_pyeong": "3,276만원",
+      "unique_id": "송도에듀포레푸르지오_59.941㎡_36층_2025-05-16_59500"
+    },
+    {
       "apartment_name": "송도오션파크베르디움",
       "area": "84.847㎡",
       "floor": "35층",
@@ -6755,18 +6827,6 @@
       "location": "송도동",
       "price_per_pyeong": "3,319만원",
       "unique_id": "송도더샵마스터뷰21BL_72.59㎡_15층_2025-05-16_73000"
-    },
-    {
-      "apartment_name": "송도에듀포레푸르지오",
-      "area": "59.941㎡",
-      "floor": "36층",
-      "price": "5억 9,500만원",
-      "price_numeric": 59500,
-      "deal_date": "2025-05-16",
-      "build_year": 2016,
-      "location": "송도동",
-      "price_per_pyeong": "3,276만원",
-      "unique_id": "송도에듀포레푸르지오_59.941㎡_36층_2025-05-16_59500"
     },
     {
       "apartment_name": "랜드마크시티센트럴더샵",
@@ -8449,7 +8509,7 @@
       "unique_id": "더샵송도프라임뷰20BL_107.44㎡_16층_2025-05-01_112500"
     }
   ],
-  "timestamp": "2025-07-09T14:58:12.632Z",
-  "total_count": 704,
-  "date": "2025-07-09"
+  "timestamp": "2025-07-10T11:48:51.952Z",
+  "total_count": 709,
+  "date": "2025-07-10"
 }

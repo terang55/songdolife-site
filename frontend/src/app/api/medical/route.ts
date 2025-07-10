@@ -334,24 +334,21 @@ async function geocodeAddress(address: string) {
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
-    const type = searchParams.get('type') || 'all'; // hospital, pharmacy, all
-    const categoryParam = searchParams.get('category'); // 내과, 외과 등
+    const type = searchParams.get('type') || 'all';
+    const categoryParam = searchParams.get('category');
     const emergency = searchParams.get('emergency') === 'true';
     const night = searchParams.get('night') === 'true';
-    const radius = parseInt(searchParams.get('radius') || '2000'); // 기본 2km
-    // 내 위치(위도, 경도) 파라미터
-      const userLat = searchParams.get('lat') ? parseFloat(searchParams.get('lat')!) : SONGDO_LAT;
-  const userLon = searchParams.get('lon') ? parseFloat(searchParams.get('lon')!) : SONGDO_LON;
+    const radius = parseInt(searchParams.get('radius') || '2000');
+    const userLatParam = searchParams.get('lat');
+    const userLonParam = searchParams.get('lon');
 
-    console.log('🏥 의료기관 정보 요청:', {
-      type,
-      category: categoryParam,
-      emergency,
-      night,
-      radius,
-      userLat,
-      userLon
-    });
+    console.log('🔍 의료 API 요청:', { type, categoryParam, emergency, night, radius, userLatParam, userLonParam });
+
+    // 중심 좌표 설정 (사용자 위치 또는 기본 송도 위치)
+    const centerLat = userLatParam ? parseFloat(userLatParam) : SONGDO_LAT;
+    const centerLon = userLonParam ? parseFloat(userLonParam) : SONGDO_LON;
+
+    let medicalPlaces: MedicalInfo[] = [];
 
     // 디버깅: API 키 확인
     console.log('🔑 HIRA API 키 존재:', !!HIRA_API_KEY);
@@ -365,8 +362,10 @@ export async function GET(request: NextRequest) {
       console.log('⚠️ 카카오 API 키 없음, 더미 데이터 제공');
       return NextResponse.json({
         success: true,
-        medical: getDummyMedicalData(type),
+        data: getDummyMedicalData(type),
         total: getDummyMedicalData(type).length,
+        timestamp: new Date().toISOString(),
+        params: { type, category: categoryParam, emergency, night, radius },
         note: '테스트 데이터 - 실제 서비스를 위해서는 카카오 API 키가 필요합니다'
       });
     }
@@ -382,7 +381,7 @@ export async function GET(request: NextRequest) {
 
     // 소아과 → 소아청소년과로 정규화 (카카오 표기와 맞추기)
     let category: string | null = categoryParam;
-    if (categoryParam === '소아과') {
+    if (category === '소아과') {
       category = '소아청소년과';
     }
 
@@ -396,9 +395,9 @@ export async function GET(request: NextRequest) {
           const apiUrl = `https://dapi.kakao.com/v2/local/search/category.json`;
           const params = new URLSearchParams({
             category_group_code: categoryQuery.code,
-            x: userLon.toString(),
-            y: userLat.toString(),
-            radius: radius.toString(),
+            x: centerLon.toString(),
+            y: centerLat.toString(),
+            radius: '20000', // 송도 전역 커버 (20km)
             sort: 'distance',
             size: '15',
             page: page.toString()
@@ -514,10 +513,10 @@ export async function GET(request: NextRequest) {
       // 내 위치 기준으로 거리 계산
       const calcDistance = (lat: number, lon: number) => {
         const R = 6371000; // 지구 반경(m)
-        const dLat = toRad(lat - userLat);
-        const dLon = toRad(lon - userLon);
+        const dLat = toRad(lat - centerLat);
+        const dLon = toRad(lon - centerLon);
         const a = Math.sin(dLat / 2) ** 2 +
-                  Math.cos(toRad(userLat)) * Math.cos(toRad(lat)) *
+                  Math.cos(toRad(centerLat)) * Math.cos(toRad(lat)) *
                   Math.sin(dLon / 2) ** 2;
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return Math.round(R * c);
@@ -599,10 +598,10 @@ export async function GET(request: NextRequest) {
       const toRad = (deg: number) => (deg * Math.PI) / 180;
       const calcDistance = (lat: number, lon: number) => {
         const R = 6371000; // 지구 반경(m)
-        const dLat = toRad(lat - userLat);
-        const dLon = toRad(lon - userLon);
+        const dLat = toRad(lat - centerLat);
+        const dLon = toRad(lon - centerLon);
         const a = Math.sin(dLat / 2) ** 2 +
-                  Math.cos(toRad(userLat)) * Math.cos(toRad(lat)) *
+                  Math.cos(toRad(centerLat)) * Math.cos(toRad(lat)) *
                   Math.sin(dLon / 2) ** 2;
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return Math.round(R * c);
@@ -667,16 +666,12 @@ export async function GET(request: NextRequest) {
     results.sort((a, b) => a.distance - b.distance);
 
     console.log(`✅ 의료기관 검색 완료: ${results.length}개 발견`);
-
+    
     return NextResponse.json({
       success: true,
-      medical: results,
+      data: results,  // medical -> data 로 변경
       total: results.length,
-      search: {
-        query: type,
-        location: '인천대입구역',
-        radius
-      },
+      params: { type, category: categoryParam, emergency, night, radius },
       timestamp: new Date().toISOString()
     });
 
@@ -686,7 +681,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       success: false,
       error: '의료기관 정보를 가져오는데 실패했습니다.',
-      medical: [],
+      data: [],  // medical -> data 로 변경
       total: 0,
       timestamp: new Date().toISOString()
     }, { status: 500 });

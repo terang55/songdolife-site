@@ -4,11 +4,12 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 // 필요한 아이콘만 import (현재 사용 중인 아이콘 없음)
 import Image from 'next/image';
-import Head from 'next/head';
 import WeatherWidget from './components/WeatherWidget';
 import MedicalWidget from './components/MedicalWidget';
-import Breadcrumb, { getHomeBreadcrumb } from './components/Breadcrumb';
-import RelatedLinks, { getHomeRelatedLinks } from './components/RelatedLinks';
+import Breadcrumb from './components/Breadcrumb';
+import RelatedLinks from './components/RelatedLinks';
+import { getHomeBreadcrumb } from '@/lib/breadcrumb-utils';
+import { getHomeRelatedLinks } from '@/lib/related-links-utils';
 import { getNewsImageConfigWithSEO } from '@/lib/image-utils';
 
 interface NewsItem {
@@ -74,6 +75,233 @@ const categories = [
   '약국',
   '학원'
 ];
+
+// 헬퍼 함수들 (임시로 유지)
+const formatDate = (dateString: string, item?: NewsItem) => {
+  if (item?.type === 'youtube' && (!dateString || dateString.trim() === '')) {
+    return '유튜브 영상';
+  }
+  if (item?.type === 'blog' && (!dateString || dateString.trim() === '')) {
+    return '블로그 글';
+  }
+  if (!dateString || dateString.trim() === '') return '날짜 없음';
+  
+  try {
+    const koreanDateMatch = dateString.match(/(\d{4})\.(\d{1,2})\.(\d{1,2})\.\s*(오전|오후)\s*(\d{1,2}):(\d{2})/);
+    
+    if (koreanDateMatch) {
+      const [, year, month, day, ampm, hour, minute] = koreanDateMatch;
+      let hour24 = parseInt(hour);
+      
+      if (ampm === '오후' && hour24 !== 12) {
+        hour24 += 12;
+      }
+      if (ampm === '오전' && hour24 === 12) {
+        hour24 = 0;
+      }
+      
+      const parsedDate = new Date(
+        parseInt(year),
+        parseInt(month) - 1,
+        parseInt(day),
+        hour24,
+        parseInt(minute)
+      );
+      
+      return parsedDate.toLocaleDateString('ko-KR', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    }
+    
+    const date = new Date(dateString);
+    if (!isNaN(date.getTime())) {
+      return date.toLocaleDateString('ko-KR', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    }
+    
+    return dateString;
+  } catch {
+    return dateString;
+  }
+};
+
+const getTypeIcon = (type?: string) => {
+  if (type === 'blog') {
+    return <span className="text-lg">📝</span>;
+  } else if (type === 'youtube') {
+    return <span className="text-lg">🎥</span>;
+  } else if (type === 'cafe') {
+    return <span className="text-lg">☕</span>;
+  }
+  return <span className="text-lg">📰</span>;
+};
+
+const getTypeLabel = (type?: string) => {
+  if (type === 'blog') {
+    return '블로그';
+  } else if (type === 'youtube') {
+    return '유튜브';
+  } else if (type === 'cafe') {
+    return '카페';
+  }
+  return '뉴스';
+};
+
+const getCategoryColor = (type?: string) => {
+  const colors: { [key: string]: string } = {
+    'news': 'bg-blue-100 text-blue-800',
+    'blog': 'bg-green-100 text-green-800',
+    'youtube': 'bg-red-100 text-red-800',
+    'cafe': 'bg-yellow-100 text-yellow-800',
+  };
+  return colors[type || 'news'] || 'bg-gray-100 text-gray-800';
+};
+
+// 구조화된 데이터 생성 함수들
+const generateNewsStructuredData = (news: NewsItem[]): Record<string, unknown> | undefined => {
+  if (!news || news.length === 0) return undefined;
+
+  const articles = news.slice(0, 10).map(item => {
+    const safeContent = item.content ?? item.title ?? '';
+    const description = safeContent.length > 200 ? safeContent.substring(0, 200) + '...' : safeContent;
+    const image = item.thumbnail || item.url?.includes('youtube.com') ? `https://img.youtube.com/vi/${extractYouTubeId(item.url)}/hqdefault.jpg` : 'https://songdolife.info/og-image.jpg';
+    return {
+      "@type": "NewsArticle",
+      "headline": item.title,
+      "description": description,
+      "url": item.url,
+      "datePublished": item.date || new Date().toISOString(),
+      "dateModified": item.date || new Date().toISOString(),
+      "author": {
+        "@type": "Organization",
+        "name": item.source || "송도라이프"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "송도라이프",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://songdolife.info/og-image.jpg"
+        }
+      },
+      "image": image,
+      "keywords": [item.keyword, "송도국제도시", "송도동", "인천 연수구"]
+    };
+  });
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "numberOfItems": articles.length,
+    "itemListElement": articles.map((article, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "item": article
+    }))
+  };
+};
+
+// 유튜브 URL에서 비디오 ID 추출 helper 함수
+const extractYouTubeId = (url?: string): string | undefined => {
+  if (!url) return undefined;
+  const regex = /(?:v=|\/)([0-9A-Za-z_-]{11})/;
+  const match = url.match(regex);
+  return match ? match[1] : undefined;
+};
+
+const generateWebsiteStructuredData = () => {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "송도라이프",
+    "alternateName": "송도국제도시 생활정보 플랫폼",
+    "description": "인천 연수구 송도국제도시 주민들을 위한 종합 정보 플랫폼",
+    "url": "https://songdolife.info",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://songdolife.info/?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  };
+};
+
+const generateBreadcrumbStructuredData = (selectedCategory: string) => {
+  const breadcrumbs = [
+    { name: "홈", url: "https://songdolife.info" }
+  ];
+
+  if (selectedCategory !== '전체') {
+    breadcrumbs.push({
+      name: selectedCategory,
+      url: `https://songdolife.info/?category=${selectedCategory}`
+    });
+  }
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": breadcrumbs.map((item, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "name": item.name,
+      "item": item.url
+    }))
+  };
+};
+
+const generateFAQStructuredData = () => {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "송도국제도시 지하철 운행 시간은 어떻게 되나요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "인천1호선 센트럴파크역, 인천대입구역, 국제업무지구역의 운행 시간은 첫차 오전 5:30, 막차 밤 12:30입니다. 평일과 주말/공휴일 시간표가 다르니 실시간 정보를 확인하세요."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "송도국제도시 맛집 추천해주세요",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "센트럴파크 주변의 트리플스트리트, 커낼워크, NC큐브에 다양한 맛집이 있습니다. 한식, 중식, 일식, 양식, 카페 등 다양한 업종의 최신 맛집 정보를 제공합니다."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "송도 병원 응급실 정보를 알 수 있나요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "송도국제도시에는 길병원, 연세대 의료원 등 대형 병원과 다수의 의원이 있습니다. 24시간 응급실, 진료과별 병원 위치 및 연락처 정보를 실시간으로 제공합니다."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "송도 뉴스는 어디서 확인할 수 있나요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "송도국제도시 관련 최신 뉴스, 블로그, 유튜브 영상을 매일 업데이트합니다. 지역 소식, 개발 현황, 생활 정보 등 송도 주민에게 필요한 모든 정보를 제공합니다."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "송도 부동산 실거래가는 어떻게 확인하나요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "송도국제도시 아파트, 오피스텔, 상가의 실거래가를 매일 업데이트합니다. 국토교통부 공식 데이터를 기반으로 최신 거래 현황, 시세 동향, 투자 정보를 제공합니다."
+        }
+      }
+    ]
+  };
+};
 
 export default function HomePage() {
   const [news, setNews] = useState<NewsItem[]>([]);
@@ -146,6 +374,74 @@ export default function HomePage() {
     }
   }, []);
 
+  // 메타 태그와 구조화된 데이터 동적 관리
+  useEffect(() => {
+    // 기본 메타 태그 업데이트
+    const title = selectedCategory === '전체' 
+      ? '송도라이프 | 인천 연수구 송도국제도시 생활정보 플랫폼' 
+      : `송도라이프 | ${selectedCategory} 정보 - 송도국제도시`;
+    
+    const description = selectedCategory === '전체'
+      ? "송도국제도시 주민들을 위한 실시간 뉴스, 지하철 정보, 부동산 정보, 의료 정보를 한눈에 확인하세요. 센트럴파크, 인천1호선, 송도동 맛집까지 모든 정보를 제공합니다."
+      : `송도국제도시 ${selectedCategory} 정보를 실시간으로 확인하세요. 송도동 지역의 최신 ${selectedCategory} 소식과 정보를 한곳에서 제공합니다.`;
+
+    // 제목 업데이트
+    document.title = title;
+
+    // 메타 태그 업데이트
+    const updateMetaTag = (name: string, content: string, property = false) => {
+      const selector = property ? `meta[property="${name}"]` : `meta[name="${name}"]`;
+      let tag = document.querySelector(selector);
+      if (!tag) {
+        tag = document.createElement('meta');
+        if (property) {
+          tag.setAttribute('property', name);
+        } else {
+          tag.setAttribute('name', name);
+        }
+        document.head.appendChild(tag);
+      }
+      tag.setAttribute('content', content);
+    };
+
+    updateMetaTag('description', description);
+    updateMetaTag('keywords', `송도국제도시, 송도동, 인천 연수구, 센트럴파크, 인천1호선, 인천대입구역, 센트럴파크역, 국제업무지구역, 송도 ${selectedCategory}, ${selectedCategory} 정보, 송도 생활정보, 송도 뉴스, 송도 맛집, 송도 카페, 송도 부동산, 송도 병원, 송도 약국, 송도 육아, 송도 교통`);
+    
+    // Open Graph 태그
+    updateMetaTag('og:title', title, true);
+    updateMetaTag('og:description', description, true);
+    updateMetaTag('og:url', selectedCategory === '전체' ? 'https://songdo.life' : `https://songdo.life/?category=${encodeURIComponent(selectedCategory)}`, true);
+
+    // 구조화된 데이터 업데이트
+    const updateStructuredData = (id: string, data: Record<string, unknown>) => {
+      let script = document.querySelector(`script[data-schema="${id}"]`);
+      if (!script) {
+        script = document.createElement('script');
+        script.setAttribute('type', 'application/ld+json');
+        script.setAttribute('data-schema', id);
+        document.head.appendChild(script);
+      }
+      script.textContent = JSON.stringify(data);
+    };
+
+    // 웹사이트 구조화된 데이터
+    updateStructuredData('website', generateWebsiteStructuredData());
+    
+    // 브레드크럼 구조화된 데이터
+    updateStructuredData('breadcrumb', generateBreadcrumbStructuredData(selectedCategory));
+    
+    // FAQ 구조화된 데이터
+    updateStructuredData('faq', generateFAQStructuredData());
+    
+    // 뉴스 구조화된 데이터 (뉴스가 있을 때만)
+    if (news.length > 0) {
+      const newsData = generateNewsStructuredData(news);
+      if (newsData) {
+        updateStructuredData('news', newsData);
+      }
+    }
+  }, [selectedCategory, news]);
+
   // RSS 리디렉션 처리
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -204,543 +500,169 @@ export default function HomePage() {
     }
   };
 
-  const formatDate = (dateString: string, item?: NewsItem) => {
-    // 유튜브 영상이고 날짜가 없는 경우
-    if (item?.type === 'youtube' && (!dateString || dateString.trim() === '')) {
-      return '유튜브 영상';
-    }
-    
-    // 블로그 글이고 날짜가 없는 경우
-    if (item?.type === 'blog' && (!dateString || dateString.trim() === '')) {
-      // 네이버 블로그 URL에서 날짜 추출 시도
-      if (item.url && item.url.includes('blog.naver.com')) {
-        // 네이버 블로그 포스트 ID는 보통 시간 기반으로 생성되지만
-        // 정확한 날짜 추출은 어려우므로 "블로그 글"로 표시
-        return '블로그 글';
-      }
-      return '블로그 글';
-    }
-    
-    if (!dateString || dateString.trim() === '') return '날짜 없음';
-    
-    try {
-      // 한국어 날짜 형식 파싱: "2025.06.25. 오후 3:54"
-      const koreanDateMatch = dateString.match(/(\d{4})\.(\d{1,2})\.(\d{1,2})\.\s*(오전|오후)\s*(\d{1,2}):(\d{2})/);
-      
-      if (koreanDateMatch) {
-        const [, year, month, day, ampm, hour, minute] = koreanDateMatch;
-        let hour24 = parseInt(hour);
-        
-        // 오후인 경우 12시간 추가 (단, 12시는 그대로)
-        if (ampm === '오후' && hour24 !== 12) {
-          hour24 += 12;
-        }
-        // 오전 12시는 0시로 변환
-        if (ampm === '오전' && hour24 === 12) {
-          hour24 = 0;
-        }
-        
-        const parsedDate = new Date(
-          parseInt(year),
-          parseInt(month) - 1, // JavaScript의 월은 0부터 시작
-          parseInt(day),
-          hour24,
-          parseInt(minute)
-        );
-        
-        return parsedDate.toLocaleDateString('ko-KR', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric'
-        });
-      }
-      
-      // 표준 ISO 날짜 형식도 시도
-      const date = new Date(dateString);
-      if (!isNaN(date.getTime())) {
-        return date.toLocaleDateString('ko-KR', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric'
-        });
-      }
-      
-      // 파싱 실패시 원본 반환
-      return dateString;
-    } catch {
-      return dateString;
-    }
-  };
-
-  const getTypeIcon = (type?: string) => {
-    if (type === 'blog') {
-      return <span className="text-lg">📝</span>;
-    } else if (type === 'youtube') {
-      return <span className="text-lg">🎥</span>;
-    } else if (type === 'cafe') {
-      return <span className="text-lg">☕</span>;
-    }
-    return <span className="text-lg">📰</span>;
-  };
-
-  const getTypeLabel = (type?: string) => {
-    if (type === 'blog') {
-      return '블로그';
-    } else if (type === 'youtube') {
-      return '유튜브';
-    } else if (type === 'cafe') {
-      return '카페';
-    }
-    return '뉴스';
-  };
-
-  const getCategoryColor = (type?: string) => {
-    const colors: { [key: string]: string } = {
-      'news': 'bg-blue-100 text-blue-800',
-      'blog': 'bg-green-100 text-green-800',
-      'youtube': 'bg-red-100 text-red-800',
-      'cafe': 'bg-yellow-100 text-yellow-800',
-    };
-    return colors[type || 'news'] || 'bg-gray-100 text-gray-800';
-  };
-
-  const generateNewsStructuredData = (): Record<string, unknown> | undefined => {
-    if (!news || news.length === 0) return undefined;
-
-    const articles = news.slice(0, 10).map(item => ({
-      "@type": "NewsArticle",
-      "headline": item.title,
-      "description": item.content.substring(0, 200) + "...",
-      "url": item.url,
-      "datePublished": item.date || new Date().toISOString(),
-      "dateModified": item.date || new Date().toISOString(),
-      "author": {
-        "@type": "Organization",
-        "name": item.source || "송도라이프"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "송도라이프",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://songdo.life/og-image.jpg"
-        }
-      },
-      "image": item.thumbnail || "https://songdo.life/og-image.jpg",
-      "keywords": [item.keyword, "송도국제도시", "송도동", "인천 연수구"],
-      "articleSection": item.type === 'news' ? "뉴스" : item.type === 'blog' ? "블로그" : "유튜브",
-      "about": {
-        "@type": "Place",
-        "name": "송도국제도시",
-        "address": {
-          "@type": "PostalAddress",
-          "addressCountry": "KR",
-          "addressRegion": "인천광역시",
-          "addressLocality": "연수구",
-          "streetAddress": "송도동"
-        }
-      }
-    }));
-
-    return {
-      "@context": "https://schema.org",
-      "@type": "ItemList",
-      "name": "송도라이프 - 송도국제도시 최신 정보",
-      "description": "송도국제도시 관련 최신 뉴스, 블로그, 유튜브 정보를 한곳에서 확인하세요",
-      "url": "https://songdo.life",
-      "numberOfItems": articles.length,
-      "itemListElement": articles.map((article, index) => ({
-        "@type": "ListItem",
-        "position": index + 1,
-        "item": article
-      }))
-    };
-  };
-
-  const generateWebsiteStructuredData = () => {
-    return {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "송도라이프",
-      "alternateName": "송도국제도시 생활정보 플랫폼",
-      "description": "인천 연수구 송도국제도시 주민들을 위한 종합 정보 플랫폼. 실시간 뉴스, 지하철 정보, 병원/약국 정보, 부동산 정보를 제공합니다.",
-      "url": "https://songdo.life",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://songdo.life/?q={search_term_string}",
-        "query-input": "required name=search_term_string"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "송도라이프",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://songdo.life/og-image.jpg",
-          "width": 1200,
-          "height": 630
-        }
-      },
-      "mainEntity": {
-        "@type": "Organization",
-        "@id": "https://songdo.life/#organization",
-        "name": "송도라이프",
-        "description": "송도국제도시 생활정보 플랫폼",
-        "url": "https://songdo.life",
-        "logo": "https://songdo.life/og-image.jpg",
-        "sameAs": [
-          "https://songdo.life"
-        ],
-        "areaServed": {
-          "@type": "Place",
-          "name": "송도국제도시",
-          "address": {
-            "@type": "PostalAddress",
-            "addressCountry": "KR",
-            "addressRegion": "인천광역시",
-            "addressLocality": "연수구",
-            "streetAddress": "송도동"
-          },
-          "geo": {
-            "@type": "GeoCoordinates",
-            "latitude": 37.538603,
-            "longitude": 126.722675
-          }
-        }
-      }
-    };
-  };
-
-  const generateBreadcrumbStructuredData = () => {
-    const breadcrumbs = [
-      { name: "홈", url: "https://songdo.life" }
-    ];
-
-    if (selectedCategory !== '전체') {
-      breadcrumbs.push({
-        name: selectedCategory,
-        url: `https://songdo.life/?category=${selectedCategory}`
-      });
-    }
-
-    return {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": breadcrumbs.map((item, index) => ({
-        "@type": "ListItem",
-        "position": index + 1,
-        "name": item.name,
-        "item": item.url
-      }))
-    };
-  };
-
-  // FAQ 구조화된 데이터 생성
-  const generateFAQStructuredData = () => {
-    const faqData = [
-      {
-        question: "송도동 지하철 정보는 얼마나 자주 업데이트되나요?",
-        answer: "센트럴파크역, 인천대입구역, 국제업무지구역의 실시간 도착 정보를 1분 간격으로 갱신합니다. 평일과 휴일 시간표도 매월 최신 데이터로 업데이트하여 정확한 교통 정보를 제공합니다."
-      },
-      {
-        question: "송도동 맛집·카페 추천 데이터는 어디서 수집하나요?",
-        answer: "네이버 플레이스와 카카오맵 리뷰 데이터를 기반으로 매일 인기 지수를 분석해 선정합니다. 실제 방문 후기와 평점을 종합하여 송도 주민들에게 검증된 맛집과 카페 정보를 제공합니다."
-      },
-      {
-        question: "병원·약국 정보의 정확도는 어느 정도인가요?",
-        answer: "보건복지부 공공데이터 포털에서 제공하는 최신 의료기관 정보를 매일 동기화하여 제공합니다. 응급실 운영현황, 진료시간, 연락처 등은 공식 데이터를 기반으로 하므로 신뢰할 수 있습니다."
-      },
-      {
-        question: "뉴스·블로그·유튜브 콘텐츠는 언제 수집되나요?",
-        answer: "매일 자동으로 최신 콘텐츠를 수집하고 유사도 검사를 거쳐 중복을 제거한 후 반영합니다. 송도국제도시, 센트럴파크, 국제업무지구 관련 키워드로 맞춤형 정보만 선별하여 제공합니다."
-      },
-      {
-        question: "부동산 실거래가 정보는 얼마나 최신인가요?",
-        answer: "국토교통부 실거래가 공개시스템의 데이터를 기반으로 매월 업데이트됩니다. 송도국제도시 내 아파트, 오피스텔, 상업시설의 최근 거래 현황을 확인할 수 있습니다."
-      }
-    ];
-
-    return {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": faqData.map(faq => ({
-        "@type": "Question",
-        "name": faq.question,
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": faq.answer
-        }
-      }))
-    };
-  };
+  // 브레드크럼 및 관련 링크 데이터
+  const breadcrumbItems = getHomeBreadcrumb();
+  const relatedLinks = getHomeRelatedLinks();
 
   return (
     <>
-        <Head>
-          {/* 기본 메타 태그 */}
-          <title>
-            {selectedCategory === '전체' 
-              ? '송도라이프 | 인천 연수구 송도국제도시 생활정보 플랫폼' 
-              : `송도라이프 | ${selectedCategory} 정보 - 송도국제도시`
-            }
-          </title>
-          <meta 
-            name="description" 
-            content={
-              selectedCategory === '전체'
-                ? "송도국제도시 주민들을 위한 실시간 뉴스, 지하철 정보, 부동산 정보, 의료 정보를 한눈에 확인하세요. 센트럴파크, 인천1호선, 송도동 맛집까지 모든 정보를 제공합니다."
-                : `송도국제도시 ${selectedCategory} 정보를 실시간으로 확인하세요. 송도동 지역의 최신 ${selectedCategory} 소식과 정보를 한곳에서 제공합니다.`
-            } 
-          />
-          <meta 
-            name="keywords" 
-            content={`송도국제도시, 송도동, 인천 연수구, 센트럴파크, 인천1호선, 인천대입구역, 센트럴파크역, 국제업무지구역, 송도 ${selectedCategory}, ${selectedCategory} 정보, 송도 생활정보, 송도 뉴스, 송도 맛집, 송도 카페, 송도 부동산, 송도 병원, 송도 약국, 송도 육아, 송도 교통`} 
-          />
-          
-          {/* Open Graph */}
-          <meta 
-            property="og:title" 
-            content={
-              selectedCategory === '전체' 
-                ? '송도라이프 | 인천 연수구 송도국제도시 생활정보 플랫폼' 
-                : `송도라이프 | ${selectedCategory} 정보 - 송도국제도시`
-            } 
-          />
-          <meta 
-            property="og:description" 
-            content={
-              selectedCategory === '전체'
-                ? "송도국제도시 주민들을 위한 실시간 뉴스, 지하철 정보, 부동산 정보, 의료 정보를 한눈에 확인하세요."
-                : `송도국제도시 ${selectedCategory} 정보를 실시간으로 확인하세요. 송도동 지역의 최신 정보를 제공합니다.`
-            } 
-          />
-          <meta 
-            property="og:url" 
-            content={
-              selectedCategory === '전체' 
-                ? 'https://songdo.life' 
-                : `https://songdo.life/?category=${encodeURIComponent(selectedCategory)}`
-            } 
-          />
-          <meta property="og:type" content="website" />
-          <meta property="og:image" content="https://songdo.life/og-image.jpg" />
-          <meta property="og:image:width" content="1200" />
-          <meta property="og:image:height" content="630" />
-          <meta property="og:locale" content="ko_KR" />
-          <meta property="og:site_name" content="송도라이프" />
-          
-          {/* Twitter Card */}
-          <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:site" content="@songdo_life" />
-          <meta name="twitter:creator" content="@songdo_life" />
-          
-          {/* 정규 URL */}
-          <link 
-            rel="canonical" 
-            href={
-              selectedCategory === '전체' 
-                ? 'https://songdo.life' 
-                : `https://songdo.life/?category=${encodeURIComponent(selectedCategory)}`
-            } 
-          />
-          
-          {/* 지역 정보 */}
-          <meta name="geo.region" content="KR-28" />
-          <meta name="geo.placename" content="인천광역시 연수구 송도동" />
-          <meta name="geo.position" content="37.538603;126.722675" />
-          <meta name="ICBM" content="37.538603, 126.722675" />
-          
-          {/* 구조화된 데이터 - 웹사이트 */}
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify(generateWebsiteStructuredData())
-            }}
-          />
-          
-          {/* 구조화된 데이터 - 뉴스 목록 (뉴스가 있을 때만) */}
-          {news.length > 0 && (
-            <script
-              type="application/ld+json"
-              dangerouslySetInnerHTML={{
-                __html: JSON.stringify(generateNewsStructuredData())
-              }}
-            />
-          )}
-          
-          {/* 구조화된 데이터 - 브레드크럼 */}
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify(generateBreadcrumbStructuredData())
-            }}
-          />
-
-          {/* 구조화된 데이터 - FAQ */}
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify(generateFAQStructuredData())
-            }}
-          />
-        </Head>
-      
       <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-14 sm:h-16">
-            <div className="flex items-center space-x-2 sm:space-x-3">
-              <span className="text-2xl sm:text-3xl">🏙️</span>
-              <div>
-                <h1 className="text-lg sm:text-2xl font-bold text-gray-900">🏠 송도라이프</h1>
-                <p className="text-xs sm:text-sm text-gray-500">송도에서의 매일매일</p>
-              </div>
+    {/* Header */}
+    <header className="bg-white shadow-sm sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-14 sm:h-16">
+          <div className="flex items-center space-x-2 sm:space-x-3">
+            <span className="text-2xl sm:text-3xl">🏙️</span>
+            <div>
+              <h1 className="text-lg sm:text-2xl font-bold text-gray-900">🏠 송도라이프</h1>
+              <p className="text-xs sm:text-sm text-gray-500">송도에서의 매일매일</p>
             </div>
-            <div className="hidden sm:flex items-center space-x-2 text-sm text-gray-600">
-              {/* 통합된 업데이트 상태 표시 */}
-              <div className="flex items-center space-x-1">
-                <span className="text-base">🔄</span>
-                <span className="text-xs">
-                  {syncStatus && syncStatus.status === 'synced' && syncStatus.lastSync 
-                    ? `데이터 업데이트: ${new Date(syncStatus.lastSync).toLocaleDateString('ko-KR', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}`
-                    : '동기화 대기중'
-                  }
-                </span>
-              </div>
+          </div>
+          <div className="hidden sm:flex items-center space-x-2 text-sm text-gray-600">
+            {/* 통합된 업데이트 상태 표시 */}
+            <div className="flex items-center space-x-1">
+              <span className="text-base">🔄</span>
+              <span className="text-xs">
+                {syncStatus && syncStatus.status === 'synced' && syncStatus.lastSync 
+                  ? `데이터 업데이트: ${new Date(syncStatus.lastSync).toLocaleDateString('ko-KR', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}`
+                  : '동기화 대기중'
+                }
+              </span>
             </div>
           </div>
         </div>
-      </header>
+      </div>
+    </header>
 
-      {/* 네비게이션 바 */}
-      <section className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row items-center justify-center py-3 sm:py-4 gap-2 sm:gap-6">
-            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto">
-              <a 
-                href="/realestate" 
-                className="flex items-center space-x-2 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors min-h-[44px] w-full sm:w-auto justify-center"
-              >
-                <span className="text-lg">🏢</span>
-                <span className="text-sm font-medium">부동산 정보</span>
-              </a>
-              <a 
-                href="/subway" 
-                className="flex items-center space-x-2 px-4 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors min-h-[44px] w-full sm:w-auto justify-center"
-              >
-                <span className="text-lg">🚇</span>
-                <span className="text-sm font-medium">실시간 교통</span>
-              </a>
-            </div>
-            <div className="text-xs sm:text-sm text-gray-600 text-center">
-              <span className="block sm:hidden">송도 아파트 실거래가. 송도교통 실시간 정보</span>
-              <span className="hidden sm:block">송도 아파트 실거래가. 송도교통 실시간 정보</span>
-            </div>
+    {/* 네비게이션 바 */}
+    <section className="bg-white shadow-sm border-b">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col sm:flex-row items-center justify-center py-3 sm:py-4 gap-2 sm:gap-6">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto">
+            <a 
+              href="/realestate" 
+              className="flex items-center space-x-2 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors min-h-[44px] w-full sm:w-auto justify-center"
+            >
+              <span className="text-lg">🏢</span>
+              <span className="text-sm font-medium">부동산 정보</span>
+            </a>
+            <a 
+              href="/subway" 
+              className="flex items-center space-x-2 px-4 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors min-h-[44px] w-full sm:w-auto justify-center"
+            >
+              <span className="text-lg">🚇</span>
+              <span className="text-sm font-medium">실시간 교통</span>
+            </a>
+          </div>
+          <div className="text-xs sm:text-sm text-gray-600 text-center">
+            <span className="block sm:hidden">송도 아파트 실거래가. 송도교통 실시간 정보</span>
+            <span className="hidden sm:block">송도 아파트 실거래가. 송도교통 실시간 정보</span>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-6 sm:py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* 제목과 날씨 위젯 */}
-          <div className="flex justify-between items-start mb-8">
-            {/* 제목과 설명 */}
-            <div className="flex-1 text-center">
-              <h2 className="text-2xl sm:text-4xl font-bold mb-2 sm:mb-4">송도 생활을 더 편리하게</h2>
-              <p className="text-sm sm:text-xl text-blue-100">
-                우리 동네 소식, 부동산 정보, 맛집, 육아, 교통, 병원 정보까지 한번에
-              </p>
-            </div>
-            
-            {/* 날씨 위젯 */}
-            <div className="hidden sm:block">
-              <WeatherWidget />
-            </div>
+    {/* Hero Section */}
+    <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-6 sm:py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* 제목과 날씨 위젯 */}
+        <div className="flex justify-between items-start mb-8">
+          {/* 제목과 설명 */}
+          <div className="flex-1 text-center">
+            <h2 className="text-2xl sm:text-4xl font-bold mb-2 sm:mb-4">송도 생활을 더 편리하게</h2>
+            <p className="text-sm sm:text-xl text-blue-100">
+              우리 동네 소식, 부동산 정보, 맛집, 육아, 교통, 병원 정보까지 한번에
+            </p>
           </div>
           
-          {/* 통계 정보 */}
-          <div className="grid grid-cols-3 gap-3 sm:flex sm:justify-center sm:space-x-12 text-center max-w-md sm:max-w-none mx-auto">
-            <div className="bg-white/10 rounded-lg p-3 sm:bg-transparent sm:p-0">
-              <div className="text-lg sm:text-3xl font-bold flex items-center justify-center gap-1 sm:gap-2 mb-1">
-                <span className="text-xl sm:text-4xl">📊</span>
-                <span className="text-sm sm:text-3xl">{stats?.totalArticles || news.length}</span>
-              </div>
-              <div className="text-xs sm:text-sm text-blue-200">총 콘텐츠</div>
-            </div>
-            <div className="bg-white/10 rounded-lg p-3 sm:bg-transparent sm:p-0">
-              <div className="text-lg sm:text-3xl font-bold flex items-center justify-center gap-1 sm:gap-2 mb-1">
-                <span className="text-xl sm:text-4xl">🏷️</span>
-                <span className="text-sm sm:text-3xl">{stats?.summary?.totalCategories || syncStatus?.keywords?.length || '10'}</span>
-              </div>
-              <div className="text-xs sm:text-sm text-blue-200">키워드</div>
-            </div>
-            <div className="bg-white/10 rounded-lg p-3 sm:bg-transparent sm:p-0">
-              <div className="text-lg sm:text-3xl font-bold flex items-center justify-center gap-1 sm:gap-2 mb-1">
-                <span className="text-xl sm:text-4xl">⚡</span>
-                <span className="text-sm sm:text-3xl hidden sm:inline">실시간</span>
-                <span className="text-xs sm:text-3xl sm:hidden">실시간</span>
-              </div>
-              <div className="text-xs sm:text-sm text-blue-200">자동 업데이트</div>
-            </div>
-          </div>
-          
-          {/* 모바일용 날씨 위젯 */}
-          <div className="sm:hidden mt-6 flex justify-center">
+          {/* 날씨 위젯 */}
+          <div className="hidden sm:block">
             <WeatherWidget />
           </div>
         </div>
-      </section>
-
-      {/* Filter */}
-      <section className="bg-white py-4 sm:py-6 border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-center">
-            {/* Category Filter */}
-            <div className="flex flex-wrap gap-1.5 sm:gap-2 justify-center">
-              {categories.map(category => (
-                <button
-                  key={category}
-                  onClick={() => {
-                    if (category === '학원') {
-                      router.push('/academy');
-                    } else {
-                      setSelectedCategory(category);
-                      // URL 파라미터 업데이트
-                      const newUrl = category === '전체' ? '/' : `/?category=${encodeURIComponent(category)}`;
-                      window.history.pushState({}, '', newUrl);
-                    }
-                  }}
-                  className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-medium transition-colors ${
-                    selectedCategory === category
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  <div className="flex items-center space-x-1">
-                    {category !== '전체' && categoryIcons[category as keyof typeof categoryIcons]}
-                    <span>{category}</span>
-                  </div>
-                </button>
-              ))}
+        
+        {/* 통계 정보 */}
+        <div className="grid grid-cols-3 gap-3 sm:flex sm:justify-center sm:space-x-12 text-center max-w-md sm:max-w-none mx-auto">
+          <div className="bg-white/10 rounded-lg p-3 sm:bg-transparent sm:p-0">
+            <div className="text-lg sm:text-3xl font-bold flex items-center justify-center gap-1 sm:gap-2 mb-1">
+              <span className="text-xl sm:text-4xl">📊</span>
+              <span className="text-sm sm:text-3xl">{stats?.totalArticles || news.length}</span>
             </div>
+            <div className="text-xs sm:text-sm text-blue-200">총 콘텐츠</div>
+          </div>
+          <div className="bg-white/10 rounded-lg p-3 sm:bg-transparent sm:p-0">
+            <div className="text-lg sm:text-3xl font-bold flex items-center justify-center gap-1 sm:gap-2 mb-1">
+              <span className="text-xl sm:text-4xl">🏷️</span>
+              <span className="text-sm sm:text-3xl">{stats?.summary?.totalCategories || syncStatus?.keywords?.length || '10'}</span>
+            </div>
+            <div className="text-xs sm:text-sm text-blue-200">키워드</div>
+          </div>
+          <div className="bg-white/10 rounded-lg p-3 sm:bg-transparent sm:p-0">
+            <div className="text-lg sm:text-3xl font-bold flex items-center justify-center gap-1 sm:gap-2 mb-1">
+              <span className="text-xl sm:text-4xl">⚡</span>
+              <span className="text-sm sm:text-3xl hidden sm:inline">실시간</span>
+              <span className="text-xs sm:text-3xl sm:hidden">실시간</span>
+            </div>
+            <div className="text-xs sm:text-sm text-blue-200">자동 업데이트</div>
           </div>
         </div>
-      </section>
+        
+        {/* 모바일용 날씨 위젯 */}
+        <div className="sm:hidden mt-6 flex justify-center">
+          <WeatherWidget />
+        </div>
+      </div>
+    </section>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
-        {/* 브레드크럼 네비게이션 */}
-        <Breadcrumb items={getHomeBreadcrumb()} />
+    {/* Filter */}
+    <section className="bg-white py-4 sm:py-6 border-b">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-center">
+          {/* Category Filter */}
+          <div className="flex flex-wrap gap-1.5 sm:gap-2 justify-center">
+            {categories.map(category => (
+              <button
+                key={category}
+                onClick={() => {
+                  if (category === '학원') {
+                    router.push('/academy');
+                  } else {
+                    setSelectedCategory(category);
+                    // URL 파라미터 업데이트
+                    const newUrl = category === '전체' ? '/' : `/?category=${encodeURIComponent(category)}`;
+                    window.history.pushState({}, '', newUrl);
+                  }
+                }}
+                className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-medium transition-colors ${
+                  selectedCategory === category
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                <div className="flex items-center space-x-1">
+                  {category !== '전체' && categoryIcons[category as keyof typeof categoryIcons]}
+                  <span>{category}</span>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
 
-        {/* 병원/약국 정보 위젯 */}
-        {selectedCategory === '병원' && <MedicalWidget initialType="hospital" />}
-        {selectedCategory === '약국' && <MedicalWidget initialType="pharmacy" />}
+    {/* Main Content */}
+    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+      {/* 브레드크럼 네비게이션 */}
+      <Breadcrumb items={breadcrumbItems} />
 
-        {/* 메인 콘텐츠: 뉴스/블로그/유튜브 */}
-        {selectedCategory !== '병원' && selectedCategory !== '약국' && selectedCategory !== '학원' && (
-          <div className="flex flex-col gap-8">
-            <div className="flex-1">
+      {/* 병원/약국 정보 위젯 */}
+      {selectedCategory === '병원' && <MedicalWidget initialType="hospital" />}
+      {selectedCategory === '약국' && <MedicalWidget initialType="pharmacy" />}
+
+      {/* 메인 콘텐츠: 뉴스/블로그/유튜브 */}
+      {selectedCategory !== '병원' && selectedCategory !== '약국' && selectedCategory !== '학원' && (
+        <div className="flex flex-col gap-8">
+          <div className="flex-1">
         {/* 에러 메시지 */}
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-8">
@@ -950,7 +872,7 @@ export default function HomePage() {
         </section>
 
         {/* 관련 링크 섹션 */}
-        <RelatedLinks links={getHomeRelatedLinks()} />
+        <RelatedLinks links={relatedLinks} />
       </main>
 
       {/* Footer */}

@@ -1,163 +1,131 @@
-import React from 'react';
-import Link from 'next/link';
-import RealEstateWidget from '../components/RealEstateWidget';
-import Head from 'next/head';
 import type { Metadata } from 'next';
-import { BASE_URL } from '@/lib/siteConfig';
 import Footer from '../components/Footer';
+import RealEstateWidget from '../components/RealEstateWidget';
 import { generateBreadcrumbSchema } from '@/lib/seo';
-import Breadcrumb, { getRealEstateBreadcrumb } from '../components/Breadcrumb';
-import RelatedLinks, { getRealEstateRelatedLinks } from '../components/RelatedLinks';
+import Breadcrumb from '../components/Breadcrumb';
+import RelatedLinks from '../components/RelatedLinks';
+import { getRealEstateBreadcrumb } from '@/lib/breadcrumb-utils';
+import { getRealEstateRelatedLinks } from '@/lib/related-links-utils';
+import Script from 'next/script';
 
 export const metadata: Metadata = {
-  title: '송도 부동산 실거래가 | 더샵·센트럴파크 아파트 시세 | 송도라이프',
-  description: '송도 주요 단지 실거래가, 평당가, 거래 통계를 실시간 제공. 매매·전세·월세 가격 비교 및 시장 동향 분석.',
-  keywords: [
-    '송도 부동산', '송도 아파트', '송도 실거래가', '더샵', '센트럴파크', 
-    '송도 아파트 매매', '평당가', '부동산 가격', '국토부 실거래', '연수구 부동산',
-    '아파트 시세', '매매 가격', '전세 가격', '월세 정보', '부동산 시장', '송도지구 아파트',
-    '인천 부동산', '아파트 매매', '주택 가격', '부동산 투자', '송도동 시세',
-    '연수구 송도동 부동산', '인천시 연수구 송도동', '연수구 송도동 아파트'
-  ],
+  title: '송도 부동산 실거래가 | 송도라이프',
+  description: '송도국제도시 아파트 실거래가 정보를 실시간으로 확인하세요. 국토교통부 공식 데이터 기반 최신 거래 현황을 제공합니다.',
+  keywords: '송도 부동산, 송도 아파트, 송도 실거래가, 센트럴파크 아파트, 국제업무지구 아파트, 송도 매매',
   openGraph: {
-    title: '송도 부동산 실거래가 | 더샵·센트럴파크 아파트 시세',
-    description: '송도 주요 단지 실거래가, 평당가, 거래 통계를 실시간 제공. 매매·전세·월세 가격 비교 및 시장 동향 분석.',
-    url: `${BASE_URL}/realestate`,
-    type: 'website',
+    title: '송도 부동산 실거래가 | 송도라이프',
+    description: '송도국제도시 아파트 실거래가를 실시간으로 확인하세요',
+    url: 'https://songdolife.info/realestate',
     siteName: '송도라이프',
     images: [
       {
-        url: `${BASE_URL}/og-image.jpg`,
+        url: 'https://songdolife.info/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: '송도 부동산 실거래가 정보 - 송도라이프'
+        alt: '송도라이프 - 송도 부동산 정보'
       }
-    ]
+    ],
+    locale: 'ko_KR',
+    type: 'website'
   },
   twitter: {
     card: 'summary_large_image',
-    title: '송도 부동산 실거래가 | 더샵·센트럴파크 아파트 시세',
-    description: '송도 주요 단지 실거래가, 평당가, 거래 통계를 실시간 제공.',
-    images: [`${BASE_URL}/og-image.jpg`]
-  },
-  alternates: { canonical: `${BASE_URL}/realestate` },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-  other: {
-    'geo.region': 'KR-28',
-    'geo.placename': '인천광역시 연수구 송도동',
-    'geo.position': '37.538603;126.722675',
-    'ICBM': '37.538603, 126.722675',
-  },
+    title: '송도 부동산 실거래가 | 송도라이프',
+    description: '송도국제도시 아파트 실거래가를 실시간으로 확인하세요',
+    images: ['https://songdolife.info/og-image.jpg']
+  }
 };
 
 export default function RealEstatePage() {
-  const structuredData = {
-    '@context': 'https://schema.org',
-    '@type': 'Dataset',
-    name: '송도 아파트 실거래가',
-    description: '국토교통부 실거래가 공개시스템 기반 최신 3개월 데이터',
-    url: `${BASE_URL}/realestate`,
-    keywords: ['송도 실거래가','더샵','센트럴파크'],
-    creator: { '@type': 'Organization', name: '송도라이프' },
-    license: 'https://www.law.go.kr'
-  };
-
-  const breadcrumbData = generateBreadcrumbSchema([
-    { name: '홈', path: '/' },
-    { name: '부동산', path: '/realestate' }
-  ]);
+  // 브레드크럼 및 관련 링크 데이터
+  const breadcrumbItems = getRealEstateBreadcrumb();
+  const relatedLinks = getRealEstateRelatedLinks();
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Head>
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }} />
-      </Head>
-      {/* 헤더 */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            {/* 로고 및 제목 */}
-            <div className="flex items-center space-x-3">
-              <Link href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
-                <span className="text-2xl">🏙️</span>
-                <div>
-                  <div className="text-xl font-bold text-gray-900">송도라이프</div>
-                  <div className="text-sm text-gray-500">부동산 정보</div>
-                </div>
-              </Link>
-            </div>
-            
-            {/* 네비게이션 */}
-            <nav className="hidden sm:flex items-center space-x-6">
-              <Link 
-                href="/" 
-                className="text-gray-600 hover:text-blue-600 transition-colors font-medium"
-              >
-                🏠 홈
-              </Link>
-              <Link 
-                href="/realestate" 
-                className="text-blue-600 font-medium border-b-2 border-blue-600 pb-1"
-              >
-                🏢 부동산
-              </Link>
-              <Link 
-                href="/subway" 
-                className="text-gray-600 hover:text-blue-600 transition-colors font-medium"
-              >
-                🚇 실시간 교통
-              </Link>
-            </nav>
+    <>
+      {/* 구조화된 데이터 */}
+      <Script
+        id="breadcrumb-ldjson"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(generateBreadcrumbSchema([
+            { name: '홈', path: '/' },
+            { name: '부동산 정보', path: '/realestate' }
+          ]))
+        }}
+      />
 
-            {/* 모바일 네비게이션 */}
-            <div className="sm:hidden flex items-center space-x-4">
-              <Link 
-                href="/" 
-                className="text-gray-600 hover:text-blue-600 transition-colors"
-              >
-                🏠
-              </Link>
-              <Link 
-                href="/subway" 
-                className="text-gray-600 hover:text-blue-600 transition-colors"
-              >
-                🚇
-              </Link>
+      <div className="min-h-screen bg-gray-50">
+        {/* Header */}
+        <header className="bg-white shadow-sm sticky top-0 z-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between h-14 sm:h-16">
+              <div className="flex items-center space-x-2 sm:space-x-3">
+                <span className="text-2xl sm:text-3xl">🏙️</span>
+                <div>
+                  <a href="/" className="text-lg sm:text-2xl font-bold text-gray-900 hover:text-blue-600 transition-colors">
+                    🏠 송도라이프
+                  </a>
+                  <p className="text-xs sm:text-sm text-gray-500">송도에서의 매일매일</p>
+                </div>
+              </div>
+              <div className="hidden sm:flex items-center space-x-2 text-sm text-gray-600">
+                <div className="flex items-center space-x-1">
+                  <span className="text-base">🏢</span>
+                  <span className="text-xs">부동산 실거래정보</span>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </header>
+        </header>
 
-      {/* 메인 콘텐츠 */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* 브레드크럼 네비게이션 */}
-        <Breadcrumb items={getRealEstateBreadcrumb()} />
+        {/* 네비게이션 바 */}
+        <section className="bg-white shadow-sm border-b">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col sm:flex-row items-center justify-center py-3 sm:py-4 gap-2 sm:gap-6">
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto">
+                <a 
+                  href="/" 
+                  className="flex items-center space-x-2 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors min-h-[44px] w-full sm:w-auto justify-center"
+                >
+                  <span className="text-lg">🏠</span>
+                  <span className="text-sm font-medium">홈으로</span>
+                </a>
+                <a 
+                  href="/subway" 
+                  className="flex items-center space-x-2 px-4 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors min-h-[44px] w-full sm:w-auto justify-center"
+                >
+                  <span className="text-lg">🚇</span>
+                  <span className="text-sm font-medium">실시간 교통</span>
+                </a>
+              </div>
+              <div className="text-xs sm:text-sm text-gray-600 text-center">
+                <span className="block sm:hidden">송도 아파트 실거래가 정보</span>
+                <span className="hidden sm:block">송도 아파트 실거래가 정보. 매월 업데이트되는 최신 시세</span>
+              </div>
+            </div>
+          </div>
+        </section>
 
-        {/* 페이지 제목 */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            🏢 송도 부동산 실거래가
-          </h1>
-          <p className="text-gray-600">
-            송도국제도시 아파트 실거래가 정보를 실시간으로 확인하세요.
-          </p>
-        </div>
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {/* 브레드크럼 네비게이션 */}
+          <Breadcrumb items={breadcrumbItems} />
 
-        {/* 부동산 위젯 (전체 너비로 확장) */}
-        <div className="bg-white rounded-xl shadow-sm border p-6">
-          <RealEstateWidget />
-        </div>
+          {/* 페이지 제목 */}
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              🏢 송도 부동산 실거래가
+            </h1>
+            <p className="text-gray-600">
+              송도국제도시 아파트 실거래가 정보를 실시간으로 확인하세요.
+            </p>
+          </div>
+
+          {/* 부동산 위젯 (전체 너비로 확장) */}
+          <div className="bg-white rounded-xl shadow-sm border p-6">
+            <RealEstateWidget />
+          </div>
 
         {/* 추가 정보 섹션 */}
         <div className="mt-8 grid gap-6 md:grid-cols-2">
@@ -215,9 +183,15 @@ export default function RealEstatePage() {
                     </div>
                   </div>
                 </div>
+                <div className="p-3 bg-purple-50 rounded-lg border border-purple-200">
+                  <h3 className="font-semibold text-purple-800 mb-2">시내버스</h3>
+                  <ul className="space-y-1 list-disc list-inside">
+                    <li>16, 82, 103, 780-1 등 송도 ↔ 인천 전역</li>
+                  </ul>
+                </div>
               </div>
             </div>
-          </div>
+          </div> {/* end 현재 운행 노선 card */}
 
           {/* 미래 운행 노선 */}
           <div className="bg-white rounded-xl shadow-sm border p-6">
@@ -278,30 +252,37 @@ export default function RealEstatePage() {
                 <div className="text-center font-medium text-gray-800">
                   GTX-B ↔ 송도트램 ↔ 인천 1호선 환승 시스템
                 </div>
+                <div className="p-4 bg-red-50 rounded-lg border border-red-200">
+                  <h3 className="font-semibold text-red-800 mb-2">제3경인선(가칭)</h3>
+                  <ul className="space-y-1 list-disc list-inside">
+                    <li>부천 종합운동장 ↔ 송도(연장 검토)</li>
+                    <li>경인남부 교통 분산 기대</li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </div> {/* end of grid wrapper */}
 
-        {/* 안내 사항 */}
-        <div className="mt-8 bg-blue-50 border border-blue-200 rounded-xl p-6">
-          <h3 className="text-lg font-semibold text-blue-900 mb-2 flex items-center">
-            💡 실거래가 정보 안내
-          </h3>
-          <ul className="text-sm text-blue-800 space-y-1">
-            <li>• 국토교통부 실거래가 공개시스템 기준 데이터입니다.</li>
-            <li>• 최근 3개월간의 거래 내역을 제공합니다.</li>
-            <li>• 평당 가격은 3.3㎡ 기준으로 계산됩니다.</li>
-            <li>• 데이터는 주기적으로 업데이트됩니다.</li>
-          </ul>
-        </div>
+          {/* 안내 사항 */}
+          <div className="mt-8 bg-blue-50 border border-blue-200 rounded-xl p-6">
+            <h3 className="text-lg font-semibold text-blue-900 mb-2 flex items-center">
+              💡 실거래가 정보 안내
+            </h3>
+            <ul className="text-sm text-blue-800 space-y-1">
+              <li>• 국토교통부 실거래가 공개시스템 기준 데이터입니다.</li>
+              <li>• 최근 3개월간의 거래 내역을 제공합니다.</li>
+              <li>• 평당 가격은 3.3㎡ 기준으로 계산됩니다.</li>
+              <li>• 데이터는 주기적으로 업데이트됩니다.</li>
+            </ul>
+          </div>
 
-        {/* 관련 링크 섹션 */}
-        <RelatedLinks links={getRealEstateRelatedLinks()} />
-      </main>
+          {/* 관련 링크 섹션 */}
+          <RelatedLinks links={relatedLinks} />
+        </main>
+      </div>
 
-      {/* 공통 푸터 */}
-      <Footer variant="dark" />
-    </div>
+      <Footer />
+    </>
   );
 } 

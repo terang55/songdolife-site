@@ -4,8 +4,10 @@ import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { generateBreadcrumbSchema } from '@/lib/seo';
 import Link from 'next/link';
-import Breadcrumb, { getAcademyBreadcrumb } from '../components/Breadcrumb';
-import RelatedLinks, { getAcademyRelatedLinks } from '../components/RelatedLinks';
+import Breadcrumb from '../components/Breadcrumb';
+import RelatedLinks from '../components/RelatedLinks';
+import { getAcademyBreadcrumb } from '@/lib/breadcrumb-utils';
+import { getAcademyRelatedLinks } from '@/lib/related-links-utils';
 
 interface AcademyItem {
   ACA_NM: string;          // 학원명
@@ -61,119 +63,168 @@ export default function AcademyPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [realm]);
 
-  const breadcrumbData = generateBreadcrumbSchema([
-    { name: '홈', path: '/' },
-    { name: '교육·학원', path: '/academy' }
-  ]);
-
-  // 학원 페이지 구조화된 데이터
-  const structuredData = {
-    '@context': 'https://schema.org',
-    '@type': 'Service',
-    name: '송도동 학원 정보',
-    description: '인천 연수구 송도동 지역 학원 및 교습소 정보 검색 서비스',
-    provider: {
-      '@type': 'Organization',
-      name: '송도라이프',
-      url: 'https://songdo.life'
-    },
-    areaServed: {
-      '@type': 'Place',
-      name: '인천광역시 연수구 송도동',
-      geo: {
-        '@type': 'GeoCoordinates',
-        latitude: 37.538603,
-        longitude: 126.722675
-      }
-    },
-    category: '교육서비스',
-    keywords: ['송도동 학원', '송도 교육', '송도 학원 검색', '연수구 학원', '송도 학습']
-  };
-
-  const realmOptions = [
-    '입시.검정 및 보습',
-    '예능(대)',
-    '국제화',
-    '기타'
-  ];
+  // 브레드크럼 및 관련 링크 데이터
+  const breadcrumbItems = getAcademyBreadcrumb();
+  const relatedLinks = getAcademyRelatedLinks();
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <Head>
-        <title>송도동 학원 정보 | 송도라이프</title>
-        <meta name="description" content="인천시 연수구 송도동 학원·교습소 정보를 과목별로 검색해 보세요." />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }} />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
-      </Head>
+    <>
+      {/* 구조화된 데이터 */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(generateBreadcrumbSchema([
+            { name: '홈', path: '/' },
+            { name: '교육·학원', path: '/academy' }
+          ]))
+        }}
+      />
 
-      <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-          <Link href="/" className="text-lg font-bold text-gray-900 dark:text-gray-100">🏙️ 송도라이프</Link>
-          <nav className="space-x-4 text-sm">
-            <Link href="/" className="hover:text-blue-600 dark:hover:text-blue-400 text-gray-700 dark:text-gray-200">홈</Link>
-            <Link href="/realestate" className="hover:text-blue-600 dark:hover:text-blue-400 text-gray-700 dark:text-gray-200">부동산</Link>
-            <Link href="/subway" className="hover:text-blue-600 dark:hover:text-blue-400 text-gray-700 dark:text-gray-200">교통</Link>
-            <span className="text-blue-600 dark:text-blue-400 font-semibold">학원</span>
-          </nav>
-        </div>
-      </header>
+      {/* Service 스키마 구조화된 데이터 */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Service",
+            "name": "송도국제도시 교육·학원 정보",
+            "description": "송도동 지역의 학원, 교육기관, 과외 정보를 종합적으로 제공하는 서비스입니다.",
+            "provider": {
+              "@type": "Organization",
+              "name": "송도라이프",
+              "url": "https://songdolife.info"
+            },
+            "areaServed": {
+              "@type": "Place",
+              "name": "송도국제도시",
+              "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "KR",
+                "addressRegion": "인천광역시",
+                "addressLocality": "연수구",
+                "streetAddress": "송도동"
+              },
+              "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": 37.538603,
+                "longitude": 126.722675
+              }
+            },
+            "serviceType": "교육정보서비스",
+            "category": "교육",
+            "hasOfferCatalog": {
+              "@type": "OfferCatalog",
+              "name": "송도 교육기관 목록",
+              "itemListElement": [
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "유아교육 기관"
+                  }
+                },
+                {
+                  "@type": "Offer", 
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "초등학교 교육"
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service", 
+                    "name": "중고등학교 교육"
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "학원 및 과외"
+                  }
+                }
+              ]
+            }
+          })
+        }}
+      />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* 브레드크럼 네비게이션 */}
-        <Breadcrumb items={getAcademyBreadcrumb()} />
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <Head>
+          <title>송도동 학원 정보 | 송도라이프</title>
+          <meta name="description" content="인천시 연수구 송도동 학원·교습소 정보를 과목별로 검색해 보세요." />
+        </Head>
 
-        <h1 className="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">🎓 송도동 학원 정보</h1>
+        <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+            <Link href="/" className="text-lg font-bold text-gray-900 dark:text-gray-100">🏙️ 송도라이프</Link>
+            <nav className="space-x-4 text-sm">
+              <Link href="/" className="hover:text-blue-600 dark:hover:text-blue-400 text-gray-700 dark:text-gray-200">홈</Link>
+              <Link href="/realestate" className="hover:text-blue-600 dark:hover:text-blue-400 text-gray-700 dark:text-gray-200">부동산</Link>
+              <Link href="/subway" className="hover:text-blue-600 dark:hover:text-blue-400 text-gray-700 dark:text-gray-200">교통</Link>
+              <span className="text-blue-600 dark:text-blue-400 font-semibold">학원</span>
+            </nav>
+          </div>
+        </header>
 
-        {/* 검색 & 필터 */}
-        <div className="flex flex-col sm:flex-row gap-3 mb-6">
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="학원명 검색"
-            className="flex-1 border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-700 placeholder-gray-400 dark:placeholder-gray-500"
-          />
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {/* 브레드크럼 네비게이션 */}
+          <Breadcrumb items={breadcrumbItems} />
 
-          <select
-            value={realm}
-            onChange={(e) => setRealm(e.target.value)}
-            className="w-full sm:w-48 border rounded-lg px-2 py-2 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-700"
-          >
-            <option value="">전체 분야</option>
-            {realmOptions.map((r) => (
-              <option key={r} value={r}>{r}</option>
+          <h1 className="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">🎓 송도동 학원 정보</h1>
+
+          {/* 검색 & 필터 */}
+          <div className="flex flex-col sm:flex-row gap-3 mb-6">
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="학원명 검색"
+              className="flex-1 border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-700 placeholder-gray-400 dark:placeholder-gray-500"
+            />
+
+            <select
+              value={realm}
+              onChange={(e) => setRealm(e.target.value)}
+              className="w-full sm:w-48 border rounded-lg px-2 py-2 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-700"
+            >
+              <option value="">전체 분야</option>
+              {['입시.검정 및 보습', '예능(대)', '국제화', '기타'].map((r) => (
+                <option key={r} value={r}>{r}</option>
+              ))}
+            </select>
+
+            <button
+              onClick={fetchData}
+              className="w-full sm:w-auto bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+            >
+              검색
+            </button>
+          </div>
+
+          {/* 목록 */}
+          {loading && <p className="text-gray-600 dark:text-gray-300">로딩 중...</p>}
+          {error && <p className="text-red-600 dark:text-red-400">{error}</p>}
+          {!loading && academies.length === 0 && !error && (
+            <p className="text-gray-600 dark:text-gray-300">해당 조건의 학원이 없습니다.</p>
+          )}
+
+          <ul className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+            {academies.map((a) => (
+              <li key={a.ACA_NM} className="bg-white dark:bg-gray-800 border rounded-lg p-4 shadow-sm border-gray-200 dark:border-gray-700">
+                <h2 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">{a.ACA_NM}</h2>
+                <p className="text-xs text-gray-500 dark:text-gray-300 mb-1">{a.REALM_SC_NM} · {a.LE_CRSE_NM}</p>
+                <p className="text-sm text-gray-700 dark:text-gray-200 mb-1">{a.FA_RDNMA} {a.FA_RDNDA}</p>
+                {a.FA_TELNO && <p className="text-sm text-gray-700 dark:text-gray-200">☎ {a.FA_TELNO}</p>}
+              </li>
             ))}
-          </select>
+          </ul>
 
-          <button
-            onClick={fetchData}
-            className="w-full sm:w-auto bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
-          >
-            검색
-          </button>
-        </div>
-
-        {/* 목록 */}
-        {loading && <p className="text-gray-600 dark:text-gray-300">로딩 중...</p>}
-        {error && <p className="text-red-600 dark:text-red-400">{error}</p>}
-        {!loading && academies.length === 0 && !error && (
-          <p className="text-gray-600 dark:text-gray-300">해당 조건의 학원이 없습니다.</p>
-        )}
-
-        <ul className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
-          {academies.map((a) => (
-            <li key={a.ACA_NM} className="bg-white dark:bg-gray-800 border rounded-lg p-4 shadow-sm border-gray-200 dark:border-gray-700">
-              <h2 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">{a.ACA_NM}</h2>
-              <p className="text-xs text-gray-500 dark:text-gray-300 mb-1">{a.REALM_SC_NM} · {a.LE_CRSE_NM}</p>
-              <p className="text-sm text-gray-700 dark:text-gray-200 mb-1">{a.FA_RDNMA} {a.FA_RDNDA}</p>
-              {a.FA_TELNO && <p className="text-sm text-gray-700 dark:text-gray-200">☎ {a.FA_TELNO}</p>}
-            </li>
-          ))}
-        </ul>
-
-        {/* 관련 링크 섹션 */}
-        <RelatedLinks links={getAcademyRelatedLinks()} />
-      </main>
-    </div>
+          {/* 관련 링크 섹션 */}
+          <RelatedLinks links={relatedLinks} />
+        </main>
+      </div>
+    </>
   );
 } 

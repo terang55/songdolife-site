@@ -66,6 +66,17 @@ export default function RealEstateWidget() {
     };
   };
 
+  // 평당 가격 계산 헬퍼 함수
+  const calculatePricePerPyeong = (price: string, area: string): number => {
+    const numPrice = parseInt(price.replace(/,/g, '')); // 금액(만원 단위)
+    const areaSqm = parseFloat(area);
+    if (!areaSqm) return 0;
+    const py = areaSqm / 3.3058; // 1평 = 3.3058㎡
+    return Math.round(numPrice / py);
+  };
+
+  const formatPricePerPyeong = (pricePerPy: number) => `${pricePerPy.toLocaleString()}만원`;
+
   // 전체 실거래가 데이터 로드
   const fetchAllDeals = async () => {
     try {
@@ -233,6 +244,11 @@ export default function RealEstateWidget() {
           <span className="text-gray-600">거래금액</span>
           <span className="font-semibold text-blue-600">{formatPrice(deal.거래금액)}</span>
         </div>
+        {/* 평당 가격 */}
+        <div className="flex justify-between text-xs text-gray-500">
+          <span>평당</span>
+          <span className="font-semibold text-green-600">{formatPricePerPyeong(calculatePricePerPyeong(deal.거래금액, deal.전용면적))}</span>
+        </div>
         <div className="flex justify-between text-xs text-gray-500">
           <span>전용면적: {deal.전용면적}㎡</span>
           <span>{deal.층}층</span>
@@ -274,7 +290,7 @@ export default function RealEstateWidget() {
             <div className="text-sm text-red-600 font-medium mb-3">
               📍 새로 등록된 거래 {newDeals.length}건
             </div>
-            <div className={`grid gap-3 ${expandNewDeals ? '' : 'max-h-80 overflow-y-auto'}`}>
+            <div className={`grid gap-3 ${expandNewDeals ? '' : 'max-h-80 overflow-y-auto'} grid-cols-1 sm:grid-cols-2`}>
               {newDeals.map((deal, index) => (
                 <DealCard key={`new-${deal.unique_id}-${index}`} deal={deal} />
               ))}
@@ -388,6 +404,8 @@ export default function RealEstateWidget() {
                           </div>
                           <div className="text-right">
                             <p className="font-bold text-green-600 text-sm">{formatPrice(deal.거래금액)}</p>
+                            {/* 평당 가격 */}
+                            <p className="text-[11px] text-gray-500">평당 {formatPricePerPyeong(calculatePricePerPyeong(deal.거래금액, deal.전용면적))}</p>
                           </div>
                         </div>
                       </div>
@@ -449,6 +467,10 @@ export default function RealEstateWidget() {
                                     <div className="text-right ml-2">
                                       <div className="font-bold text-green-600">
                                         {formatPrice(deal.거래금액)}
+                                      </div>
+                                      {/* 평당 가격 */}
+                                      <div className="text-[11px] text-gray-500">
+                                        평당 {formatPricePerPyeong(calculatePricePerPyeong(deal.거래금액, deal.전용면적))}
                                       </div>
                                     </div>
                                   </div>
@@ -556,6 +578,8 @@ export default function RealEstateWidget() {
                            </div>
                            <div className="text-right">
                              <p className="font-bold text-blue-600 text-sm">{formatPrice(deal.거래금액)}</p>
+                             {/* 평당 가격 */}
+                             <p className="text-[11px] text-gray-500">평당 {formatPricePerPyeong(calculatePricePerPyeong(deal.거래금액, deal.전용면적))}</p>
                            </div>
                          </div>
                        </div>
@@ -618,6 +642,10 @@ export default function RealEstateWidget() {
                                    <div className="text-right ml-2">
                                      <div className="font-bold text-blue-600">
                                        {formatPrice(deal.거래금액)}
+                                     </div>
+                                     {/* 평당 가격 */}
+                                     <div className="text-[11px] text-gray-500">
+                                       평당 {formatPricePerPyeong(calculatePricePerPyeong(deal.거래금액, deal.전용면적))}
                                      </div>
                                    </div>
                                  </div>

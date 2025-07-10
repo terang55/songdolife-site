@@ -122,6 +122,8 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
+        {/* LCP 이미지 프리로드 */}
+        <link rel="preload" as="image" href="/og-image.jpg" fetchPriority="high" />
         {/* PWA 메타 태그 */}
         <meta name="application-name" content="송도라이프" />
         <meta name="apple-mobile-web-app-capable" content="yes" />

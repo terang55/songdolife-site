@@ -51,6 +51,9 @@ export default function RealEstateWidget() {
   const [expandNewDeals, setExpandNewDeals] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // 신규 거래 여부 빠른 확인을 위한 Set 생성
+  const newDealIdSet = new Set(newDeals.map((d) => d.unique_id));
+
   // 가격 통계 계산 함수
   const calculatePriceStats = (deals: RealEstateData[]): PriceStats => {
     const prices = deals.map(deal => parseInt(deal.거래금액.replace(/,/g, '')));
@@ -527,25 +530,37 @@ export default function RealEstateWidget() {
                    <span className="text-xs text-gray-500">{displayDeals.length}건</span>
                  </div>
                  <div className="space-y-2 max-h-96 overflow-y-auto pr-2">
-                   {displayDeals.map((deal, index) => (
-                     <div 
-                       key={`recent-${deal.unique_id}-${index}`} 
-                       className="border-l-4 border-blue-500 pl-3 py-2 bg-gray-50 rounded-r transition-colors hover:bg-gray-100"
-                     >
-                       <div className="flex justify-between items-start mb-1">
-                         <h5 className="font-semibold text-gray-800 text-sm">{deal.아파트}</h5>
-                         <span className="text-xs text-gray-500">{deal.거래년월}.{deal.거래일}</span>
-                       </div>
-                       <div className="flex justify-between items-center">
-                         <div className="text-xs text-gray-600">
-                           <span>{deal.전용면적}㎡ • {deal.층}층</span>
+                   {displayDeals.map((deal, index) => {
+                     const isNew = newDealIdSet.has(deal.unique_id);
+                     return (
+                       <div
+                         key={`recent-${deal.unique_id}-${index}`}
+                         className={`border-l-4 pl-3 py-2 rounded-r transition-colors hover:bg-gray-100 ${
+                           isNew ? 'border-green-500 bg-green-50' : 'border-blue-500 bg-gray-50'
+                         }`}
+                       >
+                         <div className="flex justify-between items-start mb-1">
+                           <h5 className="font-semibold text-gray-800 text-sm flex items-center">
+                             {deal.아파트}
+                             {isNew && (
+                               <span className="ml-1 text-[10px] font-semibold text-green-700 bg-green-100 px-1.5 py-0.5 rounded">
+                                 NEW
+                               </span>
+                             )}
+                           </h5>
+                           <span className="text-xs text-gray-500">{deal.거래년월}.{deal.거래일}</span>
                          </div>
-                         <div className="text-right">
-                           <p className="font-bold text-blue-600 text-sm">{formatPrice(deal.거래금액)}</p>
+                         <div className="flex justify-between items-center">
+                           <div className="text-xs text-gray-600">
+                             <span>{deal.전용면적}㎡ • {deal.층}층</span>
+                           </div>
+                           <div className="text-right">
+                             <p className="font-bold text-blue-600 text-sm">{formatPrice(deal.거래금액)}</p>
+                           </div>
                          </div>
                        </div>
-                     </div>
-                   ))}
+                     );
+                   })}
                  </div>
                </div>
 

@@ -234,54 +234,7 @@ const generateWebsiteStructuredData = () => {
 
 // 브레드크럼 구조화된 데이터는 seo-utils.ts로 이동됨
 
-const generateFAQStructuredData = () => {
-  return {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "송도국제도시 지하철 운행 시간은 어떻게 되나요?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "인천1호선 센트럴파크역, 인천대입구역, 국제업무지구역의 운행 시간은 첫차 오전 5:30, 막차 밤 12:30입니다. 평일과 주말/공휴일 시간표가 다르니 실시간 정보를 확인하세요."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "송도국제도시 맛집 추천해주세요",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "센트럴파크 주변의 트리플스트리트, 커낼워크, NC큐브에 다양한 맛집이 있습니다. 한식, 중식, 일식, 양식, 카페 등 다양한 업종의 최신 맛집 정보를 제공합니다."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "송도 병원 응급실 정보를 알 수 있나요?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "송도국제도시에는 길병원, 연세대 의료원 등 대형 병원과 다수의 의원이 있습니다. 24시간 응급실, 진료과별 병원 위치 및 연락처 정보를 실시간으로 제공합니다."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "송도 뉴스는 어디서 확인할 수 있나요?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "송도국제도시 관련 최신 뉴스, 블로그, 유튜브 영상을 매일 업데이트합니다. 지역 소식, 개발 현황, 생활 정보 등 송도 주민에게 필요한 모든 정보를 제공합니다."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "송도 부동산 실거래가는 어떻게 확인하나요?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "송도국제도시 아파트, 오피스텔, 상가의 실거래가를 매일 업데이트합니다. 국토교통부 공식 데이터를 기반으로 최신 거래 현황, 시세 동향, 투자 정보를 제공합니다."
-        }
-      }
-    ]
-  };
-};
+// generateFAQStructuredData 함수는 seo-utils.ts로 이동됨
 
 export default function HomePage() {
   const [news, setNews] = useState<NewsItem[]>([]);

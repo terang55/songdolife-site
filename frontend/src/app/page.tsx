@@ -12,6 +12,7 @@ import RelatedLinks from './components/RelatedLinks';
 import { getHomeBreadcrumb } from '@/lib/breadcrumb-utils';
 import { getHomeRelatedLinks } from '@/lib/related-links-utils';
 import { getNewsImageConfigWithSEO } from '@/lib/image-utils';
+import { generateCategorySEO, updateMetaTags, updateStructuredData, generateBreadcrumbStructuredData, generateCategoryFAQStructuredData } from '@/lib/seo-utils';
 
 interface NewsItem {
   title: string;
@@ -231,29 +232,7 @@ const generateWebsiteStructuredData = () => {
   };
 };
 
-const generateBreadcrumbStructuredData = (selectedCategory: string) => {
-  const breadcrumbs = [
-    { name: "홈", url: BASE_URL }
-  ];
-
-  if (selectedCategory !== '전체') {
-    breadcrumbs.push({
-      name: selectedCategory,
-      url: `${BASE_URL}/?category=${selectedCategory}`
-    });
-  }
-
-  return {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": breadcrumbs.map((item, index) => ({
-      "@type": "ListItem",
-      "position": index + 1,
-      "name": item.name,
-      "item": item.url
-    }))
-  };
-};
+// 브레드크럼 구조화된 데이터는 seo-utils.ts로 이동됨
 
 const generateFAQStructuredData = () => {
   return {
@@ -377,62 +356,19 @@ export default function HomePage() {
 
   // 메타 태그와 구조화된 데이터 동적 관리
   useEffect(() => {
-    // 기본 메타 태그 업데이트
-    const title = selectedCategory === '전체' 
-      ? '송도라이프 | 인천 연수구 송도국제도시 생활정보 플랫폼' 
-      : `송도라이프 | ${selectedCategory} 정보 - 송도국제도시`;
-    
-    const description = selectedCategory === '전체'
-      ? "송도국제도시 주민들을 위한 실시간 뉴스, 지하철 정보, 부동산 정보, 의료 정보를 한눈에 확인하세요. 센트럴파크, 인천1호선, 송도동 맛집까지 모든 정보를 제공합니다."
-      : `송도국제도시 ${selectedCategory} 정보를 실시간으로 확인하세요. 송도동 지역의 최신 ${selectedCategory} 소식과 정보를 한곳에서 제공합니다.`;
-
-    // 제목 업데이트
-    document.title = title;
-
-    // 메타 태그 업데이트
-    const updateMetaTag = (name: string, content: string, property = false) => {
-      const selector = property ? `meta[property="${name}"]` : `meta[name="${name}"]`;
-      let tag = document.querySelector(selector);
-      if (!tag) {
-        tag = document.createElement('meta');
-        if (property) {
-          tag.setAttribute('property', name);
-        } else {
-          tag.setAttribute('name', name);
-        }
-        document.head.appendChild(tag);
-      }
-      tag.setAttribute('content', content);
-    };
-
-    updateMetaTag('description', description);
-    updateMetaTag('keywords', `송도국제도시, 송도동, 인천 연수구, 센트럴파크, 인천1호선, 인천대입구역, 센트럴파크역, 국제업무지구역, 송도 ${selectedCategory}, ${selectedCategory} 정보, 송도 생활정보, 송도 뉴스, 송도 맛집, 송도 카페, 송도 부동산, 송도 병원, 송도 약국, 송도 육아, 송도 교통`);
-    
-    // Open Graph 태그
-    updateMetaTag('og:title', title, true);
-    updateMetaTag('og:description', description, true);
-    updateMetaTag('og:url', selectedCategory === '전체' ? BASE_URL : `${BASE_URL}/?category=${encodeURIComponent(selectedCategory)}`, true);
+    // SEO 최적화 유틸리티 사용
+    const seoConfig = generateCategorySEO(selectedCategory);
+    updateMetaTags(seoConfig);
 
     // 구조화된 데이터 업데이트
-    const updateStructuredData = (id: string, data: Record<string, unknown>) => {
-      let script = document.querySelector(`script[data-schema="${id}"]`);
-      if (!script) {
-        script = document.createElement('script');
-        script.setAttribute('type', 'application/ld+json');
-        script.setAttribute('data-schema', id);
-        document.head.appendChild(script);
-      }
-      script.textContent = JSON.stringify(data);
-    };
-
     // 웹사이트 구조화된 데이터
     updateStructuredData('website', generateWebsiteStructuredData());
     
     // 브레드크럼 구조화된 데이터
     updateStructuredData('breadcrumb', generateBreadcrumbStructuredData(selectedCategory));
     
-    // FAQ 구조화된 데이터
-    updateStructuredData('faq', generateFAQStructuredData());
+    // 카테고리별 FAQ 구조화된 데이터
+    updateStructuredData('faq', generateCategoryFAQStructuredData(selectedCategory));
     
     // 뉴스 구조화된 데이터 (뉴스가 있을 때만)
     if (news.length > 0) {

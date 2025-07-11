@@ -102,6 +102,7 @@ export const metadata: Metadata = {
       'ko-KR': BASE_URL,
     },
   },
+  metadataBase: new URL(BASE_URL),
   category: "지역정보",
   classification: "지역 생활정보 플랫폼",
   other: {

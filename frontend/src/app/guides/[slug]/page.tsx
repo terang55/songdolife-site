@@ -7,11 +7,12 @@ import { generateBreadcrumbSchema } from '@/lib/seo';
 import Script from 'next/script';
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const guide = getGuideBySlug(params.slug);
+  const { slug } = await params;
+  const guide = getGuideBySlug(slug);
   
   if (!guide) {
     return {
@@ -50,8 +51,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function GuidePage({ params }: Props) {
-  const guide = getGuideBySlug(params.slug);
+export default async function GuidePage({ params }: Props) {
+  const { slug } = await params;
+  const guide = getGuideBySlug(slug);
   
   if (!guide) {
     notFound();
@@ -80,7 +82,7 @@ export default function GuidePage({ params }: Props) {
           __html: JSON.stringify(generateBreadcrumbSchema([
             { name: '홈', path: '/' },
             { name: '생활 가이드', path: '/guides' },
-            { name: guide.title, path: `/guides/${guide.slug}` }
+            { name: guide.title, path: `/guides/${slug}` }
           ]))
         }}
       />

@@ -186,7 +186,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       
       // 파일이 없는 경우 대체 로직
       if (yesterdayDeals.length === 0 && todayDeals.length === 0) {
-        logger.warning('어제와 오늘 데이터 파일이 모두 없습니다. API 실시간 수집으로 대체합니다.');
+        logger.warn('어제와 오늘 데이터 파일이 모두 없습니다. API 실시간 수집으로 대체합니다.');
         return await handleFallbackApiComparison(yesterdayDate, todayDate);
       }
       

@@ -33,7 +33,7 @@ async function testFileAccess(date: string): Promise<{
   // 서버사이드에서는 절대 URL 필요
   const baseUrl = process.env.NODE_ENV === 'development' 
     ? 'http://localhost:3001' 
-    : `https://${process.env.VERCEL_URL || 'songdolife.vercel.app'}`;
+    : 'https://songdo.life';
   const fileUrl = `${baseUrl}/data/realestate_${date}.json`;
   
   const result = {
@@ -140,7 +140,7 @@ export async function GET(): Promise<NextResponse> {
         yesterday: yesterdayFileTest
       },
       localFileTest,
-      recommendations: [] as string[]
+      recommendations: []
     };
     
     // 문제 진단 및 권장사항

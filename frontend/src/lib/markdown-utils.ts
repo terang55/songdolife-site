@@ -21,6 +21,143 @@ export interface ParsedMarkdown {
 
 // 미리 생성된 HTML 콘텐츠 맵
 const PREGENERATED_CONTENT: { [key: string]: string } = {
+  'songdo-restaurant-guide': `<div style="max-width: 100%; margin: 0 auto; line-height: 1.8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+
+<h1 style="font-size: 2.5rem; color: #f59e0b; text-align: center; margin-bottom: 1rem; border-bottom: 3px solid #fbbf24; padding-bottom: 1rem;">🍽️ 송도 맛집 완벽 가이드</h1>
+
+<div style="text-align: center; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 1.5rem; border-radius: 1rem; margin: 2rem 0; box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);">
+  <h2 style="margin: 0; font-size: 1.5rem;">2025년 최신판 📅</h2>
+  <p style="margin: 0.5rem 0 0 0; font-size: 1.1rem; opacity: 0.9;">카테고리별 추천 맛집 총정리 🎯</p>
+  <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; opacity: 0.8;">최종 업데이트: 2025년 7월</p>
+</div>
+
+<div style="background: #fef3c7; padding: 1.5rem; border-radius: 1rem; margin: 2rem 0; border: 2px solid #f59e0b;">
+  <h3 style="color: #92400e; margin: 0 0 1rem 0; font-size: 1.2rem;">🍴 가이드 특징</h3>
+  <div style="display: grid; gap: 0.8rem;">
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+      <span style="background: #f59e0b; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem;">✓</span>
+      <span>한식부터 세계요리까지 카테고리별 분류</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+      <span style="background: #f59e0b; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem;">✓</span>
+      <span>상황별 맛집 추천 (데이트, 가족, 혼밥)</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+      <span style="background: #f59e0b; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem;">✓</span>
+      <span>주차 정보와 할인 혜택 포함</span>
+    </div>
+  </div>
+</div>
+
+<h2 style="font-size: 2rem; color: #92400e; border-left: 5px solid #f59e0b; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #fef3c7; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">🍚 한식 맛집</h2>
+
+<div style="background: #f8fafc; padding: 2rem; border-radius: 1rem; margin: 1rem 0; border: 1px solid #e2e8f0;">
+  <h3 style="color: #1e40af; margin-bottom: 1rem;">갈비전문점</h3>
+  <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid #10b981;">
+    <h4 style="color: #065f46; margin: 0 0 0.8rem 0;">📍 송도 갈비왕</h4>
+    <p style="margin: 0; color: #374151; line-height: 1.6;">
+      <strong>위치:</strong> 연수구 송도동 센트럴파크 인근<br>
+      <strong>추천메뉴:</strong> 양념갈비, 생갈비<br>
+      <strong>가격대:</strong> 1인당 2-3만원
+    </p>
+  </div>
+</div>
+
+<p style="text-align: center; color: #6b7280; margin: 2rem 0;">송도에서의 맛있는 식사 되세요! 🍽️</p>
+
+</div>`,
+
+  'songdo-shopping-guide': `<div style="max-width: 100%; margin: 0 auto; line-height: 1.8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+
+<h1 style="font-size: 2.5rem; color: #3b82f6; text-align: center; margin-bottom: 1rem; border-bottom: 3px solid #60a5fa; padding-bottom: 1rem;">🛍️ 송도 쇼핑 가이드</h1>
+
+<div style="text-align: center; background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; padding: 1.5rem; border-radius: 1rem; margin: 2rem 0; box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);">
+  <h2 style="margin: 0; font-size: 1.5rem;">2025년 최신판 📅</h2>
+  <p style="margin: 0.5rem 0 0 0; font-size: 1.1rem; opacity: 0.9;">트리플스트리트부터 아울렛까지 완벽 정리 🎯</p>
+  <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; opacity: 0.8;">최종 업데이트: 2025년 7월</p>
+</div>
+
+<div style="background: #eff6ff; padding: 1.5rem; border-radius: 1rem; margin: 2rem 0; border: 2px solid #3b82f6;">
+  <h3 style="color: #1e40af; margin: 0 0 1rem 0; font-size: 1.2rem;">🏬 주요 쇼핑몰</h3>
+  <div style="display: grid; gap: 0.8rem;">
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+      <span style="background: #3b82f6; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem;">✓</span>
+      <span>트리플스트리트 - 센트럴파크역 도보 3분</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+      <span style="background: #3b82f6; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem;">✓</span>
+      <span>현대프리미엄아울렛 - 명품 브랜드 30-70% 할인</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+      <span style="background: #3b82f6; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem;">✓</span>
+      <span>대형마트 및 편의시설 완비</span>
+    </div>
+  </div>
+</div>
+
+<h2 style="font-size: 2rem; color: #1e40af; border-left: 5px solid #3b82f6; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #eff6ff; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">🏬 대형 쇼핑몰</h2>
+
+<div style="background: #f8fafc; padding: 2rem; border-radius: 1rem; margin: 1rem 0; border: 1px solid #e2e8f0;">
+  <h3 style="color: #1e40af; margin-bottom: 1rem;">트리플스트리트 (Tri-Bowl)</h3>
+  <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid #10b981;">
+    <h4 style="color: #065f46; margin: 0 0 0.8rem 0;">📍 기본 정보</h4>
+    <p style="margin: 0; color: #374151; line-height: 1.6;">
+      <strong>주소:</strong> 인천광역시 연수구 센트럴로 123<br>
+      <strong>교통:</strong> 센트럴파크역 1번 출구 도보 3분<br>
+      <strong>영업시간:</strong> 10:30-22:00 (일요일 ~21:00)
+    </p>
+  </div>
+</div>
+
+<p style="text-align: center; color: #6b7280; margin: 2rem 0;">송도에서의 즐거운 쇼핑 되세요! 🛍️</p>
+
+</div>`,
+
+  'songdo-culture-guide': `<div style="max-width: 100%; margin: 0 auto; line-height: 1.8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+
+<h1 style="font-size: 2.5rem; color: #8b5cf6; text-align: center; margin-bottom: 1rem; border-bottom: 3px solid #a78bfa; padding-bottom: 1rem;">🎭 송도 문화생활 가이드</h1>
+
+<div style="text-align: center; background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color: white; padding: 1.5rem; border-radius: 1rem; margin: 2rem 0; box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);">
+  <h2 style="margin: 0; font-size: 1.5rem;">2025년 최신판 📅</h2>
+  <p style="margin: 0.5rem 0 0 0; font-size: 1.1rem; opacity: 0.9;">공연, 전시, 여가활동 완벽 정리 🎯</p>
+  <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; opacity: 0.8;">최종 업데이트: 2025년 7월</p>
+</div>
+
+<div style="background: #f3e8ff; padding: 1.5rem; border-radius: 1rem; margin: 2rem 0; border: 2px solid #8b5cf6;">
+  <h3 style="color: #6b21a8; margin: 0 0 1rem 0; font-size: 1.2rem;">🎪 주요 문화시설</h3>
+  <div style="display: grid; gap: 0.8rem;">
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+      <span style="background: #8b5cf6; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem;">✓</span>
+      <span>송도컨벤시아 - 3,000석 대극장</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+      <span style="background: #8b5cf6; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem;">✓</span>
+      <span>센트럴파크 - 야외 공연장과 산책로</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+      <span style="background: #8b5cf6; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem;">✓</span>
+      <span>다양한 갤러리와 전시공간</span>
+    </div>
+  </div>
+</div>
+
+<h2 style="font-size: 2rem; color: #6b21a8; border-left: 5px solid #8b5cf6; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #f3e8ff; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">🎭 공연 & 음악</h2>
+
+<div style="background: #f8fafc; padding: 2rem; border-radius: 1rem; margin: 1rem 0; border: 1px solid #e2e8f0;">
+  <h3 style="color: #6b21a8; margin-bottom: 1rem;">송도컨벤시아</h3>
+  <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid #10b981;">
+    <h4 style="color: #065f46; margin: 0 0 0.8rem 0;">📍 기본 정보</h4>
+    <p style="margin: 0; color: #374151; line-height: 1.6;">
+      <strong>주소:</strong> 인천광역시 연수구 센트럴로 123<br>
+      <strong>교통:</strong> 센트럴파크역 1번 출구 도보 5분<br>
+      <strong>좌석:</strong> 대극장 3,000석, 소극장 600석
+    </p>
+  </div>
+</div>
+
+<p style="text-align: center; color: #6b7280; margin: 2rem 0;">송도에서의 풍성한 문화생활 되세요! 🎭</p>
+
+</div>`,
   'songdo-moving-checklist': `<div style="max-width: 100%; margin: 0 auto; line-height: 1.8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
 
 <h1 style="font-size: 2.5rem; color: #2563eb; text-align: center; margin-bottom: 1rem; border-bottom: 3px solid #3b82f6; padding-bottom: 1rem;">🏠 송도 이사 완벽 체크리스트</h1>
@@ -372,69 +509,162 @@ const PREGENERATED_CONTENT: { [key: string]: string } = {
 </div>
 
 </div>
-<ul>
-<li><strong>🆕 신혼부부 특별공급</strong>: 소득 7분위 이하, 청약통장 1년 이상</li>
-<li><strong>🆕 디딤돌 대출</strong>: 최대 3억원, 금리 3.2-4.5% (소득 6천만원 이하)</li>
-<li><strong>🆕 보금자리론</strong>: 최대 5억원, 금리 3.8-5.2%</li>
-<li><strong>세제 혜택</strong>: 양도소득세 감면, 취득세 감면</li>
-<li><strong>🆕 인천시 신혼부부 지원</strong>: 전세보증금 이자 지원, 월 최대 30만원</li>
-</ul>
 
-<h2>🏠 신혼집 선택 가이드 (2025년 시세)</h2>
+<hr style="border: none; height: 2px; background: linear-gradient(90deg, #ec4899, #8b5cf6, #3b82f6); margin: 3rem 0; border-radius: 1px;">
 
-<h3>🔍 추천 아파트 단지</h3>
+<h2 style="font-size: 2rem; color: #be185d; border-left: 5px solid #ec4899; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #fdf2f8; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">🏠 신혼집 선택 가이드 (2025년 시세)</h2>
 
-<h4>1. 송도 센트럴파크 푸르지오 🌟</h4>
-<ul>
-<li><strong>특징</strong>: 센트럴파크 조망, 지하철역 도보 5분</li>
-<li><strong>평수</strong>: 59㎡, 84㎡ 위주</li>
-<li><strong>장점</strong>: 산책로 인접, 문화시설 가까움, 관리 우수</li>
-<li><strong>🆕 2025년 시세</strong>: 전세 5.5-7억원, 매매 8-11억원</li>
-<li><strong>관리비</strong>: 월 25-35만원</li>
-</ul>
+<h3 style="font-size: 1.4rem; color: #be185d; margin-bottom: 1rem; padding: 1rem; background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%); border-radius: 0.8rem; border-left: 4px solid #ec4899;">🔍 추천 아파트 단지</h3>
 
-<h4>2. 송도 아이파크 ⭐</h4>
-<ul>
-<li><strong>특징</strong>: 대단지 (총 6,500세대), 편의시설 완비</li>
-<li><strong>평수</strong>: 84㎡, 101㎡ 위주</li>
-<li><strong>장점</strong>: 단지 내 상가, 커뮤니티 활발, 어린이집 운영</li>
-<li><strong>🆕 2025년 시세</strong>: 전세 6-8억원, 매매 9-13억원</li>
-<li><strong>관리비</strong>: 월 30-40만원</li>
-</ul>
+<div style="background: #f8fafc; padding: 2rem; border-radius: 1rem; margin: 1rem 0; border: 1px solid #e2e8f0;">
 
-<h4>3. 송도 더샵 센트럴파크 💎</h4>
-<ul>
-<li><strong>특징</strong>: 고급 브랜드, 프리미엄 시설</li>
-<li><strong>평수</strong>: 101㎡, 135㎡ 위주</li>
-<li><strong>장점</strong>: 시설 최고급, 브랜드 가치, 센트럴파크 전망</li>
-<li><strong>🆕 2025년 시세</strong>: 전세 8-12억원, 매매 13-18억원</li>
-<li><strong>관리비</strong>: 월 35-50만원</li>
-</ul>
+  <div style="margin-bottom: 2rem; padding: 1.5rem; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 1rem; border-left: 4px solid #f59e0b;">
+    <h4 style="color: #92400e; margin: 0 0 1rem 0; font-size: 1.2rem; display: flex; align-items: center; gap: 0.5rem;">
+      🌟 1. 송도 센트럴파크 푸르지오
+    </h4>
+    <div style="display: grid; gap: 0.8rem; margin-bottom: 1rem;">
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span style="background: #f59e0b; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem; font-weight: bold;">특징</span>
+        <span style="color: #374151;">센트럴파크 조망, 지하철역 도보 5분</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span style="background: #10b981; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem; font-weight: bold;">평수</span>
+        <span style="color: #374151;">59㎡, 84㎡ 위주</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span style="background: #3b82f6; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem; font-weight: bold;">장점</span>
+        <span style="color: #374151;">산책로 인접, 문화시설 가까움, 관리 우수</span>
+      </div>
+    </div>
+    <div style="background: white; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem;">
+      <p style="margin: 0; color: #374151; line-height: 1.6;">
+        <strong style="color: #dc2626;">🆕 2025년 시세:</strong> 전세 <span style="color: #dc2626; font-weight: bold;">5.5-7억원</span>, 매매 <span style="color: #dc2626; font-weight: bold;">8-11억원</span><br>
+        <strong style="color: #059669;">관리비:</strong> 월 <span style="color: #059669; font-weight: bold;">25-35만원</span>
+      </p>
+    </div>
+  </div>
 
-<h4>🆕 4. 송도 롯데캐슬 ✨</h4>
-<ul>
-<li><strong>특징</strong>: 신축 단지, 최신 스마트홈 시설</li>
-<li><strong>평수</strong>: 74㎡, 84㎡ 위주</li>
-<li><strong>장점</strong>: 최신 시설, 에너지 효율 우수</li>
-<li><strong>🆕 2025년 시세</strong>: 전세 6.5-8.5억원, 매매 10-14억원</li>
-<li><strong>관리비</strong>: 월 25-35만원</li>
-</ul>
+  <div style="margin-bottom: 2rem; padding: 1.5rem; background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border-radius: 1rem; border-left: 4px solid #3b82f6;">
+    <h4 style="color: #1e40af; margin: 0 0 1rem 0; font-size: 1.2rem; display: flex; align-items: center; gap: 0.5rem;">
+      ⭐ 2. 송도 아이파크
+    </h4>
+    <div style="display: grid; gap: 0.8rem; margin-bottom: 1rem;">
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span style="background: #3b82f6; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem; font-weight: bold;">특징</span>
+        <span style="color: #374151;">대단지 (총 6,500세대), 편의시설 완비</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span style="background: #10b981; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem; font-weight: bold;">평수</span>
+        <span style="color: #374151;">84㎡, 101㎡ 위주</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span style="background: #8b5cf6; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem; font-weight: bold;">장점</span>
+        <span style="color: #374151;">단지 내 상가, 커뮤니티 활발, 어린이집 운영</span>
+      </div>
+    </div>
+    <div style="background: white; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem;">
+      <p style="margin: 0; color: #374151; line-height: 1.6;">
+        <strong style="color: #dc2626;">🆕 2025년 시세:</strong> 전세 <span style="color: #dc2626; font-weight: bold;">6-8억원</span>, 매매 <span style="color: #dc2626; font-weight: bold;">9-13억원</span><br>
+        <strong style="color: #059669;">관리비:</strong> 월 <span style="color: #059669; font-weight: bold;">30-40만원</span>
+      </p>
+    </div>
+  </div>
 
-<h3>🏡 신혼집 선택 체크리스트</h3>
-<ul>
-<li>✅ 예산 대비 적정 가격 (전세가율 70% 이하 권장)</li>
-<li>✅ 출퇴근 교통편 확인 (GTX-B 개통 고려)</li>
-<li>✅ 향후 가족 계획 고려한 평수 (84㎡ 이상 추천)</li>
-<li>✅ 관리비 및 유지비 계산 (월 30만원 내외)</li>
-<li>✅ 주변 편의시설 확인 (마트, 병원, 학교)</li>
-<li>✅ 향과 채광 상태 확인 (남향, 동남향 선호)</li>
-<li>🆕 IoT 스마트홈 시설 여부</li>
-<li>🆕 공유 오피스, 피트니스 센터 등 커뮤니티 시설</li>
-</ul>
+  <div style="margin-bottom: 2rem; padding: 1.5rem; background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%); border-radius: 1rem; border-left: 4px solid #8b5cf6;">
+    <h4 style="color: #6b21a8; margin: 0 0 1rem 0; font-size: 1.2rem; display: flex; align-items: center; gap: 0.5rem;">
+      💎 3. 송도 더샵 센트럴파크
+    </h4>
+    <div style="display: grid; gap: 0.8rem; margin-bottom: 1rem;">
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span style="background: #8b5cf6; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem; font-weight: bold;">특징</span>
+        <span style="color: #374151;">고급 브랜드, 프리미엄 시설</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span style="background: #10b981; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem; font-weight: bold;">평수</span>
+        <span style="color: #374151;">101㎡, 135㎡ 위주</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span style="background: #f59e0b; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem; font-weight: bold;">장점</span>
+        <span style="color: #374151;">시설 최고급, 브랜드 가치, 센트럴파크 전망</span>
+      </div>
+    </div>
+    <div style="background: white; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem;">
+      <p style="margin: 0; color: #374151; line-height: 1.6;">
+        <strong style="color: #dc2626;">🆕 2025년 시세:</strong> 전세 <span style="color: #dc2626; font-weight: bold;">8-12억원</span>, 매매 <span style="color: #dc2626; font-weight: bold;">13-18억원</span><br>
+        <strong style="color: #059669;">관리비:</strong> 월 <span style="color: #059669; font-weight: bold;">35-50만원</span>
+      </p>
+    </div>
+  </div>
 
-<h2>💒 신혼생활 필수 준비사항 (2025년 맞춤)</h2>
+  <div style="margin-bottom: 1rem; padding: 1.5rem; background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%); border-radius: 1rem; border: 2px solid #ec4899;">
+    <h4 style="color: #be185d; margin: 0 0 1rem 0; font-size: 1.2rem; display: flex; align-items: center; gap: 0.5rem;">
+      <span style="background: #ec4899; color: white; padding: 0.3rem 0.8rem; border-radius: 0.4rem; font-weight: bold; font-size: 0.9rem;">🆕</span>
+      ✨ 4. 송도 롯데캐슬
+    </h4>
+    <div style="display: grid; gap: 0.8rem; margin-bottom: 1rem;">
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span style="background: #ec4899; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem; font-weight: bold;">특징</span>
+        <span style="color: #374151;">신축 단지, 최신 스마트홈 시설</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span style="background: #10b981; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem; font-weight: bold;">평수</span>
+        <span style="color: #374151;">74㎡, 84㎡ 위주</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span style="background: #3b82f6; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem; font-weight: bold;">장점</span>
+        <span style="color: #374151;">최신 시설, 에너지 효율 우수</span>
+      </div>
+    </div>
+    <div style="background: white; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem;">
+      <p style="margin: 0; color: #374151; line-height: 1.6;">
+        <strong style="color: #dc2626;">🆕 2025년 시세:</strong> 전세 <span style="color: #dc2626; font-weight: bold;">6.5-8.5억원</span>, 매매 <span style="color: #dc2626; font-weight: bold;">10-14억원</span><br>
+        <strong style="color: #059669;">관리비:</strong> 월 <span style="color: #059669; font-weight: bold;">25-35만원</span>
+      </p>
+    </div>
+  </div>
 
-<h3>🛒 가전제품 쇼핑 가이드</h3>
+</div>
+
+<h3 style="font-size: 1.3rem; color: #be185d; margin: 2rem 0 1rem 0; padding: 1rem; background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%); border-radius: 0.8rem; border-left: 4px solid #ec4899;">🏡 신혼집 선택 체크리스트</h3>
+
+<div style="background: #f8fafc; padding: 2rem; border-radius: 1rem; margin: 1rem 0; border: 1px solid #e2e8f0;">
+  <div style="display: grid; gap: 1rem;">
+    <div style="display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem; background: white; border-radius: 0.5rem; border-left: 3px solid #10b981;">
+      <span style="background: #10b981; color: white; padding: 0.3rem 0.6rem; border-radius: 0.3rem; font-weight: bold;">✅</span>
+      <span style="color: #374151;">예산 대비 적정 가격 (전세가율 70% 이하 권장)</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem; background: white; border-radius: 0.5rem; border-left: 3px solid #3b82f6;">
+      <span style="background: #3b82f6; color: white; padding: 0.3rem 0.6rem; border-radius: 0.3rem; font-weight: bold;">✅</span>
+      <span style="color: #374151;">출퇴근 교통편 확인 (GTX-B 개통 고려)</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem; background: white; border-radius: 0.5rem; border-left: 3px solid #8b5cf6;">
+      <span style="background: #8b5cf6; color: white; padding: 0.3rem 0.6rem; border-radius: 0.3rem; font-weight: bold;">✅</span>
+      <span style="color: #374151;">향후 가족 계획 고려한 평수 (84㎡ 이상 추천)</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem; background: white; border-radius: 0.5rem; border-left: 3px solid #f59e0b;">
+      <span style="background: #f59e0b; color: white; padding: 0.3rem 0.6rem; border-radius: 0.3rem; font-weight: bold;">✅</span>
+      <span style="color: #374151;">관리비 및 유지비 계산 (월 30만원 내외)</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem; background: white; border-radius: 0.5rem; border-left: 3px solid #ef4444;">
+      <span style="background: #ef4444; color: white; padding: 0.3rem 0.6rem; border-radius: 0.3rem; font-weight: bold;">✅</span>
+      <span style="color: #374151;">주변 편의시설 확인 (마트, 병원, 학교)</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem; background: white; border-radius: 0.5rem; border-left: 3px solid #06b6d4;">
+      <span style="background: #06b6d4; color: white; padding: 0.3rem 0.6rem; border-radius: 0.3rem; font-weight: bold;">✅</span>
+      <span style="color: #374151;">향과 채광 상태 확인 (남향, 동남향 선호)</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 0.5rem; border: 1px solid #f59e0b;">
+      <span style="background: #f59e0b; color: white; padding: 0.3rem 0.6rem; border-radius: 0.3rem; font-weight: bold;">🆕</span>
+      <span style="color: #92400e; font-weight: 500;">IoT 스마트홈 시설 여부</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 0.5rem; border: 1px solid #f59e0b;">
+      <span style="background: #f59e0b; color: white; padding: 0.3rem 0.6rem; border-radius: 0.3rem; font-weight: bold;">🆕</span>
+      <span style="color: #92400e; font-weight: 500;">공유 오피스, 피트니스 센터 등 커뮤니티 시설</span>
+    </div>
+  </div>
+</div>
+
+<p style="text-align: center; color: #6b7280; margin: 2rem 0;">송도에서의 행복한 신혼생활 되세요! 💕</p>
 
 <h4>송도 내 주요 가전매장 (2025년 정보)</h4>
 <ul>

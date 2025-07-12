@@ -7,9 +7,11 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "collect-realestate": "node scripts/collect-daily-realestate.js"
   },
   "dependencies": {
+    "@vercel/kv": "^3.0.0",
     "cheerio": "^1.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

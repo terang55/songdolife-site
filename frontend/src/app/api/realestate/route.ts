@@ -5,6 +5,8 @@ import { createRealEstateLogger } from '@/lib/logger';
 
 const logger = createRealEstateLogger();
 
+// API 기반 실시간 비교 (Vercel KV 없이 해결)
+
 // 국토교통부 실거래가 API 설정
 const MOLIT_API_KEY = 'aTgFhrZehAYOxHq4Z3z1iSYeysHfG9Tu43JQhF26U3mdGzr0H8+jR9MzrwPoqr8yOegDO5OO56GmvXzS7rwkdw==';
 const MOLIT_BASE_URL = 'https://apis.data.go.kr/1613000/RTMSDataSvcAptTrade/getRTMSDataSvcAptTrade';
@@ -42,6 +44,100 @@ function calculatePricePerPyeong(price: number, area: string): string {
   return `${pricePerPyeong.toLocaleString()}만원`;
 }
 
+// 특정 날짜의 부동산 데이터를 국토교통부 API에서 직접 가져오기
+async function fetchRealEstateDataByDate(targetDate: string): Promise<ProcessedDeal[]> {
+  const deals: ProcessedDeal[] = [];
+  const parser = new XMLParser({ ignoreAttributes: false, trimValues: true });
+  
+  // 타겟 날짜의 연월 추출 (YYYY-MM-DD -> YYYYMM)
+  const yearMonth = targetDate.substring(0, 7).replace('-', '');
+  
+  logger.debug(`${targetDate} (${yearMonth}) 데이터 API 호출 시작`);
+  
+  let pageNo = 1;
+  const numOfRows = 100;
+  
+  while (true) {
+    const apiUrl = new URL(MOLIT_BASE_URL);
+    apiUrl.searchParams.append('serviceKey', MOLIT_API_KEY);
+    apiUrl.searchParams.append('LAWD_CD', AREA_CODE);
+    apiUrl.searchParams.append('DEAL_YMD', yearMonth);
+    apiUrl.searchParams.append('numOfRows', numOfRows.toString());
+    apiUrl.searchParams.append('pageNo', pageNo.toString());
+
+    try {
+      const response = await fetch(apiUrl.toString());
+      const xmlText = await response.text();
+      const parsed = parser.parse(xmlText);
+      const items = parsed?.response?.body?.items?.item;
+
+      if (!items) break;
+
+      const itemArray = Array.isArray(items) ? items : [items];
+
+      for (const item of itemArray) {
+        try {
+          const apartment = item.aptNm || '';
+          const area = item.excluUseAr || '';
+          const floor = item.floor || '';
+          const priceStr = item.dealAmount || '';
+          const year = item.dealYear || '';
+          const month = item.dealMonth || '';
+          const day = item.dealDay || '';
+          const buildYear = item.buildYear || '';
+          const dong = item.umdNm || '';
+
+          if (apartment && priceStr && dong === '송도동') {
+            const dealDate = formatDealDate(year, month, day);
+            
+            // 특정 날짜의 거래만 필터링
+            if (dealDate === targetDate) {
+              const price = parsePrice(priceStr);
+              const pricePerPyeong = calculatePricePerPyeong(price, area);
+
+              const uniqueId = generateDealId({
+                apartment_name: apartment,
+                area: `${area}㎡`,
+                floor: `${floor}층`,
+                price: formatPrice(price),
+                price_numeric: price,
+                deal_date: dealDate,
+                build_year: buildYear,
+                location: dong,
+                price_per_pyeong: pricePerPyeong,
+              });
+
+              deals.push({
+                apartment_name: apartment,
+                area: `${area}㎡`,
+                floor: `${floor}층`,
+                price: formatPrice(price),
+                price_numeric: price,
+                deal_date: dealDate,
+                build_year: buildYear,
+                location: dong,
+                price_per_pyeong: pricePerPyeong,
+                unique_id: uniqueId,
+              });
+            }
+          }
+        } catch (parseError) {
+          logger.error('개별 데이터 파싱 오류', parseError);
+        }
+      }
+
+      if (itemArray.length < numOfRows) break;
+      pageNo += 1;
+    } catch (pageError) {
+      logger.error(`${yearMonth} ${pageNo}페이지 데이터 수집 실패`, pageError);
+      break;
+    }
+  }
+  
+  logger.debug(`${targetDate} 데이터 수집 완료: ${deals.length}건`);
+  return deals;
+}
+
 // 거래일 포맷팅
 function formatDealDate(year: string | number, month: string | number, day: string | number): string {
   const formattedMonth = String(month).padStart(2, '0');
@@ -77,11 +173,80 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     let previousUniqueIds: Set<string> = new Set();
     
     if (checkNew) {
-      logger.info('신규 거래 확인 모드 (전일 vs 당일)');
+      logger.info('신규 거래 확인 모드 (파일 기반 비교)');
+      const todayDate = getTodayDateString();
       const yesterdayDate = getYesterdayDateString();
-      previousDeals = await loadDataByDate(yesterdayDate);
-      previousUniqueIds = new Set(previousDeals.map(deal => deal.unique_id).filter(id => id !== undefined) as string[]);
-      logger.debug(`어제(${yesterdayDate}) 데이터: ${previousDeals.length}건`);
+      
+      logger.info(`어제(${yesterdayDate}) vs 오늘(${todayDate}) 파일 기반 비교 시작`);
+      
+      // 어제와 오늘 데이터 파일 로드
+      const [yesterdayDeals, todayDeals] = await Promise.all([
+        loadDailyDataFromFile(yesterdayDate),
+        loadDailyDataFromFile(todayDate)
+      ]);
+      
+      logger.info(`어제 거래: ${yesterdayDeals.length}건, 오늘 거래: ${todayDeals.length}건`);
+      
+      // 파일이 없는 경우 대체 로직
+      if (yesterdayDeals.length === 0 && todayDeals.length === 0) {
+        logger.warning('어제와 오늘 데이터 파일이 모두 없습니다. API 실시간 수집으로 대체합니다.');
+        return await handleFallbackApiComparison(yesterdayDate, todayDate);
+      }
+      
+      // 어제 거래의 고유 ID 세트 생성
+      const yesterdayUniqueIds = new Set(
+        yesterdayDeals.map(deal => deal.unique_id).filter(id => id !== undefined) as string[]
+      );
+      
+      // 오늘 거래 중 어제에 없던 신규 거래 찾기
+      const newDeals = todayDeals.filter(deal => 
+        deal.unique_id && !yesterdayUniqueIds.has(deal.unique_id)
+      );
+      
+      logger.info(`🆕 신규 거래 발견: ${newDeals.length}건`);
+      
+      // 신규 거래를 API 응답 형식으로 변환
+      const transformedNewDeals = newDeals.map(deal => ({
+        unique_id: deal.unique_id || '',
+        법정동: deal.location,
+        아파트: deal.apartment_name,
+        전용면적: deal.area.replace('㎡', ''),
+        거래금액: deal.price_numeric.toString(),
+        거래년월: deal.deal_date.substring(0, 7).replace('-', ''),
+        거래일: deal.deal_date.substring(8, 10),
+        층: deal.floor.replace('층', ''),
+        deal_date: deal.deal_date
+      }));
+      
+      // 신규 거래에 대한 통계 계산
+      const newAvgPrice = newDeals.length > 0 ? Math.round(newDeals.reduce((sum, deal) => sum + deal.price_numeric, 0) / newDeals.length) : 0;
+      const newMaxPrice = newDeals.length > 0 ? Math.max(...newDeals.map(deal => deal.price_numeric)) : 0;
+      const newMinPrice = newDeals.length > 0 ? Math.min(...newDeals.map(deal => deal.price_numeric)) : 0;
+
+      return NextResponse.json({
+        success: true,
+        data: transformedNewDeals,
+        total_count: newDeals.length,
+        is_new_deals: true,
+        new_deals_count: newDeals.length,
+        comparison_info: {
+          yesterday_deals: yesterdayDeals.length,
+          today_deals: todayDeals.length,
+          yesterday_date: yesterdayDate,
+          today_date: todayDate,
+          data_source: 'file_based'
+        },
+        stats: {
+          avg_price: formatPrice(newAvgPrice),
+          max_price: formatPrice(newMaxPrice),
+          min_price: formatPrice(newMinPrice),
+          avg_price_numeric: newAvgPrice,
+          max_price_numeric: newMaxPrice,
+          min_price_numeric: newMinPrice,
+        },
+        timestamp: new Date().toISOString(),
+      });
+      
     } else {
       logger.info('인천 연수구 송도동 아파트 실거래가 최근 3개월 조회 시작');
     }
@@ -234,20 +399,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     }).sort((a, b) => b.avg_price_numeric - a.avg_price_numeric);
     console.log(`✅ 송도동 실거래가 최근 3개월 수집 완료: ${totalDeals}건`);
     
-    if (checkNew) {
-      // 신규 거래 확인 모드 (어제 vs 오늘)
-      const todayDate = getTodayDateString();
-      const newDeals = uniqueDeals.filter(deal => 
-        deal.unique_id && !previousUniqueIds.has(deal.unique_id)
-      );
-      
-      console.log(`🆕 신규 거래 (${todayDate}): ${newDeals.length}건 (전체 ${uniqueDeals.length}건 중)`);
-      
-      // 당일 데이터를 저장 (같은 날이면 항상 같은 데이터)
-      await saveDataByDate(uniqueDeals, todayDate);
-      
-      // 신규 거래를 컴포넌트 형식에 맞게 변환
-      const transformedNewDeals = newDeals.map(deal => ({
+    // 전체 거래 조회 모드 - limit 파라미터 적용
+    const dealsToTransform = limit ? uniqueDeals.slice(0, limit) : uniqueDeals;
+    
+    const transformedDeals = dealsToTransform.map(deal => ({
         unique_id: deal.unique_id || '',
         법정동: deal.location,
         아파트: deal.apartment_name,
@@ -257,49 +412,11 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         거래일: deal.deal_date.substring(8, 10),
         층: deal.floor.replace('층', ''),
         deal_date: deal.deal_date
-      }));
-      
-      // 신규 거래에 대한 통계 계산
-      const newAvgPrice = newDeals.length > 0 ? Math.round(newDeals.reduce((sum, deal) => sum + deal.price_numeric, 0) / newDeals.length) : 0;
-      const newMaxPrice = newDeals.length > 0 ? Math.max(...newDeals.map(deal => deal.price_numeric)) : 0;
-      const newMinPrice = newDeals.length > 0 ? Math.min(...newDeals.map(deal => deal.price_numeric)) : 0;
-
-      return NextResponse.json({
-        success: true,
-        data: transformedNewDeals,
-        total_count: newDeals.length,
-        is_new_deals: true,
-        new_deals_count: newDeals.length,
-        stats: {
-          avg_price: formatPrice(newAvgPrice),
-          max_price: formatPrice(newMaxPrice),
-          min_price: formatPrice(newMinPrice),
-          avg_price_numeric: newAvgPrice,
-          max_price_numeric: newMaxPrice,
-          min_price_numeric: newMinPrice,
-        },
-        previous_count: previousDeals.length,
-        timestamp: new Date().toISOString(),
-      });
-    } else {
-      // 전체 거래 조회 모드 - limit 파라미터 적용
-      const dealsToTransform = limit ? uniqueDeals.slice(0, limit) : uniqueDeals; // 50건 제한 제거
-      
-      const transformedDeals = dealsToTransform.map(deal => ({
-        unique_id: deal.unique_id || '',
-        법정동: deal.location,
-        아파트: deal.apartment_name,
-        전용면적: deal.area.replace('㎡', ''),
-        거래금액: deal.price_numeric.toString(),
-        거래년월: deal.deal_date.substring(0, 7).replace('-', ''),
-        거래일: deal.deal_date.substring(8, 10),
-        층: deal.floor.replace('층', ''),
-        deal_date: deal.deal_date
-      }));
-      
-      logger.info(`전체 거래 조회 완료: ${transformedDeals.length}건 반환 (전체 ${uniqueDeals.length}건 중)`);
-      
-      return NextResponse.json({
+    }));
+    
+    logger.info(`전체 거래 조회 완료: ${transformedDeals.length}건 반환 (전체 ${uniqueDeals.length}건 중)`);
+    
+    return NextResponse.json({
         success: true,
         data: transformedDeals,
         total_count: uniqueDeals.length, // 전체 개수는 항상 실제 전체 수
@@ -315,8 +432,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         },
         apartment_stats: apartmentStatsArray,
         timestamp: new Date().toISOString(),
-      });
-    }
+    });
   } catch (error) {
     console.error('부동산 API 오류:', error);
     return NextResponse.json({ 
@@ -332,49 +448,115 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 // 서버 이전 데이터 파일 관리 - 날짜 기준으로 변경
 const getDataFilePath = (date: string) => `./public/data/realestate_${date}.json`;
 
-interface DailyDataFile {
-  deals: ProcessedDeal[];
-  timestamp: string;
-  total_count: number;
-  date: string; // 해당 데이터의 날짜
-}
-
-// 특정 날짜의 데이터 읽기
-async function loadDataByDate(date: string): Promise<ProcessedDeal[]> {
+// 파일 기반 데이터 로드 함수
+async function loadDailyDataFromFile(date: string): Promise<ProcessedDeal[]> {
   try {
-    const fs = await import('fs/promises');
-    const filePath = getDataFilePath(date);
-    const data = await fs.readFile(filePath, 'utf-8');
-    const parsed: DailyDataFile = JSON.parse(data);
-    logger.debug(`${date} 데이터 로드: ${parsed.total_count}건`);
-    return parsed.deals || [];
-  } catch {
-    logger.debug(`${date} 데이터 파일이 없습니다`);
+    if (typeof window !== 'undefined') {
+      return [];
+    }
+    
+    // 개발 환경: 로컬 파일 시스템에서 읽기
+    if (process.env.NODE_ENV === 'development') {
+      try {
+        const fs = await import('fs/promises');
+        const path = await import('path');
+        const filePath = path.join(process.cwd(), 'public', 'data', `realestate_${date}.json`);
+        
+        const data = await fs.readFile(filePath, 'utf-8');
+        const parsed = JSON.parse(data);
+        
+        logger.debug(`${date} 로컬 파일에서 데이터 로드: ${parsed.total_count || 0}건`);
+        return parsed.deals || [];
+      } catch (fileError) {
+        logger.debug(`${date} 로컬 파일 없음`);
+        return [];
+      }
+    }
+    
+    // 프로덕션 환경: public 디렉토리에서 fetch로 읽기
+    try {
+      const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
+      const response = await fetch(`${baseUrl}/data/realestate_${date}.json`);
+      
+      if (response.ok) {
+        const parsed = await response.json();
+        logger.debug(`${date} 프로덕션에서 데이터 로드: ${parsed.total_count || 0}건`);
+        return parsed.deals || [];
+      }
+    } catch (fetchError) {
+      logger.debug(`${date} 프로덕션 파일 fetch 실패`);
+    }
+    
+    logger.debug(`${date} 데이터 파일을 찾을 수 없음`);
+    return [];
+    
+  } catch (error) {
+    logger.error(`${date} 데이터 로드 실패:`, error);
     return [];
   }
 }
 
-// 특정 날짜에 데이터 저장
-async function saveDataByDate(deals: ProcessedDeal[], date: string): Promise<void> {
+// 파일이 없는 경우 대체 API 호출 (기존 fetchRealEstateDataByDate 함수 활용)
+async function handleFallbackApiComparison(yesterdayDate: string, todayDate: string) {
+  logger.info('대체 API 비교 모드 시작');
+  
   try {
-    const fs = await import('fs/promises');
-    const path = await import('path');
+    const [yesterdayDeals, todayDeals] = await Promise.all([
+      fetchRealEstateDataByDate(yesterdayDate),
+      fetchRealEstateDataByDate(todayDate)
+    ]);
     
-    const filePath = getDataFilePath(date);
-    const dir = path.dirname(filePath);
-    await fs.mkdir(dir, { recursive: true });
+    const yesterdayUniqueIds = new Set(
+      yesterdayDeals.map(deal => deal.unique_id).filter(id => id !== undefined) as string[]
+    );
     
-    const dataToSave: DailyDataFile = {
-      deals,
+    const newDeals = todayDeals.filter(deal => 
+      deal.unique_id && !yesterdayUniqueIds.has(deal.unique_id)
+    );
+    
+    const transformedNewDeals = newDeals.map(deal => ({
+      unique_id: deal.unique_id || '',
+      법정동: deal.location,
+      아파트: deal.apartment_name,
+      전용면적: deal.area.replace('㎡', ''),
+      거래금액: deal.price_numeric.toString(),
+      거래년월: deal.deal_date.substring(0, 7).replace('-', ''),
+      거래일: deal.deal_date.substring(8, 10),
+      층: deal.floor.replace('층', ''),
+      deal_date: deal.deal_date
+    }));
+    
+    const newAvgPrice = newDeals.length > 0 ? Math.round(newDeals.reduce((sum, deal) => sum + deal.price_numeric, 0) / newDeals.length) : 0;
+    const newMaxPrice = newDeals.length > 0 ? Math.max(...newDeals.map(deal => deal.price_numeric)) : 0;
+    const newMinPrice = newDeals.length > 0 ? Math.min(...newDeals.map(deal => deal.price_numeric)) : 0;
+    
+    return NextResponse.json({
+      success: true,
+      data: transformedNewDeals,
+      total_count: newDeals.length,
+      is_new_deals: true,
+      new_deals_count: newDeals.length,
+      comparison_info: {
+        yesterday_deals: yesterdayDeals.length,
+        today_deals: todayDeals.length,
+        yesterday_date: yesterdayDate,
+        today_date: todayDate,
+        data_source: 'fallback_api'
+      },
+      stats: {
+        avg_price: formatPrice(newAvgPrice),
+        max_price: formatPrice(newMaxPrice),
+        min_price: formatPrice(newMinPrice),
+        avg_price_numeric: newAvgPrice,
+        max_price_numeric: newMaxPrice,
+        min_price_numeric: newMinPrice,
+      },
       timestamp: new Date().toISOString(),
-      total_count: deals.length,
-      date
-    };
+    });
     
-    await fs.writeFile(filePath, JSON.stringify(dataToSave, null, 2));
-    logger.debug(`${date} 데이터 저장: ${deals.length}건`);
   } catch (error) {
-    logger.error(`${date} 데이터 저장 실패`, error);
+    logger.error('대체 API 비교 실패:', error);
+    throw error;
   }
 }
 

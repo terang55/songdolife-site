@@ -1,0 +1,66 @@
+name: 매일 부동산 데이터 자동 수집
+
+on:
+  schedule:
+    # 매일 오전 6시 (KST) = UTC 21:00 (전날)
+    - cron: '0 21 * * *'
+  workflow_dispatch: # 수동 실행 가능
+
+jobs:
+  collect-realestate-data:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 코드 체크아웃
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+    
+    - name: Node.js 18 설정
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+    
+    - name: 의존성 설치
+      run: |
+        cd frontend
+        npm ci
+    
+    - name: 부동산 데이터 수집
+      run: |
+        cd frontend
+        node scripts/collect-daily-realestate.js
+    
+    - name: Git 설정
+      run: |
+        git config --local user.email "actions@github.com"
+        git config --local user.name "GitHub Actions Bot"
+    
+    - name: 변경사항 확인 및 커밋
+      run: |
+        # 새로 생성된 데이터 파일이 있는지 확인
+        if git diff --quiet HEAD -- frontend/public/data/realestate_*.json; then
+          echo "새로운 데이터 없음 - 커밋 건너뜀"
+        else
+          echo "새로운 부동산 데이터 발견"
+          TODAY=$(date +%Y-%m-%d)
+          git add frontend/public/data/realestate_${TODAY}.json
+          git commit -m "🏠 자동 부동산 데이터 업데이트: ${TODAY}" || echo "커밋할 변경사항 없음"
+          git push origin main || echo "푸시 실패"
+          echo "✅ 부동산 데이터 자동 수집 및 커밋 완료"
+        fi
+    
+    - name: 수집 결과 요약
+      run: |
+        TODAY=$(date +%Y-%m-%d)
+        if [ -f "frontend/public/data/realestate_${TODAY}.json" ]; then
+          echo "📊 수집된 데이터 파일: realestate_${TODAY}.json"
+          echo "📈 파일 크기: $(du -h frontend/public/data/realestate_${TODAY}.json | cut -f1)"
+          echo "🏠 거래 건수: $(cat frontend/public/data/realestate_${TODAY}.json | jq '.total_count // 0')"
+        else
+          echo "❌ 데이터 파일이 생성되지 않았습니다"
+          exit 1
+        fi

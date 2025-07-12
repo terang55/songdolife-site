@@ -169,9 +169,6 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     
     logger.info(`부동산 API 호출 시작 (신규체크: ${checkNew}, 제한: ${limit || '없음'})`);
     
-    let previousDeals: ProcessedDeal[] = [];
-    let previousUniqueIds: Set<string> = new Set();
-    
     if (checkNew) {
       logger.info('신규 거래 확인 모드 (파일 기반 비교)');
       const todayDate = getTodayDateString();
@@ -445,8 +442,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   }
 }
 
-// 서버 이전 데이터 파일 관리 - 날짜 기준으로 변경
-const getDataFilePath = (date: string) => `./public/data/realestate_${date}.json`;
+// 사용하지 않는 함수 제거
 
 // 파일 기반 데이터 로드 함수
 async function loadDailyDataFromFile(date: string): Promise<ProcessedDeal[]> {
@@ -467,7 +463,7 @@ async function loadDailyDataFromFile(date: string): Promise<ProcessedDeal[]> {
         
         logger.debug(`${date} 로컬 파일에서 데이터 로드: ${parsed.total_count || 0}건`);
         return parsed.deals || [];
-      } catch (fileError) {
+      } catch {
         logger.debug(`${date} 로컬 파일 없음`);
         return [];
       }
@@ -483,7 +479,7 @@ async function loadDailyDataFromFile(date: string): Promise<ProcessedDeal[]> {
         logger.debug(`${date} 프로덕션에서 데이터 로드: ${parsed.total_count || 0}건`);
         return parsed.deals || [];
       }
-    } catch (fetchError) {
+    } catch {
       logger.debug(`${date} 프로덕션 파일 fetch 실패`);
     }
     

@@ -140,7 +140,7 @@ export async function GET(): Promise<NextResponse> {
         yesterday: yesterdayFileTest
       },
       localFileTest,
-      recommendations: []
+      recommendations: [] as string[]
     };
     
     // 문제 진단 및 권장사항

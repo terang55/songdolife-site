@@ -485,7 +485,7 @@ async function loadDailyDataFromFile(date: string): Promise<ProcessedDeal[]> {
     // 프로덕션 환경: public 디렉토리에서 fetch로 읽기
     try {
       // 서버사이드에서는 절대 URL 필요
-      const baseUrl = process.env.NODE_ENV === 'development' 
+      const baseUrl = (process.env.NODE_ENV as string) === 'development' 
         ? 'http://localhost:3001' 
         : `https://${process.env.VERCEL_URL || 'songdolife.vercel.app'}`;
       const fileUrl = `${baseUrl}/data/realestate_${date}.json`;

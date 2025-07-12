@@ -1,5 +1,6 @@
 import { GuideContent, GuideCategory, GuideMetadata } from '@/types/guide';
 import { BASE_URL } from '@/lib/siteConfig';
+import { loadGuideContent } from '@/lib/markdown-utils';
 
 export const GUIDE_CATEGORIES: GuideCategory[] = [
   {
@@ -41,34 +42,6 @@ export const GUIDE_CATEGORIES: GuideCategory[] = [
 
 // 임시 정적 데이터 (향후 CMS 또는 API로 교체)
 export const STATIC_GUIDES: GuideContent[] = [
-  {
-    slug: 'songdo-ipark-price-guide',
-    title: '송도 아이파크 실거래가 완벽 분석 가이드',
-    description: '송도 아이파크 아파트의 실거래가 동향과 투자 가치를 상세히 분석해드립니다.',
-    keywords: ['송도 아이파크', '송도 아파트 실거래가', '아이파크 시세'],
-    content: '',
-    category: 'realestate',
-    lastUpdated: '2025-01-11',
-    relatedGuides: ['songdo-apartment-investment', 'songdo-moving-checklist'],
-    readingTime: 7,
-    difficulty: 'medium',
-    tags: ['실거래가', '아파트', '투자분석', '시세'],
-    featured: true
-  },
-  {
-    slug: 'central-park-station-last-train',
-    title: '센트럴파크역 막차시간 완벽 가이드',
-    description: '센트럴파크역 막차시간과 야간 교통 정보를 한눈에 확인하세요.',
-    keywords: ['센트럴파크역 막차', '송도 막차시간', '인천1호선 막차'],
-    content: '',
-    category: 'transportation',
-    lastUpdated: '2025-01-11',
-    relatedGuides: ['songdo-transportation-guide'],
-    readingTime: 5,
-    difficulty: 'easy',
-    tags: ['교통', '막차', '시간표', '야간교통'],
-    featured: true
-  },
   {
     slug: 'songdo-moving-checklist',
     title: '송도 이사 완벽 체크리스트',
@@ -114,7 +87,15 @@ export function getGuidesByCategory(category?: string): GuideContent[] {
 }
 
 export function getGuideBySlug(slug: string): GuideContent | null {
-  return STATIC_GUIDES.find(guide => guide.slug === slug) || null;
+  const guide = STATIC_GUIDES.find(guide => guide.slug === slug);
+  if (!guide) return null;
+  
+  const content = loadGuideContent(guide.category, slug);
+  
+  return {
+    ...guide,
+    content
+  };
 }
 
 

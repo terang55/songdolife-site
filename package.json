@@ -6,7 +6,15 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["송도", "연수구", "부동산", "교통정보"],
+  "keywords": [
+    "송도",
+    "연수구",
+    "부동산",
+    "교통정보"
+  ],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@vercel/kv": "^3.0.0"
+  }
 }

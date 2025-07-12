@@ -106,3 +106,6 @@ crawler/logs/
 
 # Backup files
 frontend.gitignore 
+
+# YoYo AI version control directory
+.yoyo/

@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { NextRequest } from 'next/server';
 import { createRealEstateLogger } from '@/lib/logger';
 
 const logger = createRealEstateLogger();
@@ -73,7 +72,7 @@ async function testFileAccess(date: string): Promise<{
   }
 }
 
-export async function GET(request: NextRequest): Promise<NextResponse> {
+export async function GET(): Promise<NextResponse> {
   try {
     const todayDate = getTodayDateString();
     const yesterdayDate = getYesterdayDateString();

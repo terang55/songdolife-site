@@ -125,17 +125,8 @@ export default function RootLayout({
       <head>
         {/* LCP 이미지 프리로드 */}
         <link rel="preload" as="image" href="/og-image.jpg" fetchPriority="high" />
-        {/* PWA 메타 태그 */}
-        <meta name="application-name" content="송도라이프" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="송도라이프" />
-        <meta name="format-detection" content="telephone=no" />
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="msapplication-config" content="/browserconfig.xml" />
-        <meta name="msapplication-TileColor" content="#2563eb" />
+        {/* PWA 메타 태그 - metadata 객체와 중복 제거 */}
         <meta name="msapplication-tap-highlight" content="no" />
-        <meta name="theme-color" content="#2563eb" />
         
         {/* 캐시 방지 메타 태그 */}
         <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
@@ -155,7 +146,7 @@ export default function RootLayout({
               s.parentNode.insertBefore(t,s)}(window,document,'script',
               'https://wcs.naver.net/wcslog.js');
               wcs_add_config({
-                'account': 'NAVER_ANALYTICS_ID',
+                'account': '${process.env.NEXT_PUBLIC_NAVER_ANALYTICS_ID || 'NAVER_ANALYTICS_ID'}',
                 'domain': 'songdo.life'
               });
               wcs_do();
@@ -163,39 +154,17 @@ export default function RootLayout({
           }}
         />
         
-        {/* 추가 SEO 메타 태그 */}
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content="#2563eb" />
-        <meta name="msapplication-TileColor" content="#2563eb" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="송도라이프" />
+        {/* 중복 메타태그 제거됨 - metadata 객체에서 관리 */}
         
-        {/* 네이버 SEO 최적화 메타 태그 */}
-        <meta name="naver-site-verification" content={process.env.NEXT_PUBLIC_NAVER_VERIFICATION || "SONGDO-LIFE-NAVER-VERIFICATION"} />
+        {/* 중복 제거됨 - metadata.verification에서 관리 */}
         
         {/* Google AdSense 인증 */}
         <meta name="google-adsense-account" content="ca-pub-2592538242403472" />
-        <meta name="description" content="송도국제도시 주민을 위한 실시간 뉴스·지하철·부동산 등 생활정보 플랫폼" />
-        <meta name="keywords" content="송도국제도시,인천1호선,인천대입구역,센트럴파크역,국제업무지구역,지하철시간표,송도,센트럴파크" />
-        <meta name="author" content="송도라이프" />
-        <meta name="publisher" content="송도라이프" />
-        <meta name="copyright" content="송도라이프" />
-        <meta name="robots" content="index,follow" />
+        {/* 중복 제거됨 - metadata 객체에서 관리 */}
         <meta name="revisit-after" content="1 days" />
         <meta name="content-language" content="ko" />
         
-        {/* Open Graph for Naver */}
-        <meta property="og:locale" content="ko_KR" />
-        <meta property="og:site_name" content="송도라이프" />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="송도라이프 | 인천 연수구 송도국제도시 생활정보 플랫폼" />
-        <meta property="og:description" content="송도국제도시 주민을 위한 실시간 뉴스·지하철·부동산·병원·약국 정보 플랫폼. 센트럴파크, 인천1호선, 송도동 모든 생활정보를 한곳에서 확인하세요." />
-        <meta property="og:url" content={BASE_URL} />
-        <meta property="og:image" content={`${BASE_URL}/og-image.jpg`} />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content={getDefaultImageAltText('og')} />
+        {/* 중복 제거됨 - metadata.openGraph에서 관리 */}
         
         {/* 지역 정보 메타 태그 */}
         <meta name="geo.region" content="KR-28" />

@@ -470,42 +470,37 @@ async function loadDailyDataFromFile(date: string): Promise<ProcessedDeal[]> {
         const fs = await import('fs/promises');
         const path = await import('path');
         const filePath = path.join(process.cwd(), 'public', 'data', `realestate_${date}.json`);
-        
         const data = await fs.readFile(filePath, 'utf-8');
         const parsed = JSON.parse(data);
-        
         logger.debug(`${date} 로컬 파일에서 데이터 로드: ${parsed.total_count || 0}건`);
         return parsed.deals || [];
       } catch {
         logger.debug(`${date} 로컬 파일 없음`);
         return [];
       }
-    }
-    
-    // 프로덕션 환경: public 디렉토리에서 fetch로 읽기
-    try {
-      // 서버사이드에서는 절대 URL 필요
-      const baseUrl = (process.env.NODE_ENV as string) === 'development' 
-        ? 'http://localhost:3001' 
-        : `https://${process.env.VERCEL_URL || 'songdolife.vercel.app'}`;
-      const fileUrl = `${baseUrl}/data/realestate_${date}.json`;
-      logger.debug(`${date} 파일 접근 시도: ${fileUrl}`);
-      
-      const response = await fetch(fileUrl);
-      
-      if (response.ok) {
-        const parsed = await response.json();
-        logger.info(`${date} 프로덕션에서 데이터 로드 성공: ${parsed.total_count || 0}건`);
-        return parsed.deals || [];
-      } else {
-        logger.warn(`${date} 파일 응답 실패: ${response.status} ${response.statusText}`);
+    } else {
+      // 프로덕션 환경: public 디렉토리에서 fetch로 읽기
+      try {
+        // 서버사이드에서는 절대 URL 필요
+        const baseUrl = (process.env.NODE_ENV as string) === 'development' 
+          ? 'http://localhost:3001' 
+          : `https://${process.env.VERCEL_URL || 'songdolife.vercel.app'}`;
+        const fileUrl = `${baseUrl}/data/realestate_${date}.json`;
+        logger.debug(`${date} 파일 접근 시도: ${fileUrl}`);
+        const response = await fetch(fileUrl);
+        if (response.ok) {
+          const parsed = await response.json();
+          logger.info(`${date} 프로덕션에서 데이터 로드 성공: ${parsed.total_count || 0}건`);
+          return parsed.deals || [];
+        } else {
+          logger.warn(`${date} 파일 응답 실패: ${response.status} ${response.statusText}`);
+        }
+      } catch (error) {
+        logger.error(`${date} 프로덕션 파일 fetch 실패:`, error);
       }
-    } catch (error) {
-      logger.error(`${date} 프로덕션 파일 fetch 실패:`, error);
+      logger.debug(`${date} 데이터 파일을 찾을 수 없음`);
+      return [];
     }
-    
-    logger.debug(`${date} 데이터 파일을 찾을 수 없음`);
-    return [];
     
   } catch (error) {
     logger.error(`${date} 데이터 로드 실패:`, error);

@@ -57,61 +57,69 @@ function getTodayDateString() {
          String(today.getDate()).padStart(2, '0');
 }
 
-// 특정 날짜의 부동산 데이터 수집
+// 현재 시점에서 이용 가능한 모든 부동산 데이터 수집 (최근 3개월)
 async function collectRealEstateDataForDate(targetDate) {
-  console.log(`🏠 ${targetDate} 부동산 데이터 수집 시작`);
+  console.log(`🏠 ${targetDate} 시점 부동산 데이터 수집 시작 (최근 3개월 전체 거래)`);
   
   const deals = [];
   const parser = new XMLParser({ ignoreAttributes: false, trimValues: true });
   
-  // 타겟 날짜의 연월 추출 (YYYY-MM-DD -> YYYYMM)
-  const yearMonth = targetDate.substring(0, 7).replace('-', '');
+  // 현재 날짜 기준으로 최근 3개월 yearMonth 리스트 생성
+  const now = new Date(targetDate);
+  const yearMonths = [];
+  for (let i = 0; i < 3; i++) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const y = d.getFullYear();
+    const m = (d.getMonth() + 1).toString().padStart(2, '0');
+    yearMonths.push(`${y}${m}`);
+  }
   
-  console.log(`📅 API 호출 대상 연월: ${yearMonth}`);
+  console.log(`📅 API 호출 대상 연월: ${yearMonths.join(', ')} (최근 3개월 전체 수집)`);
   
-  let pageNo = 1;
   const numOfRows = 100;
   
-  while (true) {
-    const apiUrl = new URL(MOLIT_BASE_URL);
-    apiUrl.searchParams.append('serviceKey', MOLIT_API_KEY);
-    apiUrl.searchParams.append('LAWD_CD', AREA_CODE);
-    apiUrl.searchParams.append('DEAL_YMD', yearMonth);
-    apiUrl.searchParams.append('numOfRows', numOfRows.toString());
-    apiUrl.searchParams.append('pageNo', pageNo.toString());
+  // 각 월별로 데이터 수집
+  for (const yearMonth of yearMonths) {
+    console.log(`📅 ${yearMonth} 데이터 수집 중`);
+    let pageNo = 1;
+    
+    while (true) {
+      const apiUrl = new URL(MOLIT_BASE_URL);
+      apiUrl.searchParams.append('serviceKey', MOLIT_API_KEY);
+      apiUrl.searchParams.append('LAWD_CD', AREA_CODE);
+      apiUrl.searchParams.append('DEAL_YMD', yearMonth);
+      apiUrl.searchParams.append('numOfRows', numOfRows.toString());
+      apiUrl.searchParams.append('pageNo', pageNo.toString());
 
-    try {
-      console.log(`📡 API 호출 중... (페이지 ${pageNo})`);
-      const response = await fetch(apiUrl.toString());
-      const xmlText = await response.text();
-      const parsed = parser.parse(xmlText);
-      const items = parsed?.response?.body?.items?.item;
+      try {
+        console.log(`📡 ${yearMonth} API 호출 중... (페이지 ${pageNo})`);
+        const response = await fetch(apiUrl.toString());
+        const xmlText = await response.text();
+        const parsed = parser.parse(xmlText);
+        const items = parsed?.response?.body?.items?.item;
 
-      if (!items) {
-        console.log(`✅ ${pageNo}페이지: 데이터 없음 (수집 완료)`);
-        break;
-      }
+        if (!items) {
+          console.log(`✅ ${yearMonth} ${pageNo}페이지: 데이터 없음 (수집 완료)`);
+          break;
+        }
 
-      const itemArray = Array.isArray(items) ? items : [items];
-      console.log(`📊 ${pageNo}페이지: ${itemArray.length}건 처리 중`);
+        const itemArray = Array.isArray(items) ? items : [items];
+        console.log(`📊 ${yearMonth} ${pageNo}페이지: ${itemArray.length}건 처리 중`);
 
-      for (const item of itemArray) {
-        try {
-          const apartment = item.aptNm || '';
-          const area = item.excluUseAr || '';
-          const floor = item.floor || '';
-          const priceStr = item.dealAmount || '';
-          const year = item.dealYear || '';
-          const month = item.dealMonth || '';
-          const day = item.dealDay || '';
-          const buildYear = item.buildYear || '';
-          const dong = item.umdNm || '';
+        for (const item of itemArray) {
+          try {
+            const apartment = item.aptNm || '';
+            const area = item.excluUseAr || '';
+            const floor = item.floor || '';
+            const priceStr = item.dealAmount || '';
+            const year = item.dealYear || '';
+            const month = item.dealMonth || '';
+            const day = item.dealDay || '';
+            const buildYear = item.buildYear || '';
+            const dong = item.umdNm || '';
 
-          if (apartment && priceStr && dong === '송도동') {
-            const dealDate = formatDealDate(year, month, day);
-            
-            // 특정 날짜의 거래만 필터링
-            if (dealDate === targetDate) {
+            if (apartment && priceStr && dong === '송도동') {
+              const dealDate = formatDealDate(year, month, day);
               const price = parsePrice(priceStr);
               const pricePerPyeong = calculatePricePerPyeong(price, area);
 
@@ -140,25 +148,25 @@ async function collectRealEstateDataForDate(targetDate) {
                 unique_id: uniqueId,
               });
             }
+          } catch (parseError) {
+            console.error('❌ 개별 데이터 파싱 오류:', parseError);
           }
-        } catch (parseError) {
-          console.error('❌ 개별 데이터 파싱 오류:', parseError);
         }
-      }
 
-      if (itemArray.length < numOfRows) {
-        console.log(`✅ ${pageNo}페이지: 마지막 페이지 (수집 완료)`);
+        if (itemArray.length < numOfRows) {
+          console.log(`✅ ${yearMonth} ${pageNo}페이지: 마지막 페이지 (수집 완료)`);
+          break;
+        }
+        
+        pageNo += 1;
+      } catch (pageError) {
+        console.error(`❌ ${yearMonth} ${pageNo}페이지 데이터 수집 실패:`, pageError);
         break;
       }
-      
-      pageNo += 1;
-    } catch (pageError) {
-      console.error(`❌ ${yearMonth} ${pageNo}페이지 데이터 수집 실패:`, pageError);
-      break;
     }
   }
   
-  console.log(`🎯 ${targetDate} 데이터 수집 완료: ${deals.length}건`);
+  console.log(`🎯 ${targetDate} 시점 데이터 수집 완료: ${deals.length}건 (최근 3개월: ${yearMonths.join(', ')})`);
   return deals;
 }
 
@@ -176,7 +184,8 @@ async function saveDataToFile(deals, targetDate) {
       timestamp: new Date().toISOString(),
       total_count: deals.length,
       date: targetDate,
-      collection_method: 'github_actions_auto'
+      collection_method: 'github_actions_auto',
+      note: `${targetDate} 시점에서 수집된 최근 3개월 전체 거래 데이터`
     };
     
     await fs.writeFile(filePath, JSON.stringify(dataToSave, null, 2));
@@ -202,8 +211,8 @@ async function main() {
     const deals = await collectRealEstateDataForDate(today);
     
     if (deals.length === 0) {
-      console.log('⚠️  오늘 날짜의 거래 데이터가 없습니다');
-      console.log('💡 이는 정상적인 상황일 수 있습니다 (주말, 공휴일, 아직 업데이트되지 않은 데이터 등)');
+      console.log('⚠️  해당 월의 거래 데이터가 없습니다');
+      console.log('💡 이는 API 응답 문제이거나 실제로 데이터가 없는 상황입니다');
     }
     
     // 파일로 저장

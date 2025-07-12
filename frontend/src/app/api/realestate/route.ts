@@ -184,10 +184,23 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       
       logger.info(`어제 거래: ${yesterdayDeals.length}건, 오늘 거래: ${todayDeals.length}건`);
       
-      // 파일이 없는 경우 대체 로직
+      // 파일 로드 결과에 따른 처리 로직
+      logger.info(`파일 로드 결과 - 어제: ${yesterdayDeals.length}건, 오늘: ${todayDeals.length}건`);
+      
+      // 두 파일 모두 없는 경우에만 API 대체 로직 사용
       if (yesterdayDeals.length === 0 && todayDeals.length === 0) {
         logger.warn('어제와 오늘 데이터 파일이 모두 없습니다. API 실시간 수집으로 대체합니다.');
         return await handleFallbackApiComparison(yesterdayDate, todayDate);
+      }
+      
+      // 어제 파일만 없는 경우: 오늘 모든 거래를 신규로 처리
+      if (yesterdayDeals.length === 0 && todayDeals.length > 0) {
+        logger.info('어제 파일 없음. 오늘 모든 거래를 신규로 처리합니다.');
+      }
+      
+      // 오늘 파일만 없는 경우: 신규 거래 0건
+      if (yesterdayDeals.length > 0 && todayDeals.length === 0) {
+        logger.info('오늘 파일 없음. 신규 거래 0건으로 처리합니다.');
       }
       
       // 어제 거래의 고유 ID 세트 생성
@@ -471,16 +484,24 @@ async function loadDailyDataFromFile(date: string): Promise<ProcessedDeal[]> {
     
     // 프로덕션 환경: public 디렉토리에서 fetch로 읽기
     try {
-      const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
-      const response = await fetch(`${baseUrl}/data/realestate_${date}.json`);
+      // 서버사이드에서는 절대 URL 필요
+      const baseUrl = process.env.NODE_ENV === 'development' 
+        ? 'http://localhost:3001' 
+        : `https://${process.env.VERCEL_URL || 'songdolife.vercel.app'}`;
+      const fileUrl = `${baseUrl}/data/realestate_${date}.json`;
+      logger.debug(`${date} 파일 접근 시도: ${fileUrl}`);
+      
+      const response = await fetch(fileUrl);
       
       if (response.ok) {
         const parsed = await response.json();
-        logger.debug(`${date} 프로덕션에서 데이터 로드: ${parsed.total_count || 0}건`);
+        logger.info(`${date} 프로덕션에서 데이터 로드 성공: ${parsed.total_count || 0}건`);
         return parsed.deals || [];
+      } else {
+        logger.warn(`${date} 파일 응답 실패: ${response.status} ${response.statusText}`);
       }
-    } catch {
-      logger.debug(`${date} 프로덕션 파일 fetch 실패`);
+    } catch (error) {
+      logger.error(`${date} 프로덕션 파일 fetch 실패:`, error);
     }
     
     logger.debug(`${date} 데이터 파일을 찾을 수 없음`);

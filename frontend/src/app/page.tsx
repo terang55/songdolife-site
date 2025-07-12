@@ -547,57 +547,6 @@ export default function HomePage() {
       {/* 브레드크럼 네비게이션 */}
       <Breadcrumb items={breadcrumbItems} />
 
-      {/* 송도 생활 가이드 섹션 */}
-      <section className="mb-8 sm:mb-12">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center space-x-3">
-            <span className="text-2xl">📚</span>
-            <div>
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900">송도 생활 가이드</h2>
-              <p className="text-sm text-gray-600 mt-1">송도국제도시 생활에 필요한 실용적인 정보들</p>
-            </div>
-          </div>
-          <Link 
-            href="/guides"
-            className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center space-x-1"
-          >
-            <span>전체보기</span>
-            <span>→</span>
-          </Link>
-        </div>
-        
-        <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {getGuidesByCategory().slice(0, 4).map((guide) => {
-            const categoryInfo = GUIDE_CATEGORIES.find(cat => cat.id === guide.category);
-            return (
-              <Link
-                key={guide.slug}
-                href={`/guides/${guide.slug}`}
-                className="group bg-white rounded-xl shadow-sm border hover:shadow-md transition-all duration-200 p-5"
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-2xl">{categoryInfo?.icon || '📄'}</span>
-                  <span className="text-xs text-gray-500">{guide.readingTime}분</span>
-                </div>
-                <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
-                  {guide.title}
-                </h3>
-                <p className="text-xs sm:text-sm text-gray-600 mb-3 line-clamp-2">
-                  {guide.description}
-                </p>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-full">
-                    {categoryInfo?.name}
-                  </span>
-                  <span className="text-xs text-blue-600 group-hover:text-blue-700">
-                    읽기 →
-                  </span>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
-      </section>
 
       {/* 병원/약국 정보 위젯 */}
       {selectedCategory === '병원' && <MedicalWidget initialType="hospital" />}
@@ -717,6 +666,58 @@ export default function HomePage() {
             </div>
           </div>
         )}
+
+        {/* 송도 생활 가이드 섹션 */}
+        <section className="mt-8 sm:mt-12 mb-8 sm:mb-12">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center space-x-3">
+              <span className="text-2xl">📚</span>
+              <div>
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900">송도 생활 가이드</h2>
+                <p className="text-sm text-gray-600 mt-1">송도국제도시 생활에 필요한 실용적인 정보들</p>
+              </div>
+            </div>
+            <Link 
+              href="/guides"
+              className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center space-x-1"
+            >
+              <span>전체보기</span>
+              <span>→</span>
+            </Link>
+          </div>
+          
+          <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {getGuidesByCategory().slice(0, 4).map((guide) => {
+              const categoryInfo = GUIDE_CATEGORIES.find(cat => cat.id === guide.category);
+              return (
+                <Link
+                  key={guide.slug}
+                  href={`/guides/${guide.slug}`}
+                  className="group bg-white rounded-xl shadow-sm border hover:shadow-md transition-all duration-200 p-5"
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-2xl">{categoryInfo?.icon || '📄'}</span>
+                    <span className="text-xs text-gray-500">{guide.readingTime}분</span>
+                  </div>
+                  <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
+                    {guide.title}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-gray-600 mb-3 line-clamp-2">
+                    {guide.description}
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-full">
+                      {categoryInfo?.name}
+                    </span>
+                    <span className="text-xs text-blue-600 group-hover:text-blue-700">
+                      읽기 →
+                    </span>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
 
         {/* FAQ 섹션 */}
         <section className="mt-12 sm:mt-16 py-8 sm:py-12 bg-gray-50 rounded-2xl">

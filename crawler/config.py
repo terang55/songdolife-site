@@ -80,15 +80,37 @@ LOGS_DIR = "../data/logs"
 MAX_PAGES = 5  # 최대 페이지 수
 DELAY_BETWEEN_REQUESTS = 2  # 요청 간 대기시간 (초)
 
-# 브라우저 설정
-CHROME_OPTIONS = [
-    "--no-sandbox",
-    "--disable-dev-shm-usage", 
-    "--disable-extensions",
-    "--disable-plugins",
-    "--disable-images",
-    "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-]
+# 브라우저 설정 (환경별 자동 감지)
+def get_chrome_options():
+    """환경에 따른 Chrome 옵션 반환"""
+    options = [
+        "--no-sandbox",
+        "--disable-dev-shm-usage", 
+        "--disable-extensions",
+        "--disable-plugins",
+        "--disable-images",
+        "--disable-gpu",
+        "--disable-background-timer-throttling",
+        "--disable-backgrounding-occluded-windows",
+        "--disable-renderer-backgrounding",
+        "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+    ]
+    
+    # CI/CD 환경이나 CRAWLER_HEADLESS 환경변수가 true인 경우 헤드리스 모드
+    if (os.getenv('CI') == 'true' or 
+        os.getenv('GITHUB_ACTIONS') == 'true' or 
+        os.getenv('CRAWLER_HEADLESS', '').lower() == 'true'):
+        options.extend([
+            "--headless",
+            "--disable-web-security",
+            "--disable-features=VizDisplayCompositor",
+            "--window-size=1920,1080"
+        ])
+    
+    return options
+
+# 기존 호환성을 위한 CHROME_OPTIONS (기본값)
+CHROME_OPTIONS = get_chrome_options()
 
 # 데이터 보존 기간 (일)
 DATA_RETENTION_DAYS = 30

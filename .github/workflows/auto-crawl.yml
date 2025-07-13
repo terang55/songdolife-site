@@ -32,15 +32,20 @@ jobs:
         pip install --upgrade pip
         pip install -r requirements.txt
     
-    - name: 🌐 Chrome 브라우저 설치
-      uses: browser-actions/setup-chrome@latest
-      with:
-        chrome-version: stable
-    
-    - name: 🤖 ChromeDriver 설정
+    - name: 🌐 Chrome 브라우저 및 ChromeDriver 설정
       run: |
-        # ChromeDriver는 webdriver-manager가 자동으로 관리
-        echo "ChromeDriver will be managed by webdriver-manager"
+        # Chrome 브라우저 설치
+        wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+        sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+        sudo apt-get update
+        sudo apt-get install -y google-chrome-stable
+        
+        # Chrome 버전 확인
+        google-chrome --version
+        
+        # ChromeDriver 자동 다운로드를 위한 설정
+        export DISPLAY=:99
+        sudo Xvfb -ac :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
     
     - name: 📁 데이터 디렉토리 생성
       run: |

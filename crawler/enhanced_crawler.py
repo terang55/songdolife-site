@@ -53,7 +53,9 @@ class EnhancedSongdoCrawler:
         """안전한 웹드라이버 생성"""
         try:
             options = webdriver.ChromeOptions()
-            for option in config.CHROME_OPTIONS:
+            # 동적으로 환경에 맞는 Chrome 옵션 가져오기
+            chrome_options = config.get_chrome_options()
+            for option in chrome_options:
                 options.add_argument(option)
             
             # 개인정보 보호 설정

@@ -7,9 +7,12 @@ import os
 import shutil
 import json
 import glob
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from loguru import logger
 import config
+
+# 한국시간 타임존 설정
+KST = timezone(timedelta(hours=9))
 
 class DataSyncManager:
     def __init__(self):
@@ -20,7 +23,7 @@ class DataSyncManager:
         
     def setup_logging(self):
         """로깅 설정"""
-        log_file = f"{config.LOGS_DIR}/data_sync_{datetime.now().strftime('%Y%m%d')}.log"
+        log_file = f"{config.LOGS_DIR}/data_sync_{datetime.now(KST).strftime('%Y%m%d')}.log"
         os.makedirs(config.LOGS_DIR, exist_ok=True)
         
         logger.add(
@@ -101,7 +104,7 @@ class DataSyncManager:
     def sync_all_data(self):
         """최신 데이터만 프론트엔드로 동기화 (실제로는 키워드별 최신 파일만)"""
         try:
-            print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] 🔄 최신 데이터 동기화 시작...")
+            print(f"[{datetime.now(KST).strftime('%Y-%m-%d %H:%M:%S')}] 🔄 최신 데이터 동기화 시작...")
             
             if not self.ensure_target_directory():
                 return False
@@ -136,7 +139,7 @@ class DataSyncManager:
                     continue
             
             logger.info(f"최신 데이터 동기화 완료: {synced_count}개 파일")
-            print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] ✅ 최신 데이터 동기화 완료: {synced_count}개 파일")
+            print(f"[{datetime.now(KST).strftime('%Y-%m-%d %H:%M:%S')}] ✅ 최신 데이터 동기화 완료: {synced_count}개 파일")
             
             # 동기화 결과 요약 생성
             self.create_latest_sync_summary(synced_files)
@@ -145,13 +148,13 @@ class DataSyncManager:
             
         except Exception as e:
             logger.error(f"최신 데이터 동기화 오류: {str(e)}")
-            print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] ❌ 최신 데이터 동기화 오류: {str(e)}")
+            print(f"[{datetime.now(KST).strftime('%Y-%m-%d %H:%M:%S')}] ❌ 최신 데이터 동기화 오류: {str(e)}")
             return False
 
     def sync_latest_data(self):
         """최신 데이터만 프론트엔드로 동기화"""
         try:
-            print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] 🔄 데이터 동기화 시작...")
+            print(f"[{datetime.now(KST).strftime('%Y-%m-%d %H:%M:%S')}] 🔄 데이터 동기화 시작...")
             
             if not self.ensure_target_directory():
                 return False
@@ -184,7 +187,7 @@ class DataSyncManager:
                     continue
             
             logger.info(f"데이터 동기화 완료: {synced_count}개 파일")
-            print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] ✅ 데이터 동기화 완료: {synced_count}개 파일")
+            print(f"[{datetime.now(KST).strftime('%Y-%m-%d %H:%M:%S')}] ✅ 데이터 동기화 완료: {synced_count}개 파일")
             
             # 동기화 결과 요약 생성
             self.create_sync_summary(latest_files)
@@ -193,7 +196,7 @@ class DataSyncManager:
             
         except Exception as e:
             logger.error(f"데이터 동기화 오류: {str(e)}")
-            print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] ❌ 데이터 동기화 오류: {str(e)}")
+            print(f"[{datetime.now(KST).strftime('%Y-%m-%d %H:%M:%S')}] ❌ 데이터 동기화 오류: {str(e)}")
             return False
 
     def cleanup_old_files(self, keep_days=7):
@@ -241,7 +244,7 @@ class DataSyncManager:
             actual_keywords = sorted(list(unique_keywords))
             
             summary = {
-                "sync_time": datetime.now().isoformat(),
+                "sync_time": datetime.now(KST).isoformat(),
                 "total_files": len(synced_files),
                 "total_keywords": len(actual_keywords),  # 실제 키워드 수
                 "keywords": actual_keywords,  # 실제 검색 키워드들
@@ -270,7 +273,7 @@ class DataSyncManager:
                     keywords.add(keyword)
             
             summary = {
-                "sync_time": datetime.now().isoformat(),
+                "sync_time": datetime.now(KST).isoformat(),
                 "total_files": len(synced_files),
                 "keywords": list(keywords),
                 "files": {k: v['filename'] for k, v in synced_files.items()},
@@ -309,7 +312,7 @@ class DataSyncManager:
             actual_keywords = sorted(list(unique_keywords))
             
             summary = {
-                "sync_time": datetime.now().isoformat(),
+                "sync_time": datetime.now(KST).isoformat(),
                 "total_files": len(synced_files),
                 "total_keywords": len(actual_keywords),  # 실제 키워드 수
                 "keywords": actual_keywords,  # 실제 검색 키워드들

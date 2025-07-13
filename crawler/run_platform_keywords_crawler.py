@@ -4,7 +4,10 @@
 
 import sys
 import os
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
+
+# 한국시간 타임존 설정
+KST = timezone(timedelta(hours=9))
 from enhanced_crawler import EnhancedSongdoCrawler
 import config
 
@@ -13,7 +16,7 @@ def main():
     print("=" * 60)
     print("🎯 송도라이프 정보 허브 - 플랫폼별 키워드 크롤러")
     print("=" * 60)
-    print(f"시작 시간: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"시작 시간: {datetime.now(KST).strftime('%Y-%m-%d %H:%M:%S')}")
     print()
     
     # 키워드 정보 출력
@@ -42,7 +45,7 @@ def main():
             print("\n" + "=" * 60)
             print("🎉 플랫폼별 키워드 크롤링 성공적으로 완료!")
             print("=" * 60)
-            print(f"완료 시간: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+            print(f"완료 시간: {datetime.now(KST).strftime('%Y-%m-%d %H:%M:%S')}")
             
             # 결과 파일 위치 안내
             print("\n📁 결과 파일 위치:")

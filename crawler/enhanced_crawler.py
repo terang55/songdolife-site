@@ -8,7 +8,7 @@ import json
 import time
 import requests
 import urllib.parse
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -22,6 +22,9 @@ import config
 import difflib
 import re
 
+# 한국시간 타임존 설정
+KST = timezone(timedelta(hours=9))
+
 class EnhancedSongdoCrawler:
     def __init__(self):
         """개선된 크롤러 초기화"""
@@ -31,7 +34,7 @@ class EnhancedSongdoCrawler:
         
     def setup_logging(self):
         """로깅 설정"""
-        log_file = f"{config.LOGS_DIR}/enhanced_crawler_{datetime.now().strftime('%Y%m%d')}.log"
+        log_file = f"{config.LOGS_DIR}/enhanced_crawler_{datetime.now(KST).strftime('%Y%m%d')}.log"
         os.makedirs(config.LOGS_DIR, exist_ok=True)
         
         logger.add(
@@ -799,7 +802,7 @@ class EnhancedSongdoCrawler:
     def save_enhanced_data(self, data, keyword):
         """개선된 데이터를 JSON 파일로 저장"""
         try:
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            timestamp = datetime.now(KST).strftime("%Y%m%d_%H%M%S")
             filename = f"{self.data_dir}/enhanced_news/{keyword}_enhanced_news_{timestamp}.json"
             
             with open(filename, 'w', encoding='utf-8') as f:
@@ -910,7 +913,7 @@ class EnhancedSongdoCrawler:
                 self._save_platform_based_data(platform_results, final_unique_data)
                 
                 # 전체 요약 저장
-                summary_file = f"{self.data_dir}/enhanced_crawl_summary_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+                summary_file = f"{self.data_dir}/enhanced_crawl_summary_{datetime.now(KST).strftime('%Y%m%d_%H%M%S')}.json"
                 with open(summary_file, 'w', encoding='utf-8') as f:
                     json.dump({
                         "total_items": len(final_unique_data),
@@ -934,7 +937,7 @@ class EnhancedSongdoCrawler:
                                 "items": len(platform_results['cafe'])
                             }
                         },
-                        "crawl_time": datetime.now().isoformat(),
+                        "crawl_time": datetime.now(KST).isoformat(),
                         "summary": f"{len(final_unique_data)}개 유니크 항목이 플랫폼별 키워드로 수집됨"
                     }, f, ensure_ascii=False, indent=2)
                 
@@ -963,7 +966,7 @@ class EnhancedSongdoCrawler:
     def _save_platform_based_data(self, platform_results, final_data):
         """플랫폼별 데이터를 개별 파일로 저장"""
         try:
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            timestamp = datetime.now(KST).strftime("%Y%m%d_%H%M%S")
             
             # 플랫폼별로 저장
             for platform, data in platform_results.items():
@@ -1040,14 +1043,14 @@ class EnhancedSongdoCrawler:
                     print(f"✅ 전체 데이터 중복 제거 완료: {final_removed_count}개 추가 중복 제거")
                 
                 # 전체 요약 저장
-                summary_file = f"{self.data_dir}/enhanced_crawl_summary_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+                summary_file = f"{self.data_dir}/enhanced_crawl_summary_{datetime.now(KST).strftime('%Y%m%d_%H%M%S')}.json"
                 with open(summary_file, 'w', encoding='utf-8') as f:
                     json.dump({
                         "total_items": len(final_unique_data),
                         "total_before_dedup": len(all_data),
                         "duplicates_removed": final_removed_count,
                         "keywords": keywords,
-                        "crawl_time": datetime.now().isoformat(),
+                        "crawl_time": datetime.now(KST).isoformat(),
                         "summary": f"{len(final_unique_data)}개 유니크 항목이 {len(keywords)}개 키워드로 수집됨 (중복 {final_removed_count}개 제거)"
                     }, f, ensure_ascii=False, indent=2)
                 

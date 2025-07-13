@@ -50,15 +50,7 @@ jobs:
         CHROMEDRIVER_URL="https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json"
         
         # stable 채널의 chromedriver 다운로드 URL 추출
-        DOWNLOAD_URL=$(curl -s "$CHROMEDRIVER_URL" | python3 -c "
-import sys, json
-data = json.load(sys.stdin)
-stable = data['channels']['Stable']
-for download in stable['downloads']['chromedriver']:
-    if download['platform'] == 'linux64':
-        print(download['url'])
-        break
-        ")
+        DOWNLOAD_URL=$(curl -s "$CHROMEDRIVER_URL" | python3 -c 'import sys, json; data = json.load(sys.stdin); stable = data["channels"]["Stable"]; [print(download["url"]) for download in stable["downloads"]["chromedriver"] if download["platform"] == "linux64"][:1]')
         
         echo "ChromeDriver 다운로드 URL: $DOWNLOAD_URL"
         

@@ -48,7 +48,7 @@ jobs:
         sudo Xvfb -ac :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
         
         # ChromeDriver 사전 다운로드 및 권한 설정
-        python3 -c "
+        cat > setup_chromedriver.py << 'EOF'
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
@@ -71,7 +71,8 @@ for root, dirs, files in os.walk(driver_dir):
         if 'chromedriver' in file:
             os.chmod(file_path, stat.S_IRWXU | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
             print(f'권한 설정: {file_path}')
-        "
+EOF
+        python3 setup_chromedriver.py
         
         # 최종 확인
         echo "✅ Chrome 및 ChromeDriver 설정 완료"

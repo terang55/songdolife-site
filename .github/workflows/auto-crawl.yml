@@ -159,8 +159,8 @@ jobs:
           git add crawler/data/enhanced_news/
           git add frontend/public/data/enhanced_news/
           
-          # 커밋 메시지 생성
-          TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+          # 커밋 메시지 생성 (한국시간)
+          TIMESTAMP=$(TZ='Asia/Seoul' date '+%Y-%m-%d %H:%M:%S KST')
           git commit -m "🗃️ 데이터 자동 동기화: ${TIMESTAMP} (GitHub Actions)"
           
           echo "✅ 새로운 데이터가 커밋되었습니다."

@@ -452,7 +452,7 @@ export default function SubwayPage() {
                   }`}
                 >
                   <div className="text-base sm:text-lg font-semibold">{station.name}</div>
-                  <div className="text-xs sm:text-sm text-gray-600 mt-1">{station.code}</div>
+                  <div className="text-sm sm:text-sm text-gray-600 mt-1">{station.code}</div>
                 </button>
               ))}
             </div>
@@ -786,7 +786,7 @@ export default function SubwayPage() {
           
           <div className="bg-gray-50 p-3 sm:p-4 rounded-lg mb-4">
             <h4 className="text-sm font-bold text-gray-800 mb-2">🚇 인천1호선 (연청색)</h4>
-            <div className="space-y-2 text-xs sm:text-sm text-gray-600">
+            <div className="space-y-2 text-sm sm:text-base text-gray-600">
               <div><strong>운행 구간:</strong> 검단호수공원역 ↔ 송도달빛축제공원역</div>
               <div><strong>총 역 수:</strong> 33개역 (약 37.1km)</div>
               <div><strong>운영사:</strong> 인천교통공사</div>
@@ -798,7 +798,7 @@ export default function SubwayPage() {
 
           <div className="bg-blue-50 p-3 sm:p-4 rounded-lg">
             <h4 className="text-sm font-bold text-gray-800 mb-2">🚌 광역급행버스</h4>
-            <div className="space-y-2 text-xs sm:text-sm text-gray-600">
+            <div className="space-y-2 text-sm sm:text-base text-gray-600">
               <div><strong>M6405:</strong> 인천 송도 웰카운티 ↔ 서울 강남역 서초현대타워앞 (직행)</div>
               <div><strong>주요 경유지:</strong> 송도더샵퍼스트월드 → 연세대송도캠퍼스 → 선바위역 → 서초역 → 교대역 → 강남역 → 양재역</div>
               <div><strong>총 정류소:</strong> 45개 (왕복 운행)</div>

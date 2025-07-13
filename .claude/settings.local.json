@@ -12,7 +12,8 @@
       "mcp__exa-search__web_search_exa",
       "Bash(rg:*)",
       "Bash(grep:*)",
-      "Bash(python3:*)"
+      "Bash(python3:*)",
+      "Bash(find:*)"
     ],
     "deny": []
   }

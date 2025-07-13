@@ -608,7 +608,7 @@ export default function HomePage() {
                             {item.type === 'youtube' ? item.views : ''}
                     </span>
                   </div>
-                        <h3 className="text-sm sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-3 line-clamp-2 leading-relaxed">
+                        <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-3 line-clamp-2 leading-relaxed text-korean-title">
                     <a 
                       href={item.url} 
                       target="_blank" 
@@ -619,11 +619,11 @@ export default function HomePage() {
                     </a>
                   </h3>
                   {item.type !== 'youtube' && (
-                          <p className="text-gray-600 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2 sm:line-clamp-3 leading-relaxed">
+                          <p className="text-gray-600 text-sm sm:text-base mb-3 sm:mb-4 line-clamp-2 sm:line-clamp-3 leading-relaxed text-korean-content">
                       {item.content}
                     </p>
                   )}
-                        <div className="flex items-center justify-between text-xs sm:text-sm pt-2 border-t border-gray-100">
+                        <div className="flex items-center justify-between text-sm sm:text-sm pt-2 border-t border-gray-100">
                           <span className="font-medium text-gray-900 truncate mr-2 flex items-center gap-1">
                             <span className="text-gray-400 text-xs">🏢</span>
                             <span className="min-w-0 truncate">{item.type === 'youtube' ? item.channel : item.source}</span>

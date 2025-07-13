@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Noto_Sans_KR } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { BASE_URL } from '@/lib/siteConfig';
@@ -9,8 +9,16 @@ import NetworkStatus from './components/NetworkStatus';
 import BottomNavigation from './components/BottomNavigation';
 
 const inter = Inter({
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
   variable: "--font-inter",
+  display: 'swap',
+});
+
+const notoSansKR = Noto_Sans_KR({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-noto-sans-kr",
+  display: 'swap',
 });
 
 export const viewport: Viewport = {
@@ -507,7 +515,7 @@ export default function RootLayout({
 
       </head>
       <body
-        className={`${inter.variable} font-sans antialiased bg-gray-50`}
+        className={`${inter.variable} ${notoSansKR.variable} font-sans antialiased bg-gray-50`}
       >
         {/* Google Analytics */}
         <Script

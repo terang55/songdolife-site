@@ -422,7 +422,7 @@ const MedicalWidget: React.FC<MedicalWidgetProps> = ({ initialType = 'all' }) =>
                             <h3 className="font-semibold text-base sm:text-lg text-gray-800 truncate">
                               {medical.name}
                             </h3>
-                            <span className="text-xs sm:text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded-full whitespace-nowrap">
+                            <span className="text-sm sm:text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded-full whitespace-nowrap">
                               {getDistanceText(medical.distance)}
                             </span>
                           </div>

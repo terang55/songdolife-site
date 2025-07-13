@@ -47,32 +47,12 @@ jobs:
         export DISPLAY=:99
         sudo Xvfb -ac :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
         
-        # ChromeDriver 사전 다운로드 및 권한 설정
-        cat > setup_chromedriver.py << 'EOF'
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
-import os
-import stat
-
-# ChromeDriver 다운로드
-driver_path = ChromeDriverManager().install()
-print(f'ChromeDriver 경로: {driver_path}')
-
-# 실행 권한 부여
-os.chmod(driver_path, stat.S_IRWXU | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
-print('ChromeDriver 실행 권한 설정 완료')
-
-# 디렉토리 내 모든 파일에 실행 권한 부여 (보험)
-driver_dir = os.path.dirname(driver_path)
-for root, dirs, files in os.walk(driver_dir):
-    for file in files:
-        file_path = os.path.join(root, file)
-        if 'chromedriver' in file:
-            os.chmod(file_path, stat.S_IRWXU | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
-            print(f'권한 설정: {file_path}')
-EOF
-        python3 setup_chromedriver.py
+        # ChromeDriver 사전 설정
+        cd crawler
+        python3 -c "from webdriver_manager.chrome import ChromeDriverManager; import os, stat; path=ChromeDriverManager().install(); os.chmod(path, 0o755); print('ChromeDriver 설정 완료:', path)"
+        
+        # webdriver 디렉토리 전체 권한 설정
+        find ~/.wdm -name "*chromedriver*" -type f -exec chmod +x {} \; 2>/dev/null || true
         
         # 최종 확인
         echo "✅ Chrome 및 ChromeDriver 설정 완료"

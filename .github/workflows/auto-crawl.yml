@@ -32,29 +32,36 @@ jobs:
         pip install --upgrade pip
         pip install -r requirements.txt
     
-    - name: 🌐 Chrome 브라우저 및 ChromeDriver 설정
+    - name: 🌐 Chrome 및 ChromeDriver 설정
       run: |
         # Chrome 브라우저 설치
+        sudo apt-get update
+        sudo apt-get install -y wget gnupg
         wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
         sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
         sudo apt-get update
         sudo apt-get install -y google-chrome-stable xvfb
         
-        # Chrome 버전 확인
-        google-chrome --version
+        # Chrome 버전 확인 및 ChromeDriver 버전 결정
+        CHROME_VERSION=$(google-chrome --version | cut -d " " -f3 | cut -d "." -f1)
+        echo "Chrome 버전: $CHROME_VERSION"
+        
+        # ChromeDriver 직접 다운로드 및 설치
+        CHROMEDRIVER_VERSION=$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION)
+        echo "ChromeDriver 버전: $CHROMEDRIVER_VERSION"
+        
+        wget -N https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip
+        unzip -o chromedriver_linux64.zip
+        sudo mv chromedriver /usr/local/bin/
+        sudo chmod +x /usr/local/bin/chromedriver
+        
+        # ChromeDriver 실행 테스트
+        chromedriver --version
         
         # 가상 디스플레이 설정
         export DISPLAY=:99
         sudo Xvfb -ac :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
         
-        # ChromeDriver 사전 설정
-        cd crawler
-        python3 -c "from webdriver_manager.chrome import ChromeDriverManager; import os, stat; path=ChromeDriverManager().install(); os.chmod(path, 0o755); print('ChromeDriver 설정 완료:', path)"
-        
-        # webdriver 디렉토리 전체 권한 설정
-        find ~/.wdm -name "*chromedriver*" -type f -exec chmod +x {} \; 2>/dev/null || true
-        
-        # 최종 확인
         echo "✅ Chrome 및 ChromeDriver 설정 완료"
     
     - name: 📁 데이터 디렉토리 생성

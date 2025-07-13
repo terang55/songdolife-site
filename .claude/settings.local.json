@@ -11,7 +11,8 @@
       "mcp__naver-search__search_local",
       "mcp__exa-search__web_search_exa",
       "Bash(rg:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(python3:*)"
     ],
     "deny": []
   }

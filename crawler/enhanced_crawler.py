@@ -67,8 +67,14 @@ class EnhancedSongdoCrawler:
             }
             options.add_experimental_option("prefs", prefs)
             
-            service = Service(ChromeDriverManager().install())
-            self.driver = webdriver.Chrome(service=service, options=options)
+            # GitHub Actions 환경에서는 시스템 ChromeDriver 사용
+            if os.getenv('GITHUB_ACTIONS') == 'true':
+                # 시스템에 설치된 ChromeDriver 사용
+                self.driver = webdriver.Chrome(options=options)
+            else:
+                # 로컬 환경에서는 webdriver-manager 사용
+                service = Service(ChromeDriverManager().install())
+                self.driver = webdriver.Chrome(service=service, options=options)
             self.driver.set_page_load_timeout(30)
             logger.info("웹드라이버 생성 완료")
             return True

@@ -939,6 +939,272 @@ const PREGENERATED_CONTENT: { [key: string]: string } = {
 <p class="text-center text-gray-600 text-sm mt-8">📢 정보 업데이트: 모든 축제 정보와 일정은 2025년 7월 기준입니다. 실제 참여 시 변경사항이 있을 수 있으니 사전 확인 바랍니다.</p>
 
 </div>`
+  ,
+  'songdo-education-guide': `<div style="max-width: 100%; margin: 0 auto; line-height: 1.8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+
+<h1 style="font-size: 2.5rem; color: #3b82f6; text-align: center; margin-bottom: 1rem; border-bottom: 3px solid #60a5fa; padding-bottom: 1rem;">🎓 송도 교육 완벽 가이드</h1>
+
+<div style="text-align: center; background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; padding: 1.5rem; border-radius: 1rem; margin: 2rem 0; box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);">
+  <h2 style="margin: 0; font-size: 1.5rem;">송도국제도시는 대한민국 최고의 국제교육 허브입니다 ✨</h2>
+  <p style="margin: 0.5rem 0 0 0; font-size: 1.1rem; opacity: 0.9;">채드윅 국제학교를 비롯한 세계적 수준의 교육기관과 우수한 학군으로 자녀 교육을 중시하는 가정들의 1순위 선택지입니다.</p>
+  <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; opacity: 0.8;">최종 업데이트: 2025년 7월</p>
+</div>
+
+<h2 style="font-size: 2rem; color: #059669; border-left: 5px solid #10b981; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #ecfdf5; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">🌍 송도만의 특별한 교육 환경</h2>
+
+<div style="display: grid; gap: 1.5rem;">
+  <div style="background: #f0fdfa; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #14b8a6;">
+    <h3 style="color: #0f766e; margin: 0 0 1rem 0;">국제교육의 메카</h3>
+    <ul style="margin: 0; color: #374151; line-height: 1.6;">
+      <li><strong>대한민국 유일</strong>: 내국인 입학 가능한 2개 국제학교 보유 (채드윅, CMIS)</li>
+      <li><strong>IB 교육</strong>: 전 과정 IB 인증받은 채드윅 국제학교</li>
+      <li><strong>글로벌 환경</strong>: 다국적 거주민들과 함께하는 자연스러운 국제교육</li>
+      <li><strong>영어 몰입</strong>: 일상생활에서 영어 사용 기회 풍부</li>
+    </ul>
+  </div>
+  <div style="background: #f0fdfa; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #14b8a6;">
+    <h3 style="color: #0f766e; margin: 0 0 1rem 0;">우수한 학군 시스템</h3>
+    <ul style="margin: 0; color: #374151; line-height: 1.6;">
+      <li><strong>전국 상위권</strong>: 인천신정중학교 44% 특목고 진학률</li>
+      <li><strong>명문 학군</strong>: 목동·강남 수준의 학업성취도</li>
+      <li><strong>교육 열기</strong>: 높은 학부모 교육 관심도</li>
+    </ul>
+  </div>
+</div>
+
+<h2 style="font-size: 2rem; color: #dc2626; border-left: 5px solid #ef4444; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #fef2f2; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">🎓 연령대별 교육 가이드</h2>
+
+<div style="display: grid; gap: 2rem;">
+  <div style="background: #fffbeb; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #f59e0b;">
+    <h3 style="color: #d97706; margin: 0 0 1rem 0;">👶 영유아 교육 (0-6세)</h3>
+    <div style="margin: 1rem 0;">
+      <h4 style="color: #b45309; margin: 0 0 0.5rem 0;">국공립 어린이집 & 유치원</h4>
+      <ul style="margin: 0; color: #374151; line-height: 1.6;">
+        <li><strong>국공립송도에듀포레푸르지오어린이집</strong>: 2022년 개원, 33명 정원</li>
+        <li><strong>구립송도국제어린이집</strong>: 2015년 개원, 33명 정원</li>
+        <li><strong>인천송도꿈유치원</strong>: 2021년 개원, 306명 규모</li>
+      </ul>
+    </div>
+    <div style="margin: 1rem 0;">
+      <h4 style="color: #b45309; margin: 0 0 0.5rem 0;">영어유치원 & 국제교육</h4>
+      <ul style="margin: 0; color: #374151; line-height: 1.6;">
+        <li><strong>채드윅 유치원</strong>: 연 3,804만원, 100:1 경쟁률</li>
+        <li><strong>CMIS 유치원</strong>: 연 1,900만원</li>
+        <li><strong>영어유치원</strong>: 다양한 민간 영어유치원 운영</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="background: #eff6ff; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #3b82f6;">
+    <h3 style="color: #1d4ed8; margin: 0 0 1rem 0;">🎒 초등교육 (7-12세)</h3>
+    <div style="margin: 1rem 0;">
+      <h4 style="color: #1e40af; margin: 0 0 0.5rem 0;">주요 초등학교</h4>
+      <ul style="margin: 0; color: #374151; line-height: 1.6;">
+        <li><strong>인천신정초등학교</strong>: 송도 1공구 대표 학교</li>
+        <li><strong>인천명선초등학교</strong>: 우수한 교육과정</li>
+        <li><strong>인천연송초등학교</strong>: 신설 학교, 최신 시설</li>
+        <li><strong>인천연성초등학교</strong>: 연수구 소재 공립학교</li>
+      </ul>
+    </div>
+    <div style="margin: 1rem 0;">
+      <h4 style="color: #1e40af; margin: 0 0 0.5rem 0;">특색 프로그램</h4>
+      <ul style="margin: 0; color: #374151; line-height: 1.6;">
+        <li><strong>원어민 교사</strong>: EPIK 프로그램을 통한 원어민 영어수업</li>
+        <li><strong>방과후 교실</strong>: 늘봄학교 프로그램 운영</li>
+        <li><strong>돌봄교실</strong>: 맞벌이 가정 지원 시스템</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="background: #fef3f2; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #ef4444;">
+    <h3 style="color: #dc2626; margin: 0 0 1rem 0;">📚 중등교육 (13-15세)</h3>
+    <div style="margin: 1rem 0;">
+      <h4 style="color: #b91c1c; margin: 0 0 0.5rem 0;">주요 중학교</h4>
+      <ul style="margin: 0; color: #374151; line-height: 1.6;">
+        <li><strong>인천신정중학교</strong>: 44% 특목고 진학률, 과밀학급 이슈</li>
+        <li><strong>송도중학교</strong>: 인천 송도 지역 대표 중학교</li>
+      </ul>
+    </div>
+    <div style="margin: 1rem 0;">
+      <h4 style="color: #b91c1c; margin: 0 0 0.5rem 0;">진학 실적</h4>
+      <ul style="margin: 0; color: #374151; line-height: 1.6;">
+        <li><strong>특목고 진학률</strong>: 신정중 44% (일반고 462명, 특목고 363명)</li>
+        <li><strong>자유학구제</strong>: 연수구 내 중학교 선택 가능</li>
+        <li><strong>전국 상위</strong>: 목동·강남 수준 학업성취도</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<h2 style="font-size: 2rem; color: #7c2d12; border-left: 5px solid #ea580c; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #fff7ed; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">🌟 송도 국제학교 완벽 분석</h2>
+
+<div style="display: grid; gap: 2rem;">
+  <div style="background: #fffbeb; padding: 2rem; border-radius: 1rem; border: 2px solid #f59e0b;">
+    <h3 style="color: #d97706; margin: 0 0 1.5rem 0; font-size: 1.5rem;">채드윅 송도 국제학교</h3>
+    
+    <div style="display: grid; gap: 1rem;">
+      <div style="background: #fef3c7; padding: 1rem; border-radius: 0.5rem;">
+        <h4 style="color: #92400e; margin: 0 0 0.5rem 0;">기본 정보</h4>
+        <ul style="margin: 0; color: #374151; line-height: 1.6;">
+          <li><strong>개교</strong>: 2010년 (대한민국 2번째 외국교육기관)</li>
+          <li><strong>교육과정</strong>: 미국 교육과정 + IB 4개 과정 모두 제공</li>
+          <li><strong>학년</strong>: Pre-K ~ Grade 12</li>
+          <li><strong>인가</strong>: 교육부 공식인가, 양국 학력 인정</li>
+        </ul>
+      </div>
+      
+      <div style="background: #fef3c7; padding: 1rem; border-radius: 0.5rem;">
+        <h4 style="color: #92400e; margin: 0 0 0.5rem 0;">학비 & 경쟁률</h4>
+        <ul style="margin: 0; color: #374151; line-height: 1.6;">
+          <li><strong>유치원</strong>: 연 3,804만원</li>
+          <li><strong>중학생</strong>: 연 4,089만원</li>
+          <li><strong>고등학생</strong>: 연 4,476만원</li>
+          <li><strong>전체 비용</strong>: 12년 총 5억 6,799만원</li>
+          <li><strong>경쟁률</strong>: 내국인 쿼터 100:1 이상</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div style="background: #f0f9ff; padding: 2rem; border-radius: 1rem; border: 2px solid #0ea5e9;">
+    <h3 style="color: #0369a1; margin: 0 0 1.5rem 0; font-size: 1.5rem;">CMIS (칼빈매니토바 국제학교)</h3>
+    
+    <div style="display: grid; gap: 1rem;">
+      <div style="background: #e0f2fe; padding: 1rem; border-radius: 0.5rem;">
+        <h4 style="color: #0c4a6e; margin: 0 0 0.5rem 0;">기본 정보</h4>
+        <ul style="margin: 0; color: #374151; line-height: 1.6;">
+          <li><strong>인가</strong>: 2023년 송도에서 정식 인가</li>
+          <li><strong>교육과정</strong>: 캐나다 매니토바주 공립교육과정</li>
+          <li><strong>특징</strong>: AP 사립국제학교</li>
+        </ul>
+      </div>
+      
+      <div style="background: #e0f2fe; padding: 1rem; border-radius: 0.5rem;">
+        <h4 style="color: #0c4a6e; margin: 0 0 0.5rem 0;">학비 비교</h4>
+        <ul style="margin: 0; color: #374151; line-height: 1.6;">
+          <li><strong>유치원</strong>: 1,900만원 (채드윅의 절반 수준)</li>
+          <li><strong>초등학교</strong>: 2,100만원</li>
+          <li><strong>중학교</strong>: 2,350만원</li>
+          <li><strong>고등학교</strong>: 2,600만원</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2 style="font-size: 2rem; color: #9333ea; border-left: 5px solid #a855f7; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #faf5ff; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">💰 교육비 가이드 & 예산 계획</h2>
+
+<div style="display: grid; gap: 1.5rem;">
+  <div style="background: #f5f3ff; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #9333ea;">
+    <h3 style="color: #7e22ce; margin: 0 0 1rem 0;">국제학교 교육비</h3>
+    <div style="background: #e9d5ff; padding: 1rem; border-radius: 0.5rem; margin: 1rem 0;">
+      <h4 style="color: #6b21a8; margin: 0 0 0.5rem 0;">채드윅 국제학교 (12년 총 비용)</h4>
+      <ul style="margin: 0; color: #374151; line-height: 1.6;">
+        <li>유치원 (3년): 1억 1,412만원</li>
+        <li>초등학교 (6년): 2억 2,824만원</li>
+        <li>중학교 (3년): 1억 2,267만원</li>
+        <li>고등학교 (3년): 1억 3,428만원</li>
+        <li><strong>총 합계: 5억 9,931만원</strong></li>
+      </ul>
+    </div>
+    <div style="background: #e9d5ff; padding: 1rem; border-radius: 0.5rem;">
+      <h4 style="color: #6b21a8; margin: 0 0 0.5rem 0;">CMIS (12년 총 비용)</h4>
+      <ul style="margin: 0; color: #374151; line-height: 1.6;">
+        <li>유치원 (3년): 5,700만원</li>
+        <li>초등학교 (6년): 1억 2,600만원</li>
+        <li>중학교 (3년): 7,050만원</li>
+        <li>고등학교 (3년): 7,800만원</li>
+        <li><strong>총 합계: 3억 3,150만원</strong></li>
+      </ul>
+    </div>
+  </div>
+  
+  <div style="background: #f5f3ff; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #9333ea;">
+    <h3 style="color: #7e22ce; margin: 0 0 1rem 0;">일반 사교육비 예상</h3>
+    <div style="background: #e9d5ff; padding: 1rem; border-radius: 0.5rem;">
+      <h4 style="color: #6b21a8; margin: 0 0 0.5rem 0;">월 평균 사교육비 (송도 추정)</h4>
+      <ul style="margin: 0; color: #374151; line-height: 1.6;">
+        <li><strong>초등학생</strong>: 50-70만원</li>
+        <li><strong>중학생</strong>: 60-80만원</li>
+        <li><strong>고등학생</strong>: 70-90만원</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<h2 style="font-size: 2rem; color: #0891b2; border-left: 5px solid #06b6d4; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #f0fdfa; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">🎯 학부모 FAQ</h2>
+
+<div style="display: grid; gap: 1.5rem;">
+  <div style="background: #f0fdfa; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #06b6d4;">
+    <h3 style="color: #0e7490; margin: 0 0 1rem 0;">Q1. 송도로 이사 시 전학 절차는?</h3>
+    <div style="color: #374151; line-height: 1.6;">
+      <strong>A.</strong>
+      <ol style="margin: 0.5rem 0 0 1rem; padding-left: 1rem;">
+        <li>거주지 이전 확인서류 준비</li>
+        <li>재적 학교에서 전학 신청</li>
+        <li>인천교육청에서 배정받기</li>
+        <li>배정일로부터 7일 내 등록</li>
+      </ol>
+    </div>
+  </div>
+  
+  <div style="background: #f0fdfa; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #06b6d4;">
+    <h3 style="color: #0e7490; margin: 0 0 1rem 0;">Q2. 송도 국제학교 입학은 어떻게?</h3>
+    <div style="color: #374151; line-height: 1.6;">
+      <strong>A.</strong>
+      <ul style="margin: 0.5rem 0 0 1rem; padding-left: 1rem;">
+        <li><strong>채드윅</strong>: 매년 입학설명회 → 원서접수 → 입학시험 → 면접</li>
+        <li><strong>경쟁률</strong>: 100:1 이상, 조기 준비 필수</li>
+        <li><strong>자격</strong>: 내국인 40% 쿼터, 해외거주 조건 없음</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="background: #f0fdfa; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #06b6d4;">
+    <h3 style="color: #0e7490; margin: 0 0 1rem 0;">Q3. 송도 학군이 정말 좋나요?</h3>
+    <div style="color: #374151; line-height: 1.6;">
+      <strong>A.</strong>
+      <ul style="margin: 0.5rem 0 0 1rem; padding-left: 1rem;">
+        <li><strong>전국 상위권</strong>: 신정중 44% 특목고 진학률</li>
+        <li><strong>목동·강남 수준</strong>: 비슷한 학업성취도</li>
+        <li><strong>국제교육</strong>: 타 지역 대비 압도적 우위</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<h2 style="font-size: 2rem; color: #dc2626; border-left: 5px solid #ef4444; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #fef2f2; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">📞 유용한 연락처</h2>
+
+<div style="display: grid; gap: 1.5rem;">
+  <div style="background: #fef2f2; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #ef4444;">
+    <h3 style="color: #dc2626; margin: 0 0 1rem 0;">교육청 및 관련 기관</h3>
+    <ul style="margin: 0; color: #374151; line-height: 1.6;">
+      <li><strong>인천광역시교육청</strong>: 032-420-8114</li>
+      <li><strong>연수구청 교육지원과</strong>: 032-749-8000</li>
+      <li><strong>인천교육청 송도교육지원센터</strong>: 032-420-8200</li>
+    </ul>
+  </div>
+  
+  <div style="background: #fef2f2; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #ef4444;">
+    <h3 style="color: #dc2626; margin: 0 0 1rem 0;">주요 학교 연락처</h3>
+    <ul style="margin: 0; color: #374151; line-height: 1.6;">
+      <li><strong>채드윅 송도국제학교</strong>: 032-250-5000</li>
+      <li><strong>CMIS</strong>: 032-626-0509</li>
+      <li><strong>인천신정초등학교</strong>: 032-832-5901</li>
+      <li><strong>인천신정중학교</strong>: 032-832-0515</li>
+    </ul>
+  </div>
+</div>
+
+<hr style="border: none; height: 2px; background: linear-gradient(90deg, #3b82f6, #60a5fa, #3b82f6); margin: 3rem 0;">
+
+<div style="text-align: center; background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; padding: 2rem; border-radius: 1rem; margin: 3rem 0;">
+  <p style="margin: 0; font-size: 1rem; opacity: 0.9; line-height: 1.6;">
+    <em>본 가이드는 2024-2025년 기준으로 작성되었으며, 학교별 세부 정보는 해당 학교에 직접 문의하시기 바랍니다. 교육 정책 변경이나 학교 현황 변화가 있을 수 있으니, 중요한 결정 전에는 최신 정보를 확인해주세요.</em>
+  </p>
+</div>
+
+</div>`
 };
 
 export function loadGuideContent(category: string, slug: string): string {

@@ -200,13 +200,19 @@ const generateNewsStructuredData = (news: NewsItem[]): Record<string, unknown> |
 
   return {
     "@context": "https://schema.org",
-    "@type": "ItemList",
-    "numberOfItems": articles.length,
-    "itemListElement": articles.map((article, index) => ({
-      "@type": "ListItem",
-      "position": index + 1,
-      "item": article
-    }))
+    "@type": "CollectionPage",
+    "name": "송도라이프 뉴스 및 콘텐츠",
+    "description": "송도국제도시 지역 뉴스, 블로그, 유튜브 콘텐츠 모음",
+    "url": `${BASE_URL}`,
+    "mainEntity": {
+      "@type": "ItemList",
+      "numberOfItems": articles.length,
+      "itemListElement": articles.map((article, index) => ({
+        "@type": "ListItem",
+        "position": index + 1,
+        "item": article
+      }))
+    }
   };
 };
 
@@ -673,7 +679,7 @@ export default function HomePage() {
             <div className="flex items-center space-x-3">
               <span className="text-2xl">📚</span>
               <div>
-                <h2 className="text-xl sm:text-2xl font-bold text-gray-900">송도 생활 가이드</h2>
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900">송도 생활 가이드 (업데이트중)</h2>
                 <p className="text-sm text-gray-600 mt-1">송도국제도시 생활에 필요한 실용적인 정보들</p>
               </div>
             </div>
@@ -742,24 +748,8 @@ export default function HomePage() {
                 </summary>
                 <div className="px-4 sm:px-6 pb-4 sm:pb-6 text-gray-700 border-t bg-gray-50">
                   <p className="pt-4">
-                    센트럴파크역, 인천대입구역, 국제업무지구역의 실시간 도착 정보를 1분 간격으로 갱신합니다. 
-                    평일과 휴일 시간표도 매월 최신 데이터로 업데이트하여 정확한 교통 정보를 제공합니다.
-                  </p>
-                </div>
-              </details>
-
-              {/* FAQ 항목 2 */}
-              <details className="bg-white rounded-xl shadow-sm border overflow-hidden group">
-                <summary className="flex items-center justify-between p-4 sm:p-6 cursor-pointer hover:bg-gray-50 transition-colors">
-                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 pr-4">
-                    송도동 맛집·카페 추천 데이터는 어디서 수집하나요?
-                  </h3>
-                  <span className="text-gray-400 group-open:rotate-180 transition-transform text-xl">▼</span>
-                </summary>
-                <div className="px-4 sm:px-6 pb-4 sm:pb-6 text-gray-700 border-t bg-gray-50">
-                  <p className="pt-4">
-                    네이버 플레이스와 카카오맵 리뷰 데이터를 기반으로 매일 인기 지수를 분석해 선정합니다. 
-                    실제 방문 후기와 평점을 종합하여 송도 주민들에게 검증된 맛집과 카페 정보를 제공합니다.
+                    송도국제도시에 위치한 모든 지하철역의 정보를 제공합니다. 인천도시철도공사에서 제공하는 시간표를 기반으로 정보를 제공합니다. 
+                    평일과 휴일 시간표도 최신 데이터로 업데이트하여 정확한 교통 정보를 제공합니다.
                   </p>
                 </div>
               </details>
@@ -791,7 +781,7 @@ export default function HomePage() {
                 <div className="px-4 sm:px-6 pb-4 sm:pb-6 text-gray-700 border-t bg-gray-50">
                   <p className="pt-4">
                     매일 자동으로 최신 콘텐츠를 수집하고 유사도 검사를 거쳐 중복을 제거한 후 반영합니다. 
-                    송도국제도시, 센트럴파크, 국제업무지구 관련 키워드로 맞춤형 정보만 선별하여 제공합니다.
+                    송도국제도시에 관련된 엄선된 키워드로 송도주민들을 위한 맞춤형 정보만 선별하여 제공합니다.
                   </p>
                 </div>
               </details>
@@ -845,6 +835,7 @@ export default function HomePage() {
               <ul className="space-y-1 sm:space-y-2 text-sm text-gray-300">
                 <li>📍 송도국제도시</li>
                 <li>🚇 센트럴파크</li>
+                <li>🚇 GTX B </li>
 
               </ul>
             </div>

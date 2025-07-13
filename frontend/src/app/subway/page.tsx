@@ -230,44 +230,49 @@ export default function SubwayPage() {
     
     return {
       "@context": "https://schema.org",
-      "@type": "TrainStation",
-      "name": selectedStationInfo.name,
-      "identifier": selectedStationInfo.code,
+      "@type": "WebPage",
+      "name": `${selectedStationInfo.name} 지하철 정보`,
+      "description": `${selectedStationInfo.name}의 실시간 도착정보와 시간표`,
       "url": `https://songdo.life/subway?station=${encodeURIComponent(selectedStation)}`,
-      "address": {
-        "@type": "PostalAddress",
-        "addressCountry": "KR",
-        "addressRegion": "인천광역시",
-        "addressLocality": "연수구",
-        "streetAddress": "송도동"
+      "mainEntity": {
+        "@type": "TrainStation",
+        "name": selectedStationInfo.name,
+        "identifier": selectedStationInfo.code,
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "KR",
+          "addressRegion": "인천광역시",
+          "addressLocality": "연수구",
+          "streetAddress": "송도동"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": selectedStationInfo.coordinates.lat,
+          "longitude": selectedStationInfo.coordinates.lon
+        },
+        "operatedBy": {
+          "@type": "Organization",
+          "name": "인천교통공사",
+          "url": "https://www.ictr.or.kr"
+        },
+        "amenityFeature": [
+          {
+            "@type": "LocationFeatureSpecification",
+            "name": "실시간 도착정보",
+            "value": true
+          },
+          {
+            "@type": "LocationFeatureSpecification", 
+            "name": "시간표 제공",
+            "value": true
+          }
+        ]
       },
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": selectedStationInfo.coordinates.lat,
-        "longitude": selectedStationInfo.coordinates.lon
-      },
-      "operatedBy": {
-        "@type": "Organization",
-        "name": "인천교통공사",
-        "url": "https://www.ictr.or.kr"
-      },
-      "parentOrganization": {
+      "provider": {
         "@type": "Organization", 
         "name": "송도라이프",
         "url": "https://songdo.life"
-      },
-      "amenityFeature": [
-        {
-          "@type": "LocationFeatureSpecification",
-          "name": "실시간 도착정보",
-          "value": true
-        },
-        {
-          "@type": "LocationFeatureSpecification", 
-          "name": "시간표 제공",
-          "value": true
-        }
-      ]
+      }
     };
   };
 

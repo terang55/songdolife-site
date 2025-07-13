@@ -58,6 +58,67 @@ export default function RealEstatePage() {
         }}
       />
 
+      {/* 메인 구조화된 데이터 */}
+      <Script
+        id="realestate-ldjson"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            "name": "송도 부동산 실거래가",
+            "description": "송도국제도시 아파트 실거래가 정보를 실시간으로 확인하세요. 국토교통부 공식 데이터 기반 최신 거래 현황을 제공합니다.",
+            "url": `${BASE_URL}/realestate`,
+            "mainEntity": {
+              "@type": "RealEstateAgent",
+              "name": "송도라이프 부동산 정보 서비스",
+              "description": "송도국제도시 아파트 실거래가 및 부동산 정보 제공",
+              "url": `${BASE_URL}/realestate`,
+              "areaServed": {
+                "@type": "Place",
+                "name": "송도국제도시",
+                "address": {
+                  "@type": "PostalAddress",
+                  "addressCountry": "KR",
+                  "addressRegion": "인천광역시",
+                  "addressLocality": "연수구",
+                  "streetAddress": "송도동"
+                }
+              },
+              "serviceType": [
+                "아파트 실거래가 조회",
+                "부동산 시세 정보",
+                "매매가격 통계",
+                "지역별 가격 동향"
+              ],
+              "provider": {
+                "@type": "Organization",
+                "name": "송도라이프",
+                "url": `${BASE_URL}`
+              }
+            },
+            "breadcrumb": {
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "홈",
+                  "item": `${BASE_URL}/`
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "부동산 정보",
+                  "item": `${BASE_URL}/realestate`
+                }
+              ]
+            }
+          })
+        }}
+      />
+
       <div className="min-h-screen bg-gray-50">
         {/* Header */}
         <header className="bg-white shadow-sm sticky top-0 z-50">

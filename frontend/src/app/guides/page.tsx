@@ -63,6 +63,85 @@ export default function GuidesPage() {
         }}
       />
 
+      {/* 메인 구조화된 데이터 */}
+      <Script
+        id="guides-ldjson"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            "name": "송도 생활 가이드 모음",
+            "description": "송도국제도시 생활에 필요한 모든 정보를 한곳에서 확인하세요. 맛집, 카페, 생활편의시설, 교통정보 등 실용적인 가이드를 제공합니다.",
+            "url": `${BASE_URL}/guides`,
+            "mainEntity": {
+              "@type": "ItemList",
+              "name": "송도 생활 가이드 목록",
+              "description": "송도국제도시 거주자를 위한 생활 정보 가이드 모음",
+              "numberOfItems": featuredGuides.length + recentGuides.length,
+              "itemListElement": [
+                ...featuredGuides.map((guide, index) => ({
+                  "@type": "ListItem",
+                  "position": index + 1,
+                  "item": {
+                    "@type": "Article",
+                    "name": guide.title,
+                    "description": guide.description,
+                    "url": `${BASE_URL}/guides/${guide.slug}`,
+                    "author": {
+                      "@type": "Organization",
+                      "name": "송도라이프"
+                    },
+                    "publisher": {
+                      "@type": "Organization",
+                      "name": "송도라이프",
+                      "url": `${BASE_URL}`
+                    }
+                  }
+                })),
+                ...recentGuides.slice(0, 6).map((guide, index) => ({
+                  "@type": "ListItem", 
+                  "position": featuredGuides.length + index + 1,
+                  "item": {
+                    "@type": "Article",
+                    "name": guide.title,
+                    "description": guide.description,
+                    "url": `${BASE_URL}/guides/${guide.slug}`,
+                    "author": {
+                      "@type": "Organization",
+                      "name": "송도라이프"
+                    },
+                    "publisher": {
+                      "@type": "Organization",
+                      "name": "송도라이프",
+                      "url": `${BASE_URL}`
+                    }
+                  }
+                }))
+              ]
+            },
+            "breadcrumb": {
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "홈",
+                  "item": `${BASE_URL}/`
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "생활 가이드",
+                  "item": `${BASE_URL}/guides`
+                }
+              ]
+            }
+          })
+        }}
+      />
+
       <div className="min-h-screen bg-gray-50">
         {/* Header */}
         <header className="bg-white shadow-sm sticky top-0 z-50">
@@ -106,7 +185,7 @@ export default function GuidesPage() {
           {/* 페이지 헤더 */}
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              📚 송도 생활 가이드
+              📚 송도 생활 가이드 (업데이트중)
             </h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               송도국제도시에서의 생활에 필요한 모든 정보를 실용적인 가이드로 제공합니다

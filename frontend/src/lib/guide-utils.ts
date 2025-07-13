@@ -106,10 +106,24 @@ export const STATIC_GUIDES: GuideContent[] = [
     content: '',
     category: 'lifestyle',
     lastUpdated: '2025-07-12',
-    relatedGuides: ['songdo-restaurant-guide', 'songdo-shopping-guide'],
+    relatedGuides: ['songdo-restaurant-guide', 'songdo-shopping-guide', 'songdo-park-guide'],
     readingTime: 15,
     difficulty: 'medium',
     tags: ['문화', '공연', '전시', '여가활동'],
+    featured: true
+  },
+  {
+    slug: 'songdo-park-guide',
+    title: '송도 공원 완벽 가이드',
+    description: '센트럴파크부터 달빛축제공원까지, 송도국제도시의 모든 공원과 녹지공간을 완벽 정리했습니다.',
+    keywords: ['송도 공원', '센트럴파크', '달빛축제공원', '해돋이공원', '송도 산책', '송도 운동', '송도 자연', '송도 휴식공간'],
+    content: '',
+    category: 'lifestyle',
+    lastUpdated: '2025-07-12',
+    relatedGuides: ['songdo-culture-guide', 'songdo-restaurant-guide'],
+    readingTime: 12,
+    difficulty: 'easy',
+    tags: ['공원', '자연', '산책', '운동', '휴식'],
     featured: true
   }
 ];

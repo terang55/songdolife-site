@@ -26,40 +26,144 @@ const PREGENERATED_CONTENT: { [key: string]: string } = {
 <h1 style="font-size: 2.5rem; color: #f59e0b; text-align: center; margin-bottom: 1rem; border-bottom: 3px solid #fbbf24; padding-bottom: 1rem;">🍽️ 송도 맛집 완벽 가이드</h1>
 
 <div style="text-align: center; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 1.5rem; border-radius: 1rem; margin: 2rem 0; box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);">
-  <h2 style="margin: 0; font-size: 1.5rem;">2025년 최신판 📅</h2>
-  <p style="margin: 0.5rem 0 0 0; font-size: 1.1rem; opacity: 0.9;">카테고리별 추천 맛집 총정리 🎯</p>
+  <h2 style="margin: 0; font-size: 1.5rem;">실제 추천 맛집 총정리 📅</h2>
+  <p style="margin: 0.5rem 0 0 0; font-size: 1.1rem; opacity: 0.9;">송도 주민들이 인정한 진짜 맛집들 🎯</p>
   <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; opacity: 0.8;">최종 업데이트: 2025년 7월</p>
 </div>
 
-<div style="background: #fef3c7; padding: 1.5rem; border-radius: 1rem; margin: 2rem 0; border: 2px solid #f59e0b;">
-  <h3 style="color: #92400e; margin: 0 0 1rem 0; font-size: 1.2rem;">🍴 가이드 특징</h3>
-  <div style="display: grid; gap: 0.8rem;">
-    <div style="display: flex; align-items: center; gap: 0.5rem;">
-      <span style="background: #f59e0b; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem;">✓</span>
-      <span>한식부터 세계요리까지 카테고리별 분류</span>
+<h2 style="font-size: 2rem; color: #92400e; border-left: 5px solid #f59e0b; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #fef3c7; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">🏆 센트럴파크 주변 TOP 맛집</h2>
+
+<div style="display: grid; gap: 1.5rem;">
+  <div style="background: #fff7ed; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #f59e0b;">
+    <h3 style="color: #ea580c; margin: 0 0 1rem 0;">1. 속초코다리냉면</h3>
+    <div style="background: white; padding: 1rem; border-radius: 0.5rem; margin-bottom: 0.8rem;">
+      <p style="margin: 0; color: #374151; line-height: 1.6;">
+        <strong>📍 위치:</strong> 센트럴파크 상가<br>
+        <strong>🍜 추천메뉴:</strong> 코다리회냉면, 비빔냉면<br>
+        <strong>💰 가격대:</strong> 12,000-15,000원<br>
+        <strong>⭐ 특징:</strong> 코다리회가 푸짐하게 들어간 냉면 전문점
+      </p>
     </div>
-    <div style="display: flex; align-items: center; gap: 0.5rem;">
-      <span style="background: #f59e0b; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem;">✓</span>
-      <span>상황별 맛집 추천 (데이트, 가족, 혼밥)</span>
+  </div>
+
+  <div style="background: #fff7ed; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #f59e0b;">
+    <h3 style="color: #ea580c; margin: 0 0 1rem 0;">2. 칭칭차이나</h3>
+    <div style="background: white; padding: 1rem; border-radius: 0.5rem; margin-bottom: 0.8rem;">
+      <p style="margin: 0; color: #374151; line-height: 1.6;">
+        <strong>📍 위치:</strong> 센트럴파크 근처<br>
+        <strong>🍜 추천메뉴:</strong> 양장피, 탕수육, 짬뽕<br>
+        <strong>💰 가격대:</strong> 15,000-25,000원<br>
+        <strong>⭐ 특징:</strong> 정통 중식당, 현지인들이 인정하는 맛
+      </p>
     </div>
-    <div style="display: flex; align-items: center; gap: 0.5rem;">
-      <span style="background: #f59e0b; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem;">✓</span>
-      <span>주차 정보와 할인 혜택 포함</span>
+  </div>
+
+  <div style="background: #fff7ed; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #f59e0b;">
+    <h3 style="color: #ea580c; margin: 0 0 1rem 0;">3. 진시황뼈다귀감자탕</h3>
+    <div style="background: white; padding: 1rem; border-radius: 0.5rem; margin-bottom: 0.8rem;">
+      <p style="margin: 0; color: #374151; line-height: 1.6;">
+        <strong>📍 위치:</strong> 센트럴파크 상가<br>
+        <strong>🍜 추천메뉴:</strong> 뼈다귀감자탕, 돼지갈비<br>
+        <strong>💰 가격대:</strong> 35,000-50,000원 (2-3인분)<br>
+        <strong>⭐ 특징:</strong> 푸짐한 양과 진한 국물, 해장 최고
+      </p>
+    </div>
+  </div>
+
+  <div style="background: #fff7ed; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #f59e0b;">
+    <h3 style="color: #ea580c; margin: 0 0 1rem 0;">4. 베테랑 종합어시장</h3>
+    <div style="background: white; padding: 1rem; border-radius: 0.5rem; margin-bottom: 0.8rem;">
+      <p style="margin: 0; color: #374151; line-height: 1.6;">
+        <strong>📍 위치:</strong> 센트럴파크 근처<br>
+        <strong>🍜 추천메뉴:</strong> 활어회, 대게, 바닷가재<br>
+        <strong>💰 가격대:</strong> 50,000-100,000원<br>
+        <strong>⭐ 특징:</strong> 신선한 해산물 전문점
+      </p>
+    </div>
+  </div>
+
+  <div style="background: #fff7ed; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #f59e0b;">
+    <h3 style="color: #ea580c; margin: 0 0 1rem 0;">5. 메종드크루아상</h3>
+    <div style="background: white; padding: 1rem; border-radius: 0.5rem; margin-bottom: 0.8rem;">
+      <p style="margin: 0; color: #374151; line-height: 1.6;">
+        <strong>📍 위치:</strong> 센트럴파크 상가<br>
+        <strong>🍜 추천메뉴:</strong> 오리지날 크루아상, 허니고르곤졸라 먹물크루아상<br>
+        <strong>💰 가격대:</strong> 3,000-8,000원<br>
+        <strong>⭐ 특징:</strong> 크루아상 장인의 전문점, 바삭한 버터향
+      </p>
     </div>
   </div>
 </div>
 
-<h2 style="font-size: 2rem; color: #92400e; border-left: 5px solid #f59e0b; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #fef3c7; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">🍚 한식 맛집</h2>
+<h2 style="font-size: 2rem; color: #92400e; border-left: 5px solid #f59e0b; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #fef3c7; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">🛍️ 트리플스트리트 맛집 BEST</h2>
 
-<div style="background: #f8fafc; padding: 2rem; border-radius: 1rem; margin: 1rem 0; border: 1px solid #e2e8f0;">
-  <h3 style="color: #1e40af; margin-bottom: 1rem;">갈비전문점</h3>
-  <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid #10b981;">
-    <h4 style="color: #065f46; margin: 0 0 0.8rem 0;">📍 송도 갈비왕</h4>
-    <p style="margin: 0; color: #374151; line-height: 1.6;">
-      <strong>위치:</strong> 연수구 송도동 센트럴파크 인근<br>
-      <strong>추천메뉴:</strong> 양념갈비, 생갈비<br>
-      <strong>가격대:</strong> 1인당 2-3만원
-    </p>
+<div style="display: grid; gap: 1.5rem;">
+  <div style="background: #fef3c7; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #d97706;">
+    <h3 style="color: #92400e; margin: 0 0 1rem 0;">1. 담솥 (솥밥 전문점)</h3>
+    <div style="background: white; padding: 1rem; border-radius: 0.5rem;">
+      <p style="margin: 0; color: #374151; line-height: 1.6;">
+        <strong>🍜 추천메뉴:</strong> 전복솥밥, 스테이크솥밥<br>
+        <strong>💰 가격대:</strong> 15,000-25,000원<br>
+        <strong>⭐ 특징:</strong> 갓 지은 솥밥의 구수한 맛, 영양만점
+      </p>
+    </div>
+  </div>
+
+  <div style="background: #fef3c7; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #d97706;">
+    <h3 style="color: #92400e; margin: 0 0 1rem 0;">2. 세나가족 서울에 오다</h3>
+    <div style="background: white; padding: 1rem; border-radius: 0.5rem;">
+      <p style="margin: 0; color: #374151; line-height: 1.6;">
+        <strong>🍜 추천메뉴:</strong> 쌀국수, 분짜, 월남쌈<br>
+        <strong>💰 가격대:</strong> 8,000-15,000원<br>
+        <strong>⭐ 특징:</strong> 베트남인이 직접 운영하는 정통 베트남 음식점
+      </p>
+    </div>
+  </div>
+
+  <div style="background: #fef3c7; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #d97706;">
+    <h3 style="color: #92400e; margin: 0 0 1rem 0;">3. 일식 덮밥&벤또 전문점</h3>
+    <div style="background: white; padding: 1rem; border-radius: 0.5rem;">
+      <p style="margin: 0; color: #374151; line-height: 1.6;">
+        <strong>🍜 추천메뉴:</strong> 차슈벤또 8,500원, 가츠동 7,500원<br>
+        <strong>💰 가격대:</strong> 7,000-12,000원<br>
+        <strong>⭐ 특징:</strong> 합리적인 가격에 든든한 일식
+      </p>
+    </div>
+  </div>
+</div>
+
+<h2 style="font-size: 2rem; color: #92400e; border-left: 5px solid #f59e0b; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #fef3c7; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">🎯 클리앙 추천 맛집</h2>
+
+<div style="display: grid; gap: 1rem;">
+  <div style="background: #f8fafc; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #10b981;">
+    <h4 style="color: #065f46; margin: 0 0 0.5rem 0;">솟구쳐차기 (일본 라멘)</h4>
+    <p style="margin: 0; color: #374151; font-size: 0.9rem;">돈코츠라멘, 매운돈코츠라멘 | 10,000-15,000원</p>
+  </div>
+  <div style="background: #f8fafc; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #10b981;">
+    <h4 style="color: #065f46; margin: 0 0 0.5rem 0;">e99 (오무라이스 전문점)</h4>
+    <p style="margin: 0; color: #374151; font-size: 0.9rem;">일본식 오무라이스 | 12,000-18,000원</p>
+  </div>
+  <div style="background: #f8fafc; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #10b981;">
+    <h4 style="color: #065f46; margin: 0 0 0.5rem 0;">명품네모 (퓨전 중식)</h4>
+    <p style="margin: 0; color: #374151; font-size: 0.9rem;">돼지갈비, 칠리새우, 베이컨볶음밥 | 20,000-30,000원</p>
+  </div>
+</div>
+
+<div style="background: #fef3c7; padding: 1.5rem; border-radius: 1rem; margin: 2rem 0; border: 2px solid #f59e0b;">
+  <h3 style="color: #92400e; margin: 0 0 1rem 0; font-size: 1.2rem;">🍴 맛집 이용 꿀팁</h3>
+  <div style="display: grid; gap: 0.8rem;">
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+      <span style="background: #f59e0b; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem;">💡</span>
+      <span>점심시간(12-1시) 피해서 방문하면 대기시간 단축</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+      <span style="background: #f59e0b; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem;">💡</span>
+      <span>센트럴파크 주차장 이용시 식당에서 주차 할인 가능</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+      <span style="background: #f59e0b; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem;">💡</span>
+      <span>트리플스트리트 맛집은 쇼핑과 함께 즐기기 좋음</span>
+    </div>
   </div>
 </div>
 
@@ -110,6 +214,123 @@ const PREGENERATED_CONTENT: { [key: string]: string } = {
 </div>
 
 <p style="text-align: center; color: #6b7280; margin: 2rem 0;">송도에서의 즐거운 쇼핑 되세요! 🛍️</p>
+
+</div>`,
+
+  'songdo-park-guide': `<div style="max-width: 100%; margin: 0 auto; line-height: 1.8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+
+<h1 style="font-size: 2.5rem; color: #10b981; text-align: center; margin-bottom: 1rem; border-bottom: 3px solid #34d399; padding-bottom: 1rem;">🌳 송도 공원 완벽 가이드</h1>
+
+<div style="text-align: center; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 1.5rem; border-radius: 1rem; margin: 2rem 0; box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);">
+  <h2 style="margin: 0; font-size: 1.5rem;">센트럴파크부터 달빛축제공원까지 📅</h2>
+  <p style="margin: 0.5rem 0 0 0; font-size: 1.1rem; opacity: 0.9;">송도의 모든 공원과 녹지공간 완벽 정리 🎯</p>
+  <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; opacity: 0.8;">최종 업데이트: 2025년 7월</p>
+</div>
+
+<h2 style="font-size: 2rem; color: #065f46; border-left: 5px solid #10b981; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #d1fae5; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">🌊 센트럴파크 (Central Park)</h2>
+
+<div style="background: #f0fdfa; padding: 2rem; border-radius: 1rem; margin: 1rem 0; border: 1px solid #5eead4;">
+  <h3 style="color: #0f766e; margin-bottom: 1rem;">📍 기본 정보</h3>
+  <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid #10b981;">
+    <p style="margin: 0; color: #374151; line-height: 1.6;">
+      <strong>위치:</strong> 인천광역시 연수구 센트럴로 160<br>
+      <strong>면적:</strong> 414,926㎡ (약 12만 5천 평)<br>
+      <strong>교통:</strong> 센트럴파크역 1,2번 출구 도보 5분<br>
+      <strong>특징:</strong> 국내 최초 해수 공원, 40층 높이 분수
+    </p>
+  </div>
+</div>
+
+<h3 style="color: #0f766e; margin: 2rem 0 1rem 0;">🏛️ 주요 시설</h3>
+<div style="display: grid; gap: 1rem;">
+  <div style="background: #ecfdf5; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #22c55e;">
+    <h4 style="color: #065f46; margin: 0 0 0.5rem 0;">해수 운하 (Waterway)</h4>
+    <p style="margin: 0; color: #374151; font-size: 0.9rem;">길이 1.8km, 카약·드래곤보트 체험 가능</p>
+  </div>
+  <div style="background: #ecfdf5; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #22c55e;">
+    <h4 style="color: #065f46; margin: 0 0 0.5rem 0;">G타워 전망대</h4>
+    <p style="margin: 0; color: #374151; font-size: 0.9rem;">32층 전망 라운지, 성인 5,000원</p>
+  </div>
+  <div style="background: #ecfdf5; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #22c55e;">
+    <h4 style="color: #065f46; margin: 0 0 0.5rem 0;">음악분수</h4>
+    <p style="margin: 0; color: #374151; font-size: 0.9rem;">높이 40m, 매일 20:00/21:00 물쇼</p>
+  </div>
+</div>
+
+<h2 style="font-size: 2rem; color: #065f46; border-left: 5px solid #10b981; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #d1fae5; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">🌕 달빛축제공원</h2>
+
+<div style="background: #f0fdfa; padding: 2rem; border-radius: 1rem; margin: 1rem 0; border: 1px solid #5eead4;">
+  <h3 style="color: #0f766e; margin-bottom: 1rem;">📍 기본 정보</h3>
+  <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid #10b981;">
+    <p style="margin: 0; color: #374151; line-height: 1.6;">
+      <strong>위치:</strong> 인천광역시 연수구 송도동 1<br>
+      <strong>면적:</strong> 2,928,692㎡ (약 88만 평)<br>
+      <strong>교통:</strong> 송도달빛축제공원역 4번 출구<br>
+      <strong>특징:</strong> 펜타포트 록 페스티벌 개최지
+    </p>
+  </div>
+</div>
+
+<h3 style="color: #0f766e; margin: 2rem 0 1rem 0;">🎵 주요 시설</h3>
+<div style="display: grid; gap: 1rem;">
+  <div style="background: #ecfdf5; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #22c55e;">
+    <h4 style="color: #065f46; margin: 0 0 0.5rem 0;">펜타포트 야외공연장</h4>
+    <p style="margin: 0; color: #374151; font-size: 0.9rem;">수용규모 8만 명, 최첨단 사운드 시스템</p>
+  </div>
+  <div style="background: #ecfdf5; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #22c55e;">
+    <h4 style="color: #065f46; margin: 0 0 0.5rem 0;">스포츠 시설</h4>
+    <p style="margin: 0; color: #374151; font-size: 0.9rem;">테니스장 17면, 농구장 2면, 다목적 운동장</p>
+  </div>
+</div>
+
+<h2 style="font-size: 2rem; color: #065f46; border-left: 5px solid #10b981; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #d1fae5; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">🌅 해돋이공원</h2>
+
+<div style="background: #f0fdfa; padding: 2rem; border-radius: 1rem; margin: 1rem 0; border: 1px solid #5eead4;">
+  <h3 style="color: #0f766e; margin-bottom: 1rem;">📍 기본 정보</h3>
+  <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid #10b981;">
+    <p style="margin: 0; color: #374151; line-height: 1.6;">
+      <strong>위치:</strong> 인천광역시 연수구 송도동 해돋이로 51<br>
+      <strong>면적:</strong> 210,468㎡ (약 6만 4천 평)<br>
+      <strong>특징:</strong> 정보화 신도시를 상징하는 현대적 공원
+    </p>
+  </div>
+</div>
+
+<h3 style="color: #0f766e; margin: 2rem 0 1rem 0;">🏗️ 주요 조형물</h3>
+<div style="display: grid; gap: 1rem;">
+  <div style="background: #ecfdf5; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #22c55e;">
+    <h4 style="color: #065f46; margin: 0 0 0.5rem 0;">고래의 꿈</h4>
+    <p style="margin: 0; color: #374151; font-size: 0.9rem;">높이 15m 대형 고래 조형물, 야간 LED 조명</p>
+  </div>
+  <div style="background: #ecfdf5; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #22c55e;">
+    <h4 style="color: #065f46; margin: 0 0 0.5rem 0;">바닥분수</h4>
+    <p style="margin: 0; color: #374151; font-size: 0.9rem;">1,087㎡ 물놀이 공간, 여름철 운영</p>
+  </div>
+  <div style="background: #ecfdf5; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #22c55e;">
+    <h4 style="color: #065f46; margin: 0 0 0.5rem 0;">음악분수 광장</h4>
+    <p style="margin: 0; color: #374151; font-size: 0.9rem;">폭 91m 대형 분수, 매일 19:00/20:00/21:00</p>
+  </div>
+</div>
+
+<div style="background: #d1fae5; padding: 1.5rem; border-radius: 1rem; margin: 2rem 0; border: 2px solid #10b981;">
+  <h3 style="color: #065f46; margin: 0 0 1rem 0; font-size: 1.2rem;">🚌 교통 정보</h3>
+  <div style="display: grid; gap: 0.8rem;">
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+      <span style="background: #10b981; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem;">지하철</span>
+      <span>센트럴파크역 → 센트럴파크 (도보 5분)</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+      <span style="background: #10b981; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem;">지하철</span>
+      <span>송도달빛축제공원역 → 달빛축제공원 (도보 11분)</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+      <span style="background: #10b981; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem;">버스</span>
+      <span>인천대입구역 → 해돋이공원 (버스 10분)</span>
+    </div>
+  </div>
+</div>
+
+<p style="text-align: center; color: #6b7280; margin: 2rem 0;">송도의 아름다운 공원에서 힐링과 휴식을 만끽하세요! 🌳🌊</p>
 
 </div>`,
 

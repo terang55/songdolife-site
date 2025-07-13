@@ -13,12 +13,19 @@ jobs:
   crawl-and-update:
     runs-on: ubuntu-latest
     
+    # GitHub Actions의 권한 설정
+    permissions:
+      contents: write        # 레포지토리 콘텐츠 쓰기 권한
+      actions: read         # Actions 읽기 권한
+      metadata: read        # 메타데이터 읽기 권한
+    
     steps:
     - name: 📦 코드 체크아웃
       uses: actions/checkout@v4
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         fetch-depth: 0
+        persist-credentials: true
     
     - name: 🐍 Python 설정
       uses: actions/setup-python@v4
@@ -131,7 +138,7 @@ jobs:
       run: |
         # 커밋이 있는 경우에만 푸시
         if [ -n "$(git log @{u}.. 2>/dev/null)" ]; then
-          git push
+          git push origin main
           echo "✅ 변경사항이 GitHub에 반영되었습니다."
         else
           echo "ℹ️ 푸시할 변경사항이 없습니다."

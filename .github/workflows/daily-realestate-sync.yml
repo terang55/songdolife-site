@@ -10,12 +10,19 @@ jobs:
   collect-realestate-data:
     runs-on: ubuntu-latest
     
+    # GitHub Actions의 권한 설정
+    permissions:
+      contents: write        # 레포지토리 콘텐츠 쓰기 권한
+      actions: read         # Actions 읽기 권한
+      metadata: read        # 메타데이터 읽기 권한
+    
     steps:
     - name: 코드 체크아웃
       uses: actions/checkout@v4
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         fetch-depth: 0
+        persist-credentials: true
     
     - name: Node.js 20 설정
       uses: actions/setup-node@v4
@@ -49,9 +56,11 @@ jobs:
           TODAY=$(date +%Y-%m-%d)
           git add frontend/public/data/realestate_${TODAY}.json
           git commit -m "🏠 자동 부동산 데이터 업데이트: ${TODAY}" || echo "커밋할 변경사항 없음"
-          git push origin main || echo "푸시 실패"
+          git push origin main
           echo "✅ 부동산 데이터 자동 수집 및 커밋 완료"
         fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
     - name: 수집 결과 요약
       run: |

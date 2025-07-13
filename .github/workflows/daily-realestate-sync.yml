@@ -14,7 +14,6 @@ jobs:
     permissions:
       contents: write        # 레포지토리 콘텐츠 쓰기 권한
       actions: read         # Actions 읽기 권한
-      metadata: read        # 메타데이터 읽기 권한
     
     steps:
     - name: 코드 체크아웃

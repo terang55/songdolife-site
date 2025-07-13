@@ -38,14 +38,43 @@ jobs:
         wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
         sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
         sudo apt-get update
-        sudo apt-get install -y google-chrome-stable
+        sudo apt-get install -y google-chrome-stable xvfb
         
         # Chrome 버전 확인
         google-chrome --version
         
-        # ChromeDriver 자동 다운로드를 위한 설정
+        # 가상 디스플레이 설정
         export DISPLAY=:99
         sudo Xvfb -ac :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
+        
+        # ChromeDriver 사전 다운로드 및 권한 설정
+        python3 -c "
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+import os
+import stat
+
+# ChromeDriver 다운로드
+driver_path = ChromeDriverManager().install()
+print(f'ChromeDriver 경로: {driver_path}')
+
+# 실행 권한 부여
+os.chmod(driver_path, stat.S_IRWXU | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
+print('ChromeDriver 실행 권한 설정 완료')
+
+# 디렉토리 내 모든 파일에 실행 권한 부여 (보험)
+driver_dir = os.path.dirname(driver_path)
+for root, dirs, files in os.walk(driver_dir):
+    for file in files:
+        file_path = os.path.join(root, file)
+        if 'chromedriver' in file:
+            os.chmod(file_path, stat.S_IRWXU | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
+            print(f'권한 설정: {file_path}')
+        "
+        
+        # 최종 확인
+        echo "✅ Chrome 및 ChromeDriver 설정 완료"
     
     - name: 📁 데이터 디렉토리 생성
       run: |

@@ -42,17 +42,32 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y google-chrome-stable xvfb
         
-        # Chrome 버전 확인 및 ChromeDriver 버전 결정
-        CHROME_VERSION=$(google-chrome --version | cut -d " " -f3 | cut -d "." -f1)
-        echo "Chrome 버전: $CHROME_VERSION"
+        # Chrome 버전 확인
+        CHROME_VERSION=$(google-chrome --version | cut -d " " -f3)
+        echo "Chrome 전체 버전: $CHROME_VERSION"
         
-        # ChromeDriver 직접 다운로드 및 설치
-        CHROMEDRIVER_VERSION=$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION)
-        echo "ChromeDriver 버전: $CHROMEDRIVER_VERSION"
+        # Chrome for Testing API를 사용한 ChromeDriver 다운로드 (2023년부터 새로운 방식)
+        CHROMEDRIVER_URL="https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json"
         
-        wget -N https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip
+        # stable 채널의 chromedriver 다운로드 URL 추출
+        DOWNLOAD_URL=$(curl -s "$CHROMEDRIVER_URL" | python3 -c "
+import sys, json
+data = json.load(sys.stdin)
+stable = data['channels']['Stable']
+for download in stable['downloads']['chromedriver']:
+    if download['platform'] == 'linux64':
+        print(download['url'])
+        break
+")
+        
+        echo "ChromeDriver 다운로드 URL: $DOWNLOAD_URL"
+        
+        # ChromeDriver 다운로드 및 설치
+        wget -O chromedriver_linux64.zip "$DOWNLOAD_URL"
         unzip -o chromedriver_linux64.zip
-        sudo mv chromedriver /usr/local/bin/
+        
+        # 압축 해제된 파일 구조 확인 및 이동
+        find . -name "chromedriver" -type f -exec sudo mv {} /usr/local/bin/ \;
         sudo chmod +x /usr/local/bin/chromedriver
         
         # ChromeDriver 실행 테스트

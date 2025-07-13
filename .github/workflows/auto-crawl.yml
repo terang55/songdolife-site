@@ -3,8 +3,8 @@ name: 🤖 송도라이프 자동 크롤링
 on:
   # 매일 오전 6시, 오후 6시 (UTC 기준이므로 한국시간 -9시간)
   schedule:
-    - cron: '0 21 * * *'  # 한국시간 오전 6시
-    - cron: '0 9 * * *'   # 한국시간 오후 6시
+    - cron: '0 21 * * *'  # 한국시간 오전 6시 (UTC 21시 = KST 06시)
+    - cron: '0 9 * * *'   # 한국시간 오후 6시 (UTC 09시 = KST 18시)
   
   # 수동 실행 가능
   workflow_dispatch:
@@ -32,41 +32,75 @@ jobs:
         python-version: '3.11'
         cache: 'pip'
     
+    - name: 📋 Python 의존성 캐시
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('crawler/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+    
     - name: 📋 의존성 설치
       run: |
         cd crawler
         pip install --upgrade pip
         pip install -r requirements.txt
     
+    - name: 🌐 Chrome 및 ChromeDriver 캐시
+      uses: actions/cache@v3
+      with:
+        path: |
+          /usr/local/bin/chromedriver
+          ~/.cache/chrome
+        key: chrome-${{ runner.os }}-${{ hashFiles('.github/workflows/auto-crawl.yml') }}
+        restore-keys: |
+          chrome-${{ runner.os }}-
+    
     - name: 🌐 Chrome 및 ChromeDriver 설정
       run: |
-        # Chrome 브라우저 설치
-        sudo apt-get update
-        sudo apt-get install -y wget gnupg
-        wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-        sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
-        sudo apt-get update
-        sudo apt-get install -y google-chrome-stable xvfb
+        # ChromeDriver가 이미 캐시되어 있는지 확인
+        if [ -f "/usr/local/bin/chromedriver" ]; then
+          echo "✅ ChromeDriver 캐시에서 복원됨"
+          chromedriver --version
+        else
+          echo "📦 Chrome 및 ChromeDriver 새로 설치 중..."
+          
+          # Chrome 브라우저 설치
+          sudo apt-get update
+          sudo apt-get install -y wget gnupg
+          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+        fi
+        
+        # 가상 디스플레이는 항상 설치 (가벼움)
+        sudo apt-get install -y xvfb
         
         # Chrome 버전 확인
         CHROME_VERSION=$(google-chrome --version | cut -d " " -f3)
         echo "Chrome 전체 버전: $CHROME_VERSION"
         
-        # Chrome for Testing API를 사용한 ChromeDriver 다운로드 (2023년부터 새로운 방식)
-        CHROMEDRIVER_URL="https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json"
-        
-        # stable 채널의 chromedriver 다운로드 URL 추출
-        DOWNLOAD_URL=$(curl -s "$CHROMEDRIVER_URL" | python3 -c 'import sys, json; data = json.load(sys.stdin); stable = data["channels"]["Stable"]; [print(download["url"]) for download in stable["downloads"]["chromedriver"] if download["platform"] == "linux64"][:1]')
-        
-        echo "ChromeDriver 다운로드 URL: $DOWNLOAD_URL"
-        
-        # ChromeDriver 다운로드 및 설치
-        wget -O chromedriver_linux64.zip "$DOWNLOAD_URL"
-        unzip -o chromedriver_linux64.zip
-        
-        # 압축 해제된 파일 구조 확인 및 이동
-        find . -name "chromedriver" -type f -exec sudo mv {} /usr/local/bin/ \;
-        sudo chmod +x /usr/local/bin/chromedriver
+        # ChromeDriver가 없는 경우에만 다운로드
+        if [ ! -f "/usr/local/bin/chromedriver" ]; then
+          echo "📥 ChromeDriver 다운로드 중..."
+          
+          # Chrome for Testing API를 사용한 ChromeDriver 다운로드
+          CHROMEDRIVER_URL="https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json"
+          
+          # stable 채널의 chromedriver 다운로드 URL 추출
+          DOWNLOAD_URL=$(curl -s "$CHROMEDRIVER_URL" | python3 -c 'import sys, json; data = json.load(sys.stdin); stable = data["channels"]["Stable"]; [print(download["url"]) for download in stable["downloads"]["chromedriver"] if download["platform"] == "linux64"][:1]')
+          
+          echo "ChromeDriver 다운로드 URL: $DOWNLOAD_URL"
+          
+          # ChromeDriver 다운로드 및 설치
+          wget -O chromedriver_linux64.zip "$DOWNLOAD_URL"
+          unzip -o chromedriver_linux64.zip
+          
+          # 압축 해제된 파일 구조 확인 및 이동
+          find . -name "chromedriver" -type f -exec sudo mv {} /usr/local/bin/ \;
+          sudo chmod +x /usr/local/bin/chromedriver
+        fi
         
         # ChromeDriver 실행 테스트
         chromedriver --version

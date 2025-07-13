@@ -169,6 +169,10 @@ const PREGENERATED_CONTENT: { [key: string]: string } = {
 
 <p style="text-align: center; color: #6b7280; margin: 2rem 0;">송도에서의 맛있는 식사 되세요! 🍽️</p>
 
+<p style="text-align: center; color: #6b7280; margin: 2rem 0; font-size: 0.8rem;">
+  <em>📢 정보 업데이트: 모든 정보는 2025년 7월 기준이며, 실제 이용 시 변경사항이 있을 수 있으니 방문 전 확인 바랍니다.</em>
+</p>
+
 </div>`,
 
   'songdo-shopping-guide': `<div style="max-width: 100%; margin: 0 auto; line-height: 1.8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
@@ -186,34 +190,114 @@ const PREGENERATED_CONTENT: { [key: string]: string } = {
   <div style="display: grid; gap: 0.8rem;">
     <div style="display: flex; align-items: center; gap: 0.5rem;">
       <span style="background: #3b82f6; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem;">✓</span>
-      <span>트리플스트리트 - 센트럴파크역 도보 3분</span>
+      <span>트리플스트리트 - 복합 문화 쇼핑 공간</span>
     </div>
     <div style="display: flex; align-items: center; gap: 0.5rem;">
       <span style="background: #3b82f6; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem;">✓</span>
-      <span>현대프리미엄아울렛 - 명품 브랜드 30-70% 할인</span>
+      <span>현대프리미엄아울렛 - 명품 및 패션 브랜드 할인</span>
     </div>
     <div style="display: flex; align-items: center; gap: 0.5rem;">
       <span style="background: #3b82f6; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem;">✓</span>
-      <span>대형마트 및 편의시설 완비</span>
+      <span>코스트코, 이마트, 홈플러스 - 대형마트</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+      <span style="background: #3b82f6; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem;">✓</span>
+      <span>롯데몰 송도 (예정) - 송도의 새로운 랜드마크</span>
     </div>
   </div>
 </div>
 
-<h2 style="font-size: 2rem; color: #1e40af; border-left: 5px solid #3b82f6; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #eff6ff; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">🏬 대형 쇼핑몰</h2>
+<h2 style="font-size: 2rem; color: #1e40af; border-left: 5px solid #3b82f6; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #eff6ff; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">🛍️ 주요 쇼핑 명소 상세 정보</h2>
 
 <div style="background: #f8fafc; padding: 2rem; border-radius: 1rem; margin: 1rem 0; border: 1px solid #e2e8f0;">
-  <h3 style="color: #1e40af; margin-bottom: 1rem;">트리플스트리트 (Tri-Bowl)</h3>
+  <h3 style="color: #1e40af; margin-bottom: 1rem;">1. 트리플스트리트 (Triple Street)</h3>
   <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid #10b981;">
     <h4 style="color: #065f46; margin: 0 0 0.8rem 0;">📍 기본 정보</h4>
     <p style="margin: 0; color: #374151; line-height: 1.6;">
-      <strong>주소:</strong> 인천광역시 연수구 센트럴로 123<br>
-      <strong>교통:</strong> 센트럴파크역 1번 출구 도보 3분<br>
-      <strong>영업시간:</strong> 10:30-22:00 (일요일 ~21:00)
+      <strong>주소:</strong> 인천광역시 연수구 송도과학로16번길 33-3<br>
+      <strong>교통:</strong> 인천지하철 1호선 테크노파크역 2번 출구와 연결<br>
+      <strong>영업시간:</strong> 10:30-22:00 (매장별 상이)<br>
+      <strong>특징:</strong> 국내 최초의 스트리트형 쇼핑몰. 패션, F&B, 엔터테인먼트가 결합된 복합 문화 공간. 다양한 팝업 스토어와 야외 행사 진행.
+    </p>
+  </div>
+  <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid #f59e0b;">
+    <h4 style="color: #92400e; margin: 0 0 0.8rem 0;">✨ 주요 시설 및 브랜드</h4>
+    <p style="margin: 0; color: #374151; line-height: 1.6;">
+      • <strong>패션:</strong> ZARA, H&M, COS 등 SPA 브랜드 및 국내외 캐주얼 브랜드<br>
+      • <strong>F&B:</strong> 다양한 레스토랑, 카페, 디저트 전문점 (예: 쉐이크쉑, 빌리엔젤)<br>
+      • <strong>엔터테인먼트:</strong> 메가박스, VR 체험존, 키즈카페 등<br>
+      • <strong>기타:</strong> 아트마켓, 플리마켓 등 주말 이벤트 상시 운영
+    </p>
+  </div>
+</div>
+
+<div style="background: #f8fafc; padding: 2rem; border-radius: 1rem; margin: 1rem 0; border: 1px solid #e2e8f0;">
+  <h3 style="color: #1e40af; margin-bottom: 1rem;">2. 현대프리미엄아울렛 송도점 (Hyundai Premium Outlets Songdo)</h3>
+  <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid #10b981;">
+    <h4 style="color: #065f46; margin: 0 0 0.8rem 0;">📍 기본 정보</h4>
+    <p style="margin: 0; color: #374151; line-height: 1.6;">
+      <strong>주소:</strong> 인천광역시 연수구 송도국제대로 123<br>
+      <strong>교통:</strong> 인천지하철 1호선 테크노파크역 2번 출구와 연결<br>
+      <strong>영업시간:</strong> 10:30-21:00 (주말 21:00, 금토일 21:00, 공휴일 21:00)<br>
+      <strong>특징:</strong> 명품, 해외 유명 브랜드, 국내 인기 브랜드 상품을 30~70% 할인된 가격으로 구매 가능. 도심형 아울렛으로 접근성 우수.
+    </p>
+  </div>
+  <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid #f59e0b;">
+    <h4 style="color: #92400e; margin: 0 0 0.8rem 0;">✨ 주요 시설 및 브랜드</h4>
+    <p style="margin: 0; color: #374151; line-height: 1.6;">
+      • <strong>명품:</strong> 구찌, 프라다, 버버리 등 (입점 브랜드는 시즌별 변동 가능)<br>
+      • <strong>패션:</strong> 나이키, 아디다스, 코치, 마이클코어스 등<br>
+      • <strong>F&B:</strong> 푸드코트, 전문 식당가, 카페 (예: 봉피양, 매드포갈릭)<br>
+      • <strong>편의시설:</strong> 키즈카페, 유모차 대여, 수선실 등
+    </p>
+  </div>
+</div>
+
+<div style="background: #f8fafc; padding: 2rem; border-radius: 1rem; margin: 1rem 0; border: 1px solid #e2e8f0;">
+  <h3 style="color: #1e40af; margin-bottom: 1rem;">3. 롯데몰 송도 (예정)</h3>
+  <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid #10b981;">
+    <h4 style="color: #065f46; margin: 0 0 0.8rem 0;">📍 기본 정보</h4>
+    <p style="margin: 0; color: #374151; line-height: 1.6;">
+      <strong>위치:</strong> 인천광역시 연수구 송도동 8-1 (인천대입구역 인근)<br>
+      <strong>개점 예정:</strong> 2025년 하반기 (예정)<br>
+      <strong>특징:</strong> 백화점, 쇼핑몰, 호텔, 영화관 등이 결합된 대규모 복합쇼핑몰. 송도의 새로운 랜드마크가 될 것으로 기대.
+    </p>
+  </div>
+</div>
+
+<div style="background: #f8fafc; padding: 2rem; border-radius: 1rem; margin: 1rem 0; border: 1px solid #e2e8f0;">
+  <h3 style="color: #1e40af; margin-bottom: 1rem;">4. 대형마트 (코스트코, 이마트, 홈플러스)</h3>
+  <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid #10b981;">
+    <h4 style="color: #065f46; margin: 0 0 0.8rem 0;">📍 코스트코 송도점</h4>
+    <p style="margin: 0; color: #374151; line-height: 1.6;">
+      <strong>주소:</strong> 인천광역시 연수구 컨벤시아대로 230<br>
+      <strong>영업시간:</strong> 10:00-22:00 (매월 2, 4째주 일요일 휴무)<br>
+      <strong>특징:</strong> 회원제 창고형 할인매장. 대용량 상품, 수입 식료품, 가전 등 다양한 품목 취급.
+    </p>
+  </div>
+  <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid #10b981;">
+    <h4 style="color: #065f46; margin: 0 0 0.8rem 0;">📍 이마트 송도점</h4>
+    <p style="margin: 0; color: #374151; line-height: 1.6;">
+      <strong>주소:</strong> 인천광역시 연수구 송도동 168-1<br>
+      <strong>영업시간:</strong> 10:00-23:00 (매월 2, 4째주 일요일 휴무)<br>
+      <strong>특징:</strong> 신선식품, 가공식품, 생활용품 등 다양한 상품 구비.
+    </p>
+  </div>
+  <div style="padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid #10b981;">
+    <h4 style="color: #065f46; margin: 0 0 0.8rem 0;">📍 홈플러스 송도점</h4>
+    <p style="margin: 0; color: #374151; line-height: 1.6;">
+      <strong>주소:</strong> 인천광역시 연수구 송도국제대로 165<br>
+      <strong>영업시간:</strong> 10:00-23:00 (매월 2, 4째주 일요일 휴무)<br>
+      <strong>특징:</strong> 식료품, 의류, 가전 등 원스톱 쇼핑 가능.
     </p>
   </div>
 </div>
 
 <p style="text-align: center; color: #6b7280; margin: 2rem 0;">송도에서의 즐거운 쇼핑 되세요! 🛍️</p>
+
+<p style="text-align: center; color: #6b7280; margin: 2rem 0; font-size: 0.8rem;">
+  <em>📢 정보 업데이트: 모든 정보는 2025년 7월 기준이며, 실제 이용 시 변경사항이 있을 수 있으니 방문 전 확인 바랍니다.</em>
+</p>
 
 </div>`,
 
@@ -236,54 +320,71 @@ const PREGENERATED_CONTENT: { [key: string]: string } = {
       <strong>위치:</strong> 인천광역시 연수구 센트럴로 160<br>
       <strong>면적:</strong> 414,926㎡ (약 12만 5천 평)<br>
       <strong>교통:</strong> 센트럴파크역 1,2번 출구 도보 5분<br>
-      <strong>특징:</strong> 국내 최초 해수 공원, 40층 높이 분수
+      <strong>특징:</strong> 국내 최초 해수 공원, 40층 높이 분수, 뉴욕 센트럴파크를 모티브로 조성
     </p>
   </div>
 </div>
 
-<h3 style="color: #0f766e; margin: 2rem 0 1rem 0;">🏛️ 주요 시설</h3>
+<h3 style="color: #0f766e; margin: 2rem 0 1rem 0;">🏛️ 주요 시설 및 즐길 거리</h3>
 <div style="display: grid; gap: 1rem;">
   <div style="background: #ecfdf5; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #22c55e;">
     <h4 style="color: #065f46; margin: 0 0 0.5rem 0;">해수 운하 (Waterway)</h4>
-    <p style="margin: 0; color: #374151; font-size: 0.9rem;">길이 1.8km, 카약·드래곤보트 체험 가능</p>
+    <p style="margin: 0; color: #374151; font-size: 0.9rem;">길이 1.8km, 카약·카누·패밀리보트·문보트 등 수상 레저 체험 가능 (이스트 보트하우스 운영)</p>
   </div>
   <div style="background: #ecfdf5; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #22c55e;">
     <h4 style="color: #065f46; margin: 0 0 0.5rem 0;">G타워 전망대</h4>
-    <p style="margin: 0; color: #374151; font-size: 0.9rem;">32층 전망 라운지, 성인 5,000원</p>
+    <p style="margin: 0; color: #374151; font-size: 0.9rem;">32층 전망 라운지, 송도 국제도시와 서해바다 조망. 입장료 무료. 평일 10:00-21:00, 주말 및 공휴일 13:00-21:00 (입장 마감 20:30), 월요일 휴무.</p>
   </div>
   <div style="background: #ecfdf5; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #22c55e;">
     <h4 style="color: #065f46; margin: 0 0 0.5rem 0;">음악분수</h4>
-    <p style="margin: 0; color: #374151; font-size: 0.9rem;">높이 40m, 매일 20:00/21:00 물쇼</p>
+    <p style="margin: 0; color: #374151; font-size: 0.9rem;">최대 40m 높이의 시원한 물줄기. 매일 20:00, 21:00 (여름철 추가 운영) 음악과 조명이 어우러진 환상적인 쇼. 무료 관람.</p>
+  </div>
+  <div style="background: #ecfdf5; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #22c55e;">
+    <h4 style="color: #065f46; margin: 0 0 0.5rem 0;">사슴농장 & 토끼섬</h4>
+    <p style="margin: 0; color: #374151; font-size: 0.9rem;">사슴농장: 송도 한옥마을 옆 경원재 맞은편에 위치, 꽃사슴을 가까이에서 볼 수 있는 생태 학습 공간.</p>
+    <p style="margin: 0; color: #374151; font-size: 0.9rem;">토끼섬: 센트럴파크 호수 내 인공섬, 토끼 서식 환경 개선 후 운영 중. 자연 친화적인 공간.</p>
+  </div>
+  <div style="background: #ecfdf5; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #22c55e;">
+    <h4 style="color: #065f46; margin: 0 0 0.5rem 0;">산책로 및 자전거 도로</h4>
+    <p style="margin: 0; color: #374151; font-size: 0.9rem;">공원 전체를 아우르는 잘 정비된 산책로와 자전거 도로. 조깅, 산책, 자전거 라이딩에 최적.</p>
+  </div>
+  <div style="background: #ecfdf5; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #22c55e;">
+    <h4 style="color: #065f46; margin: 0 0 0.5rem 0;">송도 한옥마을</h4>
+    <p style="margin: 0; color: #374151; font-size: 0.9rem;">전통 한옥의 아름다움을 느낄 수 있는 공간. 전통 음식점, 카페, 기념품점 등이 위치.</p>
   </div>
 </div>
 
-<h2 style="font-size: 2rem; color: #065f46; border-left: 5px solid #10b981; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #d1fae5; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">🌕 달빛축제공원</h2>
+<h2 style="font-size: 2rem; color: #065f46; border-left: 5px solid #10b981; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #d1fae5; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">🌕 달빛축제공원 (Moonlight Festival Park)</h2>
 
 <div style="background: #f0fdfa; padding: 2rem; border-radius: 1rem; margin: 1rem 0; border: 1px solid #5eead4;">
   <h3 style="color: #0f766e; margin-bottom: 1rem;">📍 기본 정보</h3>
   <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid #10b981;">
     <p style="margin: 0; color: #374151; line-height: 1.6;">
-      <strong>위치:</strong> 인천광역시 연수구 송도동 1<br>
-      <strong>면적:</strong> 2,928,692㎡ (약 88만 평)<br>
-      <strong>교통:</strong> 송도달빛축제공원역 4번 출구<br>
-      <strong>특징:</strong> 펜타포트 록 페스티벌 개최지
+      <strong>위치:</strong> 인천광역시 연수구 송도동 26-1 (송도달빛축제공원역 인근)<br>
+      <strong>면적:</strong> 2,928,692㎡ (약 88만 평) - 송도에서 가장 큰 공원<br>
+      <strong>교통:</strong> 송도달빛축제공원역 4번 출구 도보 5분<br>
+      <strong>특징:</strong> 대규모 야외 공연 및 축제 개최에 최적화된 공간. 펜타포트 록 페스티벌 등 대형 행사 개최지.
     </p>
   </div>
 </div>
 
-<h3 style="color: #0f766e; margin: 2rem 0 1rem 0;">🎵 주요 시설</h3>
+<h3 style="color: #0f766e; margin: 2rem 0 1rem 0;">🎵 주요 시설 및 활용</h3>
 <div style="display: grid; gap: 1rem;">
   <div style="background: #ecfdf5; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #22c55e;">
     <h4 style="color: #065f46; margin: 0 0 0.5rem 0;">펜타포트 야외공연장</h4>
-    <p style="margin: 0; color: #374151; font-size: 0.9rem;">수용규모 8만 명, 최첨단 사운드 시스템</p>
+    <p style="margin: 0; color: #374151; font-size: 0.9rem;">최대 8만 명 수용 가능한 대규모 야외 공연장. 최첨단 사운드 시스템과 넓은 잔디밭.</p>
   </div>
   <div style="background: #ecfdf5; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #22c55e;">
     <h4 style="color: #065f46; margin: 0 0 0.5rem 0;">스포츠 시설</h4>
-    <p style="margin: 0; color: #374151; font-size: 0.9rem;">테니스장 17면, 농구장 2면, 다목적 운동장</p>
+    <p style="margin: 0; color: #374151; font-size: 0.9rem;">테니스장 17면, 농구장 2면, 다목적 운동장 등 다양한 스포츠 시설 완비.</p>
+  </div>
+  <div style="background: #ecfdf5; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #22c55e;">
+    <h4 style="color: #065f46; margin: 0 0 0.5rem 0;">산책 및 휴식 공간</h4>
+    <p style="margin: 0; color: #374151; font-size: 0.9rem;">넓은 잔디밭과 산책로, 휴식 공간이 조성되어 있어 시민들의 여가 활동에 적합.</p>
   </div>
 </div>
 
-<h2 style="font-size: 2rem; color: #065f46; border-left: 5px solid #10b981; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #d1fae5; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">🌅 해돋이공원</h2>
+<h2 style="font-size: 2rem; color: #065f46; border-left: 5px solid #10b981; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #d1fae5; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">🌅 해돋이공원 (Haedoji Park)</h2>
 
 <div style="background: #f0fdfa; padding: 2rem; border-radius: 1rem; margin: 1rem 0; border: 1px solid #5eead4;">
   <h3 style="color: #0f766e; margin-bottom: 1rem;">📍 기본 정보</h3>
@@ -291,24 +392,28 @@ const PREGENERATED_CONTENT: { [key: string]: string } = {
     <p style="margin: 0; color: #374151; line-height: 1.6;">
       <strong>위치:</strong> 인천광역시 연수구 송도동 해돋이로 51<br>
       <strong>면적:</strong> 210,468㎡ (약 6만 4천 평)<br>
-      <strong>특징:</strong> 정보화 신도시를 상징하는 현대적 공원
+      <strong>특징:</strong> 정보화 신도시를 상징하는 현대적 공원. 다양한 조형물과 분수 시설이 특징.
     </p>
   </div>
 </div>
 
-<h3 style="color: #0f766e; margin: 2rem 0 1rem 0;">🏗️ 주요 조형물</h3>
+<h3 style="color: #0f766e; margin: 2rem 0 1rem 0;">🏗️ 주요 조형물 및 시설</h3>
 <div style="display: grid; gap: 1rem;">
   <div style="background: #ecfdf5; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #22c55e;">
     <h4 style="color: #065f46; margin: 0 0 0.5rem 0;">고래의 꿈</h4>
-    <p style="margin: 0; color: #374151; font-size: 0.9rem;">높이 15m 대형 고래 조형물, 야간 LED 조명</p>
+    <p style="margin: 0; color: #374151; font-size: 0.9rem;">높이 15m의 대형 고래 조형물. 야간에는 LED 조명으로 아름다운 경관 연출.</p>
   </div>
   <div style="background: #ecfdf5; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #22c55e;">
     <h4 style="color: #065f46; margin: 0 0 0.5rem 0;">바닥분수</h4>
-    <p style="margin: 0; color: #374151; font-size: 0.9rem;">1,087㎡ 물놀이 공간, 여름철 운영</p>
+    <p style="margin: 0; color: #374151; font-size: 0.9rem;">1,087㎡ 규모의 물놀이 공간. 여름철 어린이들에게 인기. (운영 기간 확인 필요)</p>
   </div>
   <div style="background: #ecfdf5; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #22c55e;">
     <h4 style="color: #065f46; margin: 0 0 0.5rem 0;">음악분수 광장</h4>
-    <p style="margin: 0; color: #374151; font-size: 0.9rem;">폭 91m 대형 분수, 매일 19:00/20:00/21:00</p>
+    <p style="margin: 0; color: #374151; font-size: 0.9rem;">폭 91m의 대형 분수. 매일 19:00/20:00/21:00 운영. 음악과 함께하는 분수 쇼.</p>
+  </div>
+  <div style="background: #ecfdf5; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #22c55e;">
+    <h4 style="color: #065f46; margin: 0 0 0.5rem 0;">장미원 및 산책로</h4>
+    <p style="margin: 0; color: #374151; font-size: 0.9rem;">다양한 종류의 장미가 식재된 장미원과 잘 조성된 산책로.</p>
   </div>
 </div>
 
@@ -321,7 +426,7 @@ const PREGENERATED_CONTENT: { [key: string]: string } = {
     </div>
     <div style="display: flex; align-items: center; gap: 0.5rem;">
       <span style="background: #10b981; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem;">지하철</span>
-      <span>송도달빛축제공원역 → 달빛축제공원 (도보 11분)</span>
+      <span>송도달빛축제공원역 → 달빛축제공원 (도보 5분)</span>
     </div>
     <div style="display: flex; align-items: center; gap: 0.5rem;">
       <span style="background: #10b981; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem;">버스</span>
@@ -331,6 +436,10 @@ const PREGENERATED_CONTENT: { [key: string]: string } = {
 </div>
 
 <p style="text-align: center; color: #6b7280; margin: 2rem 0;">송도의 아름다운 공원에서 힐링과 휴식을 만끽하세요! 🌳🌊</p>
+
+<p style="text-align: center; color: #6b7280; margin: 2rem 0; font-size: 0.8rem;">
+  <em>📢 정보 업데이트: 모든 정보는 2025년 7월 기준이며, 실제 이용 시 변경사항이 있을 수 있으니 방문 전 확인 바랍니다.</em>
+</p>
 
 </div>`,
 
@@ -349,34 +458,147 @@ const PREGENERATED_CONTENT: { [key: string]: string } = {
   <div style="display: grid; gap: 0.8rem;">
     <div style="display: flex; align-items: center; gap: 0.5rem;">
       <span style="background: #8b5cf6; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem;">✓</span>
-      <span>송도컨벤시아 - 3,000석 대극장</span>
+      <span>송도컨벤시아 - 국제회의 및 전시 전문 시설</span>
     </div>
     <div style="display: flex; align-items: center; gap: 0.5rem;">
       <span style="background: #8b5cf6; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem;">✓</span>
-      <span>센트럴파크 - 야외 공연장과 산책로</span>
+      <span>아트센터 인천 - 클래식 공연 전문 홀</span>
     </div>
     <div style="display: flex; align-items: center; gap: 0.5rem;">
       <span style="background: #8b5cf6; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem;">✓</span>
-      <span>다양한 갤러리와 전시공간</span>
+      <span>국립세계문자박물관 - 문자 관련 전시 및 교육</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+      <span style="background: #8b5cf6; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem;">✓</span>
+      <span>트라이볼 - 독특한 건축미의 복합문화공간</span>
     </div>
   </div>
 </div>
 
-<h2 style="font-size: 2rem; color: #6b21a8; border-left: 5px solid #8b5cf6; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #f3e8ff; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">🎭 공연 & 음악</h2>
+<h2 style="font-size: 2rem; color: #6b21a8; border-left: 5px solid #8b5cf6; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #f3e8ff; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">🎭 공연 & 전시</h2>
 
 <div style="background: #f8fafc; padding: 2rem; border-radius: 1rem; margin: 1rem 0; border: 1px solid #e2e8f0;">
-  <h3 style="color: #6b21a8; margin-bottom: 1rem;">송도컨벤시아</h3>
+  <h3 style="color: #6b21a8; margin-bottom: 1rem;">1. 송도컨벤시아 (Songdo Convensia)</h3>
   <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid #10b981;">
     <h4 style="color: #065f46; margin: 0 0 0.8rem 0;">📍 기본 정보</h4>
     <p style="margin: 0; color: #374151; line-height: 1.6;">
       <strong>주소:</strong> 인천광역시 연수구 센트럴로 123<br>
-      <strong>교통:</strong> 센트럴파크역 1번 출구 도보 5분<br>
-      <strong>좌석:</strong> 대극장 3,000석, 소극장 600석
+      <strong>교통:</strong> 인천지하철 1호선 센트럴파크역 4번 출구 도보 5분<br>
+      <strong>특징:</strong> 국제회의, 전시회, 박람회, 콘서트 등 다양한 대규모 행사 개최. 최첨단 시설과 넓은 공간.
+    </p>
+  </div>
+  <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid #f59e0b;">
+    <h4 style="color: #92400e; margin: 0 0 0.8rem 0;">✨ 주요 시설 및 활용</h4>
+    <p style="margin: 0; color: #374151; line-height: 1.6;">
+      • <strong>전시장:</strong> 최대 900부스 규모의 대형 전시장<br>
+      • <strong>회의실:</strong> 2,000명 수용 가능한 그랜드볼룸 포함 20여 개 회의실<br>
+      • <strong>이벤트:</strong> 코믹콘, 베이비페어, 건축박람회 등 연중 다양한 행사 개최
+    </p>
+  </div>
+</div>
+
+<div style="background: #f8fafc; padding: 2rem; border-radius: 1rem; margin: 1rem 0; border: 1px solid #e2e8f0;">
+  <h3 style="color: #6b21a8; margin-bottom: 1rem;">2. 아트센터 인천 (Art Center Incheon)</h3>
+  <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid #10b981;">
+    <h4 style="color: #065f46; margin: 0 0 0.8rem 0;">📍 기본 정보</h4>
+    <p style="margin: 0; color: #374151; line-height: 1.6;">
+      <strong>주소:</strong> 인천광역시 연수구 아트센터대로 100<br>
+      <strong>교통:</strong> 인천지하철 1호선 센트럴파크역 4번 출구 도보 10분<br>
+      <strong>특징:</strong> 클래식 공연 전문 홀. 세계적인 수준의 음향 시설과 아름다운 건축미.
+    </p>
+  </div>
+  <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid #f59e0b;">
+    <h4 style="color: #92400e; margin: 0 0 0.8rem 0;">✨ 주요 시설 및 프로그램</h4>
+    <p style="margin: 0; color: #374151; line-height: 1.6;">
+      • <strong>콘서트홀:</strong> 1,413석 규모의 클래식 전용 홀<br>
+      • <strong>다목적홀:</strong> 700석 규모의 다목적 공연장<br>
+      • <strong>프로그램:</strong> 오케스트라, 오페라, 발레, 독주회 등 다양한 클래식 공연
+    </p>
+  </div>
+</div>
+
+<div style="background: #f8fafc; padding: 2rem; border-radius: 1rem; margin: 1rem 0; border: 1px solid #e2e8f0;">
+  <h3 style="color: #6b21a8; margin-bottom: 1rem;">3. 국립세계문자박물관 (National Museum of World Writing)</h3>
+  <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid #10b981;">
+    <h4 style="color: #065f46; margin: 0 0 0.8rem 0;">📍 기본 정보</h4>
+    <p style="margin: 0; color: #374151; line-height: 1.6;">
+      <strong>주소:</strong> 인천광역시 연수구 송도동 24-8<br>
+      <strong>교통:</strong> 인천지하철 1호선 센트럴파크역 4번 출구 도보 15분<br>
+      <strong>특징:</strong> 세계 문자의 역사와 문화를 한눈에 볼 수 있는 국내 유일의 문자 전문 박물관.
+    </p>
+  </div>
+  <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid #f59e0b;">
+    <h4 style="color: #92400e; margin: 0 0 0.8rem 0;">✨ 주요 전시 및 교육</h4>
+    <p style="margin: 0; color: #374151; line-height: 1.6;">
+      • <strong>상설전시:</strong> 문자의 탄생, 발전, 확산 등 문자의 역사와 문화<br>
+      • <strong>기획전시:</strong> 특정 문자 또는 문화권에 대한 심층 전시<br>
+      • <strong>교육 프로그램:</strong> 어린이, 청소년, 성인을 위한 다양한 문자 교육 및 체험 프로그램
+    </p>
+  </div>
+</div>
+
+<div style="background: #f8fafc; padding: 2rem; border-radius: 1rem; margin: 1rem 0; border: 1px solid #e2e8f0;">
+  <h3 style="color: #6b21a8; margin-bottom: 1rem;">4. 트라이볼 (Tri-Bowl)</h3>
+  <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid #10b981;">
+    <h4 style="color: #065f46; margin: 0 0 0.8rem 0;">📍 기본 정보</h4>
+    <p style="margin: 0; color: #374151; line-height: 1.6;">
+      <strong>주소:</strong> 인천광역시 연수구 센트럴로 232<br>
+      <strong>교통:</strong> 인천지하철 1호선 센트럴파크역 4번 출구 도보 3분<br>
+      <strong>특징:</strong> 세 개의 그릇을 엎어놓은 듯한 독특한 건축물. 공연, 전시, 교육 등 다양한 문화 행사가 열리는 복합문화공간.
+    </p>
+  </div>
+  <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid #f59e0b;">
+    <h4 style="color: #92400e; margin: 0 0 0.8rem 0;">✨ 주요 활용</h4>
+    <p style="margin: 0; color: #374151; line-height: 1.6;">
+      • <strong>공연:</strong> 소규모 음악회, 연극, 퍼포먼스 등<br>
+      • <strong>전시:</strong> 현대 미술, 미디어 아트 등 다양한 장르의 전시<br>
+      • <strong>교육:</strong> 문화 예술 교육 프로그램, 워크숍
+    </p>
+  </div>
+</div>
+
+<h2 style="font-size: 2rem; color: #6b21a8; border-left: 5px solid #8b5cf6; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #f3e8ff; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">📚 도서관 & 문화센터</h2>
+
+<div style="background: #f8fafc; padding: 2rem; border-radius: 1rem; margin: 1rem 0; border: 1px solid #e2e8f0;">
+  <h3 style="color: #6b21a8; margin-bottom: 1rem;">1. 송도국제도시 도서관 (예정)</h3>
+  <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid #10b981;">
+    <h4 style="color: #065f46; margin: 0 0 0.8rem 0;">📍 기본 정보</h4>
+    <p style="margin: 0; color: #374151; line-height: 1.6;">
+      <strong>주소:</strong> 인천광역시 연수구 송도동 20-1 (예정)<br>
+      <strong>개관 예정:</strong> 2026년 (예정)<br>
+      <strong>특징:</strong> 송도국제도시의 새로운 복합문화공간으로, 도서관 기능 외에도 다양한 문화 프로그램 운영 예정.
+    </p>
+  </div>
+</div>
+
+<div style="background: #f8fafc; padding: 2rem; border-radius: 1rem; margin: 1rem 0; border: 1px solid #e2e8f0;">
+  <h3 style="color: #6b21a8; margin-bottom: 1rem;">2. 연수구립 송도국제어린이도서관</h3>
+  <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid #10b981;">
+    <h4 style="color: #065f46; margin: 0 0 0.8rem 0;">📍 기본 정보</h4>
+    <p style="margin: 0; color: #374151; line-height: 1.6;">
+      <strong>주소:</strong> 인천광역시 연수구 해돋이로 107<br>
+      <strong>영업시간:</strong> 09:00-18:00 (월요일 휴관)<br>
+      <strong>특징:</strong> 어린이 특화 도서관으로, 다양한 언어의 도서와 교육 프로그램 제공.
+    </p>
+  </div>
+</div>
+
+<div style="background: #f8fafc; padding: 2rem; border-radius: 1rem; margin: 1rem 0; border: 1px solid #e2e8f0;">
+  <h3 style="color: #6b21a8; margin-bottom: 1rem;">3. 홈플러스 송도점 문화센터</h3>
+  <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid #10b981;">
+    <h4 style="color: #065f46; margin: 0 0 0.8rem 0;">📍 기본 정보</h4>
+    <p style="margin: 0; color: #374151; line-height: 1.6;">
+      <strong>주소:</strong> 인천광역시 연수구 송도국제대로 165 (홈플러스 송도점 내)<br>
+      <strong>특징:</strong> 요리, 미술, 음악, 외국어 등 다양한 연령대를 위한 문화 강좌 운영.
     </p>
   </div>
 </div>
 
 <p style="text-align: center; color: #6b7280; margin: 2rem 0;">송도에서의 풍성한 문화생활 되세요! 🎭</p>
+
+<p style="text-align: center; color: #6b7280; margin: 2rem 0; font-size: 0.8rem;">
+  <em>📢 정보 업데이트: 모든 정보는 2025년 7월 기준이며, 실제 이용 시 변경사항이 있을 수 있으니 방문 전 확인 바랍니다.</em>
+</p>
 
 </div>`,
   'songdo-moving-checklist': `<div style="max-width: 100%; margin: 0 auto; line-height: 1.8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
@@ -386,7 +608,7 @@ const PREGENERATED_CONTENT: { [key: string]: string } = {
 <div style="text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1.5rem; border-radius: 1rem; margin: 2rem 0; box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);">
   <h2 style="margin: 0; font-size: 1.5rem;">2025년 최신판 📅</h2>
   <p style="margin: 0.5rem 0 0 0; font-size: 1.1rem; opacity: 0.9;">송도국제도시 맞춤형 이사 가이드 🎯</p>
-  <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; opacity: 0.8;">최종 업데이트: 2025년 7월</p>
+  <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; opacity: 0.8;">최종 업데이트: 2025년 7월 13일</p>
 </div>
 
 <div style="background: #f0f9ff; padding: 1.5rem; border-radius: 1rem; margin: 2rem 0; border: 2px solid #0ea5e9;">
@@ -546,6 +768,47 @@ const PREGENERATED_CONTENT: { [key: string]: string } = {
   </div>
 </div>
 
+<p style="text-align: center; color: #6b7280; margin: 2rem 0; font-size: 0.8rem;">
+  <em>📢 정보 업데이트: 모든 정보는 2025년 7월 기준이며, 실제 이용 시 변경사항이 있을 수 있으니 사전 확인 바랍니다.</em>
+</p>
+
+</div>
+<br>
+
+<h2 style="font-size: 2rem; color: #1e40af; border-left: 5px solid #3b82f6; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #eff6ff; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">🚚 이사 당일 체크리스트</h2>
+
+<div style="margin: 2rem 0;">
+  <h3 style="font-size: 1.4rem; color: #1e40af; margin-bottom: 1rem; padding: 1rem; background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border-radius: 0.8rem; border-left: 4px solid #3b82f6; box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);">✅ 이사 전 최종 확인</h3>
+  <div style="background: #f8fafc; padding: 2rem; border-radius: 1rem; margin: 1rem 0; border: 1px solid #e2e8f0; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+    <ul style="margin: 0; padding-left: 1.5rem; color: #374151; line-height: 1.8;">
+      <li style="margin-bottom: 0.5rem;">가스, 전기, 수도 요금 정산 및 차단 확인</li>
+      <li style="margin-bottom: 0.5rem;">우편물 주소 변경 및 전입신고 준비</li>
+      <li style="margin-bottom: 0.5rem;">쓰레기 처리 및 분리수거 완료</li>
+      <li style="margin-bottom: 0.5rem;">귀중품 및 중요 서류 별도 보관</li>
+      <li>이사 업체 도착 시간 확인 및 동선 확보</li>
+    </ul>
+  </div>
+</div>
+
+<h2 style="font-size: 2rem; color: #1e40af; border-left: 5px solid #3b82f6; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #eff6ff; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">📦 이사 후 체크리스트</h2>
+
+<div style="margin: 2rem 0;">
+  <h3 style="font-size: 1.4rem; color: #1e40af; margin-bottom: 1rem; padding: 1rem; background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border-radius: 0.8rem; border-left: 4px solid #3b82f6; box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);">🏠 새 집 정리</h3>
+  <div style="background: #f8fafc; padding: 2rem; border-radius: 1rem; margin: 1rem 0; border: 1px solid #e2e8f0; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+    <ul style="margin: 0; padding-left: 1.5rem; color: #374151; line-height: 1.8;">
+      <li style="margin-bottom: 0.5rem;">가전제품 및 가구 배치 확인</li>
+      <li style="margin-bottom: 0.5rem;">인터넷, TV, 전화 설치 확인</li>
+      <li style="margin-bottom: 0.5rem;">전입신고 및 확정일자 받기 (주민센터 또는 온라인)</li>
+      <li style="margin-bottom: 0.5rem;">전기, 가스, 수도 명의 변경 및 계량기 확인</li>
+      <li>주변 상가 및 편의시설 파악</li>
+    </ul>
+  </div>
+</div>
+
+<p style="text-align: center; color: #6b7280; margin: 2rem 0; font-size: 0.8rem;">
+  <em>📢 정보 업데이트: 모든 정보는 2025년 7월 13일 기준이며, 실제 이용 시 변경사항이 있을 수 있으니 사전 확인 바랍니다.</em>
+</p>
+
 </div>`,
 
   'songdo-newlywed-guide': `<div style="max-width: 100%; margin: 0 auto; line-height: 1.8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
@@ -555,7 +818,7 @@ const PREGENERATED_CONTENT: { [key: string]: string } = {
 <div style="text-align: center; background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); color: white; padding: 1.5rem; border-radius: 1rem; margin: 2rem 0; box-shadow: 0 8px 25px rgba(236, 72, 153, 0.3);">
   <h2 style="margin: 0; font-size: 1.5rem;">2025년 최신판 📅</h2>
   <p style="margin: 0.5rem 0 0 0; font-size: 1.1rem; opacity: 0.9;">송도에서 시작하는 행복한 신혼 라이프 💕</p>
-  <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; opacity: 0.8;">최종 업데이트: 2025년 7월</p>
+  <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; opacity: 0.8;">최종 업데이트: 2025년 7월 13일</p>
 </div>
 
 <div style="background: #fdf2f8; padding: 1.5rem; border-radius: 1rem; margin: 2rem 0; border: 2px solid #f472b6;">
@@ -733,436 +996,485 @@ const PREGENERATED_CONTENT: { [key: string]: string } = {
 
 <hr style="border: none; height: 2px; background: linear-gradient(90deg, #ec4899, #8b5cf6, #3b82f6); margin: 3rem 0; border-radius: 1px;">
 
-<h2 style="font-size: 2rem; color: #be185d; border-left: 5px solid #ec4899; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #fdf2f8; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">🏠 신혼집 선택 가이드 (2025년 시세)</h2>
-
-<h3 style="font-size: 1.4rem; color: #be185d; margin-bottom: 1rem; padding: 1rem; background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%); border-radius: 0.8rem; border-left: 4px solid #ec4899;">🔍 추천 아파트 단지</h3>
+<h2 style="font-size: 2rem; color: #be185d; border-left: 5px solid #ec4899; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #fdf2f8; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">🏠 신혼부부 주거 지원 정책 (2025년)</h2>
 
 <div style="background: #f8fafc; padding: 2rem; border-radius: 1rem; margin: 1rem 0; border: 1px solid #e2e8f0;">
-
-  <div style="margin-bottom: 2rem; padding: 1.5rem; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 1rem; border-left: 4px solid #f59e0b;">
-    <h4 style="color: #92400e; margin: 0 0 1rem 0; font-size: 1.2rem; display: flex; align-items: center; gap: 0.5rem;">
-      🌟 1. 송도 센트럴파크 푸르지오
-    </h4>
-    <div style="display: grid; gap: 0.8rem; margin-bottom: 1rem;">
-      <div style="display: flex; align-items: center; gap: 0.5rem;">
-        <span style="background: #f59e0b; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem; font-weight: bold;">특징</span>
-        <span style="color: #374151;">센트럴파크 조망, 지하철역 도보 5분</span>
-      </div>
-      <div style="display: flex; align-items: center; gap: 0.5rem;">
-        <span style="background: #10b981; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem; font-weight: bold;">평수</span>
-        <span style="color: #374151;">59㎡, 84㎡ 위주</span>
-      </div>
-      <div style="display: flex; align-items: center; gap: 0.5rem;">
-        <span style="background: #3b82f6; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem; font-weight: bold;">장점</span>
-        <span style="color: #374151;">산책로 인접, 문화시설 가까움, 관리 우수</span>
-      </div>
-    </div>
-    <div style="background: white; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem;">
-      <p style="margin: 0; color: #374151; line-height: 1.6;">
-        <strong style="color: #dc2626;">🆕 2025년 시세:</strong> 전세 <span style="color: #dc2626; font-weight: bold;">5.5-7억원</span>, 매매 <span style="color: #dc2626; font-weight: bold;">8-11억원</span><br>
-        <strong style="color: #059669;">관리비:</strong> 월 <span style="color: #059669; font-weight: bold;">25-35만원</span>
-      </p>
-    </div>
+  <h3 style="color: #be185d; margin-bottom: 1rem;">1. 신혼부부 전세자금 대출</h3>
+  <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid #10b981;">
+    <h4 style="color: #065f46; margin: 0 0 0.8rem 0;">📍 버팀목 전세자금 대출</h4>
+    <p style="margin: 0; color: #374151; line-height: 1.6;">
+      <strong>대상:</strong> 부부합산 연소득 7천만원 이하, 순자산 3.25억원 이하 무주택 세대주<br>
+      <strong>대출 한도:</strong> 수도권 2억원, 수도권 외 1.6억원 (2자녀 이상 가구는 각 2.2억원, 1.8억원)<br>
+      <strong>금리:</strong> 연 1.8% ~ 2.4% (소득 및 보증금에 따라 차등)<br>
+      <strong>특징:</strong> 최장 10년 (4회 연장), 자녀 수에 따라 우대금리 적용
+    </p>
   </div>
-
-  <div style="margin-bottom: 2rem; padding: 1.5rem; background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border-radius: 1rem; border-left: 4px solid #3b82f6;">
-    <h4 style="color: #1e40af; margin: 0 0 1rem 0; font-size: 1.2rem; display: flex; align-items: center; gap: 0.5rem;">
-      ⭐ 2. 송도 아이파크
-    </h4>
-    <div style="display: grid; gap: 0.8rem; margin-bottom: 1rem;">
-      <div style="display: flex; align-items: center; gap: 0.5rem;">
-        <span style="background: #3b82f6; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem; font-weight: bold;">특징</span>
-        <span style="color: #374151;">대단지 (총 6,500세대), 편의시설 완비</span>
-      </div>
-      <div style="display: flex; align-items: center; gap: 0.5rem;">
-        <span style="background: #10b981; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem; font-weight: bold;">평수</span>
-        <span style="color: #374151;">84㎡, 101㎡ 위주</span>
-      </div>
-      <div style="display: flex; align-items: center; gap: 0.5rem;">
-        <span style="background: #8b5cf6; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem; font-weight: bold;">장점</span>
-        <span style="color: #374151;">단지 내 상가, 커뮤니티 활발, 어린이집 운영</span>
-      </div>
-    </div>
-    <div style="background: white; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem;">
-      <p style="margin: 0; color: #374151; line-height: 1.6;">
-        <strong style="color: #dc2626;">🆕 2025년 시세:</strong> 전세 <span style="color: #dc2626; font-weight: bold;">6-8억원</span>, 매매 <span style="color: #dc2626; font-weight: bold;">9-13억원</span><br>
-        <strong style="color: #059669;">관리비:</strong> 월 <span style="color: #059669; font-weight: bold;">30-40만원</span>
-      </p>
-    </div>
+  <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid #3b82f6;">
+    <h4 style="color: #1e40af; margin: 0 0 0.8rem 0;">📍 중소기업 취업청년 전세자금 대출</h4>
+    <p style="margin: 0; color: #374151; line-height: 1.6;">
+      <strong>대상:</strong> 중소기업 재직 청년 (만 34세 이하), 부부합산 연소득 5천만원 이하<br>
+      <strong>대출 한도:</strong> 1억원<br>
+      <strong>금리:</strong> 연 1.2% (고정금리)<br>
+      <strong>특징:</strong> 최장 10년 (4회 연장), 저금리로 신혼부부에게 유리
+    </p>
   </div>
-
-  <div style="margin-bottom: 2rem; padding: 1.5rem; background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%); border-radius: 1rem; border-left: 4px solid #8b5cf6;">
-    <h4 style="color: #6b21a8; margin: 0 0 1rem 0; font-size: 1.2rem; display: flex; align-items: center; gap: 0.5rem;">
-      💎 3. 송도 더샵 센트럴파크
-    </h4>
-    <div style="display: grid; gap: 0.8rem; margin-bottom: 1rem;">
-      <div style="display: flex; align-items: center; gap: 0.5rem;">
-        <span style="background: #8b5cf6; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem; font-weight: bold;">특징</span>
-        <span style="color: #374151;">고급 브랜드, 프리미엄 시설</span>
-      </div>
-      <div style="display: flex; align-items: center; gap: 0.5rem;">
-        <span style="background: #10b981; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem; font-weight: bold;">평수</span>
-        <span style="color: #374151;">101㎡, 135㎡ 위주</span>
-      </div>
-      <div style="display: flex; align-items: center; gap: 0.5rem;">
-        <span style="background: #f59e0b; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem; font-weight: bold;">장점</span>
-        <span style="color: #374151;">시설 최고급, 브랜드 가치, 센트럴파크 전망</span>
-      </div>
-    </div>
-    <div style="background: white; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem;">
-      <p style="margin: 0; color: #374151; line-height: 1.6;">
-        <strong style="color: #dc2626;">🆕 2025년 시세:</strong> 전세 <span style="color: #dc2626; font-weight: bold;">8-12억원</span>, 매매 <span style="color: #dc2626; font-weight: bold;">13-18억원</span><br>
-        <strong style="color: #059669;">관리비:</strong> 월 <span style="color: #059669; font-weight: bold;">35-50만원</span>
-      </p>
-    </div>
-  </div>
-
-  <div style="margin-bottom: 1rem; padding: 1.5rem; background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%); border-radius: 1rem; border: 2px solid #ec4899;">
-    <h4 style="color: #be185d; margin: 0 0 1rem 0; font-size: 1.2rem; display: flex; align-items: center; gap: 0.5rem;">
-      <span style="background: #ec4899; color: white; padding: 0.3rem 0.8rem; border-radius: 0.4rem; font-weight: bold; font-size: 0.9rem;">🆕</span>
-      ✨ 4. 송도 롯데캐슬
-    </h4>
-    <div style="display: grid; gap: 0.8rem; margin-bottom: 1rem;">
-      <div style="display: flex; align-items: center; gap: 0.5rem;">
-        <span style="background: #ec4899; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem; font-weight: bold;">특징</span>
-        <span style="color: #374151;">신축 단지, 최신 스마트홈 시설</span>
-      </div>
-      <div style="display: flex; align-items: center; gap: 0.5rem;">
-        <span style="background: #10b981; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem; font-weight: bold;">평수</span>
-        <span style="color: #374151;">74㎡, 84㎡ 위주</span>
-      </div>
-      <div style="display: flex; align-items: center; gap: 0.5rem;">
-        <span style="background: #3b82f6; color: white; padding: 0.2rem 0.5rem; border-radius: 0.3rem; font-size: 0.8rem; font-weight: bold;">장점</span>
-        <span style="color: #374151;">최신 시설, 에너지 효율 우수</span>
-      </div>
-    </div>
-    <div style="background: white; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem;">
-      <p style="margin: 0; color: #374151; line-height: 1.6;">
-        <strong style="color: #dc2626;">🆕 2025년 시세:</strong> 전세 <span style="color: #dc2626; font-weight: bold;">6.5-8.5억원</span>, 매매 <span style="color: #dc2626; font-weight: bold;">10-14억원</span><br>
-        <strong style="color: #059669;">관리비:</strong> 월 <span style="color: #059669; font-weight: bold;">25-35만원</span>
-      </p>
-    </div>
-  </div>
-
 </div>
 
-<h3 style="font-size: 1.3rem; color: #be185d; margin: 2rem 0 1rem 0; padding: 1rem; background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%); border-radius: 0.8rem; border-left: 4px solid #ec4899;">🏡 신혼집 선택 체크리스트</h3>
+<div style="background: #f8fafc; padding: 2rem; border-radius: 1rem; margin: 1rem 0; border: 1px solid #e2e8f0;">
+  <h3 style="color: #be185d; margin-bottom: 1rem;">2. 신혼부부 주택 구입자금 대출</h3>
+  <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid #8b5cf6;">
+    <h4 style="color: #6b21a8; margin: 0 0 0.8rem 0;">📍 디딤돌 대출</h4>
+    <p style="margin: 0; color: #374151; line-height: 1.6;">
+      <strong>대상:</strong> 부부합산 연소득 7천만원 이하, 순자산 4.69억원 이하 무주택 세대주<br>
+      <strong>대출 한도:</strong> 2.5억원 (2자녀 이상 가구는 3.1억원)<br>
+      <strong>금리:</strong> 연 2.15% ~ 3.0% (소득 및 만기에 따라 차등)<br>
+      <strong>특징:</strong> 최장 30년 (거치기간 1년), 생애최초 주택 구입 시 우대금리 적용
+    </p>
+  </div>
+  <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid #f59e0b;">
+    <h4 style="color: #92400e; margin: 0 0 0.8rem 0;">📍 보금자리론</h4>
+    <p style="margin: 0; color: #374151; line-height: 1.6;">
+      <strong>대상:</strong> 부부합산 연소득 7천만원 이하, 주택가격 6억원 이하<br>
+      <strong>대출 한도:</strong> 3.6억원<br>
+      <strong>금리:</strong> 연 3.2% ~ 3.5% (만기에 따라 차등)<br>
+      <strong>특징:</strong> 최장 40년, 고정금리로 안정적인 상환 가능
+    </p>
+  </div>
+</div>
+
+<h2 style="font-size: 2rem; color: #be185d; border-left: 5px solid #ec4899; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #fdf2f8; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">💡 신혼부부 생활 팁</h2>
 
 <div style="background: #f8fafc; padding: 2rem; border-radius: 1rem; margin: 1rem 0; border: 1px solid #e2e8f0;">
+  <h3 style="color: #be185d; margin-bottom: 1rem;">1. 스마트한 가계부 관리</h3>
+  <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid #10b981;">
+    <h4 style="color: #065f46; margin: 0 0 0.8rem 0;">💰 공동 생활비 계좌 개설</h4>
+    <p style="margin: 0; color: #374151; line-height: 1.6;">
+      매월 일정 금액을 공동 계좌에 이체하여 식비, 공과금 등 공동 지출 관리<br>
+      <small style="color: #64748b;">각자의 용돈은 개인 계좌에서 관리하여 투명성 확보</small>
+    </p>
+  </div>
+  <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid #3b82f6;">
+    <h4 style="color: #1e40af; margin: 0 0 0.8rem 0;">📊 가계부 앱 활용</h4>
+    <p style="margin: 0; color: #374151; line-height: 1.6;">
+      뱅크샐러드, 네이버 가계부 등 자동 연동되는 앱으로 지출 내역 편리하게 관리<br>
+      <small style="color: #64748b;">월별 예산 설정 및 목표 달성 여부 확인</small>
+    </p>
+  </div>
+</div>
+
+<div style="background: #f8fafc; padding: 2rem; border-radius: 1rem; margin: 1rem 0; border: 1px solid #e2e8f0;">
+  <h3 style="color: #be185d; margin-bottom: 1rem;">2. 건강한 신혼 생활</h3>
+  <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid #8b5cf6;">
+    <h4 style="color: #6b21a8; margin: 0 0 0.8rem 0;">🏋️‍♀️ 함께 운동하기</h4>
+    <p style="margin: 0; color: #374151; line-height: 1.6;">
+      송도 센트럴파크 조깅, 요가, 필라테스 등 함께 할 수 있는 운동 선택<br>
+      <small style="color: #64748b;">건강도 챙기고 데이트도 즐기는 일석이조 효과</small>
+    </p>
+  </div>
+  <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid #f59e0b;">
+    <h4 style="color: #92400e; margin: 0 0 0.8rem 0;">🥗 건강한 식단 유지</h4>
+    <p style="margin: 0; color: #374151; line-height: 1.6;">
+      주 1회 이상 건강식 직접 요리, 제철 식재료 활용<br>
+      <small style="color: #64748b;">배달 음식 줄이고 건강한 식습관 만들기</small>
+    </p>
+  </div>
+</div>
+
+<p class="text-center text-gray-600 text-sm mt-8">📢 정보 업데이트: 모든 정보는 2025년 7월 13일 기준이며, 실제 이용 시 변경사항이 있을 수 있으니 사전 확인 바랍니다.</p>
+`,
+
+  'seasonal-events': `<div style="max-width: 100%; margin: 0 auto; line-height: 1.8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+
+<h1 style="font-size: 2.5rem; color: #ec4899; text-align: center; margin-bottom: 1rem; border-bottom: 3px solid #f472b6; padding-bottom: 1rem;">🌸 송도 계절별 이벤트 가이드</h1>
+
+<div style="text-align: center; background: linear-gradient(135deg, #ec4899 0%, #be185d 100%); color: white; padding: 1.5rem; border-radius: 1rem; margin: 2rem 0; box-shadow: 0 8px 25px rgba(236, 72, 153, 0.3);">
+  <h2 style="margin: 0; font-size: 1.5rem;">사계절 송도 축제 & 이벤트 완벽 가이드 🎉</h2>
+  <p style="margin: 0.5rem 0 0 0; font-size: 1.1rem; opacity: 0.9;">봄꽃부터 겨울 일루미네이션까지 ✨</p>
+  <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; opacity: 0.8;">최종 업데이트: 2025년 7월 13일</p>
+</div>
+
+<div style="background: #fdf2f8; padding: 1.5rem; border-radius: 1rem; margin: 2rem 0; border-left: 4px solid #ec4899;">
+  <h3 style="color: #be185d; margin: 0 0 1rem 0; font-size: 1.2rem;">📋 개요</h3>
+  <p style="color: #374151; margin: 0; line-height: 1.7;">송도국제도시에서 사계절 내내 즐길 수 있는 다양한 이벤트와 축제, 계절별 추천 활동을 소개합니다. 국제도시답게 다채로운 문화 행사와 자연을 만끽할 수 있는 활동들이 가득합니다.</p>
+</div>
+
+<hr style="border: none; height: 2px; background: linear-gradient(90deg, #ec4899, #f472b6, #ec4899); margin: 3rem 0;">
+
+<h2 style="font-size: 2rem; color: #059669; border-left: 5px solid #10b981; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #d1fae5; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">🌸 봄 (3월~5월)</h2>
+
+<h3 style="color: #047857; font-size: 1.4rem; margin: 2rem 0 1rem 0;">주요 이벤트 & 축제</h3>
+
+<div style="background: #ecfdf5; padding: 1.5rem; border-radius: 1rem; margin: 1.5rem 0; border-left: 4px solid #10b981;">
+  <h4 style="color: #065f46; margin: 0 0 1rem 0; font-size: 1.2rem;">🌸 벚꽃 시즌 (4월 초~중순)</h4>
+  <ul style="color: #374151; margin: 0; padding-left: 1.5rem;">
+    <li><strong>센트럴파크 벚꽃 명소</strong>: 송도의 대표 벚꽃 명소로 고층 빌딩과 어우러진 도심 속 벚꽃 감상</li>
+    <li><strong>수상택시 벚꽃투어</strong>: 센트럴파크 수로를 따라 벚꽃과 도시 경관을 동시에 즐기는 특별한 경험</li>
+    <li><strong>산책로 벚꽃길</strong>: 센트럴파크 산책로를 따라 약 2시간 코스의 여유로운 벚꽃 산책</li>
+  </ul>
+</div>
+
+<h3 style="color: #047857; font-size: 1.4rem; margin: 2rem 0 1rem 0;">봄 추천 활동</h3>
+
+<div style="display: grid; gap: 1.5rem;">
+  <div style="background: #f0fdf4; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #22c55e;">
+    <h4 style="color: #166534; margin: 0 0 1rem 0;">🏃‍♂️ 아웃도어 액티비티</h4>
+    <ul style="color: #374151; margin: 0; padding-left: 1.5rem;">
+      <li><strong>센트럴파크 산책 & 피크닉</strong>: 해수공원에서 바닷바람을 맞으며 산책</li>
+      <li><strong>카약 및 보트 체험</strong>: 이스트 보트하우스에서 구르미보트, 문보트, 패밀리보트 이용</li>
+      <li><strong>G타워 전망대</strong>: 지상 33층에서 360도 송도 전경과 서해바다 조망</li>
+      <li><strong>트라이볼 주변 산책</strong>: 독특한 건축물과 수변공간에서 포토존 활용</li>
+    </ul>
+  </div>
+
+  <div style="background: #fef7ff; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #a855f7;">
+    <h4 style="color: #7c2d12; margin: 0 0 1rem 0;">💕 데이트 코스</h4>
+    <ul style="color: #374151; margin: 0; padding-left: 1.5rem;">
+      <li><strong>센트럴파크 → 웨스트34 카페 → 리저브9 쇼핑</strong>: 봄날의 완벽한 데이트 코스</li>
+      <li><strong>포레스트아웃팅스</strong>: 계절마다 바뀌는 실내장식과 야외 테리스에서 봄 분위기 만끽</li>
+    </ul>
+  </div>
+</div>
+
+<h3 style="color: #047857; font-size: 1.4rem; margin: 2rem 0 1rem 0;">봄 맛집 & 카페</h3>
+
+<div style="background: #fffbeb; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #f59e0b;">
+  <h4 style="color: #92400e; margin: 0 0 1rem 0;">🍃 계절 추천 메뉴</h4>
+  <ul style="color: #374151; margin: 0; padding-left: 1.5rem;">
+    <li><strong>테라송 루프탑</strong>: 봄가을철 야외 테라스가 가장 인기, 송도 야경과 함께 즐기는 음료</li>
+    <li><strong>케이슨24</strong>: 솔찬공원 내 복합문화공간, 탁 트인 테라스에서 바다 전망과 함께 커피 타임</li>
+    <li><strong>밥상편지</strong>: 봄나물을 활용한 계절 한상차림으로 유명</li>
+  </ul>
+</div>
+
+<hr style="border: none; height: 2px; background: linear-gradient(90deg, #f59e0b, #fbbf24, #f59e0b); margin: 3rem 0;">
+
+<h2 style="font-size: 2rem; color: #dc2626; border-left: 5px solid #ef4444; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #fef2f2; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">☀️ 여름 (6월~8월)</h2>
+
+<h3 style="color: #991b1b; font-size: 1.4rem; margin: 2rem 0 1rem 0;">주요 이벤트 & 축제</h3>
+
+<div style="display: grid; gap: 1.5rem;">
+  <div style="background: #fef2f2; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #ef4444;">
+    <h4 style="color: #991b1b; margin: 0 0 1rem 0;">🎸 인천 펜타포트 락 페스티벌 (8월 1-3일)</h4>
+    <ul style="color: #374151; margin: 0; padding-left: 1.5rem;">
+      <li><strong>장소</strong>: 송도달빛축제공원</li>
+      <li><strong>특징</strong>: 대한민국 대표 록 페스티벌, 2025년 20주년 기념 특별 라인업</li>
+      <li><strong>하이라이트</strong>: 9년 만에 내한하는 그래미 8관왕 BECK 헤드라이너</li>
+    </ul>
+  </div>
+
+  <div style="background: #f0f9ff; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #0ea5e9;">
+    <h4 style="color: #0c4a6e; margin: 0 0 1rem 0;">🏖️ 新송도해변축제 (8월 10-15일)</h4>
+    <ul style="color: #374151; margin: 0; padding-left: 1.5rem;">
+      <li><strong>장소</strong>: 송도달빛공원 일원</li>
+      <li><strong>주요 시설</strong>: 어린이물놀이장, 인공백사장, 캠프닉(캠핑+피크닉)존</li>
+      <li><strong>프로그램</strong>: 레크리에이션, 체험프로그램, 레트로게임, 버스킹, 야외극장</li>
+      <li><strong>특징</strong>: 무료 입장, 가족 단위 방문객 최적화</li>
+    </ul>
+  </div>
+
+  <div style="background: #fffbeb; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #f59e0b;">
+    <h4 style="color: #92400e; margin: 0 0 1rem 0;">🍺 송도 맥주축제 (매년 여름)</h4>
+    <ul style="color: #374151; margin: 0; padding-left: 1.5rem;">
+      <li><strong>장소</strong>: 송도달빛축제공원</li>
+      <li><strong>특징</strong>: 제15회를 맞는 전통 있는 맥주 축제</li>
+    </ul>
+  </div>
+
+  <div style="background: #fef2f2; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #ef4444;">
+    <h4 style="color: #991b1b; margin: 0 0 1rem 0;">🎶 송도 썸머 페스티벌 (8월 20-25일)</h4>
+    <ul style="color: #374151; margin: 0; padding-left: 1.5rem;">
+      <li><strong>장소</strong>: 송도 센트럴파크</li>
+      <li><strong>특징</strong>: 다양한 장르의 음악 공연, 푸드트럭, 체험 부스 운영</li>
+      <li><strong>하이라이트</strong>: 유명 K-POP 아티스트 초청 공연</li>
+    </ul>
+  </div>
+</div>
+
+<h3 style="color: #991b1b; font-size: 1.4rem; margin: 2rem 0 1rem 0;">여름 추천 활동</h3>
+
+<div style="display: grid; gap: 1.5rem;">
+  <div style="background: #f0f9ff; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #0ea5e9;">
+    <h4 style="color: #0c4a6e; margin: 0 0 1rem 0;">🚤 수상 액티비티</h4>
+    <ul style="color: #374151; margin: 0; padding-left: 1.5rem;">
+      <li><strong>센트럴파크 수상택시</strong>: 바닷물을 가르며 달리는 시원한 체험</li>
+      <li><strong>카누 & 보트</strong>: 해수공원에서 즐기는 다양한 수상스포츠</li>
+      <li><strong>수변 산책로</strong>: 약 1.8km 길이의 수로를 따라 시원한 산책</li>
+    </ul>
+  </div>
+
+  <div style="background: #f3f4f6; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #6b7280;">
+    <h4 style="color: #374151; margin: 0 0 1rem 0;">🌙 야간 활동</h4>
+    <ul style="color: #374151; margin: 0; padding-left: 1.5rem;">
+      <li><strong>센트럴파크 야경 산책</strong>: 여름 더위를 피해 밤에 즐기는 로맨틱한 야경</li>
+      <li><strong>리저브9 야간 데이트</strong>: 고층 빌딩들의 화려한 조명과 함께하는 야경 명소</li>
+      <li><strong>인천대교 야경</strong>: 송도에서 가장 아름다운 일몰과 야경 감상 포인트</li>
+    </ul>
+  </div>
+</div>
+
+<h3 style="color: #991b1b; font-size: 1.4rem; margin: 2rem 0 1rem 0;">여름 맛집 & 카페</h3>
+
+<div style="background: #ecfdf5; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #10b981;">
+  <h4 style="color: #065f46; margin: 0 0 1rem 0;">🧊 시원한 메뉴</h4>
+  <ul style="color: #374151; margin: 0; padding-left: 1.5rem;">
+    <li><strong>엉클인더키친</strong>: 쌀국수, 분짜 등 베트남 요리로 여름 더위 해소</li>
+    <li><strong>람쁘</strong>: 송도 최고의 라멘집, 시원한 츠케멘과 냉라멘 추천</li>
+    <li><strong>포레스트아웃팅스</strong>: 에어컨이 잘 되는 대형 카페, 계절별 시즌 음료</li>
+  </ul>
+</div>
+
+<hr style="border: none; height: 2px; background: linear-gradient(90deg, #f97316, #fb923c, #f97316); margin: 3rem 0;">
+
+<h2 style="font-size: 2rem; color: #ea580c; border-left: 5px solid #f97316; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #fff7ed; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">🍂 가을 (9월~11월)</h2>
+
+<h3 style="color: #c2410c; font-size: 1.4rem; margin: 2rem 0 1rem 0;">주요 이벤트 & 축제</h3>
+
+<div style="background: #fff7ed; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #f97316;">
+  <h4 style="color: #c2410c; margin: 0 0 1rem 0;">🎵 가을 문화 행사</h4>
+  <ul style="color: #374151; margin: 0; padding-left: 1.5rem;">
+    <li><strong>송도달빛축제공원 가을 콘서트</strong>: 9월-10월 다양한 대중음악 공연</li>
+    <li><strong>센트럴파크 가을 축제</strong>: 단풍과 억새가 어우러진 도심 속 가을 정취</li>
+  </ul>
+</div>
+
+<h3 style="color: #c2410c; font-size: 1.4rem; margin: 2rem 0 1rem 0;">가을 추천 활동</h3>
+
+<div style="display: grid; gap: 1.5rem;">
+  <div style="background: #fef3c7; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #f59e0b;">
+    <h4 style="color: #92400e; margin: 0 0 1rem 0;">🍁 자연 감상</h4>
+    <ul style="color: #374151; margin: 0; padding-left: 1.5rem;">
+      <li><strong>센트럴파크 단풍 산책</strong>: 해수공원 주변 단풍나무와 도시 경관의 조화</li>
+      <li><strong>G타워 전망대 가을 조망</strong>: 가을빛으로 물든 송도 전경과 서해바다</li>
+      <li><strong>월미공원 단풍길</strong>: 근처 월미도의 50년 만에 개방된 숲길에서 가을 정취</li>
+    </ul>
+  </div>
+
+  <div style="background: #fdf2f8; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #ec4899;">
+    <h4 style="color: #be185d; margin: 0 0 1rem 0;">📸 포토존 & 데이트</h4>
+    <ul style="color: #374151; margin: 0; padding-left: 1.5rem;">
+      <li><strong>트라이볼 가을 포토존</strong>: 독특한 건축물과 가을 단풍의 환상적 조화</li>
+      <li><strong>센트럴파크 선셋정원</strong>: 가을 석양과 함께하는 로맨틱한 데이트 코스</li>
+      <li><strong>송도미래길</strong>: 가을 산책하기 좋은 송도의 대표 산책로</li>
+    </ul>
+  </div>
+</div>
+
+<h3 style="color: #c2410c; font-size: 1.4rem; margin: 2rem 0 1rem 0;">가을 맛집 & 카페</h3>
+
+<div style="background: #fef7ff; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #a855f7;">
+  <h4 style="color: #7c2d12; margin: 0 0 1rem 0;">🌰 가을 제철 메뉴</h4>
+  <ul style="color: #374151; margin: 0; padding-left: 1.5rem;">
+    <li><strong>신계동장어</strong>: 가을 보양식으로 인기, 국내산 대물장어와 뚝배기 계란찜</li>
+    <li><strong>시즈쿠</strong>: 가을 제철 해산물을 활용한 일식 코스 요리</li>
+    <li><strong>테라송</strong>: 가을철 야외 테라스가 가장 쾌적한 시기</li>
+  </ul>
+</div>
+
+<hr style="border: none; height: 2px; background: linear-gradient(90deg, #3b82f6, #60a5fa, #3b82f6); margin: 3rem 0;">
+
+<h2 style="font-size: 2rem; color: #1d4ed8; border-left: 5px solid #3b82f6; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #eff6ff; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">❄️ 겨울 (12월~2월)</h2>
+
+<h3 style="color: #1e40af; font-size: 1.4rem; margin: 2rem 0 1rem 0;">주요 이벤트 & 축제</h3>
+
+<div style="display: grid; gap: 1.5rem;">
+  <div style="background: #eff6ff; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #3b82f6;">
+    <h4 style="color: #1e40af; margin: 0 0 1rem 0;">✨ 겨울 일루미네이션</h4>
+    <ul style="color: #374151; margin: 0; padding-left: 1.5rem;">
+      <li><strong>센트럴파크 겨울 조명</strong>: 고층 빌딩들의 화려한 조명과 겨울 정취</li>
+      <li><strong>송도달빛축제공원 연말 이벤트</strong>: 겨울철 특별 공연 및 행사</li>
+    </ul>
+  </div>
+
+  <div style="background: #fef7ff; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #a855f7;">
+    <h4 style="color: #7c2d12; margin: 0 0 1rem 0;">🎄 송도 크리스마스 마켓 (12월 15일-31일)</h4>
+    <ul style="color: #374151; margin: 0; padding-left: 1.5rem;">
+      <li><strong>장소</strong>: 트리플스트리트</li>
+      <li><strong>특징</strong>: 크리스마스 용품, 수공예품, 겨울 먹거리 판매</li>
+      <li><strong>하이라이트</strong>: 대형 크리스마스 트리, 캐롤 공연</li>
+    </ul>
+  </div>
+</div>
+
+<h3 style="color: #1e40af; font-size: 1.4rem; margin: 2rem 0 1rem 0;">겨울 추천 활동</h3>
+
+<div style="display: grid; gap: 1.5rem;">
+  <div style="background: #f8fafc; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #64748b;">
+    <h4 style="color: #475569; margin: 0 0 1rem 0;">🏢 실내 활동</h4>
+    <ul style="color: #374151; margin: 0; padding-left: 1.5rem;">
+      <li><strong>G타워 전망대</strong>: 겨울 서해바다와 설경 조망</li>
+      <li><strong>트라이볼 실내 공연</strong>: 복합문화공간에서 즐기는 겨울 문화 행사</li>
+      <li><strong>대형 카페 투어</strong>: 포레스트아웃팅스 등 겨울철 따뜻한 실내 공간</li>
+    </ul>
+  </div>
+
+  <div style="background: #f1f5f9; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #475569;">
+    <h4 style="color: #334155; margin: 0 0 1rem 0;">🌃 겨울 야경</h4>
+    <ul style="color: #374151; margin: 0; padding-left: 1.5rem;">
+      <li><strong>센트럴파크 겨울 야경</strong>: 겨울철 특별한 조명과 함께하는 야경 산책</li>
+      <li><strong>인천대교 겨울 조망</strong>: 겨울 해넘이와 야경의 환상적 조화</li>
+    </ul>
+  </div>
+</div>
+
+<h3 style="color: #1e40af; font-size: 1.4rem; margin: 2rem 0 1rem 0;">겨울 맛집 & 카페</h3>
+
+<div style="background: #fef2f2; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #ef4444;">
+  <h4 style="color: #991b1b; margin: 0 0 1rem 0;">🍲 따뜻한 메뉴</h4>
+  <ul style="color: #374151; margin: 0; padding-left: 1.5rem;">
+    <li><strong>광명대창집</strong>: 겨울철 따뜻한 곱창과 대창으로 몸보신</li>
+    <li><strong>보승회관</strong>: 뜨끈한 국밥으로 겨울 추위 해소</li>
+    <li><strong>라멘나츠</strong>: 토리빠이탄 라멘으로 몸과 마음을 따뜻하게</li>
+  </ul>
+</div>
+
+<hr style="border: none; height: 2px; background: linear-gradient(90deg, #ec4899, #f472b6, #ec4899); margin: 3rem 0;">
+
+<h2 style="font-size: 2rem; color: #be185d; border-left: 5px solid #ec4899; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #fdf2f8; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">📅 연간 축제 달력</h2>
+
+<div style="background: #fdf2f8; padding: 2rem; border-radius: 1rem; margin: 2rem 0;">
+  <h3 style="color: #be185d; margin: 0 0 1.5rem 0;">정기 행사 일정</h3>
   <div style="display: grid; gap: 1rem;">
-    <div style="display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem; background: white; border-radius: 0.5rem; border-left: 3px solid #10b981;">
-      <span style="background: #10b981; color: white; padding: 0.3rem 0.6rem; border-radius: 0.3rem; font-weight: bold;">✅</span>
-      <span style="color: #374151;">예산 대비 적정 가격 (전세가율 70% 이하 권장)</span>
+    <div style="background: white; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #10b981;">
+      <strong style="color: #059669;">3-4월</strong>: 센트럴파크 벚꽃 시즌
     </div>
-    <div style="display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem; background: white; border-radius: 0.5rem; border-left: 3px solid #3b82f6;">
-      <span style="background: #3b82f6; color: white; padding: 0.3rem 0.6rem; border-radius: 0.3rem; font-weight: bold;">✅</span>
-      <span style="color: #374151;">출퇴근 교통편 확인 (GTX-B 개통 고려)</span>
+    <div style="background: white; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #22c55e;">
+      <strong style="color: #16a34a;">5월</strong>: 송도 봄 축제 및 야외 활동 시즌
     </div>
-    <div style="display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem; background: white; border-radius: 0.5rem; border-left: 3px solid #8b5cf6;">
-      <span style="background: #8b5cf6; color: white; padding: 0.3rem 0.6rem; border-radius: 0.3rem; font-weight: bold;">✅</span>
-      <span style="color: #374151;">향후 가족 계획 고려한 평수 (84㎡ 이상 추천)</span>
+    <div style="background: white; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #06b6d4;">
+      <strong style="color: #0891b2;">6-7월</strong>: 여름 수상 액티비티 본격 시작
     </div>
-    <div style="display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem; background: white; border-radius: 0.5rem; border-left: 3px solid #f59e0b;">
-      <span style="background: #f59e0b; color: white; padding: 0.3rem 0.6rem; border-radius: 0.3rem; font-weight: bold;">✅</span>
-      <span style="color: #374151;">관리비 및 유지비 계산 (월 30만원 내외)</span>
+    <div style="background: white; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #ef4444;">
+      <strong style="color: #dc2626;">8월 1일-3일</strong>: 인천 펜타포트 락 페스티벌
     </div>
-    <div style="display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem; background: white; border-radius: 0.5rem; border-left: 3px solid #ef4444;">
-      <span style="background: #ef4444; color: white; padding: 0.3rem 0.6rem; border-radius: 0.3rem; font-weight: bold;">✅</span>
-      <span style="color: #374151;">주변 편의시설 확인 (마트, 병원, 학교)</span>
+    <div style="background: white; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #0ea5e9;">
+      <strong style="color: #0284c7;">8월 10-15일</strong>: 新송도해변축제
     </div>
-    <div style="display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem; background: white; border-radius: 0.5rem; border-left: 3px solid #06b6d4;">
-      <span style="background: #06b6d4; color: white; padding: 0.3rem 0.6rem; border-radius: 0.3rem; font-weight: bold;">✅</span>
-      <span style="color: #374151;">향과 채광 상태 확인 (남향, 동남향 선호)</span>
+    <div style="background: white; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #f59e0b;">
+      <strong style="color: #d97706;">8월 22일-30일</strong>: 송도 맥주축제
     </div>
-    <div style="display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 0.5rem; border: 1px solid #f59e0b;">
-      <span style="background: #f59e0b; color: white; padding: 0.3rem 0.6rem; border-radius: 0.3rem; font-weight: bold;">🆕</span>
-      <span style="color: #92400e; font-weight: 500;">IoT 스마트홈 시설 여부</span>
+    <div style="background: white; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #f97316;">
+      <strong style="color: #ea580c;">9-10월</strong>: 가을 문화 행사 및 단풍 시즌
     </div>
-    <div style="display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 0.5rem; border: 1px solid #f59e0b;">
-      <span style="background: #f59e0b; color: white; padding: 0.3rem 0.6rem; border-radius: 0.3rem; font-weight: bold;">🆕</span>
-      <span style="color: #92400e; font-weight: 500;">공유 오피스, 피트니스 센터 등 커뮤니티 시설</span>
+    <div style="background: white; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #a855f7;">
+      <strong style="color: #9333ea;">11월</strong>: 겨울 준비 및 실내 활동 증가
+    </div>
+    <div style="background: white; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #3b82f6;">
+      <strong style="color: #2563eb;">12월-2월</strong>: 겨울 일루미네이션 및 실내 문화 행사
     </div>
   </div>
 </div>
 
-<p style="text-align: center; color: #6b7280; margin: 2rem 0;">송도에서의 행복한 신혼생활 되세요! 💕</p>
+<h3 style="color: #be185d; margin: 2rem 0 1rem 0;">🗓️ 월별 베스트 액티비티</h3>
 
-<h4>송도 내 주요 가전매장 (2025년 정보)</h4>
-<ul>
-<li><strong>하이마트 송도점</strong>: 032-832-1004 (무료배송, 설치서비스)</li>
-<li><strong>전자랜드 송도점</strong>: 032-832-2345 (신혼 패키지 할인)</li>
-<li><strong>코스트코 송도점</strong>: 032-727-2000 (대용량 가전제품)</li>
-<li><strong>🆕 삼성 디지털프라자 송도점</strong>: 032-851-9999 (스마트홈 솔루션)</li>
-<li><strong>🆕 LG 베스트샵 송도점</strong>: 032-851-8888 (에너지효율 가전)</li>
-</ul>
+<div style="display: grid; gap: 1rem; margin: 2rem 0;">
+  <div style="background: #ecfdf5; padding: 1rem; border-radius: 0.5rem;">
+    <strong style="color: #065f46;">3월</strong>: 봄맞이 센트럴파크 산책
+  </div>
+  <div style="background: #f0fdf4; padding: 1rem; border-radius: 0.5rem;">
+    <strong style="color: #166534;">4월</strong>: 벚꽃 명소 투어 및 포토존 활용
+  </div>
+  <div style="background: #f0fdfa; padding: 1rem; border-radius: 0.5rem;">
+    <strong style="color: #134e4a;">5월</strong>: 야외 피크닉 및 수상 액티비티 시작
+  </div>
+  <div style="background: #f0f9ff; padding: 1rem; border-radius: 0.5rem;">
+    <strong style="color: #0c4a6e;">6월</strong>: 본격적인 수상스포츠 시즌
+  </div>
+  <div style="background: #fef2f2; padding: 1rem; border-radius: 0.5rem;">
+    <strong style="color: #991b1b;">7월</strong>: 야간 활동 및 쿨링 스팟 탐방
+  </div>
+  <div style="background: #fdf2f8; padding: 1rem; border-radius: 0.5rem;">
+    <strong style="color: #be185d;">8월</strong>: 대형 축제 참여 (펜타포트, 해변축제, 맥주축제)
+  </div>
+  <div style="background: #fffbeb; padding: 1rem; border-radius: 0.5rem;">
+    <strong style="color: #92400e;">9월</strong>: 가을 초입 야외 활동 재개
+  </div>
+  <div style="background: #fff7ed; padding: 1rem; border-radius: 0.5rem;">
+    <strong style="color: #c2410c;">10월</strong>: 단풍 명소 및 가을 정취 만끽
+  </div>
+  <div style="background: #fef7ff; padding: 1rem; border-radius: 0.5rem;">
+    <strong style="color: #7c2d12;">11월</strong>: 겨울 준비 및 실내 카페 투어
+  </div>
+  <div style="background: #eff6ff; padding: 1rem; border-radius: 0.5rem;">
+    <strong style="color: #1e40af;">12월</strong>: 연말 분위기 및 겨울 야경
+  </div>
+  <div style="background: #f8fafc; padding: 1rem; border-radius: 0.5rem;">
+    <strong style="color: #475569;">1월</strong>: 신년 계획 및 실내 문화 활동
+  </div>
+  <div style="background: #f1f5f9; padding: 1rem; border-radius: 0.5rem;">
+    <strong style="color: #334155;">2월</strong>: 겨울 마무리 및 봄 준비
+  </div>
+</div>
 
-<h4>🆕 2025년 신혼 필수 가전 (스마트홈 중심)</h4>
-<ul>
-<li><strong>냉장고</strong>: 500L 이상, 와이파이 연결 (삼성 비스포크, LG 오브제컬렉션)</li>
-<li><strong>세탁기</strong>: 드럼세탁기 + 건조기 일체형 (AI 세탁 기능)</li>
-<li><strong>에어컨</strong>: 인버터형 2-3대, 공기청정 기능 (스마트 제어)</li>
-<li><strong>TV</strong>: 65인치 이상 스마트TV (8K, OLED 권장)</li>
-<li><strong>🆕 스마트 오븐</strong>: 전자레인지 + 오븐 + 에어프라이어 올인원</li>
-<li><strong>🆕 로봇청소기</strong>: 물걸레 겸용, 맵핑 기능</li>
-<li><strong>🆕 공기청정기</strong>: IoT 연결, 실시간 공기질 모니터링</li>
-</ul>
+<hr style="border: none; height: 2px; background: linear-gradient(90deg, #10b981, #34d399, #10b981); margin: 3rem 0;">
 
-<h3>🛏️ 가구 쇼핑 가이드</h3>
+<h2 style="font-size: 2rem; color: #065f46; border-left: 5px solid #10b981; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #ecfdf5; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">🚗 교통 및 접근성</h2>
 
-<h4>송도 내 가구매장 (2025년 업데이트)</h4>
-<ul>
-<li><strong>이케아 송도점</strong>: 032-727-1234 (스칸디나비아 디자인, 조립서비스)</li>
-<li><strong>한샘 송도점</strong>: 032-832-3456 (맞춤 가구, 토탈 인테리어)</li>
-<li><strong>현대리바트 송도점</strong>: 032-832-4567 (프리미엄 가구)</li>
-<li><strong>🆕 일룸 송도점</strong>: 032-851-7777 (모던 디자인 가구)</li>
-<li><strong>🆕 템퍼 송도점</strong>: 032-851-6666 (메모리폼 매트리스)</li>
-</ul>
+<div style="display: grid; gap: 1.5rem;">
+  <div style="background: #ecfdf5; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #10b981;">
+    <h3 style="color: #065f46; margin: 0 0 1rem 0;">🚇 대중교통</h3>
+    <ul style="color: #374151; margin: 0; padding-left: 1.5rem;">
+      <li><strong>인천지하철 1호선</strong>: 센트럴파크역, 국제업무지구역, 송도달빛축제공원역</li>
+      <li><strong>버스</strong>: 16, 82, 103, 780-1번 등 송도 전역 연결</li>
+      <li><strong>광역급행버스 M6405</strong>: 송도 ↔ 서울 강남 직행</li>
+    </ul>
+  </div>
 
-<h4>🆕 2025년 신혼 필수 가구 (모던 라이프 스타일)</h4>
-<ul>
-<li><strong>침대</strong>: 킹사이즈 + 메모리폼 매트리스 (수면 질 개선)</li>
-<li><strong>소파</strong>: 3인용 리클라이너 소파 (홈시어터 겸용)</li>
-<li><strong>식탁</strong>: 확장형 4-6인용 (손님 초대 고려)</li>
-<li><strong>🆕 스마트 화장대</strong>: LED 조명, 무선충전 패드 내장</li>
-<li><strong>🆕 시스템 옷장</strong>: 맞춤 제작, 의류 관리 시스템</li>
-<li><strong>🆕 높이조절 책상</strong>: 재택근무용, 서서 일하기 가능</li>
-</ul>
+  <div style="background: #f0f9ff; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #0ea5e9;">
+    <h3 style="color: #0c4a6e; margin: 0 0 1rem 0;">🅿️ 주차 정보</h3>
+    <ul style="color: #374151; margin: 0; padding-left: 1.5rem;">
+      <li><strong>센트럴파크</strong>: 인근 공영주차장 및 상업시설 주차장 이용</li>
+      <li><strong>달빛축제공원</strong>: 축제 기간 중 임시 주차장 운영</li>
+      <li><strong>G타워</strong>: 지하 주차장 이용 가능</li>
+    </ul>
+  </div>
+</div>
 
-<h2>🍽️ 송도 신혼부부 맛집 투어 (2025년 핫플레이스)</h2>
+<hr style="border: none; height: 2px; background: linear-gradient(90deg, #a855f7, #c084fc, #a855f7); margin: 3rem 0;">
 
-<h3>🥘 데이트 코스 맛집</h3>
+<h2 style="font-size: 2rem; color: #7c2d12; border-left: 5px solid #a855f7; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #fef7ff; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">💡 여행 팁</h2>
 
-<h4>센트럴파크 주변 (루프탑 & 뷰 맛집)</h4>
-<ul>
-<li><strong>🆕 더 테라스</strong>: 루프탑 이탈리안, 센트럴파크 전망 (032-851-2580)</li>
-<li><strong>송도 스테이크하우스</strong>: 한우 프리미엄, 기념일 특화 (032-832-1357)</li>
-<li><strong>🆕 소노마 와인바</strong>: 와인 + 안주, 로맨틱 분위기 (032-851-9900)</li>
-<li><strong>카페 드롭탑</strong>: 루프탑 카페, 야경 맛집 (032-832-7788)</li>
-</ul>
+<div style="display: grid; gap: 1.5rem;">
+  <div style="background: #fef7ff; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #a855f7;">
+    <h3 style="color: #7c2d12; margin: 0 0 1rem 0;">👔 계절별 복장 가이드</h3>
+    <ul style="color: #374151; margin: 0; padding-left: 1.5rem;">
+      <li><strong>봄/가을</strong>: 가디건이나 얇은 자켓 추천 (해풍으로 인한 일교차 주의)</li>
+      <li><strong>여름</strong>: 자외선 차단제 필수, 모자 및 선글라스 권장</li>
+      <li><strong>겨울</strong>: 바람막이 및 목도리 필수 (해풍으로 체감온도 하락)</li>
+    </ul>
+  </div>
 
-<h4>트리플스트리트 & 현대아울렛</h4>
-<ul>
-<li><strong>🆕 고메이494</strong>: 프리미엄 뷔페, 기념일 추천 (032-727-4949)</li>
-<li><strong>아웃백 스테이크하우스</strong>: 스테이크 전문 (032-727-8899)</li>
-<li><strong>🆕 딘타이펑</strong>: 대만 샤오롱바오 전문 (032-727-9988)</li>
-<li><strong>🆕 블루보틀 송도점</strong>: 프리미엄 커피, 데이트 카페 (032-851-2468)</li>
-</ul>
+  <div style="background: #fdf2f8; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #ec4899;">
+    <h3 style="color: #be185d; margin: 0 0 1rem 0;">📸 사진 촬영 포인트</h3>
+    <ul style="color: #374151; margin: 0; padding-left: 1.5rem;">
+      <li><strong>센트럴파크 수로</strong>: 고층 빌딩과 물의 반영이 아름다운 구도</li>
+      <li><strong>G타워 전망대</strong>: 송도 전경 파노라마 사진</li>
+      <li><strong>트라이볼</strong>: 독특한 건축미와 함께하는 인생샷</li>
+      <li><strong>인천대교</strong>: 일몰 시간대 실루엣 사진</li>
+    </ul>
+  </div>
 
-<h3>🏠 홈쿠킹 & 장보기</h3>
-<ul>
-<li><strong>이마트 송도점</strong>: 24시간 운영, 신선식품 (032-727-1234)</li>
-<li><strong>홈플러스 송도점</strong>: 생활용품 원스톱 (032-727-5678)</li>
-<li><strong>코스트코 송도점</strong>: 대용량 쇼핑, 수입식품 (032-727-2000)</li>
-<li><strong>🆕 마켓컬리 송도 직배송</strong>: 새벽배송, 유기농 식품</li>
-<li><strong>🆕 송도 전통시장</strong>: 로컬 맛집, 신선 해산물 (032-832-9876)</li>
-</ul>
+  <div style="background: #ecfdf5; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #10b981;">
+    <h3 style="color: #065f46; margin: 0 0 1rem 0;">💰 예산 가이드</h3>
+    <ul style="color: #374151; margin: 0; padding-left: 1.5rem;">
+      <li><strong>무료 활동</strong>: 센트럴파크 산책, G타워 전망대, 해변 산책</li>
+      <li><strong>저예산</strong>: 카페 음료 (5,000-10,000원), 대중교통비</li>
+      <li><strong>중예산</strong>: 수상택시 (성인 5,000원), 보트 체험 (20,000-30,000원)</li>
+      <li><strong>고예산</strong>: 축제 티켓, 고급 레스토랑 식사</li>
+    </ul>
+  </div>
+</div>
 
-<h2>💕 신혼부부 데이트 코스 (2025년 추천)</h2>
+<hr style="border: none; height: 2px; background: linear-gradient(90deg, #ec4899, #f472b6, #ec4899); margin: 3rem 0;">
 
-<h3>🌸 로맨틱 산책 코스</h3>
+<div style="text-align: center; background: linear-gradient(135deg, #ec4899 0%, #be185d 100%); color: white; padding: 2rem; border-radius: 1rem; margin: 3rem 0;">
+  <p style="margin: 0; font-size: 1rem; opacity: 0.9; line-height: 1.6;">
+    <em>본 가이드는 2024-2025년 기준으로 작성되었으며, 축제 일정이나 운영시간은 변경될 수 있으니 방문 전 공식 홈페이지를 확인해주세요.</em>
+  </p>
+</div>
 
-<h4>센트럴파크 골든 코스 (3-4시간)</h4>
-<ol>
-<li><strong>센트럴파크 호수</strong>: 수상택시 체험, 조깅 트랙</li>
-<li><strong>🆕 미디어 파사드</strong>: 건물벽면 디지털 아트쇼 (저녁 8시)</li>
-<li><strong>G-타워 스카이가든</strong>: 33층 전망대, 인천공항 야경</li>
-<li><strong>🆕 센트럴파크 카누</strong>: 호수 위 낭만 체험 (계절 운영)</li>
-</ol>
+<p class="text-center text-gray-600 text-sm mt-8">📢 정보 업데이트: 모든 축제 정보와 일정은 2025년 7월 기준입니다. 실제 참여 시 변경사항이 있을 수 있으니 사전 확인 바랍니다.</p>
 
-<h4>해안 힐링 코스 (4-5시간)</h4>
-<ol>
-<li><strong>🆕 송도달빛축제공원</strong>: 계절별 꽃 축제, 포토존</li>
-<li><strong>송도해변 산책로</strong>: 서해안 일몰 명소</li>
-<li><strong>🆕 워터프론트 요트투어</strong>: 선셋 크루즈 (주말 운행)</li>
-<li><strong>채널워크</strong>: 해안가 카페거리, 야경 명소</li>
-</ol>
-
-<h3>🎬 실내 데이트 코스</h3>
-
-<h4>문화생활 코스</h4>
-<ul>
-<li><strong>🆕 CGV 송도 IMAX</strong>: 최신 영화 관람, 커플시트</li>
-<li><strong>🆕 송도 VR 테마파크</strong>: 가상현실 체험, 게임존</li>
-<li><strong>송도 컨벤시아</strong>: 전시회, 공연 관람</li>
-<li><strong>🆕 송도 쿠킹스튜디오</strong>: 커플 요리 클래스</li>
-</ul>
-
-<h4>쇼핑 & 스파 코스</h4>
-<ul>
-<li><strong>현대프리미엄아울렛</strong>: 럭셔리 브랜드 쇼핑</li>
-<li><strong>🆕 스파 1839</strong>: 커플 스파, 찜질방 (24시간)</li>
-<li><strong>🆕 송도 골프존</strong>: 스크린 골프, 실내 스포츠</li>
-<li><strong>트리플스트리트</strong>: 복합문화공간, 팝업스토어</li>
-</ul>
-
-<h2>👶 미래 계획 준비 (2025년 육아 인프라)</h2>
-
-<h3>🏥 산부인과 & 소아과 (최신 시설)</h3>
-<ul>
-<li><strong>가천대 길병원</strong>: 산부인과 전문, 신생아 집중치료실 (032-460-3114)</li>
-<li><strong>인천성모병원</strong>: 무통분만 전문, 산후조리 (032-280-5114)</li>
-<li><strong>🆕 송도 여성병원</strong>: 신축 전문병원, 최신 장비 (032-851-5000)</li>
-<li><strong>🆕 송도아이클리닉</strong>: 소아과 전문, 예방접종 (032-834-7582)</li>
-</ul>
-
-<h3>🎓 교육 환경 (글로벌 교육 특구)</h3>
-<ul>
-<li><strong>🆕 채드윅국제학교</strong>: 미국식 교육, K-12 과정</li>
-<li><strong>송도국제학교</strong>: IB 프로그램, 다국적 학생</li>
-<li><strong>연세대 송도캠퍼스</strong>: 대학 부설 교육 프로그램</li>
-<li><strong>🆕 송도 글로벌 캠퍼스</strong>: 해외 대학 분교 집중</li>
-</ul>
-
-<h3>👨‍👩‍👧‍👦 육아 시설 (2025년 확장)</h3>
-<ul>
-<li><strong>🆕 국공립 어린이집</strong>: 8개소로 확장 (대기자 감소)</li>
-<li><strong>민간 어린이집</strong>: 20개소, 영어 특화 프로그램</li>
-<li><strong>🆕 송도 키즈 테마파크</strong>: 실내 놀이공간, 카페 결합형</li>
-<li><strong>🆕 스마트 키즈케어</strong>: AI 기반 육아 서비스</li>
-</ul>
-
-<h2>💰 신혼부부 재정 관리 (2025년 맞춤 전략)</h2>
-
-<h3>🏦 송도 내 주요 금융기관</h3>
-<ul>
-<li><strong>KB국민은행 송도지점</strong>: 032-832-1234 (신혼부부 전용 상담)</li>
-<li><strong>신한은행 송도지점</strong>: 032-832-2345 (디지털 뱅킹 센터)</li>
-<li><strong>우리은행 송도지점</strong>: 032-832-3456 (부동산 대출 전문)</li>
-<li><strong>🆕 카카오뱅크 송도센터</strong>: 디지털 전용, 24시간 서비스</li>
-</ul>
-
-<h3>💳 2025년 신혼부부 대출 상품</h3>
-<ul>
-<li><strong>🆕 디딤돌 대출</strong>: 최대 3억원, 금리 3.2-4.5%, 40년 상환</li>
-<li><strong>🆕 신혼희망타운 대출</strong>: 최대 2.7억원, 금리 2.9-3.8%</li>
-<li><strong>🆕 보금자리론</strong>: 최대 5억원, 금리 3.8-5.2%</li>
-<li><strong>🆕 인천시 청년 전세대출</strong>: 최대 2억원, 금리 2.5-3.5%</li>
-</ul>
-
-<h3>📊 2025년 월 예산 가이드 (송도 맞벌이 기준)</h3>
-<ul>
-<li><strong>주거비</strong>: 월 소득의 30% 이내 (전세 대출 포함)</li>
-<li><strong>생활비</strong>: 월 소득의 35% 이내 (식비, 교통비, 통신비)</li>
-<li><strong>저축/투자</strong>: 월 소득의 25% 이상 (비상금 + 투자)</li>
-<li><strong>여가/문화</strong>: 월 소득의 10% 이내 (데이트, 취미)</li>
-<li><strong>🆕 평균 월 지출</strong>: 250-350만원 (84㎡ 신혼부부 기준)</li>
-</ul>
-
-<h2>🤝 커뮤니티 활동 (2025년 네트워킹)</h2>
-
-<h3>👥 신혼부부 모임 (온/오프라인 융합)</h3>
-<ul>
-<li><strong>🆕 송도 신혼부부 카페</strong>: 네이버 카페 2만명 (정보 공유)</li>
-<li><strong>🆕 송도맘 & 송도대디</strong>: 육아 정보, 용품 나눔</li>
-<li><strong>송도 런닝 클럽</strong>: 주말 모임, 건강 관리</li>
-<li><strong>🆕 송도 쿠킹 클럽</strong>: 요리 레시피 공유, 홈파티</li>
-</ul>
-
-<h3>🎨 문화활동 (취미 개발)</h3>
-<ul>
-<li><strong>홈플러스 문화센터</strong>: 요가, 필라테스, 외국어</li>
-<li><strong>🆕 송도 아트센터</strong>: 미술, 음악, 댄스 클래스</li>
-<li><strong>연세대 평생교육원</strong>: 전문 교육 프로그램</li>
-<li><strong>🆕 송도 메이커스페이스</strong>: 3D 프린팅, 목공 체험</li>
-</ul>
-
-<h2>🚨 신혼부부 생활 가이드</h2>
-
-<h3>💸 스마트한 가계 관리</h3>
-<ul>
-<li>🆕 가계부 앱 활용 (토스, 뱅크샐러드 추천)</li>
-<li>🆕 정기 구독 서비스 정리 (중복 방지)</li>
-<li>🆕 카드 혜택 최적화 (송도 지역 특화 카드)</li>
-<li>🆕 비상금 3-6개월치 준비 (CMA, 적금 활용)</li>
-</ul>
-
-<h3>🏠 주거 관리 팁</h3>
-<ul>
-<li>🆕 스마트홈 앱으로 에너지 절약</li>
-<li>🆕 정기 안전점검 (가스, 전기, 보일러)</li>
-<li>🆕 관리비 절약법 (공동 전기 절약, 분리수거)</li>
-<li>🆕 화재·지진 보험 가입 필수</li>
-</ul>
-
-<h2>📱 송도 신혼부부 필수 앱</h2>
-<ul>
-<li><strong>🆕 송도 스마트시티</strong> - 송도 전용 통합 서비스</li>
-<li><strong>🆕 송도라이프</strong> - 지역 커뮤니티, 맛집 정보</li>
-<li><strong>배달의민족/요기요</strong> - 홈쿠킹 피곤할 때</li>
-<li><strong>마켓컬리</strong> - 신선식품 새벽배송</li>
-<li><strong>카카오T</strong> - 택시, 대중교통</li>
-<li><strong>토스</strong> - 가계부, 투자, 대출 관리</li>
-<li><strong>🆕 커플앱 (비트윈)</strong> - 추억 저장, 일정 공유</li>
-</ul>
-
-<h2>📞 유용한 연락처 (2025년 최신)</h2>
-
-<h3>🏢 관공서 & 생활민원</h3>
-<ul>
-<li><strong>연수구청</strong>: 032-749-8114 (혼인신고, 전입신고)</li>
-<li><strong>송도1동 주민센터</strong>: 032-749-8201</li>
-<li><strong>송도2동 주민센터</strong>: 032-749-8221</li>
-<li><strong>🆕 송도 스마트시티 통합상황실</strong>: 032-850-0000</li>
-</ul>
-
-<h3>🏠 생활 서비스</h3>
-<ul>
-<li><strong>송도IBD 통합관리</strong>: 032-727-8900</li>
-<li><strong>🆕 송도 컨시어지 서비스</strong>: 032-850-1111 (생활 도우미)</li>
-<li><strong>🆕 송도 반려동물 병원</strong>: 032-851-9595</li>
-<li><strong>🆕 송도 케어 서비스</strong>: 032-851-2424 (청소, 육아)</li>
-</ul>
-
-<h3>🆘 응급상황</h3>
-<ul>
-<li><strong>종합상황실</strong>: 119 (화재/구급/구조)</li>
-<li><strong>경찰신고</strong>: 112</li>
-<li><strong>가스누설신고</strong>: 032-440-0700</li>
-<li><strong>🆕 송도 24시간 콜센터</strong>: 032-850-9999</li>
-</ul>
-
-<hr>
-
-<h2>🎯 신혼부부 1년 플랜</h2>
-
-<h3>📅 신혼 1개월차 - 정착기</h3>
-<ul>
-<li>집 계약 및 이사 완료</li>
-<li>기본 가전제품 구입 및 설치</li>
-<li>주변 편의시설 파악</li>
-<li>송도 커뮤니티 가입</li>
-</ul>
-
-<h3>📅 신혼 3개월차 - 적응기</h3>
-<ul>
-<li>가구 구입 및 인테리어 완성</li>
-<li>동네 맛집 탐방</li>
-<li>취미 활동 시작</li>
-<li>비상금 적립 시작</li>
-</ul>
-
-<h3>📅 신혼 6개월차 - 안정기</h3>
-<ul>
-<li>가계부 정착 및 예산 관리</li>
-<li>여행 계획 및 실행</li>
-<li>미래 계획 논의</li>
-<li>보험 가입 검토</li>
-</ul>
-
-<h3>📅 신혼 1년차 - 성숙기</h3>
-<ul>
-<li>장기 재정 계획 수립</li>
-<li>부동산 투자 검토</li>
-<li>가족 계획 구체화</li>
-<li>송도 라이프 완전 정착</li>
-</ul>
-
-<hr>
-
-<p><em>💕 축하합니다! 송도에서 시작하는 신혼생활이 행복으로 가득하길 바랍니다.</em></p>
-<p><em>✨ 이 가이드는 송도 신혼부부들의 경험과 2025년 최신 정보를 담아 제작되었습니다.</em></p>
-
-<p><small>📢 정보 업데이트: 모든 연락처와 가격 정보는 2025년 7월 기준입니다. 실제 이용 시 변경사항이 있을 수 있으니 사전 확인 바랍니다.</small></p>`
+</div>`
 };
 
 export function loadGuideContent(category: string, slug: string): string {

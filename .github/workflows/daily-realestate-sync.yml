@@ -2,7 +2,7 @@ name: 매일 부동산 데이터 자동 수집
 
 on:
   schedule:
-    # 매일 오전 6시 (KST) = UTC 21:00 (전날)
+    # 매일 오전 6시 (KST) = UTC 21:00 (전날) - 스크립트 내부에서 KST 기준으로 날짜 계산
     - cron: '0 21 * * *'
   workflow_dispatch: # 수동 실행 가능
 
@@ -52,7 +52,8 @@ jobs:
           echo "새로운 데이터 없음 - 커밋 건너뜀"
         else
           echo "새로운 부동산 데이터 발견"
-          TODAY=$(date +%Y-%m-%d)
+          # 한국시간(KST) 기준으로 날짜 계산
+          TODAY=$(TZ='Asia/Seoul' date +%Y-%m-%d)
           git add frontend/public/data/realestate_${TODAY}.json
           git commit -m "🏠 자동 부동산 데이터 업데이트: ${TODAY}" || echo "커밋할 변경사항 없음"
           git push origin main
@@ -63,7 +64,8 @@ jobs:
     
     - name: 수집 결과 요약
       run: |
-        TODAY=$(date +%Y-%m-%d)
+        # 한국시간(KST) 기준으로 날짜 계산
+        TODAY=$(TZ='Asia/Seoul' date +%Y-%m-%d)
         if [ -f "frontend/public/data/realestate_${TODAY}.json" ]; then
           echo "📊 수집된 데이터 파일: realestate_${TODAY}.json"
           echo "📈 파일 크기: $(du -h frontend/public/data/realestate_${TODAY}.json | cut -f1)"

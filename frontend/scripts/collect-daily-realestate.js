@@ -51,10 +51,13 @@ function generateDealId(deal) {
 }
 
 function getTodayDateString() {
-  const today = new Date();
-  return today.getFullYear() + '-' + 
-         String(today.getMonth() + 1).padStart(2, '0') + '-' + 
-         String(today.getDate()).padStart(2, '0');
+  // 한국시간(KST, UTC+9) 기준으로 날짜 생성
+  const now = new Date();
+  const kstTime = new Date(now.getTime() + (9 * 60 * 60 * 1000)); // UTC + 9시간
+  
+  return kstTime.getFullYear() + '-' + 
+         String(kstTime.getMonth() + 1).padStart(2, '0') + '-' + 
+         String(kstTime.getDate()).padStart(2, '0');
 }
 
 // 현재 시점에서 이용 가능한 모든 부동산 데이터 수집 (최근 3개월)
@@ -202,7 +205,12 @@ async function saveDataToFile(deals, targetDate) {
 async function main() {
   try {
     console.log('🚀 부동산 데이터 자동 수집 시작');
-    console.log('⏰ 실행 시간:', new Date().toISOString());
+    
+    // 한국시간(KST) 표시
+    const now = new Date();
+    const kstTime = new Date(now.getTime() + (9 * 60 * 60 * 1000));
+    console.log('⏰ 실행 시간 (UTC):', now.toISOString());
+    console.log('⏰ 실행 시간 (KST):', kstTime.toISOString().replace('Z', '+09:00'));
     
     const today = getTodayDateString();
     console.log(`📅 수집 대상 날짜: ${today}`);

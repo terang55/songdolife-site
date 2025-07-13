@@ -1,0 +1,131 @@
+name: 🤖 송도라이프 자동 크롤링
+
+on:
+  # 매일 오전 6시, 오후 6시 (UTC 기준이므로 한국시간 -9시간)
+  schedule:
+    - cron: '0 21 * * *'  # 한국시간 오전 6시
+    - cron: '0 9 * * *'   # 한국시간 오후 6시
+  
+  # 수동 실행 가능
+  workflow_dispatch:
+
+jobs:
+  crawl-and-update:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📦 코드 체크아웃
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+    
+    - name: 🐍 Python 설정
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+    
+    - name: 📋 의존성 설치
+      run: |
+        cd crawler
+        pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: 🌐 Chrome 브라우저 설치
+      uses: browser-actions/setup-chrome@latest
+      with:
+        chrome-version: stable
+    
+    - name: 🤖 ChromeDriver 설정
+      run: |
+        # ChromeDriver는 webdriver-manager가 자동으로 관리
+        echo "ChromeDriver will be managed by webdriver-manager"
+    
+    - name: 📁 데이터 디렉토리 생성
+      run: |
+        mkdir -p crawler/data/enhanced_news
+        mkdir -p crawler/logs
+        mkdir -p frontend/public/data/enhanced_news
+    
+    - name: 🚀 크롤링 실행
+      run: |
+        cd crawler
+        echo "🎯 플랫폼별 키워드 크롤링 시작..."
+        python run_platform_keywords_crawler.py
+      env:
+        # 크롤링 환경 변수 (필요시 GitHub Secrets에서 설정)
+        CRAWLER_HEADLESS: true
+        CRAWLER_TIMEOUT: 30
+    
+    - name: 🔄 프론트엔드 동기화
+      run: |
+        cd crawler
+        echo "🔄 프론트엔드 데이터 동기화..."
+        python sync_to_frontend.py --sync
+    
+    - name: 📊 크롤링 결과 확인
+      run: |
+        echo "📊 크롤링 결과 요약:"
+        echo "크롤링 데이터 파일 수: $(find crawler/data/enhanced_news -name "*.json" | wc -l)"
+        echo "동기화된 파일 수: $(find frontend/public/data/enhanced_news -name "*.json" | wc -l)"
+        
+        # 최신 파일 확인
+        if [ -f "frontend/public/data/enhanced_news/sync_summary.json" ]; then
+          echo "📄 동기화 요약:"
+          cat frontend/public/data/enhanced_news/sync_summary.json
+        fi
+    
+    - name: 🔧 Git 설정
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+    
+    - name: 📝 변경사항 커밋
+      run: |
+        # 변경된 파일이 있는지 확인
+        if [ -n "$(git status --porcelain)" ]; then
+          # 크롤링 데이터만 추가
+          git add crawler/data/enhanced_news/
+          git add frontend/public/data/enhanced_news/
+          
+          # 커밋 메시지 생성
+          TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+          git commit -m "🗃️ 데이터 자동 동기화: ${TIMESTAMP} (GitHub Actions)"
+          
+          echo "✅ 새로운 데이터가 커밋되었습니다."
+        else
+          echo "ℹ️ 변경된 데이터가 없습니다."
+        fi
+    
+    - name: 🚀 GitHub에 푸시
+      run: |
+        # 커밋이 있는 경우에만 푸시
+        if [ -n "$(git log @{u}.. 2>/dev/null)" ]; then
+          git push
+          echo "✅ 변경사항이 GitHub에 반영되었습니다."
+        else
+          echo "ℹ️ 푸시할 변경사항이 없습니다."
+        fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: 📧 실패 알림 (Slack/Discord - 선택사항)
+      if: failure()
+      uses: 8398a7/action-slack@v3
+      with:
+        status: failure
+        text: '🚨 송도라이프 자동 크롤링이 실패했습니다!'
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # 설정 필요
+    
+    - name: 📋 실행 요약
+      if: always()
+      run: |
+        echo "==============================================="
+        echo "📊 송도라이프 자동 크롤링 실행 완료"
+        echo "==============================================="
+        echo "⏰ 실행 시간: $(date)"
+        echo "🌍 타임존: 한국 표준시 (KST)"
+        echo "🎯 다음 실행: 매일 오전 6시, 오후 6시"
+        echo "==============================================="

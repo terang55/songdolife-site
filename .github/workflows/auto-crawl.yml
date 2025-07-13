@@ -58,7 +58,7 @@ for download in stable['downloads']['chromedriver']:
     if download['platform'] == 'linux64':
         print(download['url'])
         break
-")
+        ")
         
         echo "ChromeDriver 다운로드 URL: $DOWNLOAD_URL"
         

@@ -472,8 +472,19 @@ async function loadDailyDataFromFile(date: string): Promise<ProcessedDeal[]> {
         const filePath = path.join(process.cwd(), 'public', 'data', `realestate_${date}.json`);
         const data = await fs.readFile(filePath, 'utf-8');
         const parsed = JSON.parse(data);
-        logger.debug(`${date} 로컬 파일에서 데이터 로드: ${parsed.total_count || 0}건`);
-        return parsed.deals || [];
+        const deals = parsed.deals || [];
+        
+        // 중복 제거 (unique_id 기준)
+        const uniqueDeals = deals.filter((deal: ProcessedDeal, index: number, arr: ProcessedDeal[]) => 
+          arr.findIndex(d => d.unique_id === deal.unique_id) === index
+        );
+        
+        logger.debug(`${date} 로컬 파일에서 데이터 로드: 총 ${deals.length}건 → 중복 제거 후 ${uniqueDeals.length}건`);
+        if (deals.length !== uniqueDeals.length) {
+          logger.debug(`${date} 파일에서 중복 제거됨: ${deals.length - uniqueDeals.length}건`);
+        }
+        
+        return uniqueDeals;
       } catch {
         logger.debug(`${date} 로컬 파일 없음`);
         return [];
@@ -490,8 +501,19 @@ async function loadDailyDataFromFile(date: string): Promise<ProcessedDeal[]> {
         const response = await fetch(fileUrl);
         if (response.ok) {
           const parsed = await response.json();
-          logger.info(`${date} 프로덕션에서 데이터 로드 성공: ${parsed.total_count || 0}건`);
-          return parsed.deals || [];
+          const deals = parsed.deals || [];
+          
+          // 중복 제거 (unique_id 기준)
+          const uniqueDeals = deals.filter((deal: ProcessedDeal, index: number, arr: ProcessedDeal[]) => 
+            arr.findIndex(d => d.unique_id === deal.unique_id) === index
+          );
+          
+          logger.info(`${date} 프로덕션에서 데이터 로드 성공: 총 ${deals.length}건 → 중복 제거 후 ${uniqueDeals.length}건`);
+          if (deals.length !== uniqueDeals.length) {
+            logger.info(`${date} 프로덕션 파일에서 중복 제거됨: ${deals.length - uniqueDeals.length}건`);
+          }
+          
+          return uniqueDeals;
         } else {
           logger.warn(`${date} 파일 응답 실패: ${response.status} ${response.statusText}`);
         }

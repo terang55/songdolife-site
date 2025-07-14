@@ -62,7 +62,9 @@ function getTodayDateString() {
 
 // 현재 시점에서 이용 가능한 모든 부동산 데이터 수집 (최근 3개월)
 async function collectRealEstateDataForDate(targetDate) {
-  console.log(`🏠 ${targetDate} 시점 부동산 데이터 수집 시작 (최근 3개월 전체 거래)`);
+  console.log('🎯 ===== 부동산 데이터 수집 시작 =====');
+  console.log(`📅 수집 대상 날짜: ${targetDate}`);
+  console.log(`🏠 수집 범위: 최근 3개월 전체 거래`);
   
   const deals = [];
   const parser = new XMLParser({ ignoreAttributes: false, trimValues: true });
@@ -77,14 +79,19 @@ async function collectRealEstateDataForDate(targetDate) {
     yearMonths.push(`${y}${m}`);
   }
   
-  console.log(`📅 API 호출 대상 연월: ${yearMonths.join(', ')} (최근 3개월 전체 수집)`);
+  console.log(`📊 API 호출 대상 연월: ${yearMonths.join(', ')}`);
+  console.log('');
   
   const numOfRows = 100;
   
   // 각 월별로 데이터 수집
+  let totalApiCalls = 0;
+  let totalProcessedItems = 0;
+  
   for (const yearMonth of yearMonths) {
-    console.log(`📅 ${yearMonth} 데이터 수집 중`);
+    console.log(`📅 === ${yearMonth} 월 데이터 수집 시작 ===`);
     let pageNo = 1;
+    let monthlyDeals = 0;
     
     while (true) {
       const apiUrl = new URL(MOLIT_BASE_URL);
@@ -96,6 +103,8 @@ async function collectRealEstateDataForDate(targetDate) {
 
       try {
         console.log(`📡 ${yearMonth} API 호출 중... (페이지 ${pageNo})`);
+        totalApiCalls++;
+        
         const response = await fetch(apiUrl.toString());
         const xmlText = await response.text();
         const parsed = parser.parse(xmlText);
@@ -108,6 +117,7 @@ async function collectRealEstateDataForDate(targetDate) {
 
         const itemArray = Array.isArray(items) ? items : [items];
         console.log(`📊 ${yearMonth} ${pageNo}페이지: ${itemArray.length}건 처리 중`);
+        totalProcessedItems += itemArray.length;
 
         for (const item of itemArray) {
           try {
@@ -150,6 +160,7 @@ async function collectRealEstateDataForDate(targetDate) {
                 price_per_pyeong: pricePerPyeong,
                 unique_id: uniqueId,
               });
+              monthlyDeals++;
             }
           } catch (parseError) {
             console.error('❌ 개별 데이터 파싱 오류:', parseError);
@@ -167,10 +178,49 @@ async function collectRealEstateDataForDate(targetDate) {
         break;
       }
     }
+    
+    console.log(`📈 ${yearMonth} 월 송도동 거래: ${monthlyDeals}건`);
+    console.log('');
   }
   
-  console.log(`🎯 ${targetDate} 시점 데이터 수집 완료: ${deals.length}건 (최근 3개월: ${yearMonths.join(', ')})`);
-  return deals;
+  console.log('🔄 ===== 데이터 정제 및 중복 제거 =====');
+  console.log(`📊 총 API 호출 횟수: ${totalApiCalls}회`);
+  console.log(`📊 총 처리된 아이템: ${totalProcessedItems}건`);
+  console.log(`📊 송도동 필터링 후: ${deals.length}건`);
+  
+  // 중복 제거 (unique_id 기준)
+  const uniqueDeals = [];
+  const seenIds = new Set();
+  
+  deals.forEach(deal => {
+    if (!seenIds.has(deal.unique_id)) {
+      seenIds.add(deal.unique_id);
+      uniqueDeals.push(deal);
+    }
+  });
+  
+  const duplicateCount = deals.length - uniqueDeals.length;
+  console.log(`🔍 중복 제거 결과:`);
+  console.log(`   - 중복 제거 전: ${deals.length}건`);
+  console.log(`   - 중복 제거 후: ${uniqueDeals.length}건`);
+  console.log(`   - 중복된 거래: ${duplicateCount}건`);
+  
+  if (duplicateCount > 0) {
+    console.log(`   - 중복 제거율: ${((duplicateCount / deals.length) * 100).toFixed(1)}%`);
+  }
+  
+  // 데이터 품질 검증
+  const invalidIds = uniqueDeals.filter(deal => !deal.unique_id || deal.unique_id.trim() === '');
+  if (invalidIds.length > 0) {
+    console.log(`⚠️  데이터 품질 경고: unique_id가 없는 거래 ${invalidIds.length}건`);
+  } else {
+    console.log(`✅ 데이터 품질: 모든 거래에 unique_id 생성됨`);
+  }
+  
+  console.log('');
+  console.log(`🎯 ${targetDate} 시점 데이터 수집 완료: ${uniqueDeals.length}건 (최근 3개월: ${yearMonths.join(', ')})`);
+  
+  return uniqueDeals;
 }
 
 // 데이터를 파일로 저장
@@ -192,7 +242,10 @@ async function saveDataToFile(deals, targetDate) {
     };
     
     await fs.writeFile(filePath, JSON.stringify(dataToSave, null, 2));
-    console.log(`💾 데이터 저장 완료: ${fileName} (${deals.length}건)`);
+    console.log('💾 ===== 데이터 저장 완료 =====');
+    console.log(`📁 파일명: ${fileName}`);
+    console.log(`📊 저장된 거래: ${deals.length}건`);
+    console.log(`📍 저장 경로: ${filePath}`);
     
     return filePath;
   } catch (error) {
@@ -204,31 +257,33 @@ async function saveDataToFile(deals, targetDate) {
 // 메인 함수
 async function main() {
   try {
-    console.log('🚀 부동산 데이터 자동 수집 시작');
+    console.log('🚀 ===== 송도 부동산 데이터 자동 수집 시작 =====');
+    console.log('');
     
     // 한국시간(KST) 표시
     const now = new Date();
     const kstTime = new Date(now.getTime() + (9 * 60 * 60 * 1000));
-    console.log('⏰ 실행 시간 (UTC):', now.toISOString());
-    console.log('⏰ 실행 시간 (KST):', kstTime.toISOString().replace('Z', '+09:00'));
+    console.log('⏰ === 실행 시간 정보 ===');
+    console.log(`   UTC: ${now.toISOString()}`);
+    console.log(`   KST: ${kstTime.toISOString().replace('Z', '+09:00')}`);
     
     const today = getTodayDateString();
-    console.log(`📅 수집 대상 날짜: ${today}`);
+    console.log(`📅 수집 대상 날짜: ${today} (KST 기준)`);
+    console.log('');
     
     // 데이터 수집
     const deals = await collectRealEstateDataForDate(today);
     
     if (deals.length === 0) {
-      console.log('⚠️  해당 월의 거래 데이터가 없습니다');
+      console.log('⚠️  ===== 데이터 없음 경고 =====');
+      console.log('해당 월의 거래 데이터가 없습니다');
       console.log('💡 이는 API 응답 문제이거나 실제로 데이터가 없는 상황입니다');
+      console.log('');
     }
     
     // 파일로 저장
     const savedPath = await saveDataToFile(deals, today);
-    
-    console.log('✅ 자동 수집 완료');
-    console.log(`📂 저장 경로: ${savedPath}`);
-    console.log(`📊 수집 건수: ${deals.length}건`);
+    console.log('');
     
     // 통계 정보
     if (deals.length > 0) {
@@ -237,14 +292,33 @@ async function main() {
       const maxPrice = Math.max(...prices);
       const minPrice = Math.min(...prices);
       
-      console.log('📈 거래 통계:');
+      console.log('📈 ===== 거래 통계 =====');
       console.log(`   평균 가격: ${formatPrice(avgPrice)}`);
       console.log(`   최고 가격: ${formatPrice(maxPrice)}`);
       console.log(`   최저 가격: ${formatPrice(minPrice)}`);
+      
+      // 최신 거래 5건 표시
+      const recentDeals = deals
+        .sort((a, b) => new Date(b.deal_date).getTime() - new Date(a.deal_date).getTime())
+        .slice(0, 5);
+      
+      console.log('');
+      console.log('🏠 ===== 최신 거래 TOP 5 =====');
+      recentDeals.forEach((deal, index) => {
+        console.log(`   ${index + 1}. ${deal.apartment_name} ${deal.area} ${deal.floor} - ${deal.price} (${deal.deal_date})`);
+      });
     }
     
+    console.log('');
+    console.log('✅ ===== 자동 수집 성공 완료 =====');
+    console.log(`📂 저장 경로: ${savedPath}`);
+    console.log(`📊 최종 수집 건수: ${deals.length}건`);
+    console.log(`🔗 API 확인: /api/realestate?checkNew=true`);
+    
   } catch (error) {
-    console.error('❌ 자동 수집 실패:', error);
+    console.error('❌ ===== 자동 수집 실패 =====');
+    console.error('오류 내용:', error);
+    console.error('스택 트레이스:', error.stack);
     process.exit(1);
   }
 }

@@ -594,21 +594,27 @@ async function handleFallbackApiComparison(yesterdayDate: string, todayDate: str
   }
 }
 
-// 오늘 날짜 문자열 가져오기 (YYYY-MM-DD)
+// 오늘 날짜 문자열 가져오기 (YYYY-MM-DD) - KST 기준
 function getTodayDateString(): string {
-  const today = new Date();
-  return today.getFullYear() + '-' + 
-         String(today.getMonth() + 1).padStart(2, '0') + '-' + 
-         String(today.getDate()).padStart(2, '0');
+  // 한국시간(KST, UTC+9) 기준으로 날짜 계산
+  const now = new Date();
+  const kstTime = new Date(now.getTime() + (9 * 60 * 60 * 1000)); // UTC + 9시간
+  
+  return kstTime.getFullYear() + '-' + 
+         String(kstTime.getMonth() + 1).padStart(2, '0') + '-' + 
+         String(kstTime.getDate()).padStart(2, '0');
 }
 
-// 어제 날짜 문자열 가져오기 (YYYY-MM-DD)
+// 어제 날짜 문자열 가져오기 (YYYY-MM-DD) - KST 기준
 function getYesterdayDateString(): string {
-  const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 1);
-  return yesterday.getFullYear() + '-' + 
-         String(yesterday.getMonth() + 1).padStart(2, '0') + '-' + 
-         String(yesterday.getDate()).padStart(2, '0');
+  // 한국시간(KST, UTC+9) 기준으로 어제 날짜 계산
+  const now = new Date();
+  const kstTime = new Date(now.getTime() + (9 * 60 * 60 * 1000)); // UTC + 9시간
+  kstTime.setDate(kstTime.getDate() - 1); // KST 기준 어제
+  
+  return kstTime.getFullYear() + '-' + 
+         String(kstTime.getMonth() + 1).padStart(2, '0') + '-' + 
+         String(kstTime.getDate()).padStart(2, '0');
 }
 
 // 서버 이전 데이터 파일 관리

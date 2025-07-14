@@ -139,6 +139,78 @@ export const STATIC_GUIDES: GuideContent[] = [
     difficulty: 'medium',
     tags: ['교육', '학교', '학원', '국제학교', '학군', 'IB', '유치원', '입학'],
     featured: true
+  },
+  {
+    slug: 'songdo-spring-guide',
+    title: '송도 봄 완벽 가이드',
+    description: '송도국제도시의 봄을 만끽할 수 있는 벚꽃 명소, 축제, 나들이 코스를 완벽 정리한 가이드입니다.',
+    keywords: ['송도 봄', '송도 벚꽃', '센트럴파크 벚꽃', '달빛축제공원', '봄 축제', '봄 나들이', '수상택시', '카누', 'G타워', '트라이볼'],
+    content: '',
+    category: 'seasonal',
+    lastUpdated: '2025-07-13',
+    relatedGuides: ['songdo-park-guide', 'songdo-culture-guide', 'songdo-summer-guide'],
+    readingTime: 20,
+    difficulty: 'easy',
+    tags: ['봄', '벚꽃', '축제', '나들이', '수상활동', '산책', '피크닉'],
+    featured: true,
+    seasonal: {
+      season: 'spring',
+      months: [3, 4, 5]
+    }
+  },
+  {
+    slug: 'songdo-summer-guide',
+    title: '송도 여름 완벽 가이드',
+    description: '송도국제도시 여름 축제와 수상활동, 시원한 피서지까지 완벽 정리한 여름철 가이드입니다.',
+    keywords: ['송도 여름', '펜타포트 락 페스티벌', '송도맥주축제', '센트럴파크 수상레저', '카누', '카약', '수상택시', '트리플스트리트', '현대아울렛'],
+    content: '',
+    category: 'seasonal',
+    lastUpdated: '2025-07-13',
+    relatedGuides: ['songdo-park-guide', 'songdo-culture-guide', 'songdo-spring-guide'],
+    readingTime: 25,
+    difficulty: 'medium',
+    tags: ['여름', '축제', '수상활동', '피서', '락페스티벌', '맥주축제', '쇼핑'],
+    featured: true,
+    seasonal: {
+      season: 'summer',
+      months: [6, 7, 8]
+    }
+  },
+  {
+    slug: 'songdo-autumn-guide',
+    title: '송도 가을 완벽 가이드',
+    description: '송도국제도시의 단풍 명소와 가을 야외활동, 축제 정보를 완벽 정리한 가을철 가이드입니다.',
+    keywords: ['송도 가을', '송도 단풍', '센트럴파크 단풍', '달빛공원', '해돋이공원', '자전거 투어', '조깅', '송도미래길', '가을 축제'],
+    content: '',
+    category: 'seasonal',
+    lastUpdated: '2025-07-13',
+    relatedGuides: ['songdo-park-guide', 'songdo-culture-guide', 'songdo-winter-guide'],
+    readingTime: 22,
+    difficulty: 'medium',
+    tags: ['가을', '단풍', '야외활동', '자전거', '조깅', '산책', '사진'],
+    featured: true,
+    seasonal: {
+      season: 'fall',
+      months: [9, 10, 11]
+    }
+  },
+  {
+    slug: 'songdo-winter-guide',
+    title: '송도 겨울 완벽 가이드',
+    description: '송도국제도시의 따뜻한 실내 명소와 겨울 활동, 온천 정보를 완벽 정리한 겨울철 가이드입니다.',
+    keywords: ['송도 겨울', '송도 실내 활동', '현대아울렛', '트리플스트리트', '송해온 온천', 'CGV', '찜질방', '따뜻한 카페', '겨울 쇼핑'],
+    content: '',
+    category: 'seasonal',
+    lastUpdated: '2025-07-13',
+    relatedGuides: ['songdo-shopping-guide', 'songdo-restaurant-guide', 'songdo-autumn-guide'],
+    readingTime: 24,
+    difficulty: 'easy',
+    tags: ['겨울', '실내활동', '쇼핑', '온천', '영화', '카페', '따뜻함'],
+    featured: true,
+    seasonal: {
+      season: 'winter',
+      months: [12, 1, 2]
+    }
   }
 ];
 

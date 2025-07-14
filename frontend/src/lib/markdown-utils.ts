@@ -1205,6 +1205,106 @@ const PREGENERATED_CONTENT: { [key: string]: string } = {
 </div>
 
 </div>`
+  ,
+  'songdo-spring-guide': `<div style="max-width: 100%; margin: 0 auto; line-height: 1.8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+
+<h1 style="font-size: 2.5rem; color: #f472b6; text-align: center; margin-bottom: 1rem; border-bottom: 3px solid #f9a8d4; padding-bottom: 1rem;">🌸 송도 봄 완벽 가이드</h1>
+
+<div style="text-align: center; background: linear-gradient(135deg, #f472b6 0%, #ec4899 100%); color: white; padding: 1.5rem; border-radius: 1rem; margin: 2rem 0; box-shadow: 0 8px 25px rgba(244, 114, 182, 0.3);">
+  <h2 style="margin: 0; font-size: 1.5rem;">송도의 봄은 화사한 벚꽃과 따뜻한 바닷바람이 어우러진 최고의 계절입니다 🌺</h2>
+  <p style="margin: 0.5rem 0 0 0; font-size: 1.1rem; opacity: 0.9;">3월부터 5월까지 송도만의 특별한 봄을 만끽할 수 있는 완벽한 가이드를 준비했습니다.</p>
+</div>
+
+<h2 style="font-size: 2rem; color: #059669; border-left: 5px solid #10b981; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #ecfdf5; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">🌸 송도 벚꽃 명소 BEST 3</h2>
+
+<div style="display: grid; gap: 1.5rem;">
+  <div style="background: #fef7ff; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #f472b6;">
+    <h3 style="color: #be185d; margin: 0 0 1rem 0;">🥇 송도 센트럴파크</h3>
+    <p style="margin: 0; color: #374151; line-height: 1.6;">
+      <strong>특징:</strong> 국내 최초 해수공원, 뉴욕 센트럴파크를 모티브로 조성<br>
+      <strong>벚꽃 포인트:</strong> 한옥마을 일대, 호수 건너편 작은 동물원 일대<br>
+      <strong>추천 활동:</strong> 벚꽃 터널 산책, 인공수로변 피크닉, 인생샷 촬영<br>
+      <strong>접근성:</strong> 지하철 1호선 센트럴파크역 도보 5분
+    </p>
+  </div>
+</div>
+
+</div>`
+  ,
+  'songdo-summer-guide': `<div style="max-width: 100%; margin: 0 auto; line-height: 1.8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+
+<h1 style="font-size: 2.5rem; color: #f59e0b; text-align: center; margin-bottom: 1rem; border-bottom: 3px solid #fbbf24; padding-bottom: 1rem;">☀️ 송도 여름 완벽 가이드</h1>
+
+<div style="text-align: center; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 1.5rem; border-radius: 1rem; margin: 2rem 0; box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);">
+  <h2 style="margin: 0; font-size: 1.5rem;">송도의 여름은 시원한 바닷바람과 다양한 축제가 어우러진 활기찬 계절입니다 🌊</h2>
+  <p style="margin: 0.5rem 0 0 0; font-size: 1.1rem; opacity: 0.9;">6월부터 8월까지 펜타포트 락 페스티벌, 송도맥주축제를 비롯한 다양한 여름 축제와 시원한 수상활동을 만끽할 수 있습니다.</p>
+</div>
+
+<h2 style="font-size: 2rem; color: #dc2626; border-left: 5px solid #ef4444; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #fef2f2; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">🎪 송도 여름 대표 축제 TOP 3</h2>
+
+<div style="display: grid; gap: 1.5rem;">
+  <div style="background: #fffbeb; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #f59e0b;">
+    <h3 style="color: #d97706; margin: 0 0 1rem 0;">🎸 인천 펜타포트 락 페스티벌</h3>
+    <p style="margin: 0; color: #374151; line-height: 1.6;">
+      <strong>개최 시기:</strong> 2025년 8월 1일 ~ 3일 (3일간)<br>
+      <strong>장소:</strong> 송도 달빛축제공원<br>
+      <strong>특징:</strong> 20주년 기념, "Pentaport 2.0" 슬로건으로 업그레이드<br>
+      <strong>규모:</strong> 대한민국 최대 규모 락 페스티벌
+    </p>
+  </div>
+</div>
+
+</div>`
+  ,
+  'songdo-autumn-guide': `<div style="max-width: 100%; margin: 0 auto; line-height: 1.8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+
+<h1 style="font-size: 2.5rem; color: #ea580c; text-align: center; margin-bottom: 1rem; border-bottom: 3px solid #fb923c; padding-bottom: 1rem;">🍂 송도 가을 완벽 가이드</h1>
+
+<div style="text-align: center; background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%); color: white; padding: 1.5rem; border-radius: 1rem; margin: 2rem 0; box-shadow: 0 8px 25px rgba(234, 88, 12, 0.3);">
+  <h2 style="margin: 0; font-size: 1.5rem;">송도의 가을은 황금빛 단풍과 선선한 바닷바람이 어우러진 최고의 계절입니다 🍁</h2>
+  <p style="margin: 0.5rem 0 0 0; font-size: 1.1rem; opacity: 0.9;">9월부터 11월까지 단풍 명소부터 가을 축제, 야외활동까지 송도만의 특별한 가을을 만끽할 수 있습니다.</p>
+</div>
+
+<h2 style="font-size: 2rem; color: #059669; border-left: 5px solid #10b981; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #ecfdf5; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">🍁 송도 단풍 명소 BEST 5</h2>
+
+<div style="display: grid; gap: 1.5rem;">
+  <div style="background: #fff7ed; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #ea580c;">
+    <h3 style="color: #c2410c; margin: 0 0 1rem 0;">🥇 센트럴파크 단풍 산책로</h3>
+    <p style="margin: 0; color: #374151; line-height: 1.6;">
+      <strong>특징:</strong> 3.5km 순환 코스, 국내 최초 해수공원<br>
+      <strong>단풍 포인트:</strong> 인공수로변 메타세쿼이아, 한옥마을 단풍나무<br>
+      <strong>절정 시기:</strong> 10월 말 ~ 11월 초<br>
+      <strong>추천 활동:</strong> 단풍 산책, 수상택시에서 바라보는 단풍
+    </p>
+  </div>
+</div>
+
+</div>`
+  ,
+  'songdo-winter-guide': `<div style="max-width: 100%; margin: 0 auto; line-height: 1.8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+
+<h1 style="font-size: 2.5rem; color: #3b82f6; text-align: center; margin-bottom: 1rem; border-bottom: 3px solid #60a5fa; padding-bottom: 1rem;">❄️ 송도 겨울 완벽 가이드</h1>
+
+<div style="text-align: center; background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; padding: 1.5rem; border-radius: 1rem; margin: 2rem 0; box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);">
+  <h2 style="margin: 0; font-size: 1.5rem;">송도의 겨울은 따뜻한 실내 공간과 시원한 바닷바람이 조화를 이루는 특별한 계절입니다 ⛄</h2>
+  <p style="margin: 0.5rem 0 0 0; font-size: 1.1rem; opacity: 0.9;">12월부터 2월까지 추위를 피해 즐길 수 있는 실내 활동부터 겨울만의 독특한 매력까지 완벽하게 즐기는 가이드입니다.</p>
+</div>
+
+<h2 style="font-size: 2rem; color: #dc2626; border-left: 5px solid #ef4444; padding-left: 1rem; margin: 3rem 0 1.5rem 0; background: #fef2f2; padding: 1rem 1rem 1rem 2rem; border-radius: 0.5rem;">🔥 송도 겨울 실내 명소 TOP 5</h2>
+
+<div style="display: grid; gap: 1.5rem;">
+  <div style="background: #eff6ff; padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #3b82f6;">
+    <h3 style="color: #1d4ed8; margin: 0 0 1rem 0;">🛍️ 현대프리미엄아울렛 송도점</h3>
+    <p style="margin: 0; color: #374151; line-height: 1.6;">
+      <strong>특징:</strong> 도심형 프리미엄 아울렛, 완벽한 실내 난방<br>
+      <strong>브랜드:</strong> 200여개 국내외 명품 브랜드<br>
+      <strong>할인:</strong> 연중 30-70% 할인, 겨울 세일 특가<br>
+      <strong>편의시설:</strong> 푸드코트, 카페, 키즈카페, 영화관
+    </p>
+  </div>
+</div>
+
+</div>`
 };
 
 export function loadGuideContent(category: string, slug: string): string {

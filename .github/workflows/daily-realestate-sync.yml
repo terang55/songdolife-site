@@ -47,17 +47,47 @@ jobs:
     
     - name: 변경사항 확인 및 커밋
       run: |
-        # 새로 생성된 데이터 파일이 있는지 확인
-        if git diff --quiet HEAD -- frontend/public/data/realestate_*.json; then
-          echo "새로운 데이터 없음 - 커밋 건너뜀"
+        # 한국시간(KST) 기준으로 날짜 계산
+        TODAY=$(TZ='Asia/Seoul' date +%Y-%m-%d)
+        TARGET_FILE="frontend/public/data/realestate_${TODAY}.json"
+        
+        echo "🔍 오늘 날짜 파일 확인: ${TARGET_FILE}"
+        
+        # 오늘 날짜 파일이 존재하는지 확인
+        if [ -f "${TARGET_FILE}" ]; then
+          echo "📁 파일 존재 확인됨: ${TARGET_FILE}"
+          
+          # Git에 추가되지 않은 파일인지 확인 (새로 생성된 파일)
+          if ! git ls-files --error-unmatch "${TARGET_FILE}" >/dev/null 2>&1; then
+            echo "🆕 새로운 부동산 데이터 파일 발견"
+            echo "📊 파일 정보:"
+            ls -lh "${TARGET_FILE}"
+            
+            # Git에 추가하고 커밋
+            git add "${TARGET_FILE}"
+            git commit -m "🏠 자동 부동산 데이터 업데이트: ${TODAY}"
+            git push origin main
+            echo "✅ 부동산 데이터 자동 수집 및 커밋 완료"
+            
+          else
+            echo "📝 기존 파일이므로 변경사항 확인"
+            # 기존 파일의 변경사항이 있는지 확인
+            if ! git diff --quiet HEAD -- "${TARGET_FILE}"; then
+              echo "🔄 기존 파일에 변경사항 발견"
+              git add "${TARGET_FILE}"
+              git commit -m "🔄 부동산 데이터 업데이트: ${TODAY}"
+              git push origin main
+              echo "✅ 부동산 데이터 업데이트 및 커밋 완료"
+            else
+              echo "📊 데이터 변경사항 없음 - 커밋 건너뜀"
+            fi
+          fi
+          
         else
-          echo "새로운 부동산 데이터 발견"
-          # 한국시간(KST) 기준으로 날짜 계산
-          TODAY=$(TZ='Asia/Seoul' date +%Y-%m-%d)
-          git add frontend/public/data/realestate_${TODAY}.json
-          git commit -m "🏠 자동 부동산 데이터 업데이트: ${TODAY}" || echo "커밋할 변경사항 없음"
-          git push origin main
-          echo "✅ 부동산 데이터 자동 수집 및 커밋 완료"
+          echo "❌ 오늘 날짜 데이터 파일이 생성되지 않았습니다"
+          echo "🔍 디버깅: 데이터 폴더 내용 확인"
+          ls -la frontend/public/data/ || echo "데이터 폴더가 존재하지 않습니다"
+          exit 1
         fi
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

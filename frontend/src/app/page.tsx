@@ -679,7 +679,7 @@ export default function HomePage() {
             <div className="flex items-center space-x-3">
               <span className="text-2xl">📚</span>
               <div>
-                <h2 className="text-xl sm:text-2xl font-bold text-gray-900">송도 생활 가이드 (업데이트중)</h2>
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900">송도 생활 가이드 </h2>
                 <p className="text-sm text-gray-600 mt-1">송도국제도시 생활에 필요한 실용적인 정보들</p>
               </div>
             </div>

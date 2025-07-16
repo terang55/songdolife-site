@@ -37,6 +37,13 @@ export const GUIDE_CATEGORIES: GuideCategory[] = [
     description: '송도 계절별 추천 활동과 정보',
     icon: '🌸',
     color: 'pink'
+  },
+  {
+    id: 'childcare',
+    name: '육아',
+    description: '송도 육아 시설과 아이와 함께 가볼 만한 곳',
+    icon: '👶',
+    color: 'yellow'
   }
 ];
 
@@ -211,6 +218,20 @@ export const STATIC_GUIDES: GuideContent[] = [
       season: 'winter',
       months: [12, 1, 2]
     }
+  },
+  {
+    slug: 'songdo-childcare-guide',
+    title: '송도 육아 완벽 가이드',
+    description: '송도국제도시의 어린이집, 유치원, 놀이시설부터 의료진까지, 아이와 함께 살기 좋은 송도 육아 정보를 완벽 정리했습니다.',
+    keywords: ['송도 육아', '송도 어린이집', '송도 유치원', '송도 놀이시설', '송도 키즈카페', '송도 소아과', '송도 아이', '송도 육아 정보'],
+    content: '',
+    category: 'childcare',
+    lastUpdated: '2025-07-15',
+    relatedGuides: ['songdo-park-guide', 'songdo-shopping-guide', 'songdo-restaurant-guide'],
+    readingTime: 15,
+    difficulty: 'easy',
+    tags: ['육아', '어린이집', '유치원', '놀이시설', '의료', '아이', '가족'],
+    featured: true
   }
 ];
 

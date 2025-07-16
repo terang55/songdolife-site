@@ -1,0 +1,12 @@
+Docs: Update Songdo Life Guides with verified information
+
+Updated various guide documents to ensure accuracy and reliability based on recent web searches.
+
+- `AUTOMATION_SETUP_GUIDE.md`: Updated GitHub Actions free tier information.
+- `frontend/src/data/guides/lifestyle/songdo-culture-guide.md`: Updated Art Center Incheon and Songdo Convensia event schedules.
+- `frontend/src/data/guides/lifestyle/songdo-park-guide.md`: Corrected typos, updated G-Tower observatory info, and added details on animal facilities and accessibility.
+- `frontend/src/data/guides/lifestyle/songdo-shopping-guide.md`: Updated Hyundai Premium Outlet operating hours and parking fees.
+- `frontend/src/data/guides/moving/songdo-moving-checklist.md`: Updated contact numbers for Incheon City Gas and Incheon Waterworks Headquarters.
+- `frontend/src/data/guides/moving/songdo-newlywed-guide.md`: Updated contact numbers for electronics stores, furniture stores, and banks.
+- `frontend/src/data/guides/realestate/songdo-ipark-price-guide.md`: Updated real estate price trends to reflect current period and added a disclaimer about price volatility.
+- `frontend/src/data/guides/transportation/central-park-station-last-train.md`: Updated Central Park Station last train times for weekdays and weekends.

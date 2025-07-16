@@ -13,7 +13,16 @@
       "Bash(rg:*)",
       "Bash(grep:*)",
       "Bash(python3:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "mcp__naver-search__search_webkr",
+      "mcp__naver-search__search_blog",
+      "Bash(jq:*)",
+      "mcp__server-sequential-thinking__sequentialthinking",
+      "Bash(npm install:*)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__get-library-docs",
+      "mcp__naver-search__search_news",
+      "mcp__brave-search__brave_web_search"
     ],
     "deny": []
   }

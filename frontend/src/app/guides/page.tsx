@@ -185,7 +185,7 @@ export default function GuidesPage() {
           {/* 페이지 헤더 */}
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              📚 송도 생활 가이드 (업데이트중)
+              📚 송도 생활 가이드
             </h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               송도국제도시에서의 생활에 필요한 모든 정보를 실용적인 가이드로 제공합니다

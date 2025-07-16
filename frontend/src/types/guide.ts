@@ -4,7 +4,7 @@ export interface GuideContent {
   description: string;
   keywords: string[];
   content: string;
-  category: 'realestate' | 'transportation' | 'lifestyle' | 'moving' | 'seasonal';
+  category: 'realestate' | 'transportation' | 'lifestyle' | 'moving' | 'seasonal' | 'childcare';
   lastUpdated: string;
   relatedGuides: string[];
   readingTime: number;

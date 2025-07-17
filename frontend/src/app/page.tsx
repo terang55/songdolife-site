@@ -451,13 +451,13 @@ export default function HomePage() {
               <span className="text-lg">🚇</span>
               <span className="text-sm font-medium">실시간 교통</span>
             </a>
-            <a 
+            <Link 
               href="/guides" 
               className="flex items-center space-x-2 px-4 py-2.5 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors min-h-[44px] w-full sm:w-auto justify-center"
             >
               <span className="text-lg">📚</span>
               <span className="text-sm font-medium">생활 가이드</span>
-            </a>
+            </Link>
           </div>
           <div className="text-xs sm:text-sm text-gray-600 text-center">
             <span className="block sm:hidden">송도 아파트 실거래가. 송도교통 실시간 정보. 생활 가이드</span>

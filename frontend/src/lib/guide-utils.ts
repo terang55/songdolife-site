@@ -2,6 +2,13 @@ import { GuideContent, GuideCategory, GuideMetadata } from '@/types/guide';
 import { BASE_URL } from '@/lib/siteConfig';
 import { loadGuideContent } from '@/lib/markdown-utils';
 
+interface HowToStep {
+  '@type': string;
+  name: string;
+  text: string;
+  position: number;
+}
+
 export const GUIDE_CATEGORIES: GuideCategory[] = [
   {
     id: 'realestate',
@@ -272,7 +279,7 @@ export function getGuideBySlug(slug: string): GuideContent | null {
 /**
  * 가이드 콘텐츠에서 단계별 정보를 추출하여 HowTo 스키마용 단계 생성
  */
-function extractHowToSteps(guide: GuideContent): any[] {
+function extractHowToSteps(guide: GuideContent): HowToStep[] {
   // 가이드 유형별로 단계 추출 로직 다르게 적용
   const steps = [];
   

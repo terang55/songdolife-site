@@ -72,6 +72,11 @@ export interface GuideMetadata {
       currency: string;
       value: string;
     };
-    step: any[];
+    step: Array<{
+      '@type': string;
+      name: string;
+      text: string;
+      position: number;
+    }>;
   };
 }

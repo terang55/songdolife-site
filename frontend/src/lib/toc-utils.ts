@@ -108,7 +108,7 @@ function generateAnchor(text: string, index: number): string {
 export function addAnchorsToContent(htmlContent: string, tocItems: TocItem[]): string {
   let result = htmlContent;
   
-  tocItems.forEach((item, index) => {
+  tocItems.forEach((item) => {
     // 헤더 태그에 id 속성 추가
     const headerPattern = new RegExp(
       `<h${item.level}([^>]*)>([^<]*${escapeRegExp(item.text)}[^<]*)</h${item.level}>`,

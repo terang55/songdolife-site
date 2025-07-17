@@ -1,6 +1,5 @@
 import { GuideContent, GuideCategory, GuideMetadata } from '@/types/guide';
 import { BASE_URL } from '@/lib/siteConfig';
-import { loadGuideContent } from '@/lib/markdown-loader';
 
 interface HowToStep {
   '@type': string;
@@ -256,7 +255,36 @@ export function getGuidesByCategory(category?: string): GuideContent[] {
     guides = guides.filter(guide => guide.category === category);
   }
   
-  return guides.sort((a, b) => {
+  // 서버 환경에서는 실제 콘텐츠와 함께 반환
+  if (typeof window === 'undefined') {
+    try {
+      const { loadGuideContent } = require('@/lib/markdown-loader');
+      const guidesWithContent = guides.map(guide => {
+        const content = loadGuideContent(guide.slug, guide.category);
+        return content || {
+          ...guide,
+          content: '<p>콘텐츠를 로드할 수 없습니다.</p>',
+          rawContent: '콘텐츠를 로드할 수 없습니다.'
+        };
+      });
+      return guidesWithContent.sort((a, b) => {
+        if (a.featured && !b.featured) return -1;
+        if (!a.featured && b.featured) return 1;
+        return new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime();
+      });
+    } catch (error) {
+      console.error('가이드 목록 로드 실패:', error);
+    }
+  }
+  
+  // 클라이언트에서는 메타데이터만 반환
+  const guidesWithPlaceholder = guides.map(guide => ({
+    ...guide,
+    content: '<p>콘텐츠를 로드하는 중...</p>',
+    rawContent: '콘텐츠를 로드하는 중...'
+  }));
+  
+  return guidesWithPlaceholder.sort((a, b) => {
     if (a.featured && !b.featured) return -1;
     if (!a.featured && b.featured) return 1;
     return new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime();
@@ -267,9 +295,23 @@ export function getGuideBySlug(slug: string): GuideContent | null {
   const guide = STATIC_GUIDES.find(guide => guide.slug === slug);
   if (!guide) return null;
   
-  const content = loadGuideContent(slug, guide.category);
+  // 서버 환경에서만 실제 콘텐츠 로드
+  if (typeof window === 'undefined') {
+    try {
+      const { loadGuideContent } = require('@/lib/markdown-loader');
+      const content = loadGuideContent(slug, guide.category);
+      return content;
+    } catch (error) {
+      console.error('가이드 콘텐츠 로드 실패:', error);
+    }
+  }
   
-  return content;
+  // 클라이언트에서는 메타데이터만 반환
+  return {
+    ...guide,
+    content: '<p>콘텐츠를 로드하는 중...</p>',
+    rawContent: '콘텐츠를 로드하는 중...'
+  };
 }
 
 

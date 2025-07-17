@@ -3,15 +3,15 @@ import { getGuidesByCategory } from '@/lib/markdown-loader';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { category: string } }
+  { params }: { params: Promise<{ category: string }> }
 ) {
   try {
-    const { category } = params;
+    const { category } = await params;
     const guides = getGuidesByCategory(category);
     
     return NextResponse.json({
       success: true,
-      guides,
+      data: guides,
       total: guides.length
     });
   } catch (error) {

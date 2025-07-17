@@ -3,10 +3,10 @@ import { loadGuide } from '@/lib/markdown-loader';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { category: string; slug: string } }
+  { params }: { params: Promise<{ category: string; slug: string }> }
 ) {
   try {
-    const { category, slug } = params;
+    const { category, slug } = await params;
     const guide = loadGuide(category, slug);
     
     if (!guide) {
@@ -18,9 +18,7 @@ export async function GET(
     
     return NextResponse.json({
       success: true,
-      metadata: guide.metadata,
-      content: guide.htmlContent,
-      rawContent: guide.content
+      data: guide
     });
   } catch (error) {
     console.error('가이드 API 오류:', error);

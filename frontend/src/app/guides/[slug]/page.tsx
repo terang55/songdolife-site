@@ -5,6 +5,8 @@ import { getGuideBySlug, getRelatedGuides, generateGuideMetadata, getCategoryInf
 import Footer from '../../components/Footer';
 import { generateBreadcrumbSchema } from '@/lib/seo';
 import Script from 'next/script';
+import TableOfContents from '@/components/TableOfContents';
+import { getGuideTableOfContents } from '@/lib/guide-toc';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -26,6 +28,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: metadata.title,
     description: metadata.description,
     keywords: metadata.keywords,
+    alternates: {
+      canonical: metadata.canonicalUrl,
+    },
     openGraph: {
       title: metadata.openGraph.title,
       description: metadata.openGraph.description,
@@ -62,6 +67,7 @@ export default async function GuidePage({ params }: Props) {
   const relatedGuides = getRelatedGuides(guide);
   const categoryInfo = getCategoryInfo(guide.category);
   const metadata = generateGuideMetadata(guide);
+  const tocItems = getGuideTableOfContents(guide.category, slug);
 
   return (
     <>
@@ -71,6 +77,15 @@ export default async function GuidePage({ params }: Props) {
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(metadata.structuredData)
+        }}
+      />
+      
+      <Script
+        id="guide-howto-schema"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(metadata.howToSchema)
         }}
       />
       
@@ -133,7 +148,7 @@ export default async function GuidePage({ params }: Props) {
           </div>
         </section>
 
-        <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* 가이드 헤더 */}
           <div className="bg-white rounded-xl shadow-sm border p-8 mb-8">
             <div className="flex items-center space-x-2 mb-4">
@@ -173,12 +188,74 @@ export default async function GuidePage({ params }: Props) {
             </div>
           </div>
 
-          {/* 가이드 내용 */}
-          <div className="bg-white rounded-xl shadow-sm border p-8 mb-8">
-            <div 
-              className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-li:text-gray-700 prose-strong:text-gray-900 prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline"
-              dangerouslySetInnerHTML={{ __html: guide.content }}
-            />
+          {/* 메인 컨텐츠 - 2컬럼 레이아웃 */}
+          <div className="lg:grid lg:grid-cols-4 lg:gap-8">
+            {/* 목차 사이드바 (데스크톱) */}
+            {tocItems.length > 0 && (
+              <aside className="hidden lg:block lg:col-span-1">
+                <TableOfContents tocItems={tocItems} />
+              </aside>
+            )}
+            
+            {/* 메인 컨텐츠 */}
+            <div className={`${tocItems.length > 0 ? 'lg:col-span-3' : 'lg:col-span-4'}`}>
+              {/* 목차 (모바일) */}
+              {tocItems.length > 0 && (
+                <div className="lg:hidden mb-8">
+                  <TableOfContents tocItems={tocItems} />
+                </div>
+              )}
+              
+              {/* 가이드 내용 */}
+              <div className="bg-white rounded-xl shadow-sm border mb-8 overflow-hidden">
+                {/* 컨텐츠 헤더 */}
+                <div className="bg-gradient-to-r from-blue-50 to-green-50 px-8 py-6 border-b">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <span className="text-2xl">{categoryInfo?.icon || '📚'}</span>
+                      <div>
+                        <h2 className="text-lg font-semibold text-gray-800">
+                          {categoryInfo?.name} 가이드
+                        </h2>
+                        <p className="text-sm text-gray-600">
+                          송도국제도시 생활정보
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-2 text-sm text-gray-500">
+                      <span>📖</span>
+                      <span>{guide.readingTime}분 읽기</span>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* 컨텐츠 본문 */}
+                <div className="p-8">
+                  <div 
+                    className="guide-content max-w-none"
+                    dangerouslySetInnerHTML={{ __html: guide.content }}
+                  />
+                </div>
+
+                {/* 컨텐츠 푸터 */}
+                <div className="bg-gray-50 px-8 py-4 border-t">
+                  <div className="flex items-center justify-between text-sm text-gray-600">
+                    <div className="flex items-center space-x-4">
+                      <span>🕐 최종 수정: {new Date(guide.lastUpdated).toLocaleDateString('ko-KR')}</span>
+                      <span>📝 작성자: 송도라이프</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <button className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full hover:bg-blue-200 transition-colors">
+                        📋 복사
+                      </button>
+                      <button className="px-3 py-1 bg-green-100 text-green-700 rounded-full hover:bg-green-200 transition-colors">
+                        📤 공유
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* 관련 가이드 */}

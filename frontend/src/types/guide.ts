@@ -1,10 +1,17 @@
+export interface TocItem {
+  id: string;
+  text: string;
+  level: number;
+  anchor: string;
+}
+
 export interface GuideContent {
   slug: string;
   title: string;
   description: string;
   keywords: string[];
   content: string;
-  category: 'realestate' | 'transportation' | 'lifestyle' | 'moving' | 'seasonal' | 'childcare';
+  category: 'realestate' | 'transportation' | 'lifestyle' | 'moving' | 'seasonal' | 'childcare' | 'education';
   lastUpdated: string;
   relatedGuides: string[];
   readingTime: number;
@@ -15,6 +22,7 @@ export interface GuideContent {
     season: 'spring' | 'summer' | 'fall' | 'winter';
     months: number[];
   };
+  tocItems?: TocItem[];
 }
 
 export interface GuideCategory {
@@ -50,5 +58,20 @@ export interface GuideMetadata {
       '@type': string;
       '@id': string;
     };
+    image: string;
+  };
+  howToSchema: {
+    '@context': string;
+    '@type': string;
+    name: string;
+    description: string;
+    image: string;
+    totalTime: string;
+    estimatedCost: {
+      '@type': string;
+      currency: string;
+      value: string;
+    };
+    step: any[];
   };
 }

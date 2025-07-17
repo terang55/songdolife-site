@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next'
 import { BASE_URL } from '@/lib/siteConfig'
+import { STATIC_GUIDES } from '@/lib/guide-utils'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = BASE_URL
@@ -110,8 +111,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
+  // 가이드 페이지들 추가
+  const guideRoutes = STATIC_GUIDES.map(guide => ({
+    url: `${baseUrl}/guides/${guide.slug}`,
+    lastModified: new Date(guide.lastUpdated),
+    changeFrequency: 'weekly' as const,
+    priority: guide.featured ? 0.8 : 0.7,
+  }));
+
+  // 가이드 메인 페이지 추가
+  const guideMainPage = {
+    url: `${baseUrl}/guides`,
+    lastModified: now,
+    changeFrequency: 'weekly' as const,
+    priority: 0.8,
+  };
+
   // 🔧 해시(fragment) 기반 URL과 /api 경로는 SEO 상 불필요하여 제거
   // 키워드 해시 페이지 대신 핵심 페이지(route 목록)만 반환
 
-  return routes;
+  return [...routes, guideMainPage, ...guideRoutes];
 } 

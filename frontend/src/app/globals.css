@@ -200,4 +200,133 @@ body {
       font-size: 1.125rem; /* 18px */
     }
   }
+
+  /* 가이드 컨텐츠 전용 스타일 */
+  .guide-content {
+    font-family: var(--font-noto-sans-kr), var(--font-inter), "Malgun Gothic", "맑은 고딕", Arial, sans-serif;
+    line-height: 1.7;
+    color: #374151;
+  }
+
+  .guide-content h1 {
+    scroll-margin-top: 100px;
+  }
+
+  .guide-content h2 {
+    scroll-margin-top: 100px;
+  }
+
+  .guide-content h3 {
+    scroll-margin-top: 100px;
+  }
+
+  .guide-content h4 {
+    scroll-margin-top: 100px;
+  }
+
+  /* 이모지가 포함된 헤더 특별 처리 */
+  .guide-content h2:has(span[role="img"]),
+  .guide-content h3:has(span[role="img"]),
+  .guide-content h4:has(span[role="img"]) {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* 특별 블록 반응형 */
+  @media (max-width: 640px) {
+    .guide-content [class*="border-l-4"] {
+      margin-left: -1rem;
+      margin-right: -1rem;
+      border-radius: 0;
+      border-left-width: 4px;
+    }
+  }
+
+  /* 테이블 반응형 개선 */
+  .guide-content table {
+    font-size: 0.875rem;
+  }
+
+  @media (max-width: 640px) {
+    .guide-content table {
+      font-size: 0.75rem;
+    }
+    
+    .guide-content th,
+    .guide-content td {
+      padding: 0.5rem 0.25rem;
+    }
+  }
+
+  /* 리스트 스타일 개선 */
+  .guide-content ul > li::marker {
+    color: #3B82F6;
+  }
+
+  .guide-content ol > li::marker {
+    color: #10B981;
+    font-weight: 600;
+  }
+
+  /* 코드 블록 반응형 */
+  @media (max-width: 640px) {
+    .guide-content pre {
+      margin-left: -1rem;
+      margin-right: -1rem;
+      border-radius: 0;
+    }
+  }
+
+  /* 인터랙티브 요소 호버 효과 */
+  .guide-content [class*="bg-blue-50"]:hover {
+    background-color: #dbeafe;
+    transition: background-color 0.2s ease;
+  }
+
+  .guide-content [class*="bg-yellow-50"]:hover {
+    background-color: #fef3c7;
+    transition: background-color 0.2s ease;
+  }
+
+  .guide-content [class*="bg-green-50"]:hover {
+    background-color: #dcfce7;
+    transition: background-color 0.2s ease;
+  }
+
+  .guide-content [class*="bg-purple-50"]:hover {
+    background-color: #f3e8ff;
+    transition: background-color 0.2s ease;
+  }
+
+  .guide-content [class*="bg-indigo-50"]:hover {
+    background-color: #e0e7ff;
+    transition: background-color 0.2s ease;
+  }
+
+  /* 링크 스타일 */
+  .guide-content a {
+    color: #2563eb;
+    text-decoration: underline;
+    text-decoration-color: #93c5fd;
+    text-underline-offset: 2px;
+    transition: all 0.2s ease;
+  }
+
+  .guide-content a:hover {
+    color: #1d4ed8;
+    text-decoration-color: #2563eb;
+  }
+
+  /* 스크롤 진행 표시기 */
+  .guide-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, #3b82f6, #10b981);
+    transform-origin: left;
+    z-index: 1000;
+  }
 }

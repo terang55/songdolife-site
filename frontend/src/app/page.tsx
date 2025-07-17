@@ -451,10 +451,17 @@ export default function HomePage() {
               <span className="text-lg">🚇</span>
               <span className="text-sm font-medium">실시간 교통</span>
             </a>
+            <a 
+              href="/guides" 
+              className="flex items-center space-x-2 px-4 py-2.5 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors min-h-[44px] w-full sm:w-auto justify-center"
+            >
+              <span className="text-lg">📚</span>
+              <span className="text-sm font-medium">생활 가이드</span>
+            </a>
           </div>
           <div className="text-xs sm:text-sm text-gray-600 text-center">
-            <span className="block sm:hidden">송도 아파트 실거래가. 송도교통 실시간 정보</span>
-            <span className="hidden sm:block">송도 아파트 실거래가. 송도교통 실시간 정보</span>
+            <span className="block sm:hidden">송도 아파트 실거래가. 송도교통 실시간 정보. 생활 가이드</span>
+            <span className="hidden sm:block">송도 아파트 실거래가. 송도교통 실시간 정보. 생활 가이드</span>
           </div>
         </div>
       </div>
@@ -469,7 +476,7 @@ export default function HomePage() {
           <div className="flex-1 text-center">
             <h2 className="text-2xl sm:text-4xl font-bold mb-2 sm:mb-4">송도 생활을 더 편리하게</h2>
             <p className="text-sm sm:text-xl text-blue-100">
-              우리 동네 소식, 부동산 정보, 맛집, 육아, 교통, 병원 정보까지 한번에
+              우리 동네 소식, 부동산 정보, 교통 정보, 생활 가이드까지 한번에
             </p>
           </div>
           

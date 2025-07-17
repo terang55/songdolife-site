@@ -44,6 +44,13 @@ export const GUIDE_CATEGORIES: GuideCategory[] = [
     description: '송도 육아 시설과 아이와 함께 가볼 만한 곳',
     icon: '👶',
     color: 'yellow'
+  },
+  {
+    id: 'education',
+    name: '교육',
+    description: '송도 교육 인프라와 학교 정보',
+    icon: '🎓',
+    color: 'indigo'
   }
 ];
 
@@ -139,7 +146,7 @@ export const STATIC_GUIDES: GuideContent[] = [
     description: '송도국제도시의 교육 인프라와 환경을 체계적으로 정리한 자녀 교육 완벽 가이드입니다.',
     keywords: ['송도 교육', '채드윅 국제학교', 'CMIS', '송도 학군', '송도 학원', '인천신정중학교', '특목고 진학률', '국제교육', 'IB 교육', '송도 유치원'],
     content: '',
-    category: 'lifestyle',
+    category: 'education',
     lastUpdated: '2025-07-13',
     relatedGuides: ['songdo-moving-checklist', 'songdo-newlywed-guide', 'songdo-culture-guide'],
     readingTime: 25,
@@ -225,7 +232,7 @@ export const STATIC_GUIDES: GuideContent[] = [
     description: '송도국제도시의 어린이집, 유치원, 놀이시설부터 의료진까지, 아이와 함께 살기 좋은 송도 육아 정보를 완벽 정리했습니다.',
     keywords: ['송도 육아', '송도 어린이집', '송도 유치원', '송도 놀이시설', '송도 키즈카페', '송도 소아과', '송도 아이', '송도 육아 정보'],
     content: '',
-    category: 'childcare',
+    category: 'lifestyle',
     lastUpdated: '2025-07-15',
     relatedGuides: ['songdo-park-guide', 'songdo-shopping-guide', 'songdo-restaurant-guide'],
     readingTime: 15,
@@ -262,8 +269,67 @@ export function getGuideBySlug(slug: string): GuideContent | null {
 }
 
 
+/**
+ * 가이드 콘텐츠에서 단계별 정보를 추출하여 HowTo 스키마용 단계 생성
+ */
+function extractHowToSteps(guide: GuideContent): any[] {
+  // 가이드 유형별로 단계 추출 로직 다르게 적용
+  const steps = [];
+  
+  if (guide.category === 'moving') {
+    // 이사 가이드: 체크리스트 형태
+    steps.push(
+      { name: '이사 전 준비', text: '송도 지역 정보 조사 및 업체 선정하기' },
+      { name: '행정 절차', text: '주민등록 이전 및 각종 변경 신고하기' },
+      { name: '이사 당일', text: '짐 정리 및 새 집 확인하기' },
+      { name: '이사 후 정착', text: '송도 생활 인프라 파악 및 적응하기' }
+    );
+  } else if (guide.category === 'lifestyle') {
+    if (guide.slug.includes('childcare')) {
+      steps.push(
+        { name: '어린이집 유치원 조사', text: '송도 지역 보육시설 정보 수집 및 비교하기' },
+        { name: '놀이시설 확인', text: '키즈카페 및 체험학습 시설 방문하기' },
+        { name: '의료진 선택', text: '신뢰할 수 있는 소아과 찾기' },
+        { name: '육아 지원 신청', text: '정부 지원 정책 및 서비스 신청하기' }
+      );
+    } else if (guide.slug.includes('restaurant')) {
+      steps.push(
+        { name: '맛집 리스트 작성', text: '송도 지역 인기 맛집 목록 만들기' },
+        { name: '카테고리별 탐방', text: '한식, 중식, 일식, 양식 순서로 방문하기' },
+        { name: '리뷰 작성', text: '개인 맛집 리뷰 및 평점 기록하기' }
+      );
+    } else {
+      steps.push(
+        { name: '정보 수집', text: '송도 생활 편의시설 정보 조사하기' },
+        { name: '실제 방문', text: '관심 있는 시설 직접 확인하기' },
+        { name: '생활 적응', text: '송도 라이프스타일에 맞춰 생활하기' }
+      );
+    }
+  } else if (guide.category === 'seasonal') {
+    steps.push(
+      { name: '계절 정보 확인', text: '송도 지역 계절별 특징 파악하기' },
+      { name: '활동 계획', text: '계절에 맞는 액티비티 및 장소 선정하기' },
+      { name: '실제 체험', text: '추천 활동 및 명소 방문하기' }
+    );
+  } else if (guide.category === 'education') {
+    steps.push(
+      { name: '교육기관 조사', text: '송도 지역 학교 및 교육시설 정보 수집하기' },
+      { name: '입학 준비', text: '필요 서류 및 절차 확인하기' },
+      { name: '교육 환경 적응', text: '송도 교육 시스템에 맞춰 적응하기' }
+    );
+  }
+
+  return steps.map((step, index) => ({
+    '@type': 'HowToStep',
+    name: step.name,
+    text: step.text,
+    position: index + 1
+  }));
+}
+
 export function generateGuideMetadata(guide: GuideContent): GuideMetadata {
   const canonicalUrl = `${BASE_URL}/guides/${guide.slug}`;
+  const howToSteps = extractHowToSteps(guide);
   
   return {
     title: `${guide.title} | 송도라이프`,
@@ -296,7 +362,22 @@ export function generateGuideMetadata(guide: GuideContent): GuideMetadata {
       mainEntityOfPage: {
         '@type': 'WebPage',
         '@id': canonicalUrl
-      }
+      },
+      image: `${BASE_URL}/og-guide-${guide.category}.jpg`
+    },
+    howToSchema: {
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      name: guide.title,
+      description: guide.description,
+      image: `${BASE_URL}/og-guide-${guide.category}.jpg`,
+      totalTime: `PT${guide.readingTime}M`,
+      estimatedCost: {
+        '@type': 'MonetaryAmount',
+        currency: 'KRW',
+        value: '0'
+      },
+      step: howToSteps
     }
   };
 }

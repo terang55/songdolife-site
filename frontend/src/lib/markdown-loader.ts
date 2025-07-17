@@ -1,15 +1,20 @@
 // 서버 사이드 전용 - Next.js에서 fs는 서버에서만 사용 가능
-let fs: any;
-let path: any;
-let matter: any;
-let marked: any;
+let fs: typeof import('fs') | undefined;
+let path: typeof import('path') | undefined;
+let matter: typeof import('gray-matter') | undefined;
+let marked: any | undefined;
 
 // 서버 환경에서만 모듈 로드
 if (typeof window === 'undefined') {
-  fs = require('fs');
-  path = require('path');
-  matter = require('gray-matter');
-  marked = require('marked').marked;
+  const fsModule = eval('require')('fs');
+  const pathModule = eval('require')('path');
+  const matterModule = eval('require')('gray-matter');
+  const markedModule = eval('require')('marked');
+  
+  fs = fsModule;
+  path = pathModule;
+  matter = matterModule;
+  marked = markedModule.marked;
 }
 
 export interface GuideMetadata {

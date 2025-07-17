@@ -1,6 +1,6 @@
 import { GuideContent, GuideCategory, GuideMetadata } from '@/types/guide';
 import { BASE_URL } from '@/lib/siteConfig';
-import { loadGuideContent } from '@/lib/markdown-utils';
+import { loadGuideContent } from '@/lib/markdown-loader';
 
 interface HowToStep {
   '@type': string;
@@ -267,12 +267,9 @@ export function getGuideBySlug(slug: string): GuideContent | null {
   const guide = STATIC_GUIDES.find(guide => guide.slug === slug);
   if (!guide) return null;
   
-  const content = loadGuideContent(guide.category, slug);
+  const content = loadGuideContent(slug, guide.category);
   
-  return {
-    ...guide,
-    content
-  };
+  return content;
 }
 
 

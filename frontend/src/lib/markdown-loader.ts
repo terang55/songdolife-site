@@ -162,7 +162,7 @@ export function loadGuideContent(slug: string, category?: string): GuideContent 
     };
     
     // 특별 블록 처리
-    let processedContent = processSpecialBlocks(rawContent);
+    const processedContent = processSpecialBlocks(rawContent);
     
     // 나머지 마크다운을 HTML로 변환
     const htmlContent = marked.parse(processedContent);
@@ -224,4 +224,33 @@ export function getGuidesList(category?: string): GuideMetadata[] {
     console.error('Error getting guides list:', error);
     return [];
   }
+}
+
+/**
+ * 단일 가이드 로드 (API에서 사용)
+ */
+export function loadGuide(category: string, slug: string): GuideContent | null {
+  return loadGuideContent(slug, category);
+}
+
+/**
+ * 카테고리별 가이드 목록 가져오기 (API에서 사용)
+ */
+export function getGuidesByCategory(category?: string): GuideMetadata[] {
+  return getGuidesList(category);
+}
+
+/**
+ * 추천 가이드 목록 가져오기
+ */
+export function getFeaturedGuides(): GuideMetadata[] {
+  const allGuides = getGuidesList();
+  return allGuides.filter(guide => guide.featured);
+}
+
+/**
+ * 모든 가이드 목록 가져오기
+ */
+export function getAllGuides(): GuideMetadata[] {
+  return getGuidesList();
 }

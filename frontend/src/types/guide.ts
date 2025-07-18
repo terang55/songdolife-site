@@ -11,7 +11,7 @@ export interface GuideContent {
   description: string;
   keywords: string[];
   content: string;
-  rawContent?: string;
+  rawContent?: string; // 원본 마크다운 콘텐츠
   category: 'realestate' | 'transportation' | 'lifestyle' | 'moving' | 'seasonal' | 'childcare' | 'education';
   lastUpdated: string;
   relatedGuides: string[];

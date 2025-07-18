@@ -309,9 +309,25 @@ export function getGuideBySlug(slug: string): GuideContent | null {
       const serverLoader = eval('require')('@/lib/server-markdown-loader');
       const content = serverLoader.loadGuideContentSync(slug, guide.category);
       console.log(`📝 Content loaded successfully: ${content ? 'YES' : 'NO'}`);
+      
+      // 만약 서버에서 로드한 콘텐츠가 null이면 기본 메타데이터 반환
+      if (!content) {
+        console.log(`⚠️ Server loader returned null, using fallback`);
+        return {
+          ...guide,
+          content: '<p>콘텐츠를 로드할 수 없습니다. 파일을 확인해주세요.</p>',
+          rawContent: '콘텐츠를 로드할 수 없습니다.'
+        };
+      }
+      
       return content;
     } catch (error) {
       console.error('가이드 콘텐츠 로드 실패:', error);
+      return {
+        ...guide,
+        content: '<p>콘텐츠 로드 중 오류가 발생했습니다.</p>',
+        rawContent: '콘텐츠 로드 중 오류가 발생했습니다.'
+      };
     }
   }
   

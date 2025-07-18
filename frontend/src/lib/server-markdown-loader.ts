@@ -151,8 +151,13 @@ export function loadGuideContentSync(slug: string, category?: string): GuideCont
       return null;
     }
     
+    console.log(`✅ File exists, reading content from: ${filePath}`);
     const fileContent = fs.readFileSync(filePath, 'utf-8');
+    console.log(`📄 File content length: ${fileContent.length}`);
+    
     const { data: frontMatter, content: rawContent } = matter(fileContent);
+    console.log(`📋 Front matter:`, frontMatter);
+    console.log(`📝 Raw content length: ${rawContent.length}`);
     
     // Front matter에서 메타데이터 추출
     const metadata: GuideMetadata = {

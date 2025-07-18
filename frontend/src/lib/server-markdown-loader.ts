@@ -123,11 +123,9 @@ export function loadGuideContentSync(slug: string, category?: string): GuideCont
     const processedContent = convertSpecialBlocks(rawContent);
     
     // 마크다운 렌더링 설정
-    marked.setOptions({
+    marked.use({
       breaks: true,        // 줄바꿈을 <br>로 변환
-      gfm: true,          // GitHub Flavored Markdown 사용
-      smartLists: true,   // 스마트 리스트 처리
-      smartypants: false  // 스마트 인용부호 비활성화
+      gfm: true           // GitHub Flavored Markdown 사용
     });
     
     // 나머지 마크다운을 HTML로 변환 (동기 방식)
@@ -205,11 +203,9 @@ export async function loadGuideContent(slug: string, category?: string): Promise
     const processedContent = convertSpecialBlocks(rawContent);
     
     // 마크다운 렌더링 설정
-    marked.setOptions({
+    marked.use({
       breaks: true,        // 줄바꿈을 <br>로 변환
-      gfm: true,          // GitHub Flavored Markdown 사용
-      smartLists: true,   // 스마트 리스트 처리
-      smartypants: false  // 스마트 인용부호 비활성화
+      gfm: true           // GitHub Flavored Markdown 사용
     });
     
     // 나머지 마크다운을 HTML로 변환

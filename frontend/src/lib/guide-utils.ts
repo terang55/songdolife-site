@@ -374,11 +374,9 @@ export function getGuideBySlug(slug: string): GuideContent | null {
       const processedContent = convertSpecialBlocks(rawContent);
       
       // 마크다운 to HTML 변환 (기본 설정)
-      marked.setOptions({
+      marked.use({
         breaks: true,
-        gfm: true,
-        smartLists: true,
-        smartypants: false
+        gfm: true
       });
       
       const htmlContent = marked(processedContent);

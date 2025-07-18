@@ -1,6 +1,5 @@
-<<<<<<< HEAD
 {
-  "sync_time": "2025-07-18T05:25:45.378664+09:00",
+  "sync_time": "2025-07-18T21:47:44.944172+09:00",
   "total_files": 1,
   "total_keywords": 11,
   "keywords": [
@@ -20,33 +19,7 @@
     "all_platforms"
   ],
   "files": {
-    "all_platforms": "all_platforms_enhanced_news_20250718_052545.json"
+    "all_platforms": "all_platforms_enhanced_news_20250718_214744.json"
   },
   "sync_type": "latest_only"
-=======
-{
-  "sync_time": "2025-07-18T18:23:36.018652+09:00",
-  "total_files": 1,
-  "total_keywords": 11,
-  "keywords": [
-    "송도국제도시",
-    "송도국제도시 맛집",
-    "송도국제도시 아파트",
-    "송도국제도시 카페",
-    "인천 송도",
-    "인천 송도 맛집",
-    "인천 송도 아파트",
-    "인천 송도 추천",
-    "인천 송도 카페",
-    "인천 송도 학원",
-    "인천 연수구 송도동"
-  ],
-  "file_types": [
-    "all_platforms"
-  ],
-  "files": {
-    "all_platforms": "all_platforms_enhanced_news_20250718_182335.json"
-  },
-  "sync_type": "latest_only"
->>>>>>> 89e9bc8a8a035939cc3451b21c2451a323fb2173
 }

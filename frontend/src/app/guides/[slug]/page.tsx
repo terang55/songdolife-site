@@ -58,7 +58,43 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function GuidePage({ params }: Props) {
   const { slug } = await params;
-  const guide = getGuideBySlug(slug);
+  
+  // 서버 컴포넌트에서 안전한 가이드 로딩
+  let guide: GuideContent | null = null;
+  try {
+    // 서버 환경에서 직접 server-markdown-loader 사용
+    const { loadGuideContentSync } = await import('@/lib/server-markdown-loader');
+    const { getGuideBySlug: getStaticGuide } = await import('@/lib/guide-utils');
+    
+    const staticGuide = getStaticGuide(slug);
+    if (!staticGuide) {
+      notFound();
+    }
+    
+    // 서버에서 실제 콘텐츠 로드
+    const loadedGuide = loadGuideContentSync(slug, staticGuide.category);
+    
+    if (loadedGuide) {
+      guide = {
+        ...staticGuide,
+        title: loadedGuide.title || staticGuide.title,
+        description: loadedGuide.description || staticGuide.description,
+        content: loadedGuide.content,
+        rawContent: loadedGuide.rawContent,
+        keywords: loadedGuide.keywords?.length ? loadedGuide.keywords : staticGuide.keywords || [],
+        tags: loadedGuide.tags?.length ? loadedGuide.tags : staticGuide.tags || [],
+        relatedGuides: loadedGuide.relatedGuides?.length ? loadedGuide.relatedGuides : staticGuide.relatedGuides || [],
+        readingTime: loadedGuide.readingTime || staticGuide.readingTime,
+        difficulty: loadedGuide.difficulty || staticGuide.difficulty,
+        lastUpdated: loadedGuide.lastUpdated || staticGuide.lastUpdated
+      };
+    } else {
+      guide = staticGuide;
+    }
+  } catch (error) {
+    console.error('가이드 로딩 중 오류:', error);
+    notFound();
+  }
   
   if (!guide) {
     notFound();

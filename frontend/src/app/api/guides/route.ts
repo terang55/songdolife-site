@@ -10,11 +10,11 @@ export async function GET(request: NextRequest) {
     let guides;
     
     if (featured) {
-      guides = getFeaturedGuides();
+      guides = await getFeaturedGuides();
     } else if (category) {
-      guides = getGuidesByCategory(category);
+      guides = await getGuidesByCategory(category);
     } else {
-      guides = getAllGuides();
+      guides = await getAllGuides();
     }
 
     return NextResponse.json({

@@ -7,7 +7,7 @@ export async function GET(
 ) {
   try {
     const { category } = await params;
-    const guides = getGuidesByCategory(category);
+    const guides = await getGuidesByCategory(category);
     
     return NextResponse.json({
       success: true,

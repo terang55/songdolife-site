@@ -115,7 +115,7 @@ function parseBlockContent(content: string): string {
 /**
  * 마크다운 파일을 로드하고 파싱하는 함수
  */
-export function loadGuideContent(slug: string, category?: string): GuideContent | null {
+export async function loadGuideContent(slug: string, category?: string): Promise<GuideContent | null> {
   try {
     const publicDir = path.join(process.cwd(), 'public');
     let filePath: string;
@@ -165,7 +165,7 @@ export function loadGuideContent(slug: string, category?: string): GuideContent 
     const processedContent = processSpecialBlocks(rawContent);
     
     // 나머지 마크다운을 HTML로 변환
-    const htmlContent = marked.parse(processedContent);
+    const htmlContent = await marked.parse(processedContent);
     
     return {
       ...metadata,
@@ -181,7 +181,7 @@ export function loadGuideContent(slug: string, category?: string): GuideContent 
 /**
  * 가이드 목록을 카테고리별로 가져오는 함수
  */
-export function getGuidesList(category?: string): GuideMetadata[] {
+export async function getGuidesList(category?: string): Promise<GuideMetadata[]> {
   try {
     const publicDir = path.join(process.cwd(), 'public', 'guides');
     const guides: GuideMetadata[] = [];
@@ -193,7 +193,7 @@ export function getGuidesList(category?: string): GuideMetadata[] {
         
         for (const file of files) {
           const slug = file.replace('.md', '');
-          const guide = loadGuideContent(slug, category);
+          const guide = await loadGuideContent(slug, category);
           if (guide) {
             guides.push({
               title: guide.title,
@@ -214,7 +214,7 @@ export function getGuidesList(category?: string): GuideMetadata[] {
       const categories = ['lifestyle', 'education', 'moving', 'seasonal'];
       
       for (const cat of categories) {
-        const categoryGuides = getGuidesList(cat);
+        const categoryGuides = await getGuidesList(cat);
         guides.push(...categoryGuides);
       }
     }
@@ -229,28 +229,28 @@ export function getGuidesList(category?: string): GuideMetadata[] {
 /**
  * 단일 가이드 로드 (API에서 사용)
  */
-export function loadGuide(category: string, slug: string): GuideContent | null {
-  return loadGuideContent(slug, category);
+export async function loadGuide(category: string, slug: string): Promise<GuideContent | null> {
+  return await loadGuideContent(slug, category);
 }
 
 /**
  * 카테고리별 가이드 목록 가져오기 (API에서 사용)
  */
-export function getGuidesByCategory(category?: string): GuideMetadata[] {
-  return getGuidesList(category);
+export async function getGuidesByCategory(category?: string): Promise<GuideMetadata[]> {
+  return await getGuidesList(category);
 }
 
 /**
  * 추천 가이드 목록 가져오기
  */
-export function getFeaturedGuides(): GuideMetadata[] {
-  const allGuides = getGuidesList();
+export async function getFeaturedGuides(): Promise<GuideMetadata[]> {
+  const allGuides = await getGuidesList();
   return allGuides.filter(guide => guide.featured);
 }
 
 /**
  * 모든 가이드 목록 가져오기
  */
-export function getAllGuides(): GuideMetadata[] {
-  return getGuidesList();
+export async function getAllGuides(): Promise<GuideMetadata[]> {
+  return await getGuidesList();
 }

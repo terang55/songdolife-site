@@ -11,6 +11,7 @@ export interface GuideContent {
   description: string;
   keywords: string[];
   content: string;
+  rawContent?: string;
   category: 'realestate' | 'transportation' | 'lifestyle' | 'moving' | 'seasonal' | 'childcare' | 'education';
   lastUpdated: string;
   relatedGuides: string[];

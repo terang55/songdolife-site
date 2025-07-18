@@ -1,4 +1,4 @@
-import { GuideMetadata } from './markdown-loader';
+import { GuideMetadata } from './server-markdown-loader';
 
 /**
  * 클라이언트 사이드에서 가이드 데이터를 가져오는 API 함수들

@@ -28,7 +28,7 @@ export async function loadGuideContent(category: string, slug: string): Promise<
   // 서버 사이드에서는 새로운 마크다운 로더 시도
   if (typeof window === 'undefined') {
     try {
-      const { loadGuideContent: newLoadGuideContent } = await import('./markdown-loader');
+      const { loadGuideContent: newLoadGuideContent } = await import('./server-markdown-loader');
       const content = newLoadGuideContent(category, slug);
       if (content) {
         return content;

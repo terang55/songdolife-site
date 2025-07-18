@@ -29,9 +29,9 @@ export async function loadGuideContent(category: string, slug: string): Promise<
   if (typeof window === 'undefined') {
     try {
       const { loadGuideContent: newLoadGuideContent } = await import('./server-markdown-loader');
-      const content = newLoadGuideContent(category, slug);
+      const content = newLoadGuideContent(slug, category);
       if (content) {
-        return content;
+        return content.content; // HTML 콘텐츠만 반환
       }
     } catch (error) {
       console.warn('새로운 마크다운 로더 사용 중 오류:', error);

@@ -258,16 +258,12 @@ export function getGuidesByCategory(category?: string): GuideContent[] {
   // 서버 환경에서는 실제 콘텐츠와 함께 반환
   if (typeof window === 'undefined') {
     try {
-      // ESLint 규칙 우회를 위한 동적 require (상대 경로 사용)
-      const serverLoader = eval('require')('./server-markdown-loader');
-      const guidesWithContent = guides.map(guide => {
-        const content = serverLoader.loadGuideContentSync(guide.slug, guide.category);
-        return content || {
-          ...guide,
-          content: '<p>콘텐츠를 로드할 수 없습니다.</p>',
-          rawContent: '콘텐츠를 로드할 수 없습니다.'
-        };
-      });
+      // 서버에서는 메타데이터만 반환하고, 실제 콘텐츠는 개별 페이지에서 로드
+      const guidesWithContent = guides.map(guide => ({
+        ...guide,
+        content: '', // 목록에서는 빈 콘텐츠
+        rawContent: ''
+      }));
       return guidesWithContent.sort((a, b) => {
         if (a.featured && !b.featured) return -1;
         if (!a.featured && b.featured) return 1;
@@ -305,22 +301,66 @@ export function getGuideBySlug(slug: string): GuideContent | null {
   if (typeof window === 'undefined') {
     try {
       console.log(`🔧 Loading server-side content for: ${slug}`);
-      // ESLint 규칙 우회를 위한 동적 require (상대 경로 사용)
-      const serverLoader = eval('require')('./server-markdown-loader');
-      const content = serverLoader.loadGuideContentSync(slug, guide.category);
-      console.log(`📝 Content loaded successfully: ${content ? 'YES' : 'NO'}`);
       
-      // 만약 서버에서 로드한 콘텐츠가 null이면 기본 메타데이터 반환
-      if (!content) {
-        console.log(`⚠️ Server loader returned null, using fallback`);
+      // 직접 파일 시스템을 사용하여 마크다운 파일 로드
+      const fs = require('fs');
+      const path = require('path');
+      const matter = require('gray-matter');
+      const { marked } = require('marked');
+      
+      // 파일 경로 구성
+      const publicDir = path.join(process.cwd(), 'public');
+      let filePath: string;
+      
+      if (guide.category === 'lifestyle' && slug === 'songdo-childcare-guide') {
+        filePath = path.join(publicDir, 'guides', 'lifestyle', 'songdo-childcare-guide.md');
+      } else {
+        filePath = path.join(publicDir, 'guides', guide.category, `${slug}.md`);
+      }
+      
+      console.log(`📁 Trying to load file: ${filePath}`);
+      
+      if (!fs.existsSync(filePath)) {
+        console.warn(`❌ Guide file not found: ${filePath}`);
         return {
           ...guide,
-          content: '<p>콘텐츠를 로드할 수 없습니다. 파일을 확인해주세요.</p>',
-          rawContent: '콘텐츠를 로드할 수 없습니다.'
+          content: '<p>가이드 파일을 찾을 수 없습니다.</p>',
+          rawContent: '가이드 파일을 찾을 수 없습니다.'
         };
       }
       
-      return content;
+      console.log(`✅ File exists, reading content`);
+      const fileContent = fs.readFileSync(filePath, 'utf-8');
+      const { data: frontMatter, content: rawContent } = matter(fileContent);
+      
+      console.log(`📝 Raw content length: ${rawContent.length}`);
+      
+      // 간단한 마크다운 to HTML 변환
+      marked.setOptions({
+        breaks: true,
+        gfm: true,
+        sanitize: false
+      });
+      
+      const htmlContent = marked(rawContent);
+      
+      const result = {
+        ...guide,
+        title: frontMatter.title || guide.title,
+        description: frontMatter.description || guide.description,
+        content: htmlContent,
+        rawContent: rawContent,
+        keywords: frontMatter.keywords || guide.keywords || [],
+        tags: frontMatter.tags || guide.tags || [],
+        relatedGuides: frontMatter.relatedGuides || guide.relatedGuides || [],
+        readingTime: frontMatter.readingTime || guide.readingTime,
+        difficulty: frontMatter.difficulty || guide.difficulty,
+        lastUpdated: frontMatter.lastUpdated || guide.lastUpdated
+      };
+      
+      console.log(`📝 Content loaded successfully: YES`);
+      return result;
+      
     } catch (error) {
       console.error('가이드 콘텐츠 로드 실패:', error);
       return {

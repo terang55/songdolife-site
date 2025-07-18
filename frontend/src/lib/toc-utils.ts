@@ -109,10 +109,10 @@ export function addAnchorsToContent(htmlContent: string, tocItems: TocItem[]): s
   let result = htmlContent;
   
   tocItems.forEach((item) => {
-    // 헤더 태그에 id 속성 추가
+    // 더 유연한 헤더 태그 매칭 (이모지 포함)
     const headerPattern = new RegExp(
-      `<h${item.level}([^>]*)>([^<]*${escapeRegExp(item.text)}[^<]*)</h${item.level}>`,
-      'i'
+      `<h${item.level}([^>]*)>([^<]*)</h${item.level}>`,
+      'gi'
     );
     
     result = result.replace(headerPattern, (match, attrs, content) => {
@@ -121,7 +121,14 @@ export function addAnchorsToContent(htmlContent: string, tocItems: TocItem[]): s
         return match;
       }
       
-      return `<h${item.level}${attrs} id="${item.anchor}">${content}</h${item.level}>`;
+      // 헤더 내용이 TOC 아이템과 일치하는지 확인 (이모지 제거 후)
+      const cleanContent = content.replace(/[\u{1f300}-\u{1f5ff}\u{1f900}-\u{1f9ff}\u{1f600}-\u{1f64f}\u{1f680}-\u{1f6ff}\u{2600}-\u{26ff}\u{2700}-\u{27bf}]/gu, '').trim();
+      
+      if (cleanContent.includes(item.text) || item.text.includes(cleanContent)) {
+        return `<h${item.level}${attrs} id="${item.anchor}">${content}</h${item.level}>`;
+      }
+      
+      return match;
     });
   });
   

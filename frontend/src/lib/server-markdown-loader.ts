@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import { marked } from 'marked';
+import { generateTableOfContents, addAnchorsToContent } from './toc-utils';
 
 export interface GuideMetadata {
   title: string;
@@ -171,12 +172,27 @@ export function loadGuideContentSync(slug: string, category?: string): GuideCont
     // 특별 블록 처리
     const processedContent = processSpecialBlocks(rawContent);
     
+    // 마크다운 렌더링 설정
+    marked.setOptions({
+      breaks: true,        // 줄바꿈을 <br>로 변환
+      gfm: true,          // GitHub Flavored Markdown 사용
+      sanitize: false,    // HTML 태그 허용
+      smartLists: true,   // 스마트 리스트 처리
+      smartypants: false  // 스마트 인용부호 비활성화
+    });
+    
     // 나머지 마크다운을 HTML로 변환 (동기 방식)
     const htmlContent = marked(processedContent);
     
+    // 목차 생성
+    const tocItems = generateTableOfContents(rawContent);
+    
+    // HTML 콘텐츠에 앵커 ID 추가
+    const finalContent = addAnchorsToContent(htmlContent, tocItems);
+    
     return {
       ...metadata,
-      content: htmlContent,
+      content: finalContent,
       rawContent,
     };
   } catch (error) {
@@ -239,12 +255,27 @@ export async function loadGuideContent(slug: string, category?: string): Promise
     // 특별 블록 처리
     const processedContent = processSpecialBlocks(rawContent);
     
+    // 마크다운 렌더링 설정
+    marked.setOptions({
+      breaks: true,        // 줄바꿈을 <br>로 변환
+      gfm: true,          // GitHub Flavored Markdown 사용
+      sanitize: false,    // HTML 태그 허용
+      smartLists: true,   // 스마트 리스트 처리
+      smartypants: false  // 스마트 인용부호 비활성화
+    });
+    
     // 나머지 마크다운을 HTML로 변환
     const htmlContent = await marked.parse(processedContent);
     
+    // 목차 생성
+    const tocItems = generateTableOfContents(rawContent);
+    
+    // HTML 콘텐츠에 앵커 ID 추가
+    const finalContent = addAnchorsToContent(htmlContent, tocItems);
+    
     return {
       ...metadata,
-      content: htmlContent,
+      content: finalContent,
       rawContent,
     };
   } catch (error) {

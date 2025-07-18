@@ -258,8 +258,8 @@ export function getGuidesByCategory(category?: string): GuideContent[] {
   // 서버 환경에서는 실제 콘텐츠와 함께 반환
   if (typeof window === 'undefined') {
     try {
-      // ESLint 규칙 우회를 위한 동적 require
-      const serverLoader = eval('require')('@/lib/server-markdown-loader');
+      // ESLint 규칙 우회를 위한 동적 require (상대 경로 사용)
+      const serverLoader = eval('require')('./server-markdown-loader');
       const guidesWithContent = guides.map(guide => {
         const content = serverLoader.loadGuideContentSync(guide.slug, guide.category);
         return content || {
@@ -305,8 +305,8 @@ export function getGuideBySlug(slug: string): GuideContent | null {
   if (typeof window === 'undefined') {
     try {
       console.log(`🔧 Loading server-side content for: ${slug}`);
-      // ESLint 규칙 우회를 위한 동적 require
-      const serverLoader = eval('require')('@/lib/server-markdown-loader');
+      // ESLint 규칙 우회를 위한 동적 require (상대 경로 사용)
+      const serverLoader = eval('require')('./server-markdown-loader');
       const content = serverLoader.loadGuideContentSync(slug, guide.category);
       console.log(`📝 Content loaded successfully: ${content ? 'YES' : 'NO'}`);
       

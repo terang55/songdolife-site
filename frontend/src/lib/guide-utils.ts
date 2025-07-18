@@ -335,14 +335,82 @@ export function getGuideBySlug(slug: string): GuideContent | null {
       
       console.log(`📝 Raw content length: ${rawContent.length}`);
       
-      // 간단한 마크다운 to HTML 변환
+      // 특별 블록 처리 함수
+      function processSpecialBlocks(content: string): string {
+        // :::tip 블록 처리
+        content = content.replace(/:::tip\s*\n([\s\S]*?):::/g, (match, blockContent) => {
+          const processedContent = blockContent.trim()
+            .replace(/^- (.+)$/gm, '<div class="mb-1 p-1 bg-gray-100 rounded text-sm">• $1</div>')
+            .replace(/\n\n/g, '<br/>')
+            .replace(/\n/g, ' ');
+          return `<div class="mb-6 p-4 bg-emerald-50 border-l-4 border-emerald-500 rounded-r-lg">
+            <div class="flex items-center mb-2">
+              <span class="text-emerald-600 text-lg mr-2">💡</span>
+              <h4 class="text-emerald-800 font-semibold">팁</h4>
+            </div>
+            <div class="text-emerald-700 text-sm leading-relaxed">${processedContent}</div>
+          </div>`;
+        });
+
+        // :::info 블록 처리
+        content = content.replace(/:::info\s*\n([\s\S]*?):::/g, (match, blockContent) => {
+          const processedContent = blockContent.trim()
+            .replace(/^- (.+)$/gm, '<div class="mb-1 p-1 bg-gray-100 rounded text-sm">• $1</div>')
+            .replace(/\n\n/g, '<br/>')
+            .replace(/\n/g, ' ');
+          return `<div class="mb-6 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-r-lg">
+            <div class="flex items-center mb-2">
+              <span class="text-blue-600 text-lg mr-2">ℹ️</span>
+              <h4 class="text-blue-800 font-semibold">정보</h4>
+            </div>
+            <div class="text-blue-700 text-sm leading-relaxed">${processedContent}</div>
+          </div>`;
+        });
+
+        // :::warning 블록 처리
+        content = content.replace(/:::warning\s*\n([\s\S]*?):::/g, (match, blockContent) => {
+          const processedContent = blockContent.trim()
+            .replace(/^- (.+)$/gm, '<div class="mb-1 p-1 bg-gray-100 rounded text-sm">• $1</div>')
+            .replace(/\n\n/g, '<br/>')
+            .replace(/\n/g, ' ');
+          return `<div class="mb-6 p-4 bg-amber-50 border-l-4 border-amber-500 rounded-r-lg">
+            <div class="flex items-center mb-2">
+              <span class="text-amber-600 text-lg mr-2">⚠️</span>
+              <h4 class="text-amber-800 font-semibold">주의사항</h4>
+            </div>
+            <div class="text-amber-700 text-sm leading-relaxed">${processedContent}</div>
+          </div>`;
+        });
+
+        // :::contact 블록 처리
+        content = content.replace(/:::contact\s*\n([\s\S]*?):::/g, (match, blockContent) => {
+          const processedContent = blockContent.trim()
+            .replace(/^- (.+)$/gm, '<div class="mb-1 p-1 bg-gray-100 rounded text-sm">• $1</div>')
+            .replace(/\n\n/g, '<br/>')
+            .replace(/\n/g, ' ');
+          return `<div class="mb-6 p-4 bg-purple-50 border-l-4 border-purple-500 rounded-r-lg">
+            <div class="flex items-center mb-2">
+              <span class="text-purple-600 text-lg mr-2">📞</span>
+              <h4 class="text-purple-800 font-semibold">연락처</h4>
+            </div>
+            <div class="text-purple-700 text-sm leading-relaxed">${processedContent}</div>
+          </div>`;
+        });
+
+        return content;
+      }
+      
+      // 특별 블록 처리
+      const processedContent = processSpecialBlocks(rawContent);
+      
+      // 마크다운 to HTML 변환
       marked.setOptions({
         breaks: true,
         gfm: true,
         sanitize: false
       });
       
-      const htmlContent = marked(rawContent);
+      const htmlContent = marked(processedContent);
       
       const result = {
         ...guide,

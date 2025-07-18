@@ -339,32 +339,32 @@ export function getGuideBySlug(slug: string): GuideContent | null {
       function convertSpecialBlocks(content: string): string {
         // :::tip 블록을 인용구로 변환
         content = content.replace(/:::tip\s*\n([\s\S]*?):::/g, (match, blockContent) => {
-          return `> 💡 **팁**\n>\n${blockContent.trim().split('\n').map(line => `> ${line}`).join('\n')}\n`;
+          return `> 💡 **팁**\n>\n${blockContent.trim().split('\n').map((line: string) => `> ${line}`).join('\n')}\n`;
         });
 
         // :::info 블록을 인용구로 변환
         content = content.replace(/:::info\s*\n([\s\S]*?):::/g, (match, blockContent) => {
-          return `> ℹ️ **정보**\n>\n${blockContent.trim().split('\n').map(line => `> ${line}`).join('\n')}\n`;
+          return `> ℹ️ **정보**\n>\n${blockContent.trim().split('\n').map((line: string) => `> ${line}`).join('\n')}\n`;
         });
 
         // :::warning 블록을 인용구로 변환
         content = content.replace(/:::warning\s*\n([\s\S]*?):::/g, (match, blockContent) => {
-          return `> ⚠️ **주의사항**\n>\n${blockContent.trim().split('\n').map(line => `> ${line}`).join('\n')}\n`;
+          return `> ⚠️ **주의사항**\n>\n${blockContent.trim().split('\n').map((line: string) => `> ${line}`).join('\n')}\n`;
         });
 
         // :::contact 블록을 인용구로 변환
         content = content.replace(/:::contact\s*\n([\s\S]*?):::/g, (match, blockContent) => {
-          return `> 📞 **연락처**\n>\n${blockContent.trim().split('\n').map(line => `> ${line}`).join('\n')}\n`;
+          return `> 📞 **연락처**\n>\n${blockContent.trim().split('\n').map((line: string) => `> ${line}`).join('\n')}\n`;
         });
 
         // :::price 블록을 인용구로 변환
         content = content.replace(/:::price\s*\n([\s\S]*?):::/g, (match, blockContent) => {
-          return `> 💰 **가격 정보**\n>\n${blockContent.trim().split('\n').map(line => `> ${line}`).join('\n')}\n`;
+          return `> 💰 **가격 정보**\n>\n${blockContent.trim().split('\n').map((line: string) => `> ${line}`).join('\n')}\n`;
         });
 
         // :::schedule 블록을 인용구로 변환
         content = content.replace(/:::schedule\s*\n([\s\S]*?):::/g, (match, blockContent) => {
-          return `> 📅 **일정 정보**\n>\n${blockContent.trim().split('\n').map(line => `> ${line}`).join('\n')}\n`;
+          return `> 📅 **일정 정보**\n>\n${blockContent.trim().split('\n').map((line: string) => `> ${line}`).join('\n')}\n`;
         });
 
         return content;

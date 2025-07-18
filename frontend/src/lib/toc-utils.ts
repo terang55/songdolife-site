@@ -135,9 +135,3 @@ export function addAnchorsToContent(htmlContent: string, tocItems: TocItem[]): s
   return result;
 }
 
-/**
- * 정규식 특수문자 이스케이프
- */
-function escapeRegExp(string: string): string {
-  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}

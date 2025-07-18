@@ -66,7 +66,9 @@ function convertSpecialBlocks(content: string): string {
 export function loadGuideContentSync(slug: string, category?: string): GuideContent | null {
   try {
     console.log(`🔍 Loading guide: ${slug}, category: ${category}`);
+    console.log(`📁 Current working directory: ${process.cwd()}`);
     const publicDir = path.join(process.cwd(), 'public');
+    console.log(`📁 Public directory: ${publicDir}`);
     let filePath: string;
     
     // 카테고리별 디렉토리 매핑
@@ -93,6 +95,17 @@ export function loadGuideContentSync(slug: string, category?: string): GuideCont
     
     if (!fs.existsSync(filePath)) {
       console.warn(`❌ Guide file not found: ${filePath}`);
+      
+      // 디버깅을 위해 상위 디렉토리 확인
+      const parentDir = path.dirname(filePath);
+      console.log(`📁 Checking parent directory: ${parentDir}`);
+      if (fs.existsSync(parentDir)) {
+        const files = fs.readdirSync(parentDir);
+        console.log(`📄 Files in parent directory:`, files);
+      } else {
+        console.log(`❌ Parent directory does not exist: ${parentDir}`);
+      }
+      
       return null;
     }
     

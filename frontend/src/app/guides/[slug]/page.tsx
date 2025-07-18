@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { getGuideBySlug, getRelatedGuides, generateGuideMetadata, getCategoryInfo } from '@/lib/guide-utils';
+import type { GuideContent } from '@/types/guide';
 import Footer from '../../components/Footer';
 import { generateBreadcrumbSchema } from '@/lib/seo';
 import Script from 'next/script';

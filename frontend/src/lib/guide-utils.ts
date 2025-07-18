@@ -258,9 +258,10 @@ export function getGuidesByCategory(category?: string): GuideContent[] {
   // 서버 환경에서는 실제 콘텐츠와 함께 반환
   if (typeof window === 'undefined') {
     try {
-      const { loadGuideContent } = require('@/lib/server-markdown-loader');
+      // 동적 import를 통해 서버 전용 모듈 로드
+      const serverLoader = eval('require("@/lib/server-markdown-loader")');
       const guidesWithContent = guides.map(guide => {
-        const content = loadGuideContent(guide.slug, guide.category);
+        const content = serverLoader.loadGuideContent(guide.slug, guide.category);
         return content || {
           ...guide,
           content: '<p>콘텐츠를 로드할 수 없습니다.</p>',
@@ -298,8 +299,9 @@ export function getGuideBySlug(slug: string): GuideContent | null {
   // 서버 환경에서만 실제 콘텐츠 로드
   if (typeof window === 'undefined') {
     try {
-      const { loadGuideContent } = require('@/lib/server-markdown-loader');
-      const content = loadGuideContent(slug, guide.category);
+      // 동적 import를 통해 서버 전용 모듈 로드
+      const serverLoader = eval('require("@/lib/server-markdown-loader")');
+      const content = serverLoader.loadGuideContent(slug, guide.category);
       return content;
     } catch (error) {
       console.error('가이드 콘텐츠 로드 실패:', error);

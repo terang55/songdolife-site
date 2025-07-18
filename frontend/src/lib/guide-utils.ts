@@ -391,7 +391,7 @@ export function generateGuideMetadata(guide: GuideContent): GuideMetadata {
     title: `${guide.title} | 송도라이프`,
     description: guide.description,
     keywords: [
-      ...guide.keywords,
+      ...(Array.isArray(guide.keywords) ? guide.keywords : []),
       '송도국제도시',
       '송도 가이드',
       '인천 연수구',
@@ -469,8 +469,8 @@ export function getRelatedGuides(guide: GuideContent, limit = 3): GuideContent[]
     .filter(g => g.slug !== guide.slug)
     .filter(g => 
       g.category === guide.category || 
-      guide.relatedGuides.includes(g.slug) ||
-      g.tags.some(tag => guide.tags.includes(tag))
+      (guide.relatedGuides && guide.relatedGuides.includes(g.slug)) ||
+      (g.tags && guide.tags && g.tags.some(tag => guide.tags.includes(tag)))
     )
     .slice(0, limit);
 }

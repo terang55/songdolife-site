@@ -8,11 +8,13 @@ export interface GuideMetadata {
   slug: string;
   description: string;
   category: string;
+  keywords: string[];
   tags: string[];
   featured: boolean;
   difficulty: 'easy' | 'medium' | 'hard';
   readingTime: number;
   lastUpdated: string;
+  relatedGuides: string[];
 }
 
 export interface GuideContent extends GuideMetadata {
@@ -157,11 +159,13 @@ export function loadGuideContentSync(slug: string, category?: string): GuideCont
       slug: frontMatter.slug || slug,
       description: frontMatter.description || '',
       category: frontMatter.category || category || 'general',
+      keywords: frontMatter.keywords || [],
       tags: frontMatter.tags || [],
       featured: frontMatter.featured || false,
       difficulty: frontMatter.difficulty || 'medium',
       readingTime: frontMatter.readingTime || 5,
       lastUpdated: frontMatter.lastUpdated || new Date().toISOString(),
+      relatedGuides: frontMatter.relatedGuides || [],
     };
     
     // 특별 블록 처리
@@ -223,11 +227,13 @@ export async function loadGuideContent(slug: string, category?: string): Promise
       slug: frontMatter.slug || slug,
       description: frontMatter.description || '',
       category: frontMatter.category || category || 'general',
+      keywords: frontMatter.keywords || [],
       tags: frontMatter.tags || [],
       featured: frontMatter.featured || false,
       difficulty: frontMatter.difficulty || 'medium',
       readingTime: frontMatter.readingTime || 5,
       lastUpdated: frontMatter.lastUpdated || new Date().toISOString(),
+      relatedGuides: frontMatter.relatedGuides || [],
     };
     
     // 특별 블록 처리

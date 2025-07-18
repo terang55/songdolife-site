@@ -113,7 +113,73 @@ function parseBlockContent(content: string): string {
 }
 
 /**
- * 마크다운 파일을 로드하고 파싱하는 함수
+ * 마크다운 파일을 로드하고 파싱하는 함수 (동기 버전)
+ */
+export function loadGuideContentSync(slug: string, category?: string): GuideContent | null {
+  try {
+    const publicDir = path.join(process.cwd(), 'public');
+    let filePath: string;
+    
+    // 카테고리별 디렉토리 매핑
+    if (category) {
+      if (category === 'lifestyle' && slug === 'songdo-childcare-guide') {
+        filePath = path.join(publicDir, 'guides', 'lifestyle', 'songdo-childcare-guide.md');
+      } else {
+        filePath = path.join(publicDir, 'guides', category, `${slug}.md`);
+      }
+    } else {
+      // 기본 경로들 시도
+      const possiblePaths = [
+        path.join(publicDir, 'guides', `${slug}.md`),
+        path.join(publicDir, 'guides', 'lifestyle', `${slug}.md`),
+        path.join(publicDir, 'guides', 'education', `${slug}.md`),
+        path.join(publicDir, 'guides', 'moving', `${slug}.md`),
+        path.join(publicDir, 'guides', 'seasonal', `${slug}.md`),
+      ];
+      
+      filePath = possiblePaths.find(p => fs.existsSync(p)) || possiblePaths[0];
+    }
+    
+    if (!fs.existsSync(filePath)) {
+      console.warn(`Guide file not found: ${filePath}`);
+      return null;
+    }
+    
+    const fileContent = fs.readFileSync(filePath, 'utf-8');
+    const { data: frontMatter, content: rawContent } = matter(fileContent);
+    
+    // Front matter에서 메타데이터 추출
+    const metadata: GuideMetadata = {
+      title: frontMatter.title || '제목 없음',
+      slug: frontMatter.slug || slug,
+      description: frontMatter.description || '',
+      category: frontMatter.category || category || 'general',
+      tags: frontMatter.tags || [],
+      featured: frontMatter.featured || false,
+      difficulty: frontMatter.difficulty || 'medium',
+      readingTime: frontMatter.readingTime || 5,
+      lastUpdated: frontMatter.lastUpdated || new Date().toISOString(),
+    };
+    
+    // 특별 블록 처리
+    const processedContent = processSpecialBlocks(rawContent);
+    
+    // 나머지 마크다운을 HTML로 변환 (동기 방식)
+    const htmlContent = marked(processedContent);
+    
+    return {
+      ...metadata,
+      content: htmlContent,
+      rawContent,
+    };
+  } catch (error) {
+    console.error('Error loading guide content:', error);
+    return null;
+  }
+}
+
+/**
+ * 마크다운 파일을 로드하고 파싱하는 함수 (비동기 버전)
  */
 export async function loadGuideContent(slug: string, category?: string): Promise<GuideContent | null> {
   try {

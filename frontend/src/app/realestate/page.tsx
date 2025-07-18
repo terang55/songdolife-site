@@ -149,11 +149,11 @@ export default function RealEstatePage() {
             <div className="flex flex-col sm:flex-row items-center justify-center py-3 sm:py-4 gap-2 sm:gap-6">
               <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto">
                 <Link 
-                  href="/" 
+                  href="/realestate" 
                   className="flex items-center space-x-2 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors min-h-[44px] w-full sm:w-auto justify-center"
                 >
-                  <span className="text-lg">🏠</span>
-                  <span className="text-sm font-medium">홈으로</span>
+                  <span className="text-lg">🏢</span>
+                  <span className="text-sm font-medium">부동산 정보</span>
                 </Link>
                 <Link 
                   href="/subway" 
@@ -162,10 +162,17 @@ export default function RealEstatePage() {
                   <span className="text-lg">🚇</span>
                   <span className="text-sm font-medium">실시간 교통</span>
                 </Link>
+                <Link 
+                  href="/guides" 
+                  className="flex items-center space-x-2 px-4 py-2.5 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors min-h-[44px] w-full sm:w-auto justify-center"
+                >
+                  <span className="text-lg">📚</span>
+                  <span className="text-sm font-medium">생활 가이드</span>
+                </Link>
               </div>
               <div className="text-xs sm:text-sm text-gray-600 text-center">
-                <span className="block sm:hidden">송도 아파트 실거래가 정보</span>
-                <span className="hidden sm:block">송도 아파트 실거래가 정보. 매월 업데이트되는 최신 시세</span>
+                <span className="block sm:hidden">송도 아파트 실거래가. 송도교통 실시간 정보. 생활 가이드</span>
+                <span className="hidden sm:block">송도 아파트 실거래가. 송도교통 실시간 정보. 생활 가이드</span>
               </div>
             </div>
           </div>

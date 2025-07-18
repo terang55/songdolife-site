@@ -129,7 +129,7 @@ export function loadGuideContentSync(slug: string, category?: string): GuideCont
     });
     
     // 나머지 마크다운을 HTML로 변환 (동기 방식)
-    const htmlContent = marked(processedContent);
+    const htmlContent = marked(processedContent) as string;
     
     // 목차 생성
     const tocItems = generateTableOfContents(rawContent);
@@ -209,7 +209,7 @@ export async function loadGuideContent(slug: string, category?: string): Promise
     });
     
     // 나머지 마크다운을 HTML로 변환
-    const htmlContent = await marked.parse(processedContent);
+    const htmlContent = await marked.parse(processedContent) as string;
     
     // 목차 생성
     const tocItems = generateTableOfContents(rawContent);

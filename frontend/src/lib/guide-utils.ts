@@ -379,7 +379,7 @@ export function getGuideBySlug(slug: string): GuideContent | null {
         gfm: true
       });
       
-      const htmlContent = marked(processedContent);
+      const htmlContent = marked(processedContent) as string;
       
       // 목차 생성 및 앵커 추가 (인라인 구현)
       function generateTableOfContents(markdownContent: string) {

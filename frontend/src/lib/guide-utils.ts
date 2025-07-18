@@ -258,10 +258,10 @@ export function getGuidesByCategory(category?: string): GuideContent[] {
   // 서버 환경에서는 실제 콘텐츠와 함께 반환
   if (typeof window === 'undefined') {
     try {
-      // 동적 import를 통해 서버 전용 모듈 로드
-      const serverLoader = eval('require("@/lib/server-markdown-loader")');
+      // 직접 import 사용
+      const { loadGuideContentSync } = require('@/lib/server-markdown-loader');
       const guidesWithContent = guides.map(guide => {
-        const content = serverLoader.loadGuideContentSync(guide.slug, guide.category);
+        const content = loadGuideContentSync(guide.slug, guide.category);
         return content || {
           ...guide,
           content: '<p>콘텐츠를 로드할 수 없습니다.</p>',
@@ -294,20 +294,28 @@ export function getGuidesByCategory(category?: string): GuideContent[] {
 
 export function getGuideBySlug(slug: string): GuideContent | null {
   const guide = STATIC_GUIDES.find(guide => guide.slug === slug);
-  if (!guide) return null;
+  if (!guide) {
+    console.log(`❌ Guide not found in STATIC_GUIDES: ${slug}`);
+    return null;
+  }
+  
+  console.log(`🔍 getGuideBySlug called for: ${slug}, isServer: ${typeof window === 'undefined'}`);
   
   // 서버 환경에서만 실제 콘텐츠 로드
   if (typeof window === 'undefined') {
     try {
-      // 동적 import를 통해 서버 전용 모듈 로드
-      const serverLoader = eval('require("@/lib/server-markdown-loader")');
-      const content = serverLoader.loadGuideContentSync(slug, guide.category);
+      console.log(`🔧 Loading server-side content for: ${slug}`);
+      // 직접 import 사용
+      const { loadGuideContentSync } = require('@/lib/server-markdown-loader');
+      const content = loadGuideContentSync(slug, guide.category);
+      console.log(`📝 Content loaded successfully: ${content ? 'YES' : 'NO'}`);
       return content;
     } catch (error) {
       console.error('가이드 콘텐츠 로드 실패:', error);
     }
   }
   
+  console.log(`💻 Client-side fallback for: ${slug}`);
   // 클라이언트에서는 메타데이터만 반환
   return {
     ...guide,

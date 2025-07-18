@@ -117,6 +117,7 @@ function parseBlockContent(content: string): string {
  */
 export function loadGuideContentSync(slug: string, category?: string): GuideContent | null {
   try {
+    console.log(`🔍 Loading guide: ${slug}, category: ${category}`);
     const publicDir = path.join(process.cwd(), 'public');
     let filePath: string;
     
@@ -140,8 +141,10 @@ export function loadGuideContentSync(slug: string, category?: string): GuideCont
       filePath = possiblePaths.find(p => fs.existsSync(p)) || possiblePaths[0];
     }
     
+    console.log(`📁 Trying to load file: ${filePath}`);
+    
     if (!fs.existsSync(filePath)) {
-      console.warn(`Guide file not found: ${filePath}`);
+      console.warn(`❌ Guide file not found: ${filePath}`);
       return null;
     }
     

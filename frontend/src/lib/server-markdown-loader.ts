@@ -126,7 +126,6 @@ export function loadGuideContentSync(slug: string, category?: string): GuideCont
     marked.setOptions({
       breaks: true,        // 줄바꿈을 <br>로 변환
       gfm: true,          // GitHub Flavored Markdown 사용
-      sanitize: false,    // HTML 태그 허용
       smartLists: true,   // 스마트 리스트 처리
       smartypants: false  // 스마트 인용부호 비활성화
     });
@@ -209,7 +208,6 @@ export async function loadGuideContent(slug: string, category?: string): Promise
     marked.setOptions({
       breaks: true,        // 줄바꿈을 <br>로 변환
       gfm: true,          // GitHub Flavored Markdown 사용
-      sanitize: false,    // HTML 태그 허용
       smartLists: true,   // 스마트 리스트 처리
       smartypants: false  // 스마트 인용부호 비활성화
     });

@@ -377,7 +377,6 @@ export function getGuideBySlug(slug: string): GuideContent | null {
       marked.setOptions({
         breaks: true,
         gfm: true,
-        sanitize: false,
         smartLists: true,
         smartypants: false
       });

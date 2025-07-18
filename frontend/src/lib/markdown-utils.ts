@@ -29,7 +29,7 @@ export async function loadGuideContent(category: string, slug: string): Promise<
   if (typeof window === 'undefined') {
     try {
       const { loadGuideContent: newLoadGuideContent } = await import('./server-markdown-loader');
-      const content = newLoadGuideContent(slug, category);
+      const content = await newLoadGuideContent(slug, category);
       if (content) {
         return content.content; // HTML 콘텐츠만 반환
       }

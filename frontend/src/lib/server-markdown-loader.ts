@@ -1,21 +1,7 @@
-// 서버 사이드 전용 - Next.js에서 fs는 서버에서만 사용 가능
-let fs: typeof import('fs') | undefined;
-let path: typeof import('path') | undefined;
-let matter: typeof import('gray-matter') | undefined;
-let marked: { parse: (markdown: string) => string } | undefined;
-
-// 서버 환경에서만 모듈 로드
-if (typeof window === 'undefined') {
-  const fsModule = eval('require')('fs');
-  const pathModule = eval('require')('path');
-  const matterModule = eval('require')('gray-matter');
-  const markedModule = eval('require')('marked');
-  
-  fs = fsModule;
-  path = pathModule;
-  matter = matterModule;
-  marked = markedModule.marked;
-}
+import fs from 'fs';
+import path from 'path';
+import matter from 'gray-matter';
+import { marked } from 'marked';
 
 export interface GuideMetadata {
   title: string;
@@ -130,12 +116,6 @@ function parseBlockContent(content: string): string {
  * 마크다운 파일을 로드하고 파싱하는 함수
  */
 export function loadGuideContent(slug: string, category?: string): GuideContent | null {
-  // 서버 환경에서만 실행
-  if (typeof window !== 'undefined') {
-    console.warn('loadGuideContent는 서버 사이드에서만 사용할 수 있습니다.');
-    return null;
-  }
-  
   try {
     const publicDir = path.join(process.cwd(), 'public');
     let filePath: string;
@@ -202,12 +182,6 @@ export function loadGuideContent(slug: string, category?: string): GuideContent 
  * 가이드 목록을 카테고리별로 가져오는 함수
  */
 export function getGuidesList(category?: string): GuideMetadata[] {
-  // 서버 환경에서만 실행
-  if (typeof window !== 'undefined') {
-    console.warn('getGuidesList는 서버 사이드에서만 사용할 수 있습니다.');
-    return [];
-  }
-  
   try {
     const publicDir = path.join(process.cwd(), 'public', 'guides');
     const guides: GuideMetadata[] = [];

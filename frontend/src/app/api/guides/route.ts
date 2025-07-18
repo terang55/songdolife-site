@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAllGuides, getGuidesByCategory, getFeaturedGuides } from '@/lib/markdown-loader';
+import { getAllGuides, getGuidesByCategory, getFeaturedGuides } from '@/lib/server-markdown-loader';
 
 export async function GET(request: NextRequest) {
   try {

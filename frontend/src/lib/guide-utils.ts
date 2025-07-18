@@ -258,7 +258,7 @@ export function getGuidesByCategory(category?: string): GuideContent[] {
   // 서버 환경에서는 실제 콘텐츠와 함께 반환
   if (typeof window === 'undefined') {
     try {
-      const { loadGuideContent } = eval('require')('@/lib/markdown-loader');
+      const { loadGuideContent } = require('@/lib/server-markdown-loader');
       const guidesWithContent = guides.map(guide => {
         const content = loadGuideContent(guide.slug, guide.category);
         return content || {
@@ -298,7 +298,7 @@ export function getGuideBySlug(slug: string): GuideContent | null {
   // 서버 환경에서만 실제 콘텐츠 로드
   if (typeof window === 'undefined') {
     try {
-      const { loadGuideContent } = eval('require')('@/lib/markdown-loader');
+      const { loadGuideContent } = require('@/lib/server-markdown-loader');
       const content = loadGuideContent(slug, guide.category);
       return content;
     } catch (error) {

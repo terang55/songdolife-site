@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
     KAKAO_API_KEY: process.env.KAKAO_API_KEY || 'e7f9a0d4526c2c0a6b2c8e2b40fc1601',
   },
   
+  eslint: {
+    ignoreDuringBuilds: false,
+  },
+  
   images: {
     remotePatterns: [
       {

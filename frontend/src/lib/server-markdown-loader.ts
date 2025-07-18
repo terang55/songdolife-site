@@ -24,95 +24,40 @@ export interface GuideContent extends GuideMetadata {
 }
 
 /**
- * 특별 블록을 HTML로 변환하는 함수
+ * 특별 블록을 표준 마크다운으로 변환하는 함수
  */
-function processSpecialBlocks(content: string): string {
-  // :::info 블록 처리
-  content = content.replace(/:::info\s*\n([\s\S]*?):::/g, (match, blockContent) => {
-    const processedContent = parseBlockContent(blockContent);
-    return `<div class="mb-6 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-r-lg">
-      <div class="flex items-center mb-2">
-        <span class="text-blue-600 text-lg mr-2">ℹ️</span>
-        <h4 class="text-blue-800 font-semibold">정보</h4>
-      </div>
-      <div class="text-blue-700 text-sm leading-relaxed">${processedContent}</div>
-    </div>`;
-  });
-
-  // :::warning 블록 처리
-  content = content.replace(/:::warning\s*\n([\s\S]*?):::/g, (match, blockContent) => {
-    const processedContent = parseBlockContent(blockContent);
-    return `<div class="mb-6 p-4 bg-amber-50 border-l-4 border-amber-500 rounded-r-lg">
-      <div class="flex items-center mb-2">
-        <span class="text-amber-600 text-lg mr-2">⚠️</span>
-        <h4 class="text-amber-800 font-semibold">주의사항</h4>
-      </div>
-      <div class="text-amber-700 text-sm leading-relaxed">${processedContent}</div>
-    </div>`;
-  });
-
-  // :::tip 블록 처리
+function convertSpecialBlocks(content: string): string {
+  // :::tip 블록을 인용구로 변환
   content = content.replace(/:::tip\s*\n([\s\S]*?):::/g, (match, blockContent) => {
-    const processedContent = parseBlockContent(blockContent);
-    return `<div class="mb-6 p-4 bg-green-50 border-l-4 border-green-500 rounded-r-lg">
-      <div class="flex items-center mb-2">
-        <span class="text-green-600 text-lg mr-2">💡</span>
-        <h4 class="text-green-800 font-semibold">팁</h4>
-      </div>
-      <div class="text-green-700 text-sm leading-relaxed">${processedContent}</div>
-    </div>`;
+    return `> 💡 **팁**\n>\n${blockContent.trim().split('\n').map(line => `> ${line}`).join('\n')}\n`;
   });
 
-  // :::contact 블록 처리
+  // :::info 블록을 인용구로 변환
+  content = content.replace(/:::info\s*\n([\s\S]*?):::/g, (match, blockContent) => {
+    return `> ℹ️ **정보**\n>\n${blockContent.trim().split('\n').map(line => `> ${line}`).join('\n')}\n`;
+  });
+
+  // :::warning 블록을 인용구로 변환
+  content = content.replace(/:::warning\s*\n([\s\S]*?):::/g, (match, blockContent) => {
+    return `> ⚠️ **주의사항**\n>\n${blockContent.trim().split('\n').map(line => `> ${line}`).join('\n')}\n`;
+  });
+
+  // :::contact 블록을 인용구로 변환
   content = content.replace(/:::contact\s*\n([\s\S]*?):::/g, (match, blockContent) => {
-    const processedContent = parseBlockContent(blockContent);
-    return `<div class="mb-6 p-4 bg-gray-50 border border-gray-200 rounded-lg">
-      <div class="flex items-center mb-3">
-        <span class="text-gray-600 text-lg mr-2">📞</span>
-        <h4 class="text-gray-800 font-semibold">연락처 정보</h4>
-      </div>
-      <div class="text-gray-700 text-sm space-y-1">${processedContent}</div>
-    </div>`;
+    return `> 📞 **연락처**\n>\n${blockContent.trim().split('\n').map(line => `> ${line}`).join('\n')}\n`;
   });
 
-  // :::price 블록 처리
+  // :::price 블록을 인용구로 변환
   content = content.replace(/:::price\s*\n([\s\S]*?):::/g, (match, blockContent) => {
-    const processedContent = parseBlockContent(blockContent);
-    return `<div class="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-lg">
-      <div class="flex items-center mb-3">
-        <span class="text-emerald-600 text-lg mr-2">💰</span>
-        <h4 class="text-emerald-800 font-semibold">가격 정보</h4>
-      </div>
-      <div class="text-emerald-700 text-sm space-y-1">${processedContent}</div>
-    </div>`;
+    return `> 💰 **가격 정보**\n>\n${blockContent.trim().split('\n').map(line => `> ${line}`).join('\n')}\n`;
   });
 
-  // :::schedule 블록 처리
+  // :::schedule 블록을 인용구로 변환
   content = content.replace(/:::schedule\s*\n([\s\S]*?):::/g, (match, blockContent) => {
-    const processedContent = parseBlockContent(blockContent);
-    return `<div class="mb-6 p-4 bg-purple-50 border border-purple-200 rounded-lg">
-      <div class="flex items-center mb-3">
-        <span class="text-purple-600 text-lg mr-2">📅</span>
-        <h4 class="text-purple-800 font-semibold">일정 정보</h4>
-      </div>
-      <div class="text-purple-700 text-sm space-y-1">${processedContent}</div>
-    </div>`;
+    return `> 📅 **일정 정보**\n>\n${blockContent.trim().split('\n').map(line => `> ${line}`).join('\n')}\n`;
   });
 
   return content;
-}
-
-/**
- * 블록 내용을 파싱하여 HTML로 변환
- */
-function parseBlockContent(content: string): string {
-  // 간단하고 확실한 변환만 사용
-  return content
-    .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold">$1</strong>')
-    .replace(/\*(.*?)\*/g, '<em>$1</em>')
-    .replace(/^- (.+)$/gm, '<div class="mb-1 p-1 bg-gray-100 rounded text-sm">• $1</div>')
-    .replace(/\n\n/g, '<br/>')
-    .replace(/\n/g, ' ');
 }
 
 /**
@@ -174,8 +119,8 @@ export function loadGuideContentSync(slug: string, category?: string): GuideCont
       relatedGuides: frontMatter.relatedGuides || [],
     };
     
-    // 특별 블록 처리
-    const processedContent = processSpecialBlocks(rawContent);
+    // 특별 블록을 표준 마크다운으로 변환
+    const processedContent = convertSpecialBlocks(rawContent);
     
     // 마크다운 렌더링 설정
     marked.setOptions({
@@ -257,8 +202,8 @@ export async function loadGuideContent(slug: string, category?: string): Promise
       relatedGuides: frontMatter.relatedGuides || [],
     };
     
-    // 특별 블록 처리
-    const processedContent = processSpecialBlocks(rawContent);
+    // 특별 블록을 표준 마크다운으로 변환
+    const processedContent = convertSpecialBlocks(rawContent);
     
     // 마크다운 렌더링 설정
     marked.setOptions({

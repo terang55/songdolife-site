@@ -303,10 +303,10 @@ export function getGuideBySlug(slug: string): GuideContent | null {
       console.log(`🔧 Loading server-side content for: ${slug}`);
       
       // 직접 파일 시스템을 사용하여 마크다운 파일 로드
-      const fs = require('fs');
-      const path = require('path');
-      const matter = require('gray-matter');
-      const { marked } = require('marked');
+      const fs = eval('require')('fs');
+      const path = eval('require')('path');
+      const matter = eval('require')('gray-matter');
+      const { marked } = eval('require')('marked');
       
       // 파일 경로 구성
       const publicDir = path.join(process.cwd(), 'public');
@@ -335,88 +335,135 @@ export function getGuideBySlug(slug: string): GuideContent | null {
       
       console.log(`📝 Raw content length: ${rawContent.length}`);
       
-      // 특별 블록 처리 함수
-      function processSpecialBlocks(content: string): string {
-        // :::tip 블록 처리
+      // 특별 블록을 일반 마크다운으로 변환
+      function convertSpecialBlocks(content: string): string {
+        // :::tip 블록을 인용구로 변환
         content = content.replace(/:::tip\s*\n([\s\S]*?):::/g, (match, blockContent) => {
-          const processedContent = blockContent.trim()
-            .replace(/^- (.+)$/gm, '<div class="mb-1 p-1 bg-gray-100 rounded text-sm">• $1</div>')
-            .replace(/\n\n/g, '<br/>')
-            .replace(/\n/g, ' ');
-          return `<div class="mb-6 p-4 bg-emerald-50 border-l-4 border-emerald-500 rounded-r-lg">
-            <div class="flex items-center mb-2">
-              <span class="text-emerald-600 text-lg mr-2">💡</span>
-              <h4 class="text-emerald-800 font-semibold">팁</h4>
-            </div>
-            <div class="text-emerald-700 text-sm leading-relaxed">${processedContent}</div>
-          </div>`;
+          return `> 💡 **팁**\n>\n${blockContent.trim().split('\n').map(line => `> ${line}`).join('\n')}\n`;
         });
 
-        // :::info 블록 처리
+        // :::info 블록을 인용구로 변환
         content = content.replace(/:::info\s*\n([\s\S]*?):::/g, (match, blockContent) => {
-          const processedContent = blockContent.trim()
-            .replace(/^- (.+)$/gm, '<div class="mb-1 p-1 bg-gray-100 rounded text-sm">• $1</div>')
-            .replace(/\n\n/g, '<br/>')
-            .replace(/\n/g, ' ');
-          return `<div class="mb-6 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-r-lg">
-            <div class="flex items-center mb-2">
-              <span class="text-blue-600 text-lg mr-2">ℹ️</span>
-              <h4 class="text-blue-800 font-semibold">정보</h4>
-            </div>
-            <div class="text-blue-700 text-sm leading-relaxed">${processedContent}</div>
-          </div>`;
+          return `> ℹ️ **정보**\n>\n${blockContent.trim().split('\n').map(line => `> ${line}`).join('\n')}\n`;
         });
 
-        // :::warning 블록 처리
+        // :::warning 블록을 인용구로 변환
         content = content.replace(/:::warning\s*\n([\s\S]*?):::/g, (match, blockContent) => {
-          const processedContent = blockContent.trim()
-            .replace(/^- (.+)$/gm, '<div class="mb-1 p-1 bg-gray-100 rounded text-sm">• $1</div>')
-            .replace(/\n\n/g, '<br/>')
-            .replace(/\n/g, ' ');
-          return `<div class="mb-6 p-4 bg-amber-50 border-l-4 border-amber-500 rounded-r-lg">
-            <div class="flex items-center mb-2">
-              <span class="text-amber-600 text-lg mr-2">⚠️</span>
-              <h4 class="text-amber-800 font-semibold">주의사항</h4>
-            </div>
-            <div class="text-amber-700 text-sm leading-relaxed">${processedContent}</div>
-          </div>`;
+          return `> ⚠️ **주의사항**\n>\n${blockContent.trim().split('\n').map(line => `> ${line}`).join('\n')}\n`;
         });
 
-        // :::contact 블록 처리
+        // :::contact 블록을 인용구로 변환
         content = content.replace(/:::contact\s*\n([\s\S]*?):::/g, (match, blockContent) => {
-          const processedContent = blockContent.trim()
-            .replace(/^- (.+)$/gm, '<div class="mb-1 p-1 bg-gray-100 rounded text-sm">• $1</div>')
-            .replace(/\n\n/g, '<br/>')
-            .replace(/\n/g, ' ');
-          return `<div class="mb-6 p-4 bg-purple-50 border-l-4 border-purple-500 rounded-r-lg">
-            <div class="flex items-center mb-2">
-              <span class="text-purple-600 text-lg mr-2">📞</span>
-              <h4 class="text-purple-800 font-semibold">연락처</h4>
-            </div>
-            <div class="text-purple-700 text-sm leading-relaxed">${processedContent}</div>
-          </div>`;
+          return `> 📞 **연락처**\n>\n${blockContent.trim().split('\n').map(line => `> ${line}`).join('\n')}\n`;
+        });
+
+        // :::price 블록을 인용구로 변환
+        content = content.replace(/:::price\s*\n([\s\S]*?):::/g, (match, blockContent) => {
+          return `> 💰 **가격 정보**\n>\n${blockContent.trim().split('\n').map(line => `> ${line}`).join('\n')}\n`;
+        });
+
+        // :::schedule 블록을 인용구로 변환
+        content = content.replace(/:::schedule\s*\n([\s\S]*?):::/g, (match, blockContent) => {
+          return `> 📅 **일정 정보**\n>\n${blockContent.trim().split('\n').map(line => `> ${line}`).join('\n')}\n`;
         });
 
         return content;
       }
       
-      // 특별 블록 처리
-      const processedContent = processSpecialBlocks(rawContent);
+      // 특별 블록을 표준 마크다운으로 변환
+      const processedContent = convertSpecialBlocks(rawContent);
       
-      // 마크다운 to HTML 변환
+      // 마크다운 to HTML 변환 (기본 설정)
       marked.setOptions({
         breaks: true,
         gfm: true,
-        sanitize: false
+        sanitize: false,
+        smartLists: true,
+        smartypants: false
       });
       
       const htmlContent = marked(processedContent);
+      
+      // 목차 생성 및 앵커 추가 (인라인 구현)
+      function generateTableOfContents(markdownContent: string) {
+        const tocItems: Array<{
+          id: string;
+          text: string;
+          level: number;
+          anchor: string;
+        }> = [];
+        const headerPattern = /^(#{2,4})\s+(.+)$/gm;
+        let match;
+        let index = 0;
+        
+        while ((match = headerPattern.exec(markdownContent)) !== null) {
+          const level = match[1].length;
+          const text = match[2].trim();
+          const cleanText = text.replace(/[\u{1f300}-\u{1f5ff}\u{1f900}-\u{1f9ff}\u{1f600}-\u{1f64f}\u{1f680}-\u{1f6ff}\u{2600}-\u{26ff}\u{2700}-\u{27bf}]/gu, '').trim();
+          
+          let anchor = cleanText.toLowerCase()
+            .replace(/[^a-z0-9\s-]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/-+/g, '-')
+            .replace(/^-|-$/g, '');
+          
+          if (!anchor) {
+            anchor = `section-${index}`;
+          }
+          
+          tocItems.push({
+            id: `toc-${index}`,
+            text: cleanText,
+            level,
+            anchor
+          });
+          
+          index++;
+        }
+        
+        return tocItems;
+      }
+      
+      function addAnchorsToContent(htmlContent: string, tocItems: Array<{
+        id: string;
+        text: string;
+        level: number;
+        anchor: string;
+      }>) {
+        let result = htmlContent;
+        
+        tocItems.forEach((item) => {
+          const headerPattern = new RegExp(
+            `<h${item.level}([^>]*)>([^<]*)</h${item.level}>`,
+            'gi'
+          );
+          
+          result = result.replace(headerPattern, (match, attrs, content) => {
+            if (attrs && attrs.includes('id=')) {
+              return match;
+            }
+            
+            const cleanContent = content.replace(/[\u{1f300}-\u{1f5ff}\u{1f900}-\u{1f9ff}\u{1f600}-\u{1f64f}\u{1f680}-\u{1f6ff}\u{2600}-\u{26ff}\u{2700}-\u{27bf}]/gu, '').trim();
+            
+            if (cleanContent.includes(item.text) || item.text.includes(cleanContent)) {
+              return `<h${item.level}${attrs} id="${item.anchor}">${content}</h${item.level}>`;
+            }
+            
+            return match;
+          });
+        });
+        
+        return result;
+      }
+      
+      const tocItems = generateTableOfContents(rawContent);
+      const finalContent = addAnchorsToContent(htmlContent, tocItems);
       
       const result = {
         ...guide,
         title: frontMatter.title || guide.title,
         description: frontMatter.description || guide.description,
-        content: htmlContent,
+        content: finalContent,
         rawContent: rawContent,
         keywords: frontMatter.keywords || guide.keywords || [],
         tags: frontMatter.tags || guide.tags || [],

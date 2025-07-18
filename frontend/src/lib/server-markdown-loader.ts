@@ -250,11 +250,13 @@ export async function getGuidesList(category?: string): Promise<GuideMetadata[]>
               slug: guide.slug,
               description: guide.description,
               category: guide.category,
+              keywords: guide.keywords,
               tags: guide.tags,
               featured: guide.featured,
               difficulty: guide.difficulty,
               readingTime: guide.readingTime,
               lastUpdated: guide.lastUpdated,
+              relatedGuides: guide.relatedGuides,
             });
           }
         }

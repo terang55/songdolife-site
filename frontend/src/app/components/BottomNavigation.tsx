@@ -18,9 +18,9 @@ export default function BottomNavigation() {
 
   const navItems: NavItem[] = useMemo(() => [
     { icon: '🏠', label: '홈', path: '/' },
+    { icon: '📖', label: '가이드', path: '/guides' },
     { icon: '🏥', label: '의료', path: '/', isCategory: true, categoryName: '병원' },
     { icon: '🏢', label: '부동산', path: '/realestate' },
-    { icon: '🎓', label: '학원', path: '/academy' },
     { icon: '🚇', label: '교통', path: '/subway' }
   ], []);
 

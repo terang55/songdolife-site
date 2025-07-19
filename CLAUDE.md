@@ -4,7 +4,22 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-송도라이프는 인천 연수구 송도국제도시 주민을 위한 종합 생활정보 플랫폼입니다. Next.js 15 프론트엔드와 Python 크롤링 시스템으로 구성되어 있으며, 실시간 뉴스/블로그/유튜브 콘텐츠, 교통정보, 부동산 정보, 의료정보를 제공합니다.
+송도라이프는 인천 연수구 송도국제도시 주민을 위한 종합 생활정보 플랫폼입니다. Next.js 15 프론트엔드와 Python 크롤링 시스템으로 구성되어 있으며, 실시간 뉴스/블로그/유튜브 콘텐츠, 교통정보, 부동산 정보, 의료정보, 생활 가이드를 제공합니다.
+
+### Service Features
+- **뉴스 큐레이션**: 플랫폼별 맞춤 키워드로 송도 관련 뉴스/블로그/유튜브 수집
+- **교통 정보**: 인천1호선 실시간 도착 정보 및 시간표
+- **부동산 정보**: 국토교통부 공식 실거래가 데이터
+- **의료 정보**: 보건복지부 기반 병원/약국 정보
+- **생활 가이드**: 9개 테마별 이사/정착/생활 가이드 (마크다운 기반)
+- **PWA 지원**: 모바일 앱 수준의 사용자 경험
+
+### Current Status (2025-07-19)
+- **총 API 엔드포인트**: 12개
+- **가이드 시스템**: 7개 카테고리, 9개 가이드
+- **SEO 최적화**: 8개 스키마 타입 구현
+- **성능 등급**: ⭐⭐⭐⭐ (4.2/5.0)
+- **기술 스택**: Next.js 15, TypeScript, Tailwind CSS 4, Python
 
 ## Development Commands
 
@@ -175,3 +190,109 @@ except Exception as e:
 - 빌드 테스트: `npm run build`로 프로덕션 빌드 확인
 - 크롤러 테스트: 개별 스크립트 실행으로 데이터 수집 확인
 - API 테스트: `/api/news`, `/api/subway` 등 엔드포인트 직접 테스트
+
+## Guide System Architecture
+
+### Guide Categories (7개)
+- **realestate**: 부동산/주거 정보
+- **transportation**: 교통/이동 정보  
+- **lifestyle**: 일상생활/편의시설
+- **moving**: 이사/정착 가이드
+- **seasonal**: 계절별 생활정보
+- **childcare**: 육아/가족 정보
+- **education**: 교육/학습 정보
+
+### Guide Content Structure
+```typescript
+interface GuideContent {
+  title: string;
+  slug: string;
+  description: string;
+  category: string;
+  keywords: string[];
+  tags: string[];
+  featured: boolean;
+  difficulty: 'easy' | 'medium' | 'hard';
+  readingTime: number;
+  lastUpdated: string;
+  content: string;        // HTML 변환된 콘텐츠
+  rawContent: string;     // 원본 마크다운
+  relatedGuides: string[];
+}
+```
+
+### Guide File Management
+- **위치**: `/frontend/public/guides/{category}/{filename}.md`
+- **로딩**: 서버 컴포넌트에서 직접 파일 시스템 접근
+- **렌더링**: marked.js를 통한 마크다운 → HTML 변환
+- **SEO**: 각 가이드별 구조화된 데이터 자동 생성
+
+## Recent Major Updates (2025-07-19)
+
+### Fixed Issues
+1. **가이드 로딩 문제 해결**: 프로덕션 환경에서 "콘텐츠 로드 중 오류" 해결
+2. **동적 라우트 충돌 해결**: `/api/guides/[slug]` vs `/api/guides/[category]/[slug]` 충돌 제거
+3. **TypeScript 엄격 모드**: marked.js 타입 에러 및 deprecated 옵션 제거
+4. **빌드 최적화**: ESLint 규칙 조정 및 Vercel 배포 안정화
+
+### Architecture Improvements
+- **서버 컴포넌트 최적화**: 가이드 로딩을 페이지 레벨에서 처리
+- **모듈 로딩 개선**: dynamic import를 통한 안전한 서버사이드 모듈 로딩
+- **에러 핸들링 강화**: 프로덕션 환경별 에러 처리 분리
+
+## Performance Optimization
+
+### Current Optimizations
+- **Next.js 15**: App Router + Turbopack 사용
+- **이미지 최적화**: Next.js Image 컴포넌트 + LCP preload
+- **폰트 최적화**: Google Fonts 최적화 로딩
+- **번들 최적화**: 코드 스플리팅 + dynamic import
+- **캐시 전략**: API 레벨 no-cache로 최신 데이터 보장
+
+### Areas for Improvement
+1. **데이터베이스 도입**: 파일 기반 → PostgreSQL/Supabase 전환
+2. **검색 기능**: Elasticsearch 도입으로 전문 검색
+3. **크롤링 최적화**: Selenium → Playwright 전환 검토
+4. **에러 모니터링**: Sentry 도입으로 실시간 추적
+
+## Deployment & Infrastructure
+
+### Vercel Configuration
+- **플랫폼**: Vercel (자동 배포)
+- **도메인**: Custom domain 연결
+- **환경 변수**: .env.local 설정 필요
+- **빌드 명령어**: `npm run build`
+- **Node.js 버전**: 18.x
+
+### External Dependencies
+- **Google AdSense**: ca-pub-2592538242403472
+- **네이버 웹마스터**: 사이트 인증 완료
+- **공공데이터 API**: 부동산, 의료, 교통 정보 연동
+
+## Security & Best Practices
+
+### Security Measures
+- **환경 변수**: 민감 정보 .env.local 관리
+- **API 키 보호**: 클라이언트 사이드 노출 방지
+- **CORS 설정**: 필요한 도메인만 허용
+- **입력 검증**: 사용자 입력 데이터 검증 및 정제
+
+### Code Quality
+- **TypeScript Strict Mode**: any 타입 사용 금지
+- **ESLint**: 코드 품질 관리
+- **Import Path**: 절대 경로 (@/) 사용
+- **Error Boundaries**: React 에러 경계 구현
+
+## Contributing Guidelines
+
+### Development Workflow
+1. **기능 추가**: 새 기능은 별도 브랜치에서 개발
+2. **테스트**: 로컬에서 충분한 테스트 후 커밋
+3. **코드 리뷰**: TypeScript 에러 및 ESLint 규칙 준수
+4. **배포**: main 브랜치 머지 시 Vercel 자동 배포
+
+### Code Standards Reminder
+- **한국어**: 모든 주석과 로그는 한국어로 작성
+- **반응형**: 모바일 우선 디자인 (Tailwind CSS)
+- **접근성**: WCAG 2.1 AA 수준 준수 노력
+- **SEO**: 모든 페이지에 적절한 메타데이터 설정

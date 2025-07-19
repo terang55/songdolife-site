@@ -15,6 +15,7 @@ import { getNewsImageConfigWithSEO } from '@/lib/image-utils';
 import { generateCategorySEO, updateMetaTags, updateStructuredData, generateBreadcrumbStructuredData, generateCategoryFAQStructuredData } from '@/lib/seo-utils';
 import { getGuidesByCategory, GUIDE_CATEGORIES } from '@/lib/guide-utils';
 import Link from 'next/link';
+import Footer from './components/Footer';
 
 interface NewsItem {
   title: string;
@@ -436,27 +437,27 @@ export default function HomePage() {
     <section className="bg-white shadow-sm border-b">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row items-center justify-center py-3 sm:py-4 gap-2 sm:gap-6">
-          <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto">
-            <a 
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
+            <Link 
+              href="/guides" 
+              className="flex items-center space-x-2 px-4 py-2.5 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors min-h-[44px] w-full sm:w-auto justify-center"
+            >
+              <span className="text-lg">📖</span>
+              <span className="text-sm font-medium">생활 가이드</span>
+            </Link>
+            <Link 
               href="/realestate" 
               className="flex items-center space-x-2 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors min-h-[44px] w-full sm:w-auto justify-center"
             >
               <span className="text-lg">🏢</span>
               <span className="text-sm font-medium">부동산 정보</span>
-            </a>
-            <a 
+            </Link>
+            <Link 
               href="/subway" 
               className="flex items-center space-x-2 px-4 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors min-h-[44px] w-full sm:w-auto justify-center"
             >
               <span className="text-lg">🚇</span>
               <span className="text-sm font-medium">실시간 교통</span>
-            </a>
-            <Link 
-              href="/guides" 
-              className="flex items-center space-x-2 px-4 py-2.5 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors min-h-[44px] w-full sm:w-auto justify-center"
-            >
-              <span className="text-lg">📚</span>
-              <span className="text-sm font-medium">생활 가이드</span>
             </Link>
           </div>
           <div className="text-xs sm:text-sm text-gray-600 text-center">
@@ -819,76 +820,7 @@ export default function HomePage() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white py-8 sm:py-12 mt-8 sm:mt-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mb-6 sm:mb-8">
-            {/* 브랜드 정보 */}
-            <div className="flex flex-col items-center md:items-start">
-              <div className="flex items-center space-x-2 sm:space-x-3 mb-3 sm:mb-4">
-                <span className="text-2xl sm:text-3xl">🏙️</span>
-                <div>
-                  <div className="text-lg sm:text-xl font-bold">송도라이프</div>
-                  <div className="text-sm text-gray-400">송도국제도시 주민들을 위한 실시간 지역 정보를 제공합니다. 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요.</div>
-                </div>
-              </div>
-              <p className="text-sm text-gray-300 text-center md:text-left max-w-sm">
-                송도국제도시 주민들을 위한 실시간 지역 정보를 제공합니다. 뉴스, 맛집, 카페, 부동산, 육아 정보를 한눈에 확인하세요.
-              </p>
-            </div>
-
-            {/* 주요 지역 */}
-            <div className="text-center md:text-left">
-              <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">주요 지역</h3>
-              <ul className="space-y-1 sm:space-y-2 text-sm text-gray-300">
-                <li>📍 송도국제도시</li>
-                <li>🚇 센트럴파크</li>
-                <li>🚇 GTX B </li>
-
-              </ul>
-            </div>
-
-            {/* 비즈니스 문의 */}
-            <div className="text-center md:text-left">
-              <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">💼사이트 문의</h3>
-              <div className="space-y-2 text-sm text-gray-300">
-                <div className="flex items-center justify-center md:justify-start space-x-2">
-                  <span className="text-base">📧</span>
-                  <a 
-                    href="mailto:rainbowcr55@gmail.com" 
-                    className="hover:text-white transition-colors"
-                  >
-                    rainbowcr55@gmail.com
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* 하단 구분선 및 저작권 */}
-          <div className="border-t border-gray-700 pt-6 sm:pt-8">
-            <div className="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
-              <div className="text-xs sm:text-sm text-gray-400">
-                © 2025 송도라이프. 모든 권리 보유.
-              </div>
-              <div className="flex items-center space-x-4 text-xs sm:text-sm">
-                <a 
-                  href="/privacy" 
-                  className="text-gray-400 hover:text-white transition-colors"
-                >
-                  개인정보처리방침
-                </a>
-                <span className="text-gray-600">|</span>
-                <a 
-                  href="/terms" 
-                  className="text-gray-400 hover:text-white transition-colors"
-                >
-                  이용약관
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer variant="light" />
     </div>
     </>
   );

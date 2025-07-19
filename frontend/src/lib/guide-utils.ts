@@ -246,6 +246,34 @@ export const STATIC_GUIDES: GuideContent[] = [
     difficulty: 'easy',
     tags: ['육아', '어린이집', '유치원', '놀이시설', '의료', '아이', '가족'],
     featured: true
+  },
+  {
+    slug: 'songdo-realestate-investment-guide',
+    title: '송도 부동산 투자 완벽 가이드',
+    description: '2025년 송도국제도시 부동산 시장 완벽 분석! 실거래가 데이터부터 GTX-B 호재까지, 신뢰할 수 있는 정보로 송도 부동산 투자의 모든 것을 담았습니다.',
+    keywords: ['송도 부동산', '송도 투자', '송도 아파트', '송도 실거래가', 'GTX-B', '송도 시세', '송도국제도시 투자', '송도 부동산 시장'],
+    content: '',
+    category: 'realestate',
+    lastUpdated: '2025-07-19',
+    relatedGuides: ['songdo-moving-checklist', 'songdo-newlywed-guide', 'songdo-education-guide'],
+    readingTime: 25,
+    difficulty: 'medium',
+    tags: ['부동산', '투자', '아파트', '실거래가', 'GTX-B', '시장분석', '호재'],
+    featured: true
+  },
+  {
+    slug: 'songdo-transportation-complete-guide',
+    title: '송도 교통 완벽 가이드',
+    description: '2025년 송도국제도시 교통의 모든 것! 지하철, 버스, 공항 연결까지 실시간 정보와 꿀팁으로 송도 교통을 완벽 마스터하세요.',
+    keywords: ['송도 교통', '인천1호선', '송도 지하철', '송도 버스', 'M6405', '6770', '인천공항', '송도 대중교통', 'GTX-B'],
+    content: '',
+    category: 'transportation',
+    lastUpdated: '2025-07-19',
+    relatedGuides: ['songdo-moving-checklist', 'songdo-newlywed-guide', 'songdo-realestate-investment-guide'],
+    readingTime: 20,
+    difficulty: 'easy',
+    tags: ['교통', '지하철', '버스', '공항', '대중교통', '교통카드', '시간표'],
+    featured: true
   }
 ];
 
@@ -352,6 +380,20 @@ function extractHowToSteps(guide: GuideContent): HowToStep[] {
       { name: '교육기관 조사', text: '송도 지역 학교 및 교육시설 정보 수집하기' },
       { name: '입학 준비', text: '필요 서류 및 절차 확인하기' },
       { name: '교육 환경 적응', text: '송도 교육 시스템에 맞춰 적응하기' }
+    );
+  } else if (guide.category === 'realestate') {
+    steps.push(
+      { name: '시장 조사', text: '송도 부동산 시장 현황 및 트렌드 분석하기' },
+      { name: '실거래가 확인', text: '국토교통부 공식 데이터로 실거래가 조사하기' },
+      { name: '투자 전략 수립', text: '개인 상황에 맞는 투자 계획 세우기' },
+      { name: '물건 선택', text: '조건에 맞는 부동산 선택 및 계약하기' }
+    );
+  } else if (guide.category === 'transportation') {
+    steps.push(
+      { name: '교통편 조사', text: '송도 지하철, 버스, 공항 연결편 파악하기' },
+      { name: '교통카드 준비', text: '할인 혜택이 있는 교통카드 선택하기' },
+      { name: '경로 최적화', text: '목적지별 최적 교통 경로 설정하기' },
+      { name: '실시간 정보 활용', text: '교통 앱으로 실시간 정보 확인하기' }
     );
   }
 

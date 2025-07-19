@@ -30,7 +30,12 @@
       "Bash(touch:*)",
       "Bash(rm:*)",
       "Bash(npm run dev:*)",
-      "Bash(cp:*)"
+      "Bash(cp:*)",
+      "Bash(npm:*)",
+      "mcp__mcp-installer__install_repo_mcp_server",
+      "Bash(claude mcp add:*)",
+      "Bash(claude mcp:*)",
+      "Bash(timeout:*)"
     ],
     "deny": []
   }

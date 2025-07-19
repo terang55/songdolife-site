@@ -86,6 +86,8 @@ export function loadGuideContentSync(slug: string, category?: string): GuideCont
         path.join(publicDir, 'guides', 'education', `${slug}.md`),
         path.join(publicDir, 'guides', 'moving', `${slug}.md`),
         path.join(publicDir, 'guides', 'seasonal', `${slug}.md`),
+        path.join(publicDir, 'guides', 'realestate', `${slug}.md`),
+        path.join(publicDir, 'guides', 'transportation', `${slug}.md`),
       ];
       
       filePath = possiblePaths.find(p => fs.existsSync(p)) || possiblePaths[0];
@@ -184,6 +186,8 @@ export async function loadGuideContent(slug: string, category?: string): Promise
         path.join(publicDir, 'guides', 'education', `${slug}.md`),
         path.join(publicDir, 'guides', 'moving', `${slug}.md`),
         path.join(publicDir, 'guides', 'seasonal', `${slug}.md`),
+        path.join(publicDir, 'guides', 'realestate', `${slug}.md`),
+        path.join(publicDir, 'guides', 'transportation', `${slug}.md`),
       ];
       
       filePath = possiblePaths.find(p => fs.existsSync(p)) || possiblePaths[0];
@@ -276,7 +280,7 @@ export async function getGuidesList(category?: string): Promise<GuideMetadata[]>
       }
     } else {
       // 모든 카테고리 검색
-      const categories = ['lifestyle', 'education', 'moving', 'seasonal'];
+      const categories = ['lifestyle', 'education', 'moving', 'seasonal', 'realestate', 'transportation'];
       
       for (const cat of categories) {
         const categoryGuides = await getGuidesList(cat);

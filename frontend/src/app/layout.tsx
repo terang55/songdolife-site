@@ -436,7 +436,7 @@ export default function RootLayout({
           }}
         />
 
-        {/* 구조화된 데이터 - 송도 지역 FAQ */}
+        {/* 구조화된 데이터 - 송도 지역 종합 FAQ */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -482,6 +482,38 @@ export default function RootLayout({
                   "acceptedAnswer": {
                     "@type": "Answer",
                     "text": "송도는 계획도시 특성상 신축 아파트가 많으며, 단지별로 다양한 가격대를 형성하고 있습니다. 정확한 시세는 국토교통부 실거래가 공개시스템에서 확인할 수 있습니다."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "송도동 지하철 정보는 얼마나 자주 업데이트되나요?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "송도에 위치한 모든 지하철역의 실시간 도착 정보를 1분 간격으로 갱신합니다. 평일과 휴일 시간표도 최신 데이터로 업데이트하여 정확한 교통 정보를 제공합니다."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "병원·약국 정보의 정확도는 어느 정도인가요?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "보건복지부 공공데이터 포털에서 제공하는 최신 의료기관 정보를 매일 동기화하여 제공합니다. 응급실 운영현황, 진료시간, 연락처 등은 공식 데이터를 기반으로 하므로 신뢰할 수 있습니다."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "뉴스·블로그·유튜브 콘텐츠는 언제 수집되나요?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "매일 자동으로 최신 콘텐츠를 수집하고 유사도 검사를 거쳐 중복을 제거한 후 반영합니다. 송도국제도시, 센트럴파크, 국제업무지구 관련 키워드로 맞춤형 정보만 선별하여 제공합니다."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "부동산 실거래가 정보는 얼마나 최신인가요?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "국토교통부 실거래가 공개시스템의 데이터를 기반으로 매일 업데이트됩니다. 송도국제도시 내 아파트, 오피스텔, 상업시설의 최근 거래 현황을 확인할 수 있습니다."
                   }
                 }
               ]

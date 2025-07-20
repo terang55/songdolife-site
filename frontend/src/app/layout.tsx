@@ -596,7 +596,34 @@ export default function RootLayout({
                   "startDate": "2025-04-05",
                   "endDate": "2025-04-15",
                   "eventStatus": "https://schema.org/EventScheduled",
-                  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode"
+                  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+                  "location": {
+                    "@type": "Place",
+                    "name": "송도 센트럴파크 벚꽃길",
+                    "address": {
+                      "@type": "PostalAddress",
+                      "addressRegion": "인천광역시",
+                      "addressLocality": "연수구",
+                      "streetAddress": "송도동 센트럴파크"
+                    },
+                    "geo": {
+                      "@type": "GeoCoordinates",
+                      "latitude": 37.3894,
+                      "longitude": 126.7317
+                    }
+                  },
+                  "organizer": {
+                    "@type": "Organization",
+                    "name": "인천경제자유구역청",
+                    "url": "https://www.ifez.go.kr"
+                  },
+                  "image": `${BASE_URL}/og-image.jpg`,
+                  "offers": {
+                    "@type": "Offer",
+                    "price": "0",
+                    "priceCurrency": "KRW",
+                    "availability": "https://schema.org/InStock"
+                  }
                 },
                 {
                   "@type": "Event", 
@@ -605,7 +632,40 @@ export default function RootLayout({
                   "startDate": "2025-08-09",
                   "endDate": "2025-08-11", 
                   "eventStatus": "https://schema.org/EventScheduled",
-                  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode"
+                  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+                  "location": {
+                    "@type": "Place",
+                    "name": "송도달빛축제공원",
+                    "address": {
+                      "@type": "PostalAddress",
+                      "addressRegion": "인천광역시",
+                      "addressLocality": "연수구",
+                      "streetAddress": "송도동 달빛축제공원"
+                    },
+                    "geo": {
+                      "@type": "GeoCoordinates",
+                      "latitude": 37.3894,
+                      "longitude": 126.7317
+                    }
+                  },
+                  "organizer": {
+                    "@type": "Organization",
+                    "name": "펜타포트 락 페스티벌 조직위원회",
+                    "url": "https://pentaport.co.kr"
+                  },
+                  "performer": [
+                    {
+                      "@type": "MusicGroup",
+                      "name": "국내외 록 밴드 및 아티스트"
+                    }
+                  ],
+                  "image": `${BASE_URL}/og-image.jpg`,
+                  "offers": {
+                    "@type": "Offer",
+                    "price": "150000",
+                    "priceCurrency": "KRW",
+                    "availability": "https://schema.org/PreOrder"
+                  }
                 },
                 {
                   "@type": "Event",
@@ -614,7 +674,34 @@ export default function RootLayout({
                   "startDate": "2025-07-19",
                   "endDate": "2025-07-21",
                   "eventStatus": "https://schema.org/EventScheduled",
-                  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode"
+                  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+                  "location": {
+                    "@type": "Place",
+                    "name": "송도 센트럴파크 잔디광장",
+                    "address": {
+                      "@type": "PostalAddress",
+                      "addressRegion": "인천광역시",
+                      "addressLocality": "연수구",
+                      "streetAddress": "송도동 센트럴파크"
+                    },
+                    "geo": {
+                      "@type": "GeoCoordinates",
+                      "latitude": 37.3894,
+                      "longitude": 126.7317
+                    }
+                  },
+                  "organizer": {
+                    "@type": "Organization",
+                    "name": "송도국제도시 상인회",
+                    "url": BASE_URL
+                  },
+                  "image": `${BASE_URL}/og-image.jpg`,
+                  "offers": {
+                    "@type": "Offer",
+                    "price": "0",
+                    "priceCurrency": "KRW",
+                    "availability": "https://schema.org/InStock"
+                  }
                 }
               ],
               "image": `${BASE_URL}/og-image.jpg`

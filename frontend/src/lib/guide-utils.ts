@@ -92,45 +92,45 @@ export const STATIC_GUIDES: GuideContent[] = [
     featured: true
   },
   {
-    slug: 'songdo-restaurant-guide',
+    slug: 'songdo-restaurant-complete-guide',
     title: '송도 맛집 완벽 가이드',
-    description: '송도국제도시의 다양한 맛집을 카테고리별로 정리한 완벽 가이드입니다.',
-    keywords: ['송도 맛집', '송도 음식점', '센트럴파크 맛집', '트리플스트리트 맛집', '송도 카페', '송도 한식', '송도 중식', '송도 일식', '송도 양식'],
+    description: '2025년 송도국제도시 맛집 완벽 정복! 실시간 검증된 맛집 정보로 센트럴파크∙트리플스트리트까지 한식∙중식∙일식∙양식∙카페별 추천과 가격대∙상황별 진짜 맛집을 완벽 정리했습니다.',
+    keywords: ['송도 맛집', '송도 음식점', '센트럴파크 맛집', '트리플스트리트 맛집', '송도 한식', '송도 중식', '송도 일식', '송도 양식', '송도 카페', '밥상편지', '고집132', '이아', '애월몽'],
     content: '',
     category: 'lifestyle',
-    lastUpdated: '2025-07-12',
-    relatedGuides: ['songdo-shopping-guide', 'songdo-culture-guide'],
-    readingTime: 12,
+    lastUpdated: '2025-07-20',
+    relatedGuides: ['songdo-shopping-complete-guide', 'songdo-culture-guide', 'songdo-moving-checklist'],
+    readingTime: 28,
     difficulty: 'easy',
-    tags: ['맛집', '음식', '카페', '레스토랑'],
+    tags: ['맛집', '음식', '카페', '레스토랑', '가성비', '데이트', '가족식사', '점심', '저녁', '실시간검증'],
     featured: true
   },
   {
-    slug: 'songdo-shopping-guide',
-    title: '송도 쇼핑 가이드',
-    description: '트리플스트리트부터 프리미엄 아울렛까지, 송도의 모든 쇼핑 정보를 정리했습니다.',
-    keywords: ['송도 쇼핑', '트리플스트리트', '현대프리미엄아울렛', '송도 쇼핑몰', '센트럴파크 쇼핑', '송도 마트', '송도 편의시설'],
+    slug: 'songdo-shopping-complete-guide',
+    title: '송도 쇼핑 완벽 가이드',
+    description: '2025년 송도국제도시 쇼핑의 모든 것! 트리플스트리트∙현대아울렛∙코스트코까지 층별∙브랜드별 완벽 정리와 할인 정보∙쇼핑 전략을 담은 종합 가이드입니다.',
+    keywords: ['송도 쇼핑', '트리플스트리트', '현대프리미엄아울렛', '코스트코 송도', '송도 쇼핑몰', '센트럴파크 쇼핑', '송도 브랜드', '송도 할인', '쇼핑 전략', '송도 마트'],
     content: '',
     category: 'lifestyle',
-    lastUpdated: '2025-07-12',
-    relatedGuides: ['songdo-restaurant-guide', 'songdo-culture-guide'],
-    readingTime: 10,
+    lastUpdated: '2025-07-20',
+    relatedGuides: ['songdo-restaurant-complete-guide', 'songdo-culture-guide', 'songdo-transportation-complete-guide'],
+    readingTime: 18,
     difficulty: 'easy',
-    tags: ['쇼핑', '쇼핑몰', '아울렛', '편의시설'],
+    tags: ['쇼핑', '쇼핑몰', '아울렛', '브랜드', '할인', '코스트코', '편의시설'],
     featured: true
   },
   {
     slug: 'songdo-culture-guide',
-    title: '송도 문화생활 가이드',
-    description: '송도국제도시의 공연, 전시, 여가활동 정보를 완벽 정리한 문화생활 가이드입니다.',
-    keywords: ['송도 문화생활', '송도컨벤시아', '센트럴파크 공연', '송도 전시', '송도 공원', '송도 여가', '송도 축제', '송도 영화관'],
+    title: '송도 문화생활 완벽 가이드',
+    description: '2025년 송도국제도시 문화생활의 모든 것! 송도컨벤시아∙아트센터인천∙트라이볼 전시까지 실시간 검증된 공연∙전시∙축제 정보와 할인 혜택을 담은 완벽 가이드입니다.',
+    keywords: ['송도 문화생활', '송도컨벤시아', '아트센터인천', '트라이볼 전시', 'CGV 송도', '송도 공연', '송도 전시', '송도 축제', '달빛축제공원', '인천일러스트코리아'],
     content: '',
     category: 'lifestyle',
-    lastUpdated: '2025-07-12',
-    relatedGuides: ['songdo-restaurant-guide', 'songdo-shopping-guide', 'songdo-park-guide'],
-    readingTime: 15,
-    difficulty: 'medium',
-    tags: ['문화', '공연', '전시', '여가활동'],
+    lastUpdated: '2025-07-20',
+    relatedGuides: ['songdo-restaurant-complete-guide', 'songdo-shopping-complete-guide', 'songdo-park-guide'],
+    readingTime: 16,
+    difficulty: 'easy',
+    tags: ['문화', '공연', '전시', '축제', '영화', '도서관', '예술', '문화시설'],
     featured: true
   },
   {
@@ -234,20 +234,6 @@ export const STATIC_GUIDES: GuideContent[] = [
     }
   },
   {
-    slug: 'songdo-childcare-guide',
-    title: '송도 육아 완벽 가이드',
-    description: '송도국제도시의 어린이집, 유치원, 놀이시설부터 의료진까지, 아이와 함께 살기 좋은 송도 육아 정보를 완벽 정리했습니다.',
-    keywords: ['송도 육아', '송도 어린이집', '송도 유치원', '송도 놀이시설', '송도 키즈카페', '송도 소아과', '송도 아이', '송도 육아 정보'],
-    content: '',
-    category: 'lifestyle',
-    lastUpdated: '2025-07-15',
-    relatedGuides: ['songdo-park-guide', 'songdo-shopping-guide', 'songdo-restaurant-guide'],
-    readingTime: 15,
-    difficulty: 'easy',
-    tags: ['육아', '어린이집', '유치원', '놀이시설', '의료', '아이', '가족'],
-    featured: true
-  },
-  {
     slug: 'songdo-realestate-investment-guide',
     title: '송도 부동산 투자 완벽 가이드',
     description: '2025년 송도국제도시 부동산 시장 완벽 분석! 실거래가 데이터부터 GTX-B 호재까지, 신뢰할 수 있는 정보로 송도 부동산 투자의 모든 것을 담았습니다.',
@@ -273,6 +259,34 @@ export const STATIC_GUIDES: GuideContent[] = [
     readingTime: 20,
     difficulty: 'easy',
     tags: ['교통', '지하철', '버스', '공항', '대중교통', '교통카드', '시간표'],
+    featured: true
+  },
+  {
+    slug: 'songdo-apartment-analysis-guide',
+    title: '송도 아파트 단지별 완벽 분석 가이드',
+    description: '2025년 송도국제도시 주요 아파트 단지별 상세 분석! 더샵, 웰카운티, 푸르지오 등 실거래가부터 장단점까지 투자 전 필수 정보를 완벽 정리했습니다.',
+    keywords: ['송도 아파트', '송도 아파트 단지', '더샵 퍼스트월드', '웰카운티', '센트럴파크 푸르지오', '송도 실거래가', '송도 아파트 투자', '랜드마크시티', '송도 주거 분석'],
+    content: '',
+    category: 'realestate',
+    lastUpdated: '2025-07-19',
+    relatedGuides: ['songdo-realestate-investment-guide', 'songdo-moving-checklist', 'songdo-transportation-complete-guide'],
+    readingTime: 30,
+    difficulty: 'medium',
+    tags: ['아파트', '단지분석', '실거래가', '투자', '주거', '장단점', '입지분석'],
+    featured: true
+  },
+  {
+    slug: 'songdo-childcare-complete-guide',
+    title: '송도 육아 완벽 가이드',
+    description: '2025년 송도국제도시 육아의 모든 것! 어린이집∙유치원 입학부터 키즈카페∙체험시설∙의료진까지, 송도에서 아이 키우기 완벽 가이드입니다.',
+    keywords: ['송도 육아', '송도 어린이집', '송도 유치원', '송도 키즈카페', '송도 소아과', '송도 체험학습', '센트럴파크 어린이', '송도 놀이시설', '육아 지원 정책', '유보통합포털'],
+    content: '',
+    category: 'childcare',
+    lastUpdated: '2025-07-19',
+    relatedGuides: ['songdo-moving-checklist', 'songdo-restaurant-complete-guide', 'songdo-culture-guide'],
+    readingTime: 22,
+    difficulty: 'easy',
+    tags: ['육아', '어린이집', '유치원', '키즈카페', '소아과', '놀이시설', '체험학습', '정부지원'],
     featured: true
   }
 ];
@@ -358,15 +372,16 @@ function extractHowToSteps(guide: GuideContent): HowToStep[] {
       );
     } else if (guide.slug.includes('restaurant')) {
       steps.push(
-        { name: '맛집 리스트 작성', text: '송도 지역 인기 맛집 목록 만들기' },
-        { name: '카테고리별 탐방', text: '한식, 중식, 일식, 양식 순서로 방문하기' },
-        { name: '리뷰 작성', text: '개인 맛집 리뷰 및 평점 기록하기' }
+        { name: '맛집 지역 파악', text: '센트럴파크, 트리플스트리트 등 주요 맛집가 위치 확인하기' },
+        { name: '음식 종류별 정리', text: '한식, 중식, 일식, 양식별 추천 맛집 리스트 작성하기' },
+        { name: '가격대별 선택', text: '예산에 맞는 가성비 또는 프리미엄 맛집 선정하기' },
+        { name: '예약 및 방문', text: '필요한 경우 예약 후 실제 방문하여 맛집 경험하기' }
       );
     } else {
       steps.push(
-        { name: '정보 수집', text: '송도 생활 편의시설 정보 조사하기' },
-        { name: '실제 방문', text: '관심 있는 시설 직접 확인하기' },
-        { name: '생활 적응', text: '송도 라이프스타일에 맞춰 생활하기' }
+        { name: '맛집 리스트 작성', text: '송도 지역 인기 맛집 목록 만들기' },
+        { name: '카테고리별 탐방', text: '한식, 중식, 일식, 양식 순서로 방문하기' },
+        { name: '리뷰 작성', text: '개인 맛집 리뷰 및 평점 기록하기' }
       );
     }
   } else if (guide.category === 'seasonal') {
@@ -382,12 +397,21 @@ function extractHowToSteps(guide: GuideContent): HowToStep[] {
       { name: '교육 환경 적응', text: '송도 교육 시스템에 맞춰 적응하기' }
     );
   } else if (guide.category === 'realestate') {
-    steps.push(
-      { name: '시장 조사', text: '송도 부동산 시장 현황 및 트렌드 분석하기' },
-      { name: '실거래가 확인', text: '국토교통부 공식 데이터로 실거래가 조사하기' },
-      { name: '투자 전략 수립', text: '개인 상황에 맞는 투자 계획 세우기' },
-      { name: '물건 선택', text: '조건에 맞는 부동산 선택 및 계약하기' }
-    );
+    if (guide.slug.includes('apartment-analysis')) {
+      steps.push(
+        { name: '단지별 정보 수집', text: '송도 주요 아파트 단지 기본 정보 조사하기' },
+        { name: '실거래가 비교 분석', text: '단지별 최근 실거래가 및 시세 비교하기' },
+        { name: '장단점 분석', text: '각 단지의 입지, 시설, 교통 등 장단점 파악하기' },
+        { name: '투자 결정', text: '개인 상황에 맞는 최적 단지 선택하기' }
+      );
+    } else {
+      steps.push(
+        { name: '시장 조사', text: '송도 부동산 시장 현황 및 트렌드 분석하기' },
+        { name: '실거래가 확인', text: '국토교통부 공식 데이터로 실거래가 조사하기' },
+        { name: '투자 전략 수립', text: '개인 상황에 맞는 투자 계획 세우기' },
+        { name: '물건 선택', text: '조건에 맞는 부동산 선택 및 계약하기' }
+      );
+    }
   } else if (guide.category === 'transportation') {
     steps.push(
       { name: '교통편 조사', text: '송도 지하철, 버스, 공항 연결편 파악하기' },

@@ -83,7 +83,7 @@ export async function GET(
       { 
         success: false, 
         error: 'Internal Server Error',
-        details: process.env.NODE_ENV === 'development' ? error.message : undefined
+        details: process.env.NODE_ENV === 'development' ? (error instanceof Error ? error.message : String(error)) : undefined
       },
       { status: 500 }
     );

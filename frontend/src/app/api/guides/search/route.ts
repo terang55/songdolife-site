@@ -42,7 +42,7 @@ function calculateRelevanceScore(guide: any, searchTerms: string[]): number {
     }
     
     // 키워드에서 발견: 높은 점수
-    normalizedKeywords.forEach(keyword => {
+    normalizedKeywords.forEach((keyword: string) => {
       if (keyword.includes(normalizedTerm)) {
         score += 8;
         if (keyword === normalizedTerm) score += 12;
@@ -50,7 +50,7 @@ function calculateRelevanceScore(guide: any, searchTerms: string[]): number {
     });
     
     // 태그에서 발견: 중간 점수
-    normalizedTags.forEach(tag => {
+    normalizedTags.forEach((tag: string) => {
       if (tag.includes(normalizedTerm)) {
         score += 5;
         if (tag === normalizedTerm) score += 7;
@@ -199,7 +199,7 @@ export async function GET(request: NextRequest) {
       { 
         success: false, 
         error: 'Search failed',
-        details: process.env.NODE_ENV === 'development' ? error.message : undefined
+        details: process.env.NODE_ENV === 'development' ? (error instanceof Error ? error.message : String(error)) : undefined
       },
       { status: 500 }
     );

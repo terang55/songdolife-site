@@ -454,7 +454,7 @@ export function generateGuideMetadata(guide: GuideContent): GuideMetadata {
     },
     structuredData: {
       '@context': 'https://schema.org',
-      '@type': ['Article', 'CreativeWork'],
+      '@type': 'Article',
       headline: guide.title,
       name: guide.title,
       description: guide.description,

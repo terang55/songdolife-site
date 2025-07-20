@@ -262,17 +262,17 @@ export const STATIC_GUIDES: GuideContent[] = [
     featured: true
   },
   {
-    slug: 'songdo-apartment-analysis-guide',
-    title: '송도 아파트 단지별 완벽 분석 가이드',
-    description: '2025년 송도국제도시 주요 아파트 단지별 상세 분석! 더샵, 웰카운티, 푸르지오 등 실거래가부터 장단점까지 투자 전 필수 정보를 완벽 정리했습니다.',
-    keywords: ['송도 아파트', '송도 아파트 단지', '더샵 퍼스트월드', '웰카운티', '센트럴파크 푸르지오', '송도 실거래가', '송도 아파트 투자', '랜드마크시티', '송도 주거 분석'],
+    slug: 'songdo-district-comparison-complete-2025',
+    title: '송도 공구별 특징 완벽 비교 가이드 2025',
+    description: '송도 1-11공구 완벽 분석! 학군, 교통, 조망, 투자가치를 공구별로 상세 비교한 MCP 검증 완료 가이드입니다. 웰카운티, 더샵, 푸르지오 등 주요 단지 정보 포함.',
+    keywords: ['송도 공구별 특징', '송도 1공구', '송도 2공구', '송도 3공구', '송도 공구 비교', '송도 학군', '송도 교통', '송도 아파트 공구', '센트럴파크 조망', '송도 투자'],
     content: '',
     category: 'realestate',
-    lastUpdated: '2025-07-19',
-    relatedGuides: ['songdo-realestate-investment-guide', 'songdo-moving-checklist', 'songdo-transportation-complete-guide'],
-    readingTime: 30,
+    lastUpdated: '2025-07-20',
+    relatedGuides: ['songdo-the-sharp-central-park-2025', 'songdo-wellcounty-vs-thesharp', 'songdo-realestate-investment-guide'],
+    readingTime: 35,
     difficulty: 'medium',
-    tags: ['아파트', '단지분석', '실거래가', '투자', '주거', '장단점', '입지분석'],
+    tags: ['공구별특징', '학군비교', '교통접근성', '투자분석', '조망권', '지역특성', 'MCP검증'],
     featured: true
   },
   {
@@ -287,6 +287,21 @@ export const STATIC_GUIDES: GuideContent[] = [
     readingTime: 22,
     difficulty: 'easy',
     tags: ['육아', '어린이집', '유치원', '키즈카페', '소아과', '놀이시설', '체험학습', '정부지원'],
+    featured: true
+  },
+  // 2025년 7월 MCP 검증 완료 가이드들
+  {
+    slug: 'songdo-mart-complete-comparison-2025',
+    title: '송도 대형마트 완벽 비교 가이드 2025',
+    description: '송도 코스트코, 홈플러스, 롯데마트 등 6개 대형마트의 운영시간, 가격, 할인혜택, 접근성을 완벽 비교한 현지인 필수 가이드입니다.',
+    keywords: ['송도 마트', '송도 코스트코', '송도 홈플러스', '송도 롯데마트', '송도 대형마트 비교', '송도 쇼핑', '마트 할인혜택', '송도 장보기'],
+    content: '',
+    category: 'lifestyle',
+    lastUpdated: '2025-07-20',
+    relatedGuides: ['songdo-shopping-complete-guide', 'songdo-restaurant-complete-guide', 'songdo-moving-checklist'],
+    readingTime: 25,
+    difficulty: 'easy',
+    tags: ['마트비교', '코스트코', '홈플러스', '롯데마트', '쇼핑가이드', '할인혜택', '가격비교', '접근성'],
     featured: true
   }
 ];

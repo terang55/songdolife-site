@@ -248,4 +248,174 @@ export function generateBreadcrumbSchema(crumbs: Array<{ name: string; path: str
       item: `${BASE_URL}${c.path}`
     }))
   };
+}
+
+// Review 구조화 데이터 생성 함수
+export function generateReviewSchema(review: {
+  itemName: string;
+  reviewBody: string;
+  ratingValue: number;
+  bestRating?: number;
+  worstRating?: number;
+  author: string;
+  datePublished: string;
+  itemType?: string;
+}) {
+  return generateStructuredData('Review', {
+    itemReviewed: {
+      '@type': review.itemType || 'LocalBusiness',
+      name: review.itemName,
+      address: {
+        '@type': 'PostalAddress',
+        addressRegion: '인천광역시',
+        addressLocality: '연수구 송도동'
+      }
+    },
+    reviewRating: {
+      '@type': 'Rating',
+      ratingValue: review.ratingValue,
+      bestRating: review.bestRating || 5,
+      worstRating: review.worstRating || 1
+    },
+    author: {
+      '@type': 'Person',
+      name: review.author
+    },
+    reviewBody: review.reviewBody,
+    datePublished: review.datePublished,
+    publisher: {
+      '@type': 'Organization',
+      name: '송도라이프'
+    }
+  });
+}
+
+// Event 구조화 데이터 생성 함수
+export function generateEventSchema(event: {
+  name: string;
+  description: string;
+  startDate: string;
+  endDate?: string;
+  location: {
+    name: string;
+    address?: string;
+  };
+  organizer?: string;
+  eventStatus?: 'EventScheduled' | 'EventCancelled' | 'EventPostponed' | 'EventRescheduled';
+  eventAttendanceMode?: 'OfflineEventAttendanceMode' | 'OnlineEventAttendanceMode' | 'MixedEventAttendanceMode';
+  image?: string;
+  offers?: {
+    price: string;
+    priceCurrency: string;
+    availability: string;
+  };
+}) {
+  return generateStructuredData('Event', {
+    name: event.name,
+    description: event.description,
+    startDate: event.startDate,
+    endDate: event.endDate || event.startDate,
+    eventStatus: `https://schema.org/${event.eventStatus || 'EventScheduled'}`,
+    eventAttendanceMode: `https://schema.org/${event.eventAttendanceMode || 'OfflineEventAttendanceMode'}`,
+    location: {
+      '@type': 'Place',
+      name: event.location.name,
+      address: {
+        '@type': 'PostalAddress',
+        addressRegion: '인천광역시',
+        addressLocality: '연수구',
+        streetAddress: event.location.address || '송도동'
+      },
+      geo: {
+        '@type': 'GeoCoordinates',
+        latitude: 37.3894,
+        longitude: 126.7317
+      }
+    },
+    organizer: {
+      '@type': 'Organization',
+      name: event.organizer || '송도라이프',
+      url: BASE_URL
+    },
+    image: event.image || `${BASE_URL}/og-image.jpg`,
+    offers: event.offers ? {
+      '@type': 'Offer',
+      price: event.offers.price,
+      priceCurrency: event.offers.priceCurrency,
+      availability: `https://schema.org/${event.offers.availability}`
+    } : undefined
+  });
+}
+
+// 송도 지역 특화 FAQ 구조화 데이터
+export function generateSongdoFAQSchema() {
+  const songdoFAQs = [
+    {
+      question: "송도국제도시는 어디에 위치하나요?",
+      answer: "송도국제도시는 인천광역시 연수구 송도동에 위치한 계획도시입니다. 인천국제공항에서 차로 15분, 서울 강남에서 1시간 거리에 있습니다."
+    },
+    {
+      question: "송도 센트럴파크는 무엇인가요?",
+      answer: "센트럴파크는 송도국제도시의 중심에 위치한 대규모 공원으로, 해수를 이용한 인공호수와 다양한 문화시설이 있습니다. 수상택시, 사슴농장, 음악분수 등을 즐길 수 있습니다."
+    },
+    {
+      question: "송도 지하철 노선은 어떻게 되나요?",
+      answer: "송도는 인천지하철 1호선이 지나가며, 국제업무지구역, 센트럴파크역, 인천대입구역이 송도 지역 내 주요 역입니다. 2024년부터 GTX-B 노선도 건설 중입니다."
+    },
+    {
+      question: "송도에는 어떤 쇼핑시설이 있나요?",
+      answer: "트리플스트리트, 현대프리미엄아울렛 송도점, 코스트코 송도점 등 대형 쇼핑시설과 더불어 다양한 맛집과 카페가 집중되어 있습니다."
+    },
+    {
+      question: "송도 부동산 시세는 어떤가요?",
+      answer: "송도는 계획도시 특성상 신축 아파트가 많으며, 단지별로 다양한 가격대를 형성하고 있습니다. 정확한 시세는 국토교통부 실거래가 공개시스템에서 확인할 수 있습니다."
+    }
+  ];
+
+  return generateStructuredData('FAQPage', {
+    mainEntity: songdoFAQs.map(faq => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer
+      }
+    }))
+  });
+}
+
+// 송도 지역 비즈니스 aggregate rating 구조화 데이터
+export function generateAggregateRatingSchema(business: {
+  name: string;
+  ratingValue: number;
+  reviewCount: number;
+  bestRating?: number;
+  worstRating?: number;
+}) {
+  return generateStructuredData('LocalBusiness', {
+    name: business.name,
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: business.ratingValue,
+      reviewCount: business.reviewCount,
+      bestRating: business.bestRating || 5,
+      worstRating: business.worstRating || 1
+    },
+    address: {
+      '@type': 'PostalAddress',
+      addressCountry: 'KR',
+      addressRegion: '인천광역시',
+      addressLocality: '연수구',
+      streetAddress: '송도동'
+    },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: 37.3894,
+      longitude: 126.7317
+    },
+    areaServed: {
+      '@type': 'Place',
+      name: '인천광역시 연수구 송도동'
+    }
+  });
 } 

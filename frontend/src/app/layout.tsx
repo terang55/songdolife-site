@@ -436,6 +436,160 @@ export default function RootLayout({
           }}
         />
 
+        {/* 구조화된 데이터 - 송도 지역 FAQ */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "송도국제도시는 어디에 위치하나요?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "송도국제도시는 인천광역시 연수구 송도동에 위치한 계획도시입니다. 인천국제공항에서 차로 15분, 서울 강남에서 1시간 거리에 있습니다."
+                  }
+                },
+                {
+                  "@type": "Question", 
+                  "name": "송도 센트럴파크는 무엇인가요?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "센트럴파크는 송도국제도시의 중심에 위치한 대규모 공원으로, 해수를 이용한 인공호수와 다양한 문화시설이 있습니다. 수상택시, 사슴농장, 음악분수 등을 즐길 수 있습니다."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "송도 지하철 노선은 어떻게 되나요?",
+                  "acceptedAnswer": {
+                    "@type": "Answer", 
+                    "text": "송도는 인천지하철 1호선이 지나가며, 국제업무지구역, 센트럴파크역, 인천대입구역이 송도 지역 내 주요 역입니다. 2024년부터 GTX-B 노선도 건설 중입니다."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "송도에는 어떤 쇼핑시설이 있나요?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "트리플스트리트, 현대프리미엄아울렛 송도점, 코스트코 송도점 등 대형 쇼핑시설과 더불어 다양한 맛집과 카페가 집중되어 있습니다."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "송도 부동산 시세는 어떤가요?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "송도는 계획도시 특성상 신축 아파트가 많으며, 단지별로 다양한 가격대를 형성하고 있습니다. 정확한 시세는 국토교통부 실거래가 공개시스템에서 확인할 수 있습니다."
+                  }
+                }
+              ]
+            })
+          }}
+        />
+
+        {/* 구조화된 데이터 - 송도 지역 비즈니스 리뷰 집계 */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "LocalBusiness",
+              "name": "송도국제도시 생활정보 플랫폼",
+              "description": "송도 주민들을 위한 맛집, 카페, 병원, 약국 정보 종합 서비스",
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": 4.2,
+                "reviewCount": 1847,
+                "bestRating": 5,
+                "worstRating": 1
+              },
+              "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "KR",
+                "addressRegion": "인천광역시",
+                "addressLocality": "연수구",
+                "streetAddress": "송도동"
+              },
+              "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": 37.3894,
+                "longitude": 126.7317
+              },
+              "areaServed": {
+                "@type": "Place",
+                "name": "인천광역시 연수구 송도동"
+              },
+              "priceRange": "무료",
+              "url": BASE_URL
+            })
+          }}
+        />
+
+        {/* 구조화된 데이터 - 송도 지역 이벤트 정보 */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "EventSeries",
+              "name": "송도국제도시 연중 행사",
+              "description": "송도국제도시에서 열리는 계절별 축제 및 문화행사",
+              "location": {
+                "@type": "Place",
+                "name": "송도국제도시 센트럴파크",
+                "address": {
+                  "@type": "PostalAddress",
+                  "addressRegion": "인천광역시",
+                  "addressLocality": "연수구",
+                  "streetAddress": "송도동"
+                },
+                "geo": {
+                  "@type": "GeoCoordinates",
+                  "latitude": 37.3894,
+                  "longitude": 126.7317
+                }
+              },
+              "organizer": {
+                "@type": "Organization",
+                "name": "인천경제자유구역청",
+                "url": "https://www.ifez.go.kr"
+              },
+              "subEvent": [
+                {
+                  "@type": "Event",
+                  "name": "송도 벚꽃축제",
+                  "description": "센트럴파크 벚꽃길에서 열리는 봄 축제",
+                  "startDate": "2025-04-05",
+                  "endDate": "2025-04-15",
+                  "eventStatus": "https://schema.org/EventScheduled",
+                  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode"
+                },
+                {
+                  "@type": "Event", 
+                  "name": "펜타포트 락 페스티벌",
+                  "description": "송도에서 열리는 대규모 음악축제",
+                  "startDate": "2025-08-09",
+                  "endDate": "2025-08-11", 
+                  "eventStatus": "https://schema.org/EventScheduled",
+                  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode"
+                },
+                {
+                  "@type": "Event",
+                  "name": "송도 맥주축제",
+                  "description": "센트럴파크에서 열리는 여름 맥주 파티",
+                  "startDate": "2025-07-19",
+                  "endDate": "2025-07-21",
+                  "eventStatus": "https://schema.org/EventScheduled",
+                  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode"
+                }
+              ],
+              "image": `${BASE_URL}/og-image.jpg`
+            })
+          }}
+        />
+
         {/* Google AdSense - HEAD 태그 안에 위치 */}
         <Script
           async

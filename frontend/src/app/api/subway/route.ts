@@ -1,4 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { withCache, createCacheKey } from '@/lib/api-cache';
+import { 
+  createSuccessResponse, 
+  createInternalError, 
+  createValidationError,
+  validateRequiredParams 
+} from '@/lib/api-response';
 
 interface TrainInfo {
   station: string;
@@ -26,21 +33,36 @@ const SUBWAY_API_KEY = process.env.SEOUL_OPEN_API_KEY;
 
 export async function GET(request: NextRequest) {
   try {
+    const searchParams = request.nextUrl.searchParams;
+    const stationParam = searchParams.get('station');
+    
+    // 필수 파라미터 검증
+    const missingParams = validateRequiredParams({ station: stationParam }, ['station']);
+    if (missingParams.length > 0) {
+      return createValidationError(`필수 파라미터가 누락되었습니다: ${missingParams.join(', ')}`);
+    }
+
+    // 캐시 키 생성
+    const cacheKey = createCacheKey('subway', { station: stationParam });
+
+    // 1분 캐시로 실시간성 유지
+    return await withCache(cacheKey, async () => {
+      return await fetchSubwayData(stationParam!);
+    }, 1);
+
+  } catch (error) {
+    console.error('🚇 지하철 API 오류:', error);
+    return createInternalError(error as Error, '지하철 정보 조회');
+  }
+}
+
+async function fetchSubwayData(stationParam: string): Promise<NextResponse> {
+  try {
     // 환경변수 디버깅
     console.log('🔧 환경변수 디버깅:');
     console.log('  - SEOUL_OPEN_API_KEY:', process.env.SEOUL_OPEN_API_KEY ? 'EXISTS' : 'NOT_FOUND');
     console.log('  - NODE_ENV:', process.env.NODE_ENV);
     console.log('  - 전체 env 키들:', Object.keys(process.env).filter(key => key.includes('SEOUL')));
-    
-    const searchParams = request.nextUrl.searchParams;
-    const stationParam = searchParams.get('station');
-    
-    if (!stationParam) {
-      return NextResponse.json({
-        success: false,
-        error: '역명이 필요합니다.'
-      }, { status: 400 });
-    }
 
     console.log('🚇 요청된 역명:', stationParam);
     console.log('🔑 API 키 상태:', SUBWAY_API_KEY ? `로드됨 (${SUBWAY_API_KEY.substring(0, 10)}...)` : '❌ 로드 실패');
@@ -141,12 +163,9 @@ export async function GET(request: NextRequest) {
         if (trains.length > 0) {
           console.log('✅ 실시간 데이터 파싱 완료:', trains);
           
-          return NextResponse.json({
-            success: true,
-            data: {
-              trains,
-              note: '실시간 데이터'
-            }
+          return createSuccessResponse({
+            trains,
+            note: '실시간 데이터'
           });
         }
         
@@ -159,22 +178,13 @@ export async function GET(request: NextRequest) {
     // API 키가 없거나 실패한 경우 더미 데이터 반환
     console.log('🚇 더미 데이터 반환');
     
-    return NextResponse.json({
-      success: true,
-      data: {
-        trains: dummyTrainData,
-        note: '테스트 데이터 - 현재는 지하철 정보가 없습니다'
-      }
+    return createSuccessResponse({
+      trains: dummyTrainData,
+      note: '테스트 데이터 - 현재는 지하철 정보가 없습니다'
     });
 
   } catch (error) {
     console.error('🚇 지하철 API 오류:', error);
-    
-    return NextResponse.json({
-      success: false,
-      error: '지하철 정보를 가져오는데 실패했습니다.',
-      data: null,
-      timestamp: new Date().toISOString()
-    }, { status: 500 });
+    throw error; // 상위 함수에서 처리
   }
 } 

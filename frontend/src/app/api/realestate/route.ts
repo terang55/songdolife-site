@@ -2,6 +2,12 @@ import { NextResponse } from 'next/server';
 import { XMLParser } from 'fast-xml-parser';
 import { NextRequest } from 'next/server';
 import { createRealEstateLogger } from '@/lib/logger';
+import { withCache, createCacheKey } from '@/lib/api-cache';
+import { 
+  createSuccessResponse, 
+  createInternalError, 
+  createValidationError
+} from '@/lib/api-response';
 
 const logger = createRealEstateLogger();
 
@@ -165,10 +171,39 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const searchParams = request.nextUrl.searchParams;
     const checkNew = searchParams.get('checkNew') === 'true';
     const limitParam = searchParams.get('limit');
-    const limit = limitParam ? parseInt(limitParam) : null; // limit 파라미터 추가
+    const limit = limitParam ? parseInt(limitParam) : null;
+
+    // 파라미터 검증
+    if (limit && (limit < 1 || limit > 1000)) {
+      return createValidationError('limit은 1-1000 범위여야 합니다.');
+    }
     
     logger.info(`부동산 API 호출 시작 (신규체크: ${checkNew}, 제한: ${limit || '없음'})`);
-    
+
+    // 캐시 키 생성
+    const cacheKey = createCacheKey('realestate', {
+      checkNew: checkNew.toString(),
+      limit: limit?.toString() || null
+    });
+
+    // 캐시 TTL 설정 (신규 체크는 5분, 일반 조회는 30분)
+    const cacheTTL = checkNew ? 5 : 30;
+
+    return await withCache(cacheKey, async () => {
+      return await processRealEstateRequest(checkNew, limit);
+    }, cacheTTL);
+
+  } catch (error) {
+    logger.error('부동산 API 오류:', error);
+    return createInternalError(error as Error, '부동산 데이터 조회');
+  }
+}
+
+async function processRealEstateRequest(
+  checkNew: boolean,
+  limit: number | null
+): Promise<NextResponse> {
+  try {
     if (checkNew) {
       logger.info('신규 거래 확인 모드 (파일 기반 비교)');
       const todayDate = getTodayDateString();
@@ -233,28 +268,27 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       const newMaxPrice = newDeals.length > 0 ? Math.max(...newDeals.map(deal => deal.price_numeric)) : 0;
       const newMinPrice = newDeals.length > 0 ? Math.min(...newDeals.map(deal => deal.price_numeric)) : 0;
 
-      return NextResponse.json({
-        success: true,
-        data: transformedNewDeals,
-        total_count: newDeals.length,
-        is_new_deals: true,
-        new_deals_count: newDeals.length,
-        comparison_info: {
-          yesterday_deals: yesterdayDeals.length,
-          today_deals: todayDeals.length,
-          yesterday_date: yesterdayDate,
-          today_date: todayDate,
-          data_source: 'file_based'
-        },
-        stats: {
-          avg_price: formatPrice(newAvgPrice),
-          max_price: formatPrice(newMaxPrice),
-          min_price: formatPrice(newMinPrice),
-          avg_price_numeric: newAvgPrice,
-          max_price_numeric: newMaxPrice,
-          min_price_numeric: newMinPrice,
-        },
-        timestamp: new Date().toISOString(),
+      return createSuccessResponse(transformedNewDeals, {
+        total: newDeals.length,
+        meta: {
+          is_new_deals: true,
+          new_deals_count: newDeals.length,
+          comparison_info: {
+            yesterday_deals: yesterdayDeals.length,
+            today_deals: todayDeals.length,
+            yesterday_date: yesterdayDate,
+            today_date: todayDate,
+            data_source: 'file_based'
+          },
+          stats: {
+            avg_price: formatPrice(newAvgPrice),
+            max_price: formatPrice(newMaxPrice),
+            min_price: formatPrice(newMinPrice),
+            avg_price_numeric: newAvgPrice,
+            max_price_numeric: newMaxPrice,
+            min_price_numeric: newMinPrice,
+          }
+        }
       });
       
     } else {

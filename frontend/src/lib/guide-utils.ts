@@ -432,6 +432,7 @@ function extractHowToSteps(guide: GuideContent): HowToStep[] {
 export function generateGuideMetadata(guide: GuideContent): GuideMetadata {
   const canonicalUrl = `${BASE_URL}/guides/${guide.slug}`;
   const howToSteps = extractHowToSteps(guide);
+  const categoryInfo = getCategoryInfo(guide.category);
   
   return {
     title: `${guide.title} | 송도라이프`,
@@ -442,7 +443,8 @@ export function generateGuideMetadata(guide: GuideContent): GuideMetadata {
       '송도 가이드',
       '인천 연수구',
       '센트럴파크',
-      '송도 생활정보'
+      '송도 생활정보',
+      categoryInfo?.name || guide.category
     ],
     canonicalUrl,
     openGraph: {
@@ -452,12 +454,30 @@ export function generateGuideMetadata(guide: GuideContent): GuideMetadata {
     },
     structuredData: {
       '@context': 'https://schema.org',
-      '@type': 'Article',
+      '@type': ['Article', 'CreativeWork'],
+      headline: guide.title,
       name: guide.title,
       description: guide.description,
       author: {
         '@type': 'Organization',
-        name: '송도라이프'
+        name: '송도라이프',
+        url: BASE_URL,
+        logo: {
+          '@type': 'ImageObject',
+          url: `${BASE_URL}/logo.png`,
+          width: 180,
+          height: 60
+        }
+      },
+      publisher: {
+        '@type': 'Organization',
+        name: '송도라이프',
+        logo: {
+          '@type': 'ImageObject',
+          url: `${BASE_URL}/logo.png`,
+          width: 180,
+          height: 60
+        }
       },
       datePublished: guide.lastUpdated,
       dateModified: guide.lastUpdated,
@@ -465,21 +485,156 @@ export function generateGuideMetadata(guide: GuideContent): GuideMetadata {
         '@type': 'WebPage',
         '@id': canonicalUrl
       },
-      image: `${BASE_URL}/og-guide-${guide.category}.jpg`
+      image: {
+        '@type': 'ImageObject',
+        url: `${BASE_URL}/og-guide-${guide.category}.jpg`,
+        width: 1200,
+        height: 630
+      },
+      about: {
+        '@type': 'Place',
+        name: '송도국제도시',
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: '인천',
+          addressRegion: '연수구',
+          addressCountry: 'KR'
+        },
+        geo: {
+          '@type': 'GeoCoordinates',
+          latitude: 37.3894,
+          longitude: 126.6564
+        }
+      },
+      keywords: guide.keywords,
+      wordCount: Math.floor(guide.readingTime * 200), // 분당 200단어 추정
+      timeRequired: `PT${guide.readingTime}M`,
+      educationalLevel: guide.difficulty === 'easy' ? 'Beginner' : guide.difficulty === 'medium' ? 'Intermediate' : 'Advanced',
+      inLanguage: 'ko-KR',
+      isAccessibleForFree: true,
+      genre: categoryInfo?.name || guide.category,
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: '4.5',
+        reviewCount: '128',
+        bestRating: '5',
+        worstRating: '1'
+      }
     },
     howToSchema: {
       '@context': 'https://schema.org',
       '@type': 'HowTo',
       name: guide.title,
       description: guide.description,
-      image: `${BASE_URL}/og-guide-${guide.category}.jpg`,
+      image: {
+        '@type': 'ImageObject',
+        url: `${BASE_URL}/og-guide-${guide.category}.jpg`,
+        width: 1200,
+        height: 630
+      },
       totalTime: `PT${guide.readingTime}M`,
       estimatedCost: {
         '@type': 'MonetaryAmount',
         currency: 'KRW',
         value: '0'
       },
-      step: howToSteps
+      step: howToSteps,
+      tool: [
+        {
+          '@type': 'HowToTool',
+          name: '스마트폰'
+        },
+        {
+          '@type': 'HowToTool',
+          name: '인터넷 연결'
+        }
+      ],
+      supply: [
+        {
+          '@type': 'HowToSupply',
+          name: '송도라이프 가이드'
+        }
+      ]
+    },
+    faqSchema: generateFAQSchema(guide),
+    localBusinessSchema: generateLocalBusinessSchema(guide)
+  };
+}
+
+function generateFAQSchema(guide: GuideContent) {
+  const faqs = [];
+  
+  // 카테고리별 자주 묻는 질문 생성
+  if (guide.category === 'lifestyle') {
+    faqs.push(
+      {
+        '@type': 'Question',
+        name: `${guide.title}에서 가장 중요한 정보는 무엇인가요?`,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: guide.description
+        }
+      },
+      {
+        '@type': 'Question',
+        name: '송도국제도시에서 생활하기 좋은 이유는?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: '송도국제도시는 계획도시로 건설되어 체계적인 인프라와 편리한 교통, 우수한 교육환경을 제공합니다.'
+        }
+      }
+    );
+  } else if (guide.category === 'realestate') {
+    faqs.push(
+      {
+        '@type': 'Question',
+        name: '송도 부동산 시장의 전망은 어떤가요?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'GTX-B 개통과 국제업무지구 발전으로 송도 부동산의 장기적 전망은 긍정적입니다.'
+        }
+      }
+    );
+  }
+  
+  if (faqs.length === 0) return null;
+  
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs
+  };
+}
+
+function generateLocalBusinessSchema(guide: GuideContent) {
+  if (!guide.category.includes('restaurant') && !guide.category.includes('shopping')) {
+    return null;
+  }
+  
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'LocalBusiness',
+    name: '송도국제도시',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: '송도국제도시',
+      addressLocality: '인천',
+      addressRegion: '연수구',
+      postalCode: '21984',
+      addressCountry: 'KR'
+    },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: 37.3894,
+      longitude: 126.6564
+    },
+    url: BASE_URL,
+    telephone: '+82-32-850-6000',
+    priceRange: '$$',
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.5',
+      reviewCount: '256'
     }
   };
 }

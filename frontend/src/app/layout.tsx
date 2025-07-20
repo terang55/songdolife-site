@@ -356,12 +356,26 @@ export default function RootLayout({
                   {
                     "@type": "MedicalOrganization",
                     "name": "송도라이프 지역 병원",
-                    "description": "내과, 외과, 소아과, 치과 등 다양한 진료과목"
+                    "description": "내과, 외과, 소아과, 치과 등 다양한 진료과목",
+                    "address": {
+                      "@type": "PostalAddress",
+                      "addressCountry": "KR",
+                      "addressRegion": "인천광역시",
+                      "addressLocality": "연수구",
+                      "streetAddress": "송도동"
+                    }
                   },
                   {
                     "@type": "Pharmacy",
                     "name": "송도라이프 지역 약국",
-                    "description": "처방전 조제 및 일반의약품 판매"
+                    "description": "처방전 조제 및 일반의약품 판매",
+                    "address": {
+                      "@type": "PostalAddress",
+                      "addressCountry": "KR",
+                      "addressRegion": "인천광역시",
+                      "addressLocality": "연수구",
+                      "streetAddress": "송도동"
+                    }
                   }
                 ]
               },

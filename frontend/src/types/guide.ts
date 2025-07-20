@@ -44,40 +44,8 @@ export interface GuideMetadata {
     description: string;
     image: string;
   };
-  structuredData: {
-    '@context': string;
-    '@type': string;
-    name: string;
-    description: string;
-    author: {
-      '@type': string;
-      name: string;
-    };
-    datePublished: string;
-    dateModified: string;
-    mainEntityOfPage: {
-      '@type': string;
-      '@id': string;
-    };
-    image: string;
-  };
-  howToSchema: {
-    '@context': string;
-    '@type': string;
-    name: string;
-    description: string;
-    image: string;
-    totalTime: string;
-    estimatedCost: {
-      '@type': string;
-      currency: string;
-      value: string;
-    };
-    step: Array<{
-      '@type': string;
-      name: string;
-      text: string;
-      position: number;
-    }>;
-  };
+  structuredData: any;
+  howToSchema: any;
+  faqSchema?: any;
+  localBusinessSchema?: any;
 }

@@ -126,27 +126,6 @@ export default async function GuidePage({ params }: Props) {
         }}
       />
       
-      {metadata.faqSchema && (
-        <Script
-          id="guide-faq-schema"
-          type="application/ld+json"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(metadata.faqSchema)
-          }}
-        />
-      )}
-      
-      {metadata.localBusinessSchema && (
-        <Script
-          id="guide-localbusiness-schema"
-          type="application/ld+json"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(metadata.localBusinessSchema)
-          }}
-        />
-      )}
       
       <Script
         id="breadcrumb-ldjson"

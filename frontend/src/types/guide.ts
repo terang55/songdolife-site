@@ -20,7 +20,7 @@ export interface GuideContent {
   tags: string[];
   featured?: boolean;
   seasonal?: {
-    season: 'spring' | 'summer' | 'fall' | 'winter';
+    season: 'spring' | 'summer' | 'fall' | 'winter' | 'all';
     months: number[];
   };
   tocItems?: TocItem[];

@@ -1,0 +1,71 @@
+{
+  "cookies": [
+    {
+      "name": "SNID",
+      "value": "ABablncbmlBnCWjg9cnSQoJZDSrZy3PWEiLvur_x0aU-eXAQccpz4Wi_bdpbHWf6KIi5jokMx67RVkTskjVt_3TDNzxOUPlkn5o",
+      "domain": ".google.com",
+      "path": "/verify",
+      "expires": 1768780061.06336,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "AEC",
+      "value": "AVh_V2gOgDBROUZR3kXiog2AEeQTgoD425isxFbPf_cCgytgcIAaqxXHhQ",
+      "domain": ".google.com",
+      "path": "/",
+      "expires": 1768520860.949436,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "NID",
+      "value": "525=Cng7Gid_kfx8QhepufD9IvcZtJTltKCTpVMfZGewtZUeziOcSXVMN0nh91ebpO_gV3zNxRAxyLlgWpOLc_Ip-l-0Ze_NSqjeH9VcdW2u-HmRCh88zpOl_PSq17q_5pzTv4qiGvXz_6LZKtQyFOzuH2q4QQg9yuUDZ4SOhiWLkTur1JwNdm3ufdtw5tbC0y_24B039w0uSlzprMLdEmhqj70YgfSAC2rWeBePr9YTWFInISoegQLORuVXDOhcI2it1xkC",
+      "domain": ".google.com",
+      "path": "/",
+      "expires": 1768780060.547399,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "DV",
+      "value": "0-m5DRnAJYERMMNiN6YW-gaUcxl6ghk",
+      "domain": "www.google.com",
+      "path": "/",
+      "expires": 1753012161,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "https://www.google.com",
+      "localStorage": [
+        {
+          "name": "sb_wiz.sr_di",
+          "value": "null"
+        },
+        {
+          "name": "sb_wiz.pq_tm_hp",
+          "value": "1753011763579"
+        },
+        {
+          "name": "sb_wiz.qc",
+          "value": "53"
+        },
+        {
+          "name": "sb_wiz.sc_pq",
+          "value": ""
+        },
+        {
+          "name": "sb_wiz.pq",
+          "value": "인천신정초등학교 입학 전학구역"
+        }
+      ]
+    }
+  ]
+}

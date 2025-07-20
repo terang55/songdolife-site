@@ -1,0 +1,75 @@
+{
+  "cookies": [
+    {
+      "name": "SNID",
+      "value": "ABablncXVWzDRlyNqY0501TxnpSElqEFPdoIdtpS1ykDraj_-cGwwCSRogSos-Ra6lrqPMM83Cgq8Wfq4-G5Lw1w1LNc9JRx-g",
+      "domain": ".google.com",
+      "path": "/verify",
+      "expires": 1768779991.487343,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "AEC",
+      "value": "AVh_V2jlOh5yZmyT9ARgwu26pNo_WTDZMvzN52dyN-TrINjiy5ePkZPz7g",
+      "domain": ".google.com",
+      "path": "/",
+      "expires": 1768520792.072354,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "NID",
+      "value": "525=heGPGxEmVS5LeS1WoioVxk_9U5ERFaQ7Lf-fStMPPwBMoCdgFq8-eNXnFUsYRMT8mDSOuaO7L6v87LHAQqE6E1k2KJ5r_zV3lU7LBZJXVNToovX0WiTNodX7Z_6CdxMOu-zPFGZ-JX-XtyPAqND6_K25Ox-a-AXUhrbO12-L0-epe_HmIHVuEVVeNCu1LCV-mmIAMsvMFdOuIZLCOa3MUm_pHZLPLHYmtmrZYDW9Nbvyfl1uQF8tindYm6QxKH8ePvcA",
+      "domain": ".google.com",
+      "path": "/",
+      "expires": 1768779991.937355,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "DV",
+      "value": "Yy136KUvgwUW0J-HU_sc0eeSm715ghk",
+      "domain": "www.google.com",
+      "path": "/",
+      "expires": 1753011783,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "https://www.google.com",
+      "localStorage": [
+        {
+          "name": "sb_wiz.zpc.gws-wiz.",
+          "value": "{\"0\":[],\"1\":{\"av\":\"803844206976366758\",\"q\":\"Uj8DMz8JIrFkEk21fErEBv-Q7OQ\"}}"
+        },
+        {
+          "name": "sb_wiz.pq_tm_hp",
+          "value": "1753011761856"
+        },
+        {
+          "name": "sb_wiz.pq",
+          "value": "송도 초등학교 학군 2025"
+        },
+        {
+          "name": "sb_wiz.sr_di",
+          "value": "null"
+        },
+        {
+          "name": "sb_wiz.qc",
+          "value": "55"
+        },
+        {
+          "name": "sb_wiz.sc_pq",
+          "value": ""
+        }
+      ]
+    }
+  ]
+}

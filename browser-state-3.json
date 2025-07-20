@@ -1,0 +1,71 @@
+{
+  "cookies": [
+    {
+      "name": "SNID",
+      "value": "ABablne2CkmKrQ4ldy3KtcsUpP55o4x6g1yateIbylLJ_EvVygfLmnYKblv6Ec9tIwycNXC8z6rA8zjps0fU6C4TkShY3RZWmQ",
+      "domain": ".google.com",
+      "path": "/verify",
+      "expires": 1768814662.840993,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "AEC",
+      "value": "AVh_V2gkPpvDdlCm2M0NoFo4aRQlAXIhK-_qZeBExksWRXuygHzblOjuieI",
+      "domain": ".google.com",
+      "path": "/",
+      "expires": 1768555463.126518,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "NID",
+      "value": "525=MsJeM0As6horVb8CrVH0Ka39DfBCNxuFSFxLvchESYeME8trVgukipdx2toUxrjEQPfWhNIqSEBWEESV3j7bACOmGBTPnyP7EjF_JqOTFKmSf1nI07dQuL4PhSu2kp20FpM3e3Ipzqj3_nwTsLpZKt9B_IJ-TAi3tunGo4dfMQ6fWzFCD6E56HN4qzanZA0H7EG8MdVgR8LSDuvkXZivMgB71SQCu-BGrKRWi457Rf6DFBVkJEuDzH1I8bJzxQnTwaBj",
+      "domain": ".google.com",
+      "path": "/",
+      "expires": 1768814662.23692,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "DV",
+      "value": "wzRwcamxBAsd0J-HU_sc0efyyr15ghk",
+      "domain": "www.google.com",
+      "path": "/",
+      "expires": 1753011784,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "https://www.google.com",
+      "localStorage": [
+        {
+          "name": "sb_wiz.sr_di",
+          "value": "null"
+        },
+        {
+          "name": "sb_wiz.pq_tm_hp",
+          "value": "1753011763280"
+        },
+        {
+          "name": "sb_wiz.qc",
+          "value": "13"
+        },
+        {
+          "name": "sb_wiz.sc_pq",
+          "value": ""
+        },
+        {
+          "name": "sb_wiz.pq",
+          "value": "송도 중학교 고등학교 진학률"
+        }
+      ]
+    }
+  ]
+}

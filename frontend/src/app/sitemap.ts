@@ -133,7 +133,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  // 6. 개별 가이드 페이지들
+  // 6. 개별 가이드 페이지들 (새로 추가된 부동산 가이드 포함)
   const guideRoutes = STATIC_GUIDES.map(guide => ({
     url: `${baseUrl}/guides/${guide.slug}`,
     lastModified: new Date(guide.lastUpdated),

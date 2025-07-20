@@ -35,7 +35,14 @@
       "mcp__mcp-installer__install_repo_mcp_server",
       "Bash(claude mcp add:*)",
       "Bash(claude mcp:*)",
-      "Bash(timeout:*)"
+      "Bash(timeout:*)",
+      "mcp__g-search-mcp__search",
+      "Bash(git rm:*)",
+      "WebFetch(domain:blog.naver.com)",
+      "WebFetch(domain:namu.wiki)",
+      "Bash(claude --version)",
+      "WebFetch(domain:airplane-uncle.tistory.com)",
+      "WebFetch(domain:github.com)"
     ],
     "deny": []
   }

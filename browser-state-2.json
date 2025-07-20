@@ -1,0 +1,71 @@
+{
+  "cookies": [
+    {
+      "name": "SNID",
+      "value": "ABablnehliY9KwPAfez3oHL-Tt7HnihK3HmY1B1ZLVOe2POYqcGL5TSSY1zATWAhhgxm-uPU5QTW3vK6oQzAft_qdFPnQUCJrA",
+      "domain": ".google.com",
+      "path": "/verify",
+      "expires": 1768780060.363527,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "AEC",
+      "value": "AVh_V2g5hxUagdPa3-ZO7TuXLn2gReiXVt9qMlUdDnEEfAwiy-tpJo_kQT0",
+      "domain": ".google.com",
+      "path": "/",
+      "expires": 1768520860.595259,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "NID",
+      "value": "525=jNYnzXFx8_kTmDYgx3DqlBfe0cfH9kY4sQNTeMgXICjyOGSyKlWJjlGGtvzMFZYPYWVo0JUgTjtWKTTEFLr2iwvm6K-VrAOCb_1gYrw5l9VsRKFU4kVnZW_vVe2BSMHsfJbvJvRR7qiXO_sa7tflcNKyPmJ05PmZ6tFTI96Xa5zSUVlFeKSvj-MaxtMpfau5LAjV94Oe5o07DbIStpocXYkzLY82YMAFlPj1EiPjypEujCka9PHk55W0WquEO-1jgLi_",
+      "domain": ".google.com",
+      "path": "/",
+      "expires": 1768780060.494745,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "DV",
+      "value": "wyKGY5zsuDQR0J-HU_sc0efiRBl6ghk",
+      "domain": "www.google.com",
+      "path": "/",
+      "expires": 1753012160,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "https://www.google.com",
+      "localStorage": [
+        {
+          "name": "sb_wiz.sr_di",
+          "value": "GJXTutTh5JqAYBipuKrNmbO0-5EBGPu-0rXd0bzhJxiSo4SWv66hlv0BGKCzgrfN9J703gE"
+        },
+        {
+          "name": "sb_wiz.pq_tm_hp",
+          "value": "1753011762859"
+        },
+        {
+          "name": "sb_wiz.qc",
+          "value": "52"
+        },
+        {
+          "name": "sb_wiz.sc_pq",
+          "value": "송도 채드윅 국제학교 CMIS"
+        },
+        {
+          "name": "sb_wiz.pq",
+          "value": "송도 채드위 국제학교 CMIS"
+        }
+      ]
+    }
+  ]
+}

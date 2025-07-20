@@ -64,31 +64,17 @@ export const GUIDE_CATEGORIES: GuideCategory[] = [
 // 임시 정적 데이터 (향후 CMS 또는 API로 교체)
 export const STATIC_GUIDES: GuideContent[] = [
   {
-    slug: 'songdo-moving-checklist',
-    title: '송도 이사 완벽 체크리스트',
-    description: '송도국제도시로의 이사를 준비하는 모든 단계를 상세히 안내합니다.',
-    keywords: ['송도 이사', '송도 이사 체크리스트', '송도 입주', '송도 정착', '송도 생활 준비'],
+    slug: 'songdo-moving-complete-guide-2025',
+    title: '송도 이사 & 정착 완벽 가이드 2025',
+    description: '송도국제도시 이사의 모든 것! 3개월 전 준비부터 신혼부부 정착까지 단계별 체크리스트와 2025년 최신 정보로 완벽한 송도 이사 & 정착을 도와드립니다.',
+    keywords: ['송도 이사', '송도 정착', '송도 신혼부부', '이사 체크리스트', '송도 생활', '신혼집', '관공서 업무', '생활 인프라', '커뮤니티'],
     content: '',
     category: 'moving',
-    lastUpdated: '2025-07-12',
-    relatedGuides: ['songdo-newlywed-guide', 'songdo-restaurant-guide'],
-    readingTime: 10,
+    lastUpdated: '2025-07-20',
+    relatedGuides: ['songdo-childcare-complete-guide-2025', 'songdo-education-guide', 'songdo-lifestyle-complete-guide-2025'],
+    readingTime: 50,
     difficulty: 'medium',
-    tags: ['이사', '체크리스트', '정착', '생활정보'],
-    featured: true
-  },
-  {
-    slug: 'songdo-newlywed-guide',
-    title: '송도 신혼부부 완벽 정착 가이드',
-    description: '송도국제도시에서 신혼생활을 시작하는 부부를 위한 완벽 가이드입니다.',
-    keywords: ['송도 신혼집', '송도 신혼부부', '송도 신혼생활', '송도 신혼 추천', '송도 신혼 아파트'],
-    content: '',
-    category: 'moving',
-    lastUpdated: '2025-07-12',
-    relatedGuides: ['songdo-moving-checklist', 'songdo-restaurant-guide'],
-    readingTime: 8,
-    difficulty: 'medium',
-    tags: ['신혼', '생활정보', '정착', '부부'],
+    tags: ['이사완벽가이드', '정착체크리스트', '신혼부부', '관공서업무', '생활인프라', '커뮤니티', '통합가이드'],
     featured: true
   },
   {
@@ -162,75 +148,21 @@ export const STATIC_GUIDES: GuideContent[] = [
     featured: true
   },
   {
-    slug: 'songdo-spring-guide',
-    title: '송도 봄 완벽 가이드',
-    description: '송도국제도시의 봄을 만끽할 수 있는 벚꽃 명소, 축제, 나들이 코스를 완벽 정리한 가이드입니다.',
-    keywords: ['송도 봄', '송도 벚꽃', '센트럴파크 벚꽃', '달빛축제공원', '봄 축제', '봄 나들이', '수상택시', '카누', 'G타워', '트라이볼'],
+    slug: 'songdo-seasonal-complete-guide-2025',
+    title: '송도 계절별 완벽 가이드 2025',
+    description: '송도국제도시 사계절 여행의 모든 것! 봄 벚꽃부터 여름 워터파크, 가을 단풍, 겨울 일루미네이션까지 계절별 명소와 축제를 완벽 정리한 통합 가이드입니다.',
+    keywords: ['송도 계절별 여행', '송도 사계절', '송도 벚꽃', '송도 여름축제', '송도 단풍', '송도 일루미네이션', '센트럴파크 사계절', '송도 계절축제', '계절별 액티비티'],
     content: '',
     category: 'seasonal',
-    lastUpdated: '2025-07-13',
-    relatedGuides: ['songdo-park-guide', 'songdo-culture-guide', 'songdo-summer-guide'],
-    readingTime: 20,
+    lastUpdated: '2025-07-20',
+    relatedGuides: ['songdo-park-guide', 'songdo-culture-guide', 'songdo-restaurant-complete-guide'],
+    readingTime: 45,
     difficulty: 'easy',
-    tags: ['봄', '벚꽃', '축제', '나들이', '수상활동', '산책', '피크닉'],
+    tags: ['사계절여행', '계절별명소', '봄벚꽃', '여름축제', '가을단풍', '겨울일루미네이션', '통합가이드'],
     featured: true,
     seasonal: {
-      season: 'spring',
-      months: [3, 4, 5]
-    }
-  },
-  {
-    slug: 'songdo-summer-guide',
-    title: '송도 여름 완벽 가이드',
-    description: '송도국제도시 여름 축제와 수상활동, 시원한 피서지까지 완벽 정리한 여름철 가이드입니다.',
-    keywords: ['송도 여름', '펜타포트 락 페스티벌', '송도맥주축제', '센트럴파크 수상레저', '카누', '카약', '수상택시', '트리플스트리트', '현대아울렛'],
-    content: '',
-    category: 'seasonal',
-    lastUpdated: '2025-07-13',
-    relatedGuides: ['songdo-park-guide', 'songdo-culture-guide', 'songdo-spring-guide'],
-    readingTime: 25,
-    difficulty: 'medium',
-    tags: ['여름', '축제', '수상활동', '피서', '락페스티벌', '맥주축제', '쇼핑'],
-    featured: true,
-    seasonal: {
-      season: 'summer',
-      months: [6, 7, 8]
-    }
-  },
-  {
-    slug: 'songdo-autumn-guide',
-    title: '송도 가을 완벽 가이드',
-    description: '송도국제도시의 단풍 명소와 가을 야외활동, 축제 정보를 완벽 정리한 가을철 가이드입니다.',
-    keywords: ['송도 가을', '송도 단풍', '센트럴파크 단풍', '달빛공원', '해돋이공원', '자전거 투어', '조깅', '송도미래길', '가을 축제'],
-    content: '',
-    category: 'seasonal',
-    lastUpdated: '2025-07-13',
-    relatedGuides: ['songdo-park-guide', 'songdo-culture-guide', 'songdo-winter-guide'],
-    readingTime: 22,
-    difficulty: 'medium',
-    tags: ['가을', '단풍', '야외활동', '자전거', '조깅', '산책', '사진'],
-    featured: true,
-    seasonal: {
-      season: 'fall',
-      months: [9, 10, 11]
-    }
-  },
-  {
-    slug: 'songdo-winter-guide',
-    title: '송도 겨울 완벽 가이드',
-    description: '송도국제도시의 따뜻한 실내 명소와 겨울 활동, 온천 정보를 완벽 정리한 겨울철 가이드입니다.',
-    keywords: ['송도 겨울', '송도 실내 활동', '현대아울렛', '트리플스트리트', '송해온 온천', 'CGV', '찜질방', '따뜻한 카페', '겨울 쇼핑'],
-    content: '',
-    category: 'seasonal',
-    lastUpdated: '2025-07-13',
-    relatedGuides: ['songdo-shopping-guide', 'songdo-restaurant-guide', 'songdo-autumn-guide'],
-    readingTime: 24,
-    difficulty: 'easy',
-    tags: ['겨울', '실내활동', '쇼핑', '온천', '영화', '카페', '따뜻함'],
-    featured: true,
-    seasonal: {
-      season: 'winter',
-      months: [12, 1, 2]
+      season: 'all',
+      months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     }
   },
   {
@@ -276,17 +208,17 @@ export const STATIC_GUIDES: GuideContent[] = [
     featured: true
   },
   {
-    slug: 'songdo-childcare-complete-guide',
-    title: '송도 육아 완벽 가이드',
-    description: '2025년 송도국제도시 육아의 모든 것! 어린이집∙유치원 입학부터 키즈카페∙체험시설∙의료진까지, 송도에서 아이 키우기 완벽 가이드입니다.',
-    keywords: ['송도 육아', '송도 어린이집', '송도 유치원', '송도 키즈카페', '송도 소아과', '송도 체험학습', '센트럴파크 어린이', '송도 놀이시설', '육아 지원 정책', '유보통합포털'],
+    slug: 'songdo-childcare-complete-guide-2025',
+    title: '송도 육아 완벽 가이드 2025',
+    description: '송도 육아의 모든 것! 어린이집∙유치원 입소부터 키즈카페∙소아과까지 MCP 검증 완료 통합 가이드입니다. 아이사랑∙유보통합포털 신청방법과 정부지원혜택 총정리.',
+    keywords: ['송도 육아', '송도 어린이집', '송도 유치원', '송도 키즈카페', '송도 소아과', '아이사랑', '유보통합포털', '누리과정', '보육료지원', '예방접종', '아틀란티스', '키즈스케이프'],
     content: '',
     category: 'childcare',
-    lastUpdated: '2025-07-19',
-    relatedGuides: ['songdo-moving-checklist', 'songdo-restaurant-complete-guide', 'songdo-culture-guide'],
-    readingTime: 22,
-    difficulty: 'easy',
-    tags: ['육아', '어린이집', '유치원', '키즈카페', '소아과', '놀이시설', '체험학습', '정부지원'],
+    lastUpdated: '2025-07-20',
+    relatedGuides: ['songdo-education-guide', 'songdo-moving-checklist', 'songdo-restaurant-complete-guide'],
+    readingTime: 35,
+    difficulty: 'medium',
+    tags: ['육아완벽가이드', '어린이집유치원', '키즈카페', '소아과의료', '정부지원', 'MCP검증', '통합가이드'],
     featured: true
   },
   // 2025년 7월 MCP 검증 완료 가이드들

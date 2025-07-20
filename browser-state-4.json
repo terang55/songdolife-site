@@ -1,0 +1,65 @@
+{
+  "cookies": [
+    {
+      "name": "SNID",
+      "value": "ABablncxd3Z7m5B0BUi8p8-SH2NpuombOTC-bx0XKpLmB_4IZJtpyRg9sTkOjaGKvc-914R2wdPxSxgW2UTtcGiPoVMBHZUE6Ng",
+      "domain": ".google.com",
+      "path": "/verify",
+      "expires": 1768815523.956886,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "AEC",
+      "value": "AVh_V2g-09Bn6IlHDTSGril6-OltwUrwDTQkgwu2pFijgjJCbEgKdr4sLgM",
+      "domain": ".google.com",
+      "path": "/",
+      "expires": 1768556323.875268,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "NID",
+      "value": "525=Y8WpPIA5GmWWNhYS5bRzJCnUQBz5ddtpE8GfX9er0iAZ_tBcDNPkwR3otRfjpPsLuWziTeMLZESb3q-sa8hn7johit-79lvgaqq8BYCIjvVfpz9B-C3nHEvNZfsUV6NrE8C_f28C2H_Hy8rt2t-v3O8fNTEm1o8cwIjt-L1B73pPdmOhFaXScAHMbPm1HMi0Y7rcwQ8LY0c-IFo3zH8sPFmsH_kSQ2tl06LevEeZrHde8ZLnVCKyS0MJihbdoulb-xzGwQ",
+      "domain": ".google.com",
+      "path": "/",
+      "expires": 1768815523.320544,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "https://www.google.com",
+      "localStorage": [
+        {
+          "name": "sb_wiz.zpc.gws-wiz.",
+          "value": "{\"0\":[[\"꿈빛나래 키즈카페\",0,[512,308,468,357,439,650,362,394],{\"zl\":40009}],[\"인천 초등학생 키즈카페\",0,[512,308,468,357,439,650,362,394],{\"zl\":40009}],[\"인천 대형 키즈카페\",0,[512,308,468,357,439,650,362,394],{\"zl\":40009}],[\"인천 키즈카페 추천\",0,[512,308,468,357,439,650,362,394],{\"zl\":40009}],[\"인천 키즈카페 순위\",0,[512,308,468,357,439,650,362,394],{\"zl\":40009}],[\"국내 최대 키즈카페\",0,[512,308,468,357,439,650,362,394],{\"zl\":40009}],[\"연수 꿈빛나래 키즈카페\",0,[512,308,468,357,439,650,362,394],{\"zl\":40009}],[\"송도 키즈카페\",0,[512,308,468,357,439,650,362,394],{\"zl\":40009}],[\"초대형 키즈카페\",0,[512,308,468,357,439,650,362,394],{\"zl\":40009}],[\"서울 대형 키즈카페\",0,[512,308,468,357,439,650,362,394],{\"zl\":40009}]],\"1\":{\"ag\":{\"a\":{\"40009\":[\"최근 검색어와 관련이 있음\"]}},\"av\":\"2469620515145357581\",\"q\":\"GeIprhJqNxnHlrMmhbVVnONVIyw\"}}"
+        },
+        {
+          "name": "sb_wiz.pq_tm_hp",
+          "value": "1753011761900"
+        },
+        {
+          "name": "sb_wiz.pq",
+          "value": "송도 학원가 사교육 대세"
+        },
+        {
+          "name": "sb_wiz.sr_di",
+          "value": "GMuvjM7d4u7tSBiel_zLg4_s-SUY1cHejqyvl4mbARjm2sKlp9XQ8QcYssWxpoWposqjAQ"
+        },
+        {
+          "name": "sb_wiz.qc",
+          "value": "6"
+        },
+        {
+          "name": "sb_wiz.sc_pq",
+          "value": ""
+        }
+      ]
+    }
+  ]
+}

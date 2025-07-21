@@ -1,11 +1,10 @@
 {
-  "sync_time": "2025-07-21T18:28:35.071085+09:00",
+  "sync_time": "2025-07-22T05:26:13.917432+09:00",
   "total_files": 1,
-  "total_keywords": 11,
+  "total_keywords": 10,
   "keywords": [
     "송도국제도시",
     "송도국제도시 맛집",
-    "송도국제도시 아파트",
     "송도국제도시 카페",
     "인천 송도",
     "인천 송도 맛집",
@@ -19,7 +18,7 @@
     "all_platforms"
   ],
   "files": {
-    "all_platforms": "all_platforms_enhanced_news_20250721_182834.json"
+    "all_platforms": "all_platforms_enhanced_news_20250722_052613.json"
   },
   "sync_type": "latest_only"
 }

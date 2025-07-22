@@ -2,8 +2,8 @@ name: 매일 부동산 데이터 자동 수집
 
 on:
   schedule:
-    # 매일 오전 6시 (KST) = UTC 21:00 (전날) - 스크립트 내부에서 KST 기준으로 날짜 계산
-    - cron: '0 21 * * *'
+    # 매일 오전 5시 (KST) = UTC 20:00 (전날) - 스크립트 내부에서 KST 기준으로 날짜 계산
+    - cron: '0 20 * * *'
   workflow_dispatch: # 수동 실행 가능
 
 jobs:

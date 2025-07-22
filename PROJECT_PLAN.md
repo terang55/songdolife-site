@@ -5,7 +5,22 @@
 **프로젝트명**: 송도라이프 (SongdoLife)  
 **목적**: 인천 연수구 송도국제도시 주민을 위한 종합 생활정보 플랫폼  
 **타겟**: 송도국제도시 거주자 및 관심 있는 사용자  
-**수익 모델**: Google AdSense 광고 수익화
+**수익 모델**: Google AdSense 광고 수익화 (ca-pub-2592538242403472)
+
+### Service Features
+- **뉴스 큐레이션**: 플랫폼별 맞춤 키워드로 송도 관련 뉴스/블로그/유튜브 수집
+- **교통 정보**: 인천1호선 실시간 도착 정보 및 시간표
+- **부동산 정보**: 국토교통부 공식 실거래가 데이터
+- **의료 정보**: 보건복지부 기반 병원/약국 정보
+- **생활 가이드**: 7개 카테고리, 9개 테마별 가이드 (마크다운 기반)
+- **PWA 지원**: 모바일 앱 수준의 사용자 경험
+
+### Current Status (2025-07-21)
+- **총 API 엔드포인트**: 12개
+- **가이드 시스템**: 7개 카테고리, 9개 가이드
+- **SEO 최적화**: 8개 스키마 타입 구현
+- **성능 등급**: ⭐⭐⭐⭐ (4.2/5.0)
+- **기술 스택**: Next.js 15, TypeScript, Tailwind CSS 4, Python
 
 ## 🎯 **프로젝트 목표**
 
@@ -14,14 +29,19 @@
 - [x] 실시간 데이터 크롤링 시스템 구축
 - [x] SEO 최적화 구현
 - [x] PWA 지원 및 모바일 최적화
+- [x] Google AdSense 승인 및 설정 완료
+- [x] 가이드 시스템 구축 (7개 카테고리)
+- [x] 중복 제거 시스템 구현
 - [ ] 월간 방문자 1,000명 달성
-- [ ] Google AdSense 승인 및 수익화
+- [ ] 가이드 콘텐츠 확장 (20개 이상)
 
 ### 중기 목표 (3-6개월)
 - [ ] 네이버 지역 검색 상위 노출
 - [ ] 송도 관련 키워드 검색 결과 1페이지 진입
 - [ ] 월간 방문자 5,000명 달성
 - [ ] 사용자 참여형 콘텐츠 추가
+- [ ] 검색 기능 구현 (Elasticsearch 도입)
+- [ ] 데이터베이스 전환 (PostgreSQL/Supabase)
 - [ ] 모바일 앱 출시 검토
 
 ### 장기 목표 (6-12개월)
@@ -29,6 +49,8 @@
 - [ ] 월간 방문자 10,000명 달성
 - [ ] 지역 상권과의 제휴 확대
 - [ ] 프리미엄 서비스 출시
+- [ ] 실시간 모니터링 시스템 (Sentry 도입)
+- [ ] Playwright 기반 크롤링 시스템 전환
 
 ## 🏗 **기술 아키텍처**
 
@@ -38,34 +60,46 @@ frontend/
 ├── src/app/
 │   ├── layout.tsx          # 루트 레이아웃 (SEO 메타태그)
 │   ├── page.tsx            # 메인 페이지
-│   ├── api/                # API 라우트
+│   ├── guides/             # 가이드 시스템 (7개 카테고리)
+│   │   ├── [category]/     # 동적 카테고리 라우트
+│   │   └── [slug]/         # 동적 가이드 라우트
+│   ├── api/                # API 라우트 (12개 엔드포인트)
 │   │   ├── news/           # 뉴스 API
 │   │   ├── subway/         # 지하철 API
 │   │   ├── realestate/     # 부동산 API
-│   │   └── medical/        # 의료 API
+│   │   ├── medical/        # 의료 API
+│   │   ├── weather/        # 날씨 API
+│   │   └── guides/         # 가이드 API
 │   └── components/         # 재사용 컴포넌트
 ├── src/lib/
 │   ├── seo-utils.ts        # SEO 최적화 유틸리티
 │   └── siteConfig.ts       # 사이트 설정
 └── public/
     ├── data/               # 크롤링 데이터
+    ├── guides/             # 마크다운 가이드 파일
     └── sw.js              # Service Worker
 ```
 
 ### Backend (Python 크롤링 시스템)
 ```
 crawler/
-├── enhanced_crawler.py     # 메인 크롤러
-├── config.py              # 설정 및 키워드 관리
-├── remove_duplicates.py   # 중복 제거 시스템
-├── sync_to_frontend.py    # 데이터 동기화
-└── *.bat                  # 실행 배치 파일
+├── enhanced_crawler.py     # 메인 크롤러 (Selenium 기반)
+├── config.py              # 플랫폼별 키워드 설정
+├── remove_duplicates.py   # 지능형 중복 제거 (유사도 80%/70%)
+├── sync_to_frontend.py    # 데이터 동기화 매니저
+├── crawl_and_sync.bat     # 크롤링 + 동기화 배치
+└── remove_duplicates.bat  # 중복 제거 배치
 ```
 
 ### 데이터 플로우
 ```
-1. 크롤링 → 2. 중복 제거 → 3. 동기화 → 4. API 제공 → 5. 사용자 표시
+1. 크롤링 (플랫폼별 키워드) → 2. 중복 제거 (유사도 기반) → 3. 동기화 → 4. API 제공 → 5. 실시간 표시
 ```
+
+### 플랫폼별 키워드 전략
+- **뉴스**: 공식 지명 위주 ("인천 연수구 송도동", "송도국제도시")
+- **블로그**: 생활정보 위주 ("송도 맛집", "송도 카페", "송도 아파트")
+- **유튜브**: 영상 콘텐츠 적합 ("송도국제도시 맛집", "인천 송도 추천")
 
 ## 📊 **콘텐츠 전략**
 
@@ -85,19 +119,30 @@ crawler/
 - **업데이트**: 매일 자동 수집
 
 ### 4. **정보 서비스**
-- **교통**: 인천1호선 실시간 정보
-- **의료**: 병원/약국 정보
-- **부동산**: 실거래가 정보
+- **교통**: 인천1호선 실시간 도착 정보 및 시간표
+- **의료**: 보건복지부 기반 병원/약국 정보
+- **부동산**: 국토교통부 공식 실거래가 데이터
 - **날씨**: 실시간 날씨 정보
+
+### 5. **생활 가이드 (7개 카테고리)**
+- **realestate**: 부동산/주거 정보
+- **transportation**: 교통/이동 정보  
+- **lifestyle**: 일상생활/편의시설
+- **moving**: 이사/정착 가이드
+- **seasonal**: 계절별 생활정보
+- **childcare**: 육아/가족 정보
+- **education**: 교육/학습 정보
 
 ## 🔍 **SEO 최적화 전략**
 
 ### 온페이지 SEO
 - [x] 카테고리별 고유 메타태그 생성
 - [x] 페이지별 canonical URL 설정
-- [x] 구조화된 데이터 (JSON-LD)
+- [x] 구조화된 데이터 (JSON-LD) - 8개 스키마 타입
 - [x] 지역 키워드 최적화
 - [x] 모바일 최적화 (PWA)
+- [x] 네이버 웹마스터 사이트 인증 완료
+- [x] Open Graph 및 Twitter Card 메타태그
 
 ### 오프페이지 SEO
 - [ ] 네이버 블로그 연동
@@ -141,7 +186,7 @@ crawler/
 ## 💰 **수익화 전략**
 
 ### 1. **광고 수익**
-- [x] Google AdSense 설정 완료
+- [x] Google AdSense 설정 완료 (ca-pub-2592538242403472)
 - [ ] 네이버 애드포스트 검토
 - [ ] 직접 광고 유치 (지역 업체)
 
@@ -159,21 +204,29 @@ crawler/
 
 ### Phase 1: 기반 구축 (완료)
 - [x] Next.js 15 프론트엔드 구축
-- [x] Python 크롤링 시스템 구축
-- [x] SEO 최적화 구현
+- [x] Python 크롤링 시스템 구축 (Selenium 기반)
+- [x] SEO 최적화 구현 (8개 스키마 타입)
 - [x] PWA 지원
+- [x] 가이드 시스템 구축 (7개 카테고리)
+- [x] 지능형 중복 제거 시스템
+- [x] 12개 API 엔드포인트 구현
 
 ### Phase 2: 콘텐츠 확장 (현재)
+- [x] 마크다운 기반 가이드 시스템
+- [ ] 가이드 콘텐츠 확장 (20개 이상)
 - [ ] 사용자 생성 콘텐츠 지원
 - [ ] 댓글 시스템 구축
 - [ ] 즐겨찾기 기능
 - [ ] 알림 시스템
 
 ### Phase 3: 고도화 (예정)
+- [ ] 데이터베이스 전환 (PostgreSQL/Supabase)
+- [ ] 검색 기능 구현 (Elasticsearch)
+- [ ] Playwright 크롤링 전환
+- [ ] Sentry 에러 모니터링
 - [ ] AI 기반 콘텐츠 추천
 - [ ] 챗봇 상담 서비스
 - [ ] 모바일 앱 개발
-- [ ] 다국어 지원
 
 ## 📊 **성과 측정 KPI**
 
@@ -198,46 +251,59 @@ crawler/
 ## 🛠 **개발 환경 및 도구**
 
 ### Frontend
-- **Framework**: Next.js 15
-- **Language**: TypeScript
+- **Framework**: Next.js 15 (App Router + Turbopack)
+- **Language**: TypeScript (Strict Mode)
 - **Styling**: Tailwind CSS 4
-- **Deployment**: Vercel
+- **Deployment**: Vercel (자동 배포)
+- **Node.js**: v18.x
 
 ### Backend
 - **Language**: Python
-- **Framework**: Selenium (웹 크롤링)
-- **Database**: JSON Files (향후 DB 전환 예정)
-- **Scheduling**: Windows Task Scheduler
+- **Framework**: Selenium (웹 크롤링, 향후 Playwright 전환)
+- **Database**: JSON Files (향후 PostgreSQL/Supabase 전환)
+- **Scheduling**: Windows Task Scheduler + 배치 파일
 
 ### 모니터링
 - **Analytics**: Google Analytics
 - **Search Console**: Google Search Console
 - **Performance**: Vercel Analytics
 - **Error Tracking**: 향후 Sentry 도입 예정
+- **SEO Tools**: 네이버 웹마스터 도구
+
+### 성능 최적화
+- **이미지**: Next.js Image 컴포넌트 + LCP preload
+- **폰트**: Google Fonts 최적화 로딩
+- **번들**: 코드 스플리팅 + dynamic import
+- **캐시**: API 레벨 no-cache (최신 데이터 보장)
 
 ## 🔧 **운영 및 유지보수**
 
 ### 일일 운영
-- 크롤링 데이터 수집 및 검증
+- 자동 크롤링 시스템 (enhanced_crawler.py) 실행
+- 중복 제거 시스템 (remove_duplicates.py) 실행
+- 데이터 동기화 (sync_to_frontend.py) 확인
 - 사이트 정상 작동 확인
 - 사용자 문의 대응
 
 ### 주간 운영
-- 콘텐츠 품질 검토
-- SEO 성과 분석
-- 새로운 키워드 발굴
+- 수집된 콘텐츠 품질 검토
+- SEO 성과 분석 (Google Search Console)
+- 새로운 키워드 발굴 및 config.py 업데이트
+- 가이드 콘텐츠 추가/업데이트
 
 ### 월간 운영
-- 트래픽 분석 및 보고서 작성
+- 트래픽 분석 및 보고서 작성 (Google Analytics)
 - 기능 개선 계획 수립
 - 경쟁사 분석
+- 크롤링 성능 최적화
 
 ## 📝 **리스크 관리**
 
 ### 기술적 리스크
-- **크롤링 차단**: 다양한 소스 확보로 대응
+- **크롤링 차단**: 다양한 플랫폼 및 소스 확보, Selenium → Playwright 전환 검토
 - **서버 다운타임**: Vercel 안정성 활용
-- **데이터 손실**: 정기 백업 시스템 구축
+- **데이터 손실**: Git 버전 관리 + 정기 백업 시스템 구축
+- **API 한도 초과**: 캐시 전략 및 요청 최적화
 
 ### 법적 리스크
 - **저작권 문제**: 원문 링크 제공으로 대응
@@ -272,5 +338,24 @@ crawler/
 
 *이 프로젝트 플랜은 송도라이프의 지속적인 발전을 위한 로드맵입니다. 시장 상황과 사용자 피드백에 따라 유연하게 조정됩니다.*
 
-**마지막 업데이트**: 2025년 7월 11일  
-**문서 버전**: 1.0
+**마지막 업데이트**: 2025년 7월 21일  
+**문서 버전**: 2.0
+
+## 📈 **Recent Major Updates (2025-07-19)**
+
+### Fixed Issues
+1. **가이드 로딩 문제 해결**: 프로덕션 환경에서 "콘텐츠 로드 중 오류" 해결
+2. **동적 라우트 충돌 해결**: `/api/guides/[slug]` vs `/api/guides/[category]/[slug]` 충돌 제거
+3. **TypeScript 엄격 모드**: marked.js 타입 에러 및 deprecated 옵션 제거
+4. **빌드 최적화**: ESLint 규칙 조정 및 Vercel 배포 안정화
+
+### Architecture Improvements
+- **서버 컴포넌트 최적화**: 가이드 로딩을 페이지 레벨에서 처리
+- **모듈 로딩 개선**: dynamic import를 통한 안전한 서버사이드 모듈 로딩
+- **에러 핸들링 강화**: 프로덕션 환경별 에러 처리 분리
+
+### Development Standards
+- **언어**: 모든 코드 주석과 응답은 한국어
+- **TypeScript**: 엄격한 타입 체크, `any` 타입 사용 금지
+- **스타일링**: Tailwind CSS만 사용, 인라인 스타일 금지
+- **반응형**: 모바일 우선 설계 (sm:, md:, lg: 브레이크포인트)

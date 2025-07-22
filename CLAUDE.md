@@ -14,12 +14,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **생활 가이드**: 9개 테마별 이사/정착/생활 가이드 (마크다운 기반)
 - **PWA 지원**: 모바일 앱 수준의 사용자 경험
 
-### Current Status (2025-07-19)
+### Current Status (2025-07-21)
 - **총 API 엔드포인트**: 12개
 - **가이드 시스템**: 7개 카테고리, 9개 가이드
 - **SEO 최적화**: 8개 스키마 타입 구현
 - **성능 등급**: ⭐⭐⭐⭐ (4.2/5.0)
 - **기술 스택**: Next.js 15, TypeScript, Tailwind CSS 4, Python
+- **배포 상태**: Vercel 자동 배포 활성화
+- **모니터링**: Google Analytics, Search Console, 네이버 웹마스터 연동
 
 ## Development Commands
 
@@ -62,8 +64,10 @@ remove_duplicates.bat              # 중복 제거만
 **Frontend (Next.js 15)**
 - `src/app/page.tsx`: 메인 홈페이지 (카테고리별 뉴스 표시)
 - `src/app/layout.tsx`: 루트 레이아웃 (SEO 메타태그, 구조화된 데이터)
-- `src/app/api/`: API Routes (news, subway, realestate, medical, weather)
+- `src/app/guides/`: 가이드 시스템 (7개 카테고리, 동적 라우팅)
+- `src/app/api/`: API Routes (news, subway, realestate, medical, weather, guides)
 - `src/app/components/`: 재사용 컴포넌트들
+- `public/guides/`: 마크다운 가이드 파일들 (카테고리별 폴더 구조)
 
 **Backend/Crawler (Python)**
 - `enhanced_crawler.py`: 메인 크롤링 엔진 (Selenium 기반)
@@ -240,18 +244,25 @@ interface GuideContent {
 - **렌더링**: marked.js를 통한 마크다운 → HTML 변환
 - **SEO**: 각 가이드별 구조화된 데이터 자동 생성
 
-## Recent Major Updates (2025-07-19)
+## Recent Major Updates (2025-07-21)
 
-### Fixed Issues
+### Fixed Issues (2025-07-19)
 1. **가이드 로딩 문제 해결**: 프로덕션 환경에서 "콘텐츠 로드 중 오류" 해결
 2. **동적 라우트 충돌 해결**: `/api/guides/[slug]` vs `/api/guides/[category]/[slug]` 충돌 제거
 3. **TypeScript 엄격 모드**: marked.js 타입 에러 및 deprecated 옵션 제거
 4. **빌드 최적화**: ESLint 규칙 조정 및 Vercel 배포 안정화
+5. **FAQ 중복 제거**: 정적 FAQ 완전 제거, 동적 FAQ로 통합하여 구글 리치 결과 에러 해결
 
 ### Architecture Improvements
 - **서버 컴포넌트 최적화**: 가이드 로딩을 페이지 레벨에서 처리
 - **모듈 로딩 개선**: dynamic import를 통한 안전한 서버사이드 모듈 로딩
 - **에러 핸들링 강화**: 프로덕션 환경별 에러 처리 분리
+- **데이터 구조 최적화**: 뉴스/부동산 데이터 자동 업데이트 시스템 안정화
+
+### Current Achievements (2025-07-21)
+- **자동화 시스템**: 데이터 수집/동기화/배포 완전 자동화
+- **SEO 최적화**: 스키마 중복 완전 해결
+- **성능 개선**: Core Web Vitals 최적화 완료
 
 ## Performance Optimization
 
@@ -263,10 +274,12 @@ interface GuideContent {
 - **캐시 전략**: API 레벨 no-cache로 최신 데이터 보장
 
 ### Areas for Improvement
-1. **데이터베이스 도입**: 파일 기반 → PostgreSQL/Supabase 전환
-2. **검색 기능**: Elasticsearch 도입으로 전문 검색
-3. **크롤링 최적화**: Selenium → Playwright 전환 검토
-4. **에러 모니터링**: Sentry 도입으로 실시간 추적
+1. **데이터베이스 도입**: 파일 기반 → PostgreSQL/Supabase 전환 (확장성 개선)
+2. **검색 기능**: Elasticsearch 도입으로 전문 검색 구현
+3. **크롤링 최적화**: Selenium → Playwright 전환 검토 (성능/안정성)
+4. **에러 모니터링**: Sentry 도입으로 실시간 추적 및 알림
+5. **가이드 확장**: 현재 9개 → 20개 이상 가이드 콘텐츠 추가
+6. **사용자 기능**: 댓글, 즐겨찾기, 알림 시스템 구현
 
 ## Deployment & Infrastructure
 
@@ -309,6 +322,26 @@ interface GuideContent {
 - **반응형**: 모바일 우선 디자인 (Tailwind CSS)
 - **접근성**: WCAG 2.1 AA 수준 준수 노력
 - **SEO**: 모든 페이지에 적절한 메타데이터 설정
+- **파일 구조**: 절대 경로 (@/) 사용, 컴포넌트 재사용성 고려
+- **에러 처리**: 사용자 친화적 메시지, 개발자용 로깅 분리
+
+## Data Management
+
+### File-based Data Structure
+현재 JSON 파일 기반으로 데이터 관리:
+- `frontend/public/data/enhanced_news/`: 뉴스 데이터
+- `frontend/public/data/realestate_*.json`: 부동산 데이터
+- `frontend/public/guides/`: 가이드 마크다운 파일
+
+### Backup & Version Control
+- Git 버전 관리로 데이터 히스토리 추적
+- 자동 동기화 시 sync_summary.json으로 변경 내역 기록
+- 중복 제거 로그로 데이터 품질 관리
+
+### Data Validation
+- 크롤링 데이터 검증: 필수 필드 체크, 중복 제거
+- API 응답 검증: 타입 안전성, 에러 핸들링
+- 가이드 콘텐츠: 마크다운 문법 검증, 메타데이터 필수 필드
 
 
 ## 클로드 코드에서의 mcp-installer를 사용한 MCP (Model Context Protocol) 설치 및 설정 가이드 
@@ -450,3 +483,28 @@ interface GuideContent {
 		
 ** MCP 서버 제거가 필요할 때 예시: **
 claude mcp remove youtube-mcp
+
+---
+
+**마지막 업데이트**: 2025년 7월 21일  
+**문서 버전**: 3.0
+
+## 📊 Current Project Metrics (2025-07-21)
+
+### Technical Achievements
+- ✅ **완전 자동화**: 크롤링 → 중복제거 → 동기화 → 배포 파이프라인
+- ✅ **SEO 최적화**: 구글 리치 결과 에러 완전 해결
+- ✅ **성능 등급**: 4.2/5.0 (모바일 최적화 완료)
+- ✅ **안정성**: 프로덕션 환경 에러 제로 달성
+
+### Content Status
+- **뉴스 데이터**: 실시간 수집 (3개 플랫폼)
+- **가이드 시스템**: 7개 카테고리 완성
+- **API 엔드포인트**: 12개 안정 운영
+- **부동산 데이터**: 국토교통부 연동
+
+### Next Phase Goals
+1. **가이드 확장**: 20개 이상 콘텐츠 추가
+2. **사용자 기능**: 상호작용 요소 구현  
+3. **검색 기능**: 전문 검색 시스템 도입
+4. **DB 전환**: PostgreSQL/Supabase 마이그레이션

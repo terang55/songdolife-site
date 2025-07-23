@@ -583,7 +583,9 @@ async function loadDailyDataFromFile(date: string): Promise<ProcessedDeal[]> {
     } else {
       // 프로덕션 환경: 파일 시스템 직접 접근 (Vercel에서도 작동)
       try {
-        const filePath = path.join(process.cwd(), 'public', 'data', `realestate_${date}.json`);
+        const fs = await import('fs/promises');
+        const pathModule = await import('path');
+        const filePath = pathModule.join(process.cwd(), 'public', 'data', `realestate_${date}.json`);
         logger.debug(`${date} 프로덕션 파일 경로: ${filePath}`);
         
         const fileContent = await fs.readFile(filePath, 'utf-8');

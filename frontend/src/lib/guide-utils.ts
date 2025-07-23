@@ -221,6 +221,62 @@ export const STATIC_GUIDES: GuideContent[] = [
     tags: ['육아완벽가이드', '어린이집유치원', '키즈카페', '소아과의료', '정부지원', 'MCP검증', '통합가이드'],
     featured: true
   },
+  {
+    slug: 'songdo-pet-friendly-complete-guide',
+    title: '송도 반려동물 완벽 가이드 2025',
+    description: '송도국제도시 반려동물과 함께하는 생활의 모든 것! 24시간 응급동물병원부터 반려동물 카페, 도그런까지 완벽 정리한 반려인 필수 가이드입니다.',
+    keywords: ['송도 반려동물', '송도 동물병원', '송도 펫카페', '송도 도그런', '송도 펫샵', '반려동물 미용', '송도 애견', '반려동물 동반', '24시간 동물병원', '송도 펫프렌들리'],
+    content: '',
+    category: 'lifestyle',
+    lastUpdated: '2025-07-22',
+    relatedGuides: ['songdo-moving-complete-guide-2025', 'songdo-lifestyle-complete-guide-2025', 'songdo-park-guide'],
+    readingTime: 12,
+    difficulty: 'easy',
+    tags: ['반려동물', '동물병원', '펫카페', '도그런', '펫샵', '미용', '애견동반', '24시간응급'],
+    featured: true
+  },
+  {
+    slug: 'songdo-medical-complete-guide',
+    title: '송도 의료시설 완벽 가이드 2025',
+    description: '송도국제도시 의료시설의 모든 것! 대형병원부터 전문과별 병원, 24시간 응급실, 약국까지 완벽 정리한 건강관리 필수 가이드입니다.',
+    keywords: ['송도 병원', '송도 의료시설', '길병원', '국제성모병원', '송도 응급실', '송도 약국', '송도 건강검진', '송도 소아과', '송도 내과', '송도 산부인과'],
+    content: '',
+    category: 'lifestyle',
+    lastUpdated: '2025-07-22',
+    relatedGuides: ['songdo-pet-friendly-complete-guide', 'songdo-childcare-complete-guide-2025', 'songdo-moving-complete-guide-2025'],
+    readingTime: 18,
+    difficulty: 'easy',
+    tags: ['의료시설', '병원', '응급실', '약국', '건강검진', '전문병원', '24시간', '응급의료'],
+    featured: true
+  },
+  {
+    slug: 'songdo-parking-complete-guide',
+    title: '송도 주차장 완벽 가이드 2025',
+    description: '송도국제도시 주차의 모든 것! 센트럴파크∙트리플스트리트 주차 꿀팁부터 무료주차장, 거주자우선주차구역, 전기차 충전소까지 완벽 정리한 실용적인 주차 가이드입니다.',
+    keywords: ['송도 주차장', '센트럴파크 주차', '트리플스트리트 주차', '송도 무료주차', '송도 공영주차장', '거주자우선주차구역', '송도 전기차 충전소', '주차요금 할인'],
+    content: '',
+    category: 'lifestyle',
+    lastUpdated: '2025-07-22',
+    relatedGuides: ['songdo-transportation-complete-guide', 'songdo-shopping-complete-guide', 'songdo-restaurant-complete-guide'],
+    readingTime: 16,
+    difficulty: 'easy',
+    tags: ['주차장', '무료주차', '공영주차장', '전기차충전소', '거주자우선주차', '주차할인', '센트럴파크', '트리플스트리트'],
+    featured: true
+  },
+  {
+    slug: 'songdo-fitness-complete-guide',
+    title: '송도 운동시설 완벽 가이드 2025',
+    description: '송도국제도시 운동시설의 모든 것! 헬스장∙수영장 가격비교부터 테니스장∙골프연습장, 요가∙필라테스 스튜디오, 조깅코스까지 완벽 정리한 건강한 라이프스타일 가이드입니다.',
+    keywords: ['송도 헬스장', '송도 수영장', '송도 테니스장', '송도 골프연습장', '송도 요가', '송도 필라테스', '송도 운동시설', '센트럴파크 조깅', '송도 크로스핏'],
+    content: '',
+    category: 'lifestyle',
+    lastUpdated: '2025-07-22',
+    relatedGuides: ['songdo-park-guide', 'songdo-medical-complete-guide', 'songdo-parking-complete-guide'],
+    readingTime: 20,
+    difficulty: 'easy',
+    tags: ['헬스장', '수영장', '테니스장', '골프연습장', '요가', '필라테스', '운동시설', '조깅코스', '크로스핏', 'PT'],
+    featured: true
+  },
   // 2025년 7월 MCP 검증 완료 가이드들
   {
     slug: 'songdo-mart-complete-comparison-2025',

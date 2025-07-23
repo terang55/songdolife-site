@@ -293,6 +293,63 @@ async function processRealEstateRequest(
       
     } else {
       logger.info('인천 연수구 송도동 아파트 실거래가 최근 3개월 조회 시작');
+      
+      // 📈 성능 개선: 로컬 파일을 먼저 확인하고 있으면 빠르게 반환
+      const today = new Date().toISOString().split('T')[0];
+      const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+      
+      // 최신 파일 확인 (오늘 또는 어제)
+      let latestDeals = await loadDailyDataFromFile(today);
+      if (latestDeals.length === 0) {
+        latestDeals = await loadDailyDataFromFile(yesterday);
+      }
+      
+      // 로컬 파일이 있고 충분한 데이터가 있으면 캐시된 데이터로 빠르게 응답
+      if (latestDeals.length > 100) {
+        logger.info(`📂 로컬 캐시 파일 사용: ${latestDeals.length}건 (빠른 응답)`);
+        
+        // 통계 계산
+        const totalDeals = latestDeals.length;
+        const avgPrice = totalDeals > 0 ? Math.round(latestDeals.reduce((sum, deal) => sum + deal.price_numeric, 0) / totalDeals) : 0;
+        const maxPrice = totalDeals > 0 ? Math.max(...latestDeals.map(deal => deal.price_numeric)) : 0;
+        const minPrice = totalDeals > 0 ? Math.min(...latestDeals.map(deal => deal.price_numeric)) : 0;
+        
+        // API 응답 형식으로 변환
+        const dealsToTransform = limit ? latestDeals.slice(0, limit) : latestDeals;
+        const transformedDeals = dealsToTransform.map(deal => ({
+          unique_id: deal.unique_id || '',
+          법정동: deal.location,
+          아파트: deal.apartment_name,
+          전용면적: deal.area.replace('㎡', ''),
+          거래금액: deal.price_numeric.toString(),
+          거래년월: deal.deal_date.substring(0, 7).replace('-', ''),
+          거래일: deal.deal_date.substring(8, 10),
+          층: deal.floor.replace('층', ''),
+          deal_date: deal.deal_date
+        }));
+        
+        logger.info(`📂 캐시 파일 응답 완료: ${transformedDeals.length}건 반환 (전체 ${latestDeals.length}건 중)`);
+        
+        return NextResponse.json({
+          success: true,
+          data: transformedDeals,
+          total_count: latestDeals.length,
+          returned_count: transformedDeals.length,
+          is_new_deals: false,
+          stats: {
+            avg_price: formatPrice(avgPrice),
+            max_price: formatPrice(maxPrice),
+            min_price: formatPrice(minPrice),
+            avg_price_numeric: avgPrice,
+            max_price_numeric: maxPrice,
+            min_price_numeric: minPrice,
+          },
+          timestamp: new Date().toISOString(),
+          data_source: 'cached_file'
+        });
+      }
+      
+      logger.info('📡 로컬 파일 없음 또는 데이터 부족. 외부 API 호출 시작...');
     }
     
     const deals: ProcessedDeal[] = [];

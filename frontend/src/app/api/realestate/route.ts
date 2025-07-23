@@ -581,38 +581,31 @@ async function loadDailyDataFromFile(date: string): Promise<ProcessedDeal[]> {
         return [];
       }
     } else {
-      // 프로덕션 환경: public 디렉토리에서 fetch로 읽기
+      // 프로덕션 환경: 파일 시스템 직접 접근 (Vercel에서도 작동)
       try {
-        // 프로덕션에서는 실제 도메인 사용
-        const baseUrl = (process.env.NODE_ENV as string) === 'development' 
-          ? 'http://localhost:3001' 
-          : 'https://songdo.life';
-        const fileUrl = `${baseUrl}/data/realestate_${date}.json`;
-        logger.debug(`${date} 파일 접근 시도: ${fileUrl}`);
-        const response = await fetch(fileUrl);
-        if (response.ok) {
-          const parsed = await response.json();
-          const deals = parsed.deals || [];
-          
-          // 중복 제거 (unique_id 기준)
-          const uniqueDeals = deals.filter((deal: ProcessedDeal, index: number, arr: ProcessedDeal[]) => 
-            arr.findIndex(d => d.unique_id === deal.unique_id) === index
-          );
-          
-          logger.info(`${date} 프로덕션에서 데이터 로드 성공: 총 ${deals.length}건 → 중복 제거 후 ${uniqueDeals.length}건`);
-          if (deals.length !== uniqueDeals.length) {
-            logger.info(`${date} 프로덕션 파일에서 중복 제거됨: ${deals.length - uniqueDeals.length}건`);
-          }
-          
-          return uniqueDeals;
-        } else {
-          logger.warn(`${date} 파일 응답 실패: ${response.status} ${response.statusText}`);
+        const filePath = path.join(process.cwd(), 'public', 'data', `realestate_${date}.json`);
+        logger.debug(`${date} 프로덕션 파일 경로: ${filePath}`);
+        
+        const fileContent = await fs.readFile(filePath, 'utf-8');
+        const parsed = JSON.parse(fileContent);
+        const deals = parsed.deals || [];
+        
+        // 중복 제거 (unique_id 기준)
+        const uniqueDeals = deals.filter((deal: ProcessedDeal, index: number, arr: ProcessedDeal[]) => 
+          arr.findIndex(d => d.unique_id === deal.unique_id) === index
+        );
+        
+        logger.info(`${date} 프로덕션에서 데이터 로드 성공: 총 ${deals.length}건 → 중복 제거 후 ${uniqueDeals.length}건`);
+        if (deals.length !== uniqueDeals.length) {
+          logger.info(`${date} 프로덕션 파일에서 중복 제거됨: ${deals.length - uniqueDeals.length}건`);
         }
+        
+        return uniqueDeals;
       } catch (error) {
-        logger.error(`${date} 프로덕션 파일 fetch 실패:`, error);
+        logger.error(`${date} 프로덕션 파일 읽기 실패:`, error);
+        logger.debug(`${date} 데이터 파일을 찾을 수 없음`);
+        return [];
       }
-      logger.debug(`${date} 데이터 파일을 찾을 수 없음`);
-      return [];
     }
     
   } catch (error) {

@@ -134,17 +134,17 @@ export const STATIC_GUIDES: GuideContent[] = [
     featured: true
   },
   {
-    slug: 'songdo-education-guide',
-    title: '송도 교육 완벽 가이드',
-    description: '송도국제도시의 교육 인프라와 환경을 체계적으로 정리한 자녀 교육 완벽 가이드입니다.',
-    keywords: ['송도 교육', '채드윅 국제학교', 'CMIS', '송도 학군', '송도 학원', '인천신정중학교', '특목고 진학률', '국제교육', 'IB 교육', '송도 유치원'],
+    slug: 'songdo-education-complete-guide',
+    title: '송도국제도시 교육 완벽 가이드 2025',
+    description: '송도국제도시의 교육 환경을 완벽 정리! 초중고 학교 현황부터 국제학교, 대학교까지 모든 교육 정보를 한눈에 확인하세요.',
+    keywords: ['송도교육', '송도학교', '송도국제학교', '채드윅국제학교', '연세대국제캠퍼스', '송도학군', '인천교육'],
     content: '',
     category: 'education',
-    lastUpdated: '2025-07-13',
-    relatedGuides: ['songdo-moving-checklist', 'songdo-newlywed-guide', 'songdo-culture-guide'],
-    readingTime: 25,
+    lastUpdated: '2025-01-23',
+    relatedGuides: ['songdo-moving-complete-guide-2025', 'songdo-childcare-complete-guide-2025'],
+    readingTime: 22,
     difficulty: 'medium',
-    tags: ['교육', '학교', '학원', '국제학교', '학군', 'IB', '유치원', '입학'],
+    tags: ['교육', '학교', '국제학교', '대학교', '학군'],
     featured: true
   },
   {
